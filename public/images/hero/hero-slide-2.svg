@@ -1,0 +1,50 @@
+<svg viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="60%">
+      <stop offset="0%" stop-color="#fdf1f4" />
+      <stop offset="55%" stop-color="#f8d3e2" />
+      <stop offset="100%" stop-color="#f0aecb" />
+    </linearGradient>
+    <linearGradient id="skin2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#efb9a5" />
+      <stop offset="100%" stop-color="#dd9678" />
+    </linearGradient>
+    <linearGradient id="hair2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4a2f2a" />
+      <stop offset="100%" stop-color="#241412" />
+    </linearGradient>
+    <radialGradient id="glow2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="bottleD" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#9b2f5e" />
+      <stop offset="100%" stop-color="#5c1a38" />
+    </linearGradient>
+    <linearGradient id="bottleE" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#eed6df" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="700" fill="url(#bg2)" />
+  <circle cx="880" cy="130" r="250" fill="url(#glow2)" />
+  <circle cx="1140" cy="580" r="9" fill="#7c2d5c" opacity="0.3" />
+
+  <path d="M590 700 C620 540 750 470 862 470 C974 470 1104 540 1140 700 Z" fill="#f6d4e3" opacity="0.9" />
+  <path d="M804 380 L804 470 Q844 505 884 470 L884 380 Z" fill="url(#skin2)" />
+  <path d="M748 218 Q733 318 765 393 Q791 443 843 456 Q911 463 935 406 Q953 356 933 296 Q919 220 855 186 Q786 162 748 218 Z" fill="url(#skin2)" />
+  <path d="M735 222 Q702 90 845 78 Q985 84 962 228 Q952 160 862 154 Q770 154 752 256 Q742 240 735 222 Z" fill="url(#hair2)" />
+  <path d="M710 265 Q692 388 748 494 Q734 398 734 285 Z" fill="url(#hair2)" />
+
+  <ellipse cx="1040" cy="672" rx="150" ry="16" fill="#5c1a38" opacity="0.10" />
+
+  <rect x="930" y="500" width="64" height="170" rx="12" fill="url(#bottleD)" />
+  <rect x="944" y="466" width="36" height="38" rx="8" fill="#3c0e24" />
+
+  <rect x="1010" y="540" width="70" height="130" rx="14" fill="url(#bottleE)" stroke="#e3b9cb" stroke-width="2" />
+  <rect x="1024" y="510" width="42" height="34" rx="8" fill="#c48aa5" />
+
+  <rect x="1092" y="565" width="56" height="105" rx="10" fill="#c98f57" />
+  <ellipse cx="1120" cy="565" rx="28" ry="9" fill="#a9713f" />
+</svg>

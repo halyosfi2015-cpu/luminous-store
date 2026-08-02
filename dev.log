@@ -1,0 +1,414 @@
+
+> luminous-derma@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.12 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.9.91:3000
+✓ Ready in 2.6s
+
+ GET / 200 in 3.7s (next.js: 371ms, application-code: 3.4s)
+ GET / 200 in 1102ms (next.js: 54ms, application-code: 1049ms)
+ GET / 200 in 999ms (next.js: 14ms, application-code: 985ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <LoadingBoundaryProvider loading={[...]}>
+                      <SegmentViewNode type="layout" pagePath="layout.tsx">
+                        <SegmentTrieNode>
+                        <link>
+                        <script>
+                        <script>
+                        <script>
+                        <RootLayout>
+                          <html
++                           lang="ar"
+-                           lang="en"
++                           dir="rtl"
+-                           dir="ltr"
+                            className="h-full scroll-smooth"
+                          >
+                  ...
+ 
+    at <unknown> (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+    at runWithFiberInDEV (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at emitPendingHydrationWarnings (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3438:13)
+    at completeWork (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6885:102)
+    at runWithFiberInDEV (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:131)
+    at completeUnitOfWork (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9622:23)
+    at performUnitOfWork (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9557:28)
+    at workLoopConcurrentByScheduler (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9551:58)
+    at renderRootConcurrent (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9534:71)
+    at performWorkOnRoot (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64) (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+ GET /categories/skincare 200 in 3.8s (next.js: 2.7s, generate-params: 2.4s, application-code: 1129ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/categorie..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <LoadingBoundaryProvider loading={[...]}>
+                      <SegmentViewNode type="layout" pagePath="layout.tsx">
+                        <SegmentTrieNode>
+                        <link>
+                        <script>
+                        <script>
+                        <script>
+                        <RootLayout>
+                          <html
++                           lang="ar"
+-                           lang="en"
++                           dir="rtl"
+-                           dir="ltr"
+                            className="h-full scroll-smooth"
+                          >
+                  ...
+ 
+    at <unknown> (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+    at runWithFiberInDEV (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at emitPendingHydrationWarnings (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3438:13)
+    at completeWork (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6885:102)
+    at runWithFiberInDEV (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:131)
+    at completeUnitOfWork (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9622:23)
+    at performUnitOfWork (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9557:28)
+    at workLoopConcurrentByScheduler (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9551:58)
+    at renderRootConcurrent (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9534:71)
+    at performWorkOnRoot (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64) (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+[browser] Image with src "/images/products/vitamin-c-serum-1.svg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+ GET / 200 in 592ms (next.js: 9ms, application-code: 583ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <LoadingBoundaryProvider loading={[...]}>
+                      <SegmentViewNode type="layout" pagePath="layout.tsx">
+                        <SegmentTrieNode>
+                        <link>
+                        <script>
+                        <script>
+                        <script>
+                        <RootLayout>
+                          <html
++                           lang="ar"
+-                           lang="en"
++                           dir="rtl"
+-                           dir="ltr"
+                            className="h-full scroll-smooth"
+                          >
+                  ...
+ 
+    at <unknown> (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+    at runWithFiberInDEV (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at emitPendingHydrationWarnings (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3438:13)
+    at completeWork (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6885:102)
+    at runWithFiberInDEV (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:131)
+    at completeUnitOfWork (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9622:23)
+    at performUnitOfWork (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9557:28)
+    at workLoopConcurrentByScheduler (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9551:58)
+    at renderRootConcurrent (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9534:71)
+    at performWorkOnRoot (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64) (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+ GET / 200 in 1070ms (next.js: 21ms, application-code: 1048ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <LoadingBoundaryProvider loading={[...]}>
+                      <SegmentViewNode type="layout" pagePath="layout.tsx">
+                        <SegmentTrieNode>
+                        <link>
+                        <script>
+                        <script>
+                        <script>
+                        <RootLayout>
+                          <html
++                           lang="ar"
+-                           lang="en"
++                           dir="rtl"
+-                           dir="ltr"
+                            className="h-full scroll-smooth"
+                          >
+                  ...
+ 
+    at <unknown> (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+    at runWithFiberInDEV (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at emitPendingHydrationWarnings (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3438:13)
+    at completeWork (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6885:102)
+    at runWithFiberInDEV (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:131)
+    at completeUnitOfWork (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9622:23)
+    at performUnitOfWork (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9557:28)
+    at workLoopConcurrentByScheduler (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9551:58)
+    at renderRootConcurrent (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9534:71)
+    at performWorkOnRoot (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64) (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+ GET / 200 in 843ms (next.js: 9ms, application-code: 834ms)
+ GET /categories/skincare 200 in 901ms (next.js: 26ms, generate-params: 13ms, application-code: 875ms)
+[browser] Image with src "/images/products/vitamin-c-serum-1.svg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+ GET / 200 in 672ms (next.js: 10ms, application-code: 662ms)
+ GET /categories/skincare 200 in 443ms (next.js: 20ms, generate-params: 9ms, application-code: 422ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/categorie..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <LoadingBoundaryProvider loading={[...]}>
+                      <SegmentViewNode type="layout" pagePath="layout.tsx">
+                        <SegmentTrieNode>
+                        <link>
+                        <script>
+                        <script>
+                        <script>
+                        <RootLayout>
+                          <html
++                           lang="ar"
+-                           lang="en"
++                           dir="rtl"
+-                           dir="ltr"
+                            className="h-full scroll-smooth"
+                          >
+                  ...
+ 
+    at <unknown> (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+    at runWithFiberInDEV (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at emitPendingHydrationWarnings (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3438:13)
+    at completeWork (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6885:102)
+    at runWithFiberInDEV (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:131)
+    at completeUnitOfWork (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9622:23)
+    at performUnitOfWork (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9557:28)
+    at workLoopConcurrentByScheduler (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9551:58)
+    at renderRootConcurrent (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9534:71)
+    at performWorkOnRoot (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64) (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+[browser] Image with src "/images/products/vitamin-c-serum-1.svg" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+ GET / 200 in 506ms (next.js: 11ms, application-code: 496ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <LoadingBoundaryProvider loading={[...]}>
+                      <SegmentViewNode type="layout" pagePath="layout.tsx">
+                        <SegmentTrieNode>
+                        <link>
+                        <script>
+                        <script>
+                        <script>
+                        <RootLayout>
+                          <html
++                           lang="ar"
+-                           lang="en"
++                           dir="rtl"
+-                           dir="ltr"
+                            className="h-full scroll-smooth"
+                          >
+                  ...
+ 
+    at <unknown> (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+    at runWithFiberInDEV (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at emitPendingHydrationWarnings (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3438:13)
+    at completeWork (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6885:102)
+    at runWithFiberInDEV (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:131)
+    at completeUnitOfWork (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9622:23)
+    at performUnitOfWork (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9557:28)
+    at workLoopConcurrentByScheduler (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9551:58)
+    at renderRootConcurrent (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9534:71)
+    at performWorkOnRoot (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64) (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+ GET / 200 in 1171ms (next.js: 17ms, application-code: 1154ms)
+ GET / 200 in 52ms (next.js: 18ms, application-code: 33ms)
+ GET / 200 in 219ms (next.js: 15ms, application-code: 204ms)
+✓ Compiled in 5.8s
+ GET / 200 in 3.8s (next.js: 1385ms, application-code: 2.4s)
+ GET / 200 in 1202ms (next.js: 12ms, application-code: 1190ms)
+ GET / 200 in 1045ms (next.js: 13ms, application-code: 1031ms)
+ GET / 200 in 3.3s (next.js: 75ms, application-code: 3.2s)
+ GET / 200 in 1717ms (next.js: 20ms, application-code: 1697ms)
+ GET / 200 in 809ms (next.js: 8ms, application-code: 802ms)
+ GET / 200 in 2.1s (next.js: 51ms, application-code: 2.1s)
+✓ Compiled in 1252ms
+ GET / 200 in 1227ms (next.js: 360ms, application-code: 867ms)
+ GET / 200 in 279ms (next.js: 22ms, application-code: 257ms)
+ GET / 200 in 1877ms (next.js: 10ms, application-code: 1867ms)
+ GET / 200 in 1962ms (next.js: 40ms, application-code: 1922ms)
+ GET / 200 in 1344ms (next.js: 22ms, application-code: 1322ms)
+ GET / 200 in 1438ms (next.js: 26ms, application-code: 1412ms)
+ GET / 200 in 3.9s (next.js: 41ms, application-code: 3.9s)
+✓ Compiled in 214ms
+ GET / 200 in 647ms (next.js: 201ms, application-code: 446ms)
+ GET / 200 in 4.2s (next.js: 28ms, application-code: 4.2s)
+ GET / 200 in 4.0s (next.js: 21ms, application-code: 4.0s)
+ GET / 200 in 42ms (next.js: 15ms, application-code: 26ms)
+ GET / 200 in 398ms (next.js: 16ms, application-code: 382ms)
+ GET / 200 in 54ms (next.js: 13ms, application-code: 41ms)
+ GET / 200 in 1259ms (next.js: 23ms, application-code: 1236ms)
+ GET / 200 in 33ms (next.js: 10ms, application-code: 22ms)
+ GET / 200 in 276ms (next.js: 10ms, application-code: 266ms)
+ GET / 200 in 34ms (next.js: 10ms, application-code: 24ms)
+ GET / 200 in 39ms (next.js: 14ms, application-code: 25ms)
+ GET / 200 in 695ms (next.js: 10ms, application-code: 685ms)
+ GET / 200 in 286ms (next.js: 11ms, application-code: 275ms)
+ GET / 200 in 49ms (next.js: 14ms, application-code: 34ms)
+ GET / 200 in 250ms (next.js: 13ms, application-code: 237ms)
+ GET / 200 in 1867ms (next.js: 11ms, application-code: 1856ms)
+ GET / 200 in 671ms (next.js: 4ms, application-code: 667ms)
+ GET / 200 in 799ms (next.js: 8ms, application-code: 790ms)
+✓ Compiled in 813ms
+ GET / 200 in 549ms (next.js: 188ms, application-code: 361ms)
+ GET / 200 in 1993ms (next.js: 10ms, application-code: 1983ms)
+ GET / 200 in 1168ms (next.js: 24ms, application-code: 1144ms)
+ GET / 200 in 866ms (next.js: 16ms, application-code: 850ms)
+ GET / 200 in 917ms (next.js: 6ms, application-code: 912ms)
+ GET / 200 in 1766ms (next.js: 12ms, application-code: 1754ms)
+ GET / 200 in 1774ms (next.js: 14ms, application-code: 1760ms)
+ GET / 200 in 2.1s (next.js: 13ms, application-code: 2.0s)
+ GET / 200 in 1747ms (next.js: 18ms, application-code: 1729ms)
+○ Compiling /payment ...
+ GET /payment 200 in 8.5s (next.js: 8.3s, application-code: 152ms)
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+ GET / 200 in 1897ms (next.js: 16ms, application-code: 1881ms)
+ GET / 200 in 1874ms (next.js: 20ms, application-code: 1854ms)
+ GET / 200 in 1802ms (next.js: 20ms, application-code: 1781ms)
+ GET / 200 in 41ms (next.js: 13ms, application-code: 27ms)
+ GET / 200 in 404ms (next.js: 15ms, application-code: 389ms)
+ GET /categories/makeup 200 in 496ms (next.js: 216ms, generate-params: 66ms, application-code: 280ms)
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+ GET /categories/eye-makeup 200 in 173ms (next.js: 42ms, generate-params: 21ms, application-code: 131ms)
+ GET /categories/lip-makeup 200 in 112ms (next.js: 16ms, generate-params: 120µs, application-code: 96ms)
+ GET /categories/face-makeup 200 in 129ms (next.js: 16ms, generate-params: 81µs, application-code: 113ms)
+ GET / 200 in 329ms (next.js: 15ms, application-code: 315ms)
+ GET / 200 in 2.3s (next.js: 38ms, application-code: 2.3s)
+ GET /products 200 in 1093ms (next.js: 882ms, application-code: 211ms)
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior (file://C:/Users/user/Desktop/Luminous-Final Project/ld-final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+ GET / 200 in 443ms (next.js: 13ms, application-code: 430ms)
+ GET / 200 in 58ms (next.js: 19ms, application-code: 38ms)
+ GET / 200 in 478ms (next.js: 14ms, application-code: 463ms)
+ GET / 200 in 2.7s (next.js: 23ms, application-code: 2.7s)
+ GET / 200 in 2.6s (next.js: 18ms, application-code: 2.6s)
+✓ Compiled in 2.2s
+ GET / 200 in 1846ms (next.js: 620ms, application-code: 1226ms)
+ GET / 200 in 4.3s (next.js: 36ms, application-code: 4.2s)
+ GET / 200 in 6.4s (next.js: 26ms, application-code: 6.4s)
+ GET / 200 in 3.9s (next.js: 37ms, application-code: 3.8s)
+ GET / 200 in 3.0s (next.js: 38ms, application-code: 3.0s)

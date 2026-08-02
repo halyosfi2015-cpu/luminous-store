@@ -1,0 +1,9 @@
+export { brands } from "@/src/data/brands";
+export { experts } from "@/src/data/experts";
+export { articles } from "@/src/data/articles";
+export { testimonials } from "@/src/data/testimonials";
+export { faqs } from "@/src/data/faqs";
+export { getBrandBySlug } from "@/src/data/brands";
+export { getExpertBySlug } from "@/src/data/experts";
+export { getArticleBySlug } from "@/src/data/articles";
+export { getRelatedArticles } from "@/src/data/articles";

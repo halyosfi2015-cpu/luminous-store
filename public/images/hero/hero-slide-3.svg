@@ -1,0 +1,50 @@
+<svg viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="60%">
+      <stop offset="0%" stop-color="#fdf3ee" />
+      <stop offset="55%" stop-color="#f9dce6" />
+      <stop offset="100%" stop-color="#f3c2d6" />
+    </linearGradient>
+    <linearGradient id="skin3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f3c6b3" />
+      <stop offset="100%" stop-color="#e3a486" />
+    </linearGradient>
+    <linearGradient id="hair3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#5c3b2e" />
+      <stop offset="100%" stop-color="#2c1a14" />
+    </linearGradient>
+    <radialGradient id="glow3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="bottleF" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#eab676" />
+      <stop offset="100%" stop-color="#b5661f" />
+    </linearGradient>
+    <linearGradient id="bottleG" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#f2e0e8" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="700" fill="url(#bg3)" />
+  <circle cx="900" cy="140" r="255" fill="url(#glow3)" />
+  <circle cx="1110" cy="600" r="9" fill="#7c2d5c" opacity="0.3" />
+
+  <path d="M600 700 C630 540 758 470 868 470 C978 470 1106 540 1146 700 Z" fill="#f9dfe9" opacity="0.9" />
+  <path d="M808 380 L808 470 Q848 505 888 470 L888 380 Z" fill="url(#skin3)" />
+  <path d="M752 220 Q737 320 769 395 Q795 445 847 458 Q915 465 939 408 Q957 358 937 298 Q923 222 859 188 Q790 164 752 220 Z" fill="url(#skin3)" />
+  <path d="M739 224 Q708 92 848 80 Q985 86 964 230 Q954 163 866 157 Q775 157 758 258 Q747 242 739 224 Z" fill="url(#hair3)" />
+  <path d="M714 267 Q697 390 752 496 Q738 400 738 287 Z" fill="url(#hair3)" />
+
+  <ellipse cx="1050" cy="672" rx="145" ry="16" fill="#7c2d5c" opacity="0.10" />
+
+  <rect x="950" y="530" width="60" height="140" rx="12" fill="url(#bottleF)" />
+  <rect x="962" y="500" width="36" height="34" rx="7" fill="#7c2d12" />
+
+  <rect x="1022" y="490" width="58" height="180" rx="29" fill="url(#bottleG)" stroke="#e3b9cb" stroke-width="2" />
+  <rect x="1036" y="455" width="30" height="42" rx="6" fill="#c48aa5" />
+
+  <rect x="1092" y="558" width="60" height="112" rx="10" fill="#9b2f5e" />
+  <ellipse cx="1122" cy="558" rx="30" ry="9" fill="#5c1a38" />
+</svg>
