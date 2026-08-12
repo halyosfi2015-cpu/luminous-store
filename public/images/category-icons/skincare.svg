@@ -1,0 +1,11 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M32 8C20.9543 8 12 16.9543 12 28C12 35.376 17.033 40.675 24.25 42.596V45.2C24.25 51.67 30.33 57 38.75 57H45.25C52.474 57 59 50.474 59 43.25V39.75C59 35.51 55.486 32 51.25 32H47.25C46.836 32 46.5 31.664 46.5 31.25V28C46.5 23.878 43.122 20.5 39 20.5C38.171 20.5 37.37 20.662 36.636 20.966C33.772 15.736 27.871 12 21.5 12C15.977 12 11.25 15.326 8.75 20.25C4.033 20.775 4 20.775 4 28C4 43 15.625 55 32 62C48.375 55 60 43 60 28C60 16.9543 51.0457 8 40 8H32Z" fill="url(#skincareGradient)" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <defs>
+    <linearGradient id="skincareGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#F43F5E"/>
+    </linearGradient>
+  </defs>
+  <path d="M32 24C32 22.408 33.408 21 35 21C36.592 21 38 22.408 38 24C38 25.592 36.592 27 35 27C33.408 27 32 25.592 32 24Z" fill="white" opacity="0.7"/>
+  <path d="M30 32C29 33 28 35 28 37C28 39 30 41 32 41C34 41 36 39 36 37C36 35 35 33 34 32H30Z" fill="white" opacity="0.5"/>
+</svg>

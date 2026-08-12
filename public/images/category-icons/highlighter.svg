@@ -1,0 +1,15 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="highlighterGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FACC15"/>
+      <stop offset="100%" stop-color="#FDE047"/>
+    </linearGradient>
+  </defs>
+  <path d="M14 38C14 32 18 28 24 26C30 24 35 26 39 30C43 34 45 38 45 42V52C45 56.418 41.418 60 37 60H27C22.582 60 19 56.418 19 52V42C19 38 22 36 22 36" fill="url(#highlighterGradient)" stroke="white" stroke-width="2"/>
+  <path d="M24 10C24 6.686 26.686 4 30 4H34C37.314 4 40 6.686 40 10V18C40 21.314 37.314 24 34 24H30C26.686 24 24 21.314 24 18V10Z" fill="url(#highlighterGradient)" stroke="white" stroke-width="2"/>
+  <path d="M32 32C30 32 29 30 29 28C29 26 31 24 33 24C35 24 37 26 37 28C37 30 35 32 33 32H32Z" fill="url(#highlighterGradient)" stroke="white" stroke-width="1.5"/>
+  <circle cx="32" cy="44" r="4" fill="white"/>
+  <path d="M26 52C26 50 28 48 32 48C36 48 38 50 38 52" stroke="url(#highlighterGradient)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M22 36L18 44" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M42 36L46 44" stroke="white" stroke-width="2" stroke-linecap="round"/>
+</svg>

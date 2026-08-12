@@ -1,0 +1,14 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="serumsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#F43F5E"/>
+    </linearGradient>
+  </defs>
+  <path d="M28 8C28 8 30 14 32 14C34 14 36 8 36 8" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <path d="M26 52C26 52 32 58 38 58C44 58 50 52 50 52V22C50 16 44 12 38 12H26C20 12 14 16 14 22V52C14 52 20 58 26 58Z" fill="url(#serumsGradient)" stroke="white" stroke-width="2"/>
+  <circle cx="32" cy="32" r="6" fill="white" opacity="0.6"/>
+  <path d="M32 24V40" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M26 32H38" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M32 16C28 16 24 22 24 26V38C24 42 26 46 28 48C30 50 32 52 32 52C32 52 34 50 36 48C38 46 40 42 40 38V26C40 22 36 16 32 16Z" fill="none" stroke="white" stroke-width="1.5" opacity="0.3"/>
+</svg>

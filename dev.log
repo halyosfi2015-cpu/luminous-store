@@ -1,0 +1,274 @@
+
+> luminous-derma@0.1.0 dev
+> next dev -p 3001
+
+▲ Next.js 16.2.12 (Turbopack)
+- Local:         http://localhost:3001
+- Network:       http://192.168.9.91:3001
+- Environments: .env.local
+✓ Ready in 553ms
+
+ GET / 200 in 7.4s (next.js: 469ms, application-code: 6.9s)
+ GET /admin/ai/personalization 200 in 479ms (next.js: 179ms, application-code: 300ms)
+ GET /admin/ai/settings 200 in 1345ms (next.js: 1254ms, application-code: 91ms)
+ GET /admin/ai/campaigns 200 in 259ms (next.js: 92ms, application-code: 167ms)
+ GET /admin/ai/recommendations 200 in 967ms (next.js: 873ms, application-code: 94ms)
+ GET /admin/analytics 200 in 1068ms (next.js: 990ms, application-code: 78ms)
+ GET / 200 in 1461ms (next.js: 28ms, application-code: 1432ms)
+[browser] Uncaught Error: Hydration failed because the server rendered text didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<SegmentViewNode>} forbidden={undefined} ...>
+      <RedirectBoundary>
+        <RedirectErrorBoundary router={{...}}>
+          <InnerLayoutRouter url="/" tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} segmentPath={[...]} ...>
+            <SegmentViewNode type="page" pagePath="page.tsx">
+              <SegmentTrieNode>
+              <Home>
+                <script>
+                <TopBar>
+                  <div dir="rtl" className="jsx-3eaf20...">
+                    <Container>
+                      <div className={"\n      ..."} style={undefined}>
+                        <div className="jsx-3eaf20...">
+                          <div>
+                          <div className="jsx-3eaf20...">
+                            <div className="jsx-3eaf20...">
+                              <button
+                                type="button"
+                                onClick={function onClick}
+                                aria-expanded={false}
+                                aria-haspopup="listbox"
+                                className="jsx-3eaf2078a16e3173 flex items-center gap-1.5 rounded-full border border-w..."
+-                               fdprocessedid="akhhx"
+                              >
+                            <div className="jsx-3eaf20...">
+                              <button
+                                type="button"
+                                onClick={function onClick}
+                                aria-expanded={false}
+                                aria-haspopup="listbox"
+                                className="jsx-3eaf2078a16e3173 flex items-center gap-1.5 rounded-full border border-w..."
+-                               fdprocessedid="dovohi"
+                              >
+                  ...
+                <div className="sticky top...">
+                  <Header>
+                    <div data-nav-dropdown={true} className="jsx-2b1990...">
+                      <div className="jsx-2b1990...">
+                        <Container className="relative">
+                          <div className={"\n      ..."} style={undefined}>
+                            <div className="jsx-2b1990...">
+                              <div>
+                              <div className="jsx-2b1990...">
+                                <SearchTrigger className="w-full max...">
+                                  <button
+                                    type="button"
+                                    aria-label="بحث"
+                                    onClick={function SearchProvider.useCallback[openSearch]}
+                                    className="group flex h-11 w-full items-center gap-3 rounded-full border border-bo..."
+-                                   fdprocessedid="flwbas"
+                                  >
+                              <div className="jsx-2b1990...">
+                                <button
+                                  type="button"
+                                  onClick={function onClick}
+                                  aria-label="تتبع الطلب"
+                                  className="jsx-2b199012cb30c43 hidden sm:inline-flex items-center gap-1.5 rounded-fu..."
+-                                 fdprocessedid="zreog9"
+                                >
+                                ...
+                            <div className="jsx-2b1990...">
+                              <nav ref={{current:null}} aria-label="القائمة ال..." onMouseLeave={function scheduleClose} ...>
+                                <ul role="menubar" className="jsx-2b1990...">
+                                  <li>
+                                  <li role="none" className="jsx-2b1990...">
+                                    <button
+                                      type="button"
+                                      data-mega-trigger="categories"
+                                      role="menuitem"
+                                      aria-haspopup="true"
+                                      aria-expanded={false}
+                                      onMouseEnter={function onMouseEnter}
+                                      onClick={function onClick}
+                                      className="jsx-2b199012cb30c43 relative flex items-center gap-1.5 px-3.5 py-2 te..."
+-                                     fdprocessedid="dhqfbp"
+                                    >
+                                  <li role="none" className="jsx-2b1990...">
+                                    <button
+                                      type="button"
+                                      role="menuitem"
+                                      onClick={function onClick}
+                                      className="jsx-2b199012cb30c43 relative flex items-center gap-1.5 px-3.5 py-2 te..."
+-                                     fdprocessedid="5eup7ys"
+                                    >
+                                  <li>
+                                  <li>
+                                  <li>
+                                  <li role="none" className="jsx-2b1990...">
+                                    <button
+                                      type="button"
+                                      role="menuitem"
+                                      onClick={function onClick}
+                                      className="jsx-2b199012cb30c43 relative flex items-center gap-1.5 px-3.5 py-2 te..."
+-                                     fdprocessedid="bglbnv"
+                                    >
+                                  <li role="none" className="jsx-2b1990...">
+                                    <button
+                                      type="button"
+                                      role="menuitem"
+                                      onClick={function onClick}
+                                      className="jsx-2b199012cb30c43 relative flex items-center gap-1.5 px-3.5 py-2 te..."
+-                                     fdprocessedid="l7donf"
+                                    >
+                                  <li role="none" className="jsx-2b1990...">
+                                    <button
+                                      type="button"
+                                      role="menuitem"
+                                      onClick={function onClick}
+                                      className="jsx-2b199012cb30c43 relative flex items-center gap-1.5 px-3.5 py-2 te..."
+-                                     fdprocessedid="kag0yd"
+                                    >
+                      ...
+                    ...
+                ...
+                  <Hero>
+                    <HeroProvider>
+                      <HeroContent>
+                        <section className={"\n      ..."} data-theme="light" style={{...}} ...>
+                          <div>
+                          <div>
+                          <div className={"\n      ..."} dir="rtl">
+                            <div className="relative w...">
+                              <div className={"\n      ..."} style={{...}} aria-live="polite" aria-atomic="true">
+                                <p
+                                  className={"\n                  font-display\n                  text-lg sm:text-xl ..."}
+                                >
++                                 المعرفة + العناية = إشراقةٌ لا تُرى، بل تُشعر.
+-                                 الجمال لا يُبنى في يوم... بل بعناية تتكرر كل يوم.
+                              ...
+                            ...
+                          ...
+                ...
+            ...
+          ...
+
+    at <unknown> (https://react.dev/link/hydration-mismatch)
+    at throwOnHydrationMismatch (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3318:56)
+    at prepareToHydrateHostInstance (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3372:23)
+    at completeWork (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6922:60)
+    at runWithFiberInDEV (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at completeUnitOfWork (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9622:23)
+    at performUnitOfWork (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9557:28)
+    at workLoopSync (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9449:40)
+    at renderRootSync (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9433:13)
+    at performWorkOnRoot (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9061:186)
+    at performSyncWorkOnRoot (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10263:9)
+    at flushSyncWorkAcrossRoots_impl (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10179:316)
+    at processRootScheduleInMicrotask (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10200:106)
+    at <unknown> (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10274:158)
+    at p (<anonymous>)
+    at HeroContent (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/_1xgooqs._.js:5302:245)
+    at Hero (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/_1xgooqs._.js:5436:221)
+    at Home (app\page.tsx:49:11)
+  47 |       <main id="main-content">
+  48 |         <div className="mx-auto w-full max-w-[1800px] px-4 sm:px-6 lg:px-8">
+> 49 |           <Hero />
+     |           ^
+  50 |         </div>
+  51 |         <TrendingNow />
+  52 |         <RoutinesSection />
+[browser] Image with src "/images/logo/luminous-derma-header-transparent.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio. (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-129.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-960.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-710.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-460.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-1051.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-1294.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-1155.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-629.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-754.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2041.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2033.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2064.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2760.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2680.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2684.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+ GET / 200 in 47ms (next.js: 16ms, application-code: 31ms)
+[browser] Image with src "/images/products/yq-2685.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2039.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+ GET / 200 in 95ms (next.js: 11ms, application-code: 84ms)
+[browser] Image with src "/images/products/yq-441.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-306.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2358.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2201.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2351.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2244.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+ GET / 200 in 38ms (next.js: 16ms, application-code: 22ms)
+[browser] Image with src "/images/products/yq-821.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2788.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2397.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+ GET / 200 in 70ms (next.js: 14ms, application-code: 56ms)
+[browser] Image with src "/images/products/yq-2337.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2380.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2208.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-1680.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2603.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-990.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2761.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2220.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2468.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-1900.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2500.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2202.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2758.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2336.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-1093.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2082.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2219.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-1693.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2137.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2707.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2705.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2682.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2051.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2677.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2706.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2307.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2794.png" has "fill" prop and "sizes" prop of "100vw", but image is not rendered at full viewport width. Please adjust "sizes" to improve page performance. Read more: https://nextjs.org/docs/api-reference/next/image#sizes (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+ GET /bundles 200 in 1868ms (next.js: 1284ms, application-code: 585ms)
+ GET /bundles 200 in 689ms (next.js: 49ms, application-code: 640ms)
+ GET /bundles 200 in 297ms (next.js: 50ms, application-code: 247ms)
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+ GET /bundles/bundle-summer 200 in 2.8s (next.js: 2.7s, generate-params: 1429ms, application-code: 110ms)
+[browser] Image with src "/images/products/yq-1660.png" has "fill" and a height value of 0. This is likely because the parent element of the image has not been styled to have a set height. (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-1775.png" has "fill" and a height value of 0. This is likely because the parent element of the image has not been styled to have a set height. (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-1067.png" has "fill" and a height value of 0. This is likely because the parent element of the image has not been styled to have a set height. (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-306.png" has "fill" and a height value of 0. This is likely because the parent element of the image has not been styled to have a set height. (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+ GET / 200 in 111ms (next.js: 40ms, application-code: 71ms)
+ GET / 200 in 1673ms (next.js: 12ms, application-code: 1661ms)
+[browser] Image with src "/images/logo/luminous-derma-header-transparent.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio. (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+[browser] Image with src "/images/products/yq-2103.png" was detected as the Largest Contentful Paint (LCP). Please add the `loading="eager"` property if this image is above the fold.
+Read more: https://nextjs.org/docs/app/api-reference/components/image#loading (file://C:/Users/user/Desktop/Luminous-Final Project Hamed final/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+ GET / 200 in 39ms (next.js: 16ms, application-code: 24ms)
+ GET / 200 in 54ms (next.js: 10ms, application-code: 44ms)
+ GET / 200 in 30ms (next.js: 13ms, application-code: 18ms)
+ GET / 200 in 56ms (next.js: 14ms, application-code: 42ms)
+ GET /admin/ai/personalization 200 in 190ms (next.js: 42ms, application-code: 148ms)
+Using the user object as returned from supabase.auth.getSession() or from some supabase.auth.onAuthStateChange() events could be insecure! This value comes directly from the storage medium (usually cookies on the server) and may not be authentic. Use supabase.auth.getUser() instead which authenticates the data by contacting the Supabase Auth server.
+Using the user object as returned from supabase.auth.getSession() or from some supabase.auth.onAuthStateChange() events could be insecure! This value comes directly from the storage medium (usually cookies on the server) and may not be authentic. Use supabase.auth.getUser() instead which authenticates the data by contacting the Supabase Auth server.
+ GET /api/admin/me 200 in 1353ms (next.js: 201ms, application-code: 1152ms)
+ GET /api/admin/me 200 in 1361ms (next.js: 274ms, application-code: 1087ms)
+Using the user object as returned from supabase.auth.getSession() or from some supabase.auth.onAuthStateChange() events could be insecure! This value comes directly from the storage medium (usually cookies on the server) and may not be authentic. Use supabase.auth.getUser() instead which authenticates the data by contacting the Supabase Auth server.
+Using the user object as returned from supabase.auth.getSession() or from some supabase.auth.onAuthStateChange() events could be insecure! This value comes directly from the storage medium (usually cookies on the server) and may not be authentic. Use supabase.auth.getUser() instead which authenticates the data by contacting the Supabase Auth server.
+ GET /api/admin/ai/personalization 200 in 467ms (next.js: 10ms, application-code: 457ms)

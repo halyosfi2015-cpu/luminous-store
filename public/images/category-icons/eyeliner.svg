@@ -1,0 +1,14 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="eyelinerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14B8A6"/>
+      <stop offset="100%" stop-color="#0D9488"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="32" cy="40" rx="16" ry="12" fill="url(#eyelinerGradient)" stroke="white" stroke-width="2"/>
+  <path d="M22 22C22 18 26 14 30 14H34C38 14 42 18 42 22V28" fill="url(#eyelinerGradient)" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M16 22C16 18 20 14 24 14H28C32 14 36 18 36 22V28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M40 22C40 18 44 14 48 14H52C56 14 60 18 60 22V28" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M20 30C20 24 24 20 28 20H36C40 20 44 24 44 30V32" fill="none" stroke="url(#eyelinerGradient)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M24 42C24 38 27 36 31 36H33C37 36 40 38 40 42" stroke="white" stroke-width="2.5" fill="none"/>
+</svg>

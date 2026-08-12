@@ -1,0 +1,565 @@
+[
+  {
+    "route": "/",
+    "htmlSize": 2157159,
+    "inlineJs": 21469,
+    "rscPayload": 18853,
+    "jsTotal": 1298129,
+    "jsCount": 15,
+    "total": 3455288,
+    "jsSizes": [
+      {
+        "ref": "0sqgp1fd-2gdw.js",
+        "size": 23972
+      },
+      {
+        "ref": "0paxexg6-m0de.js",
+        "size": 43946
+      },
+      {
+        "ref": "3skbipb8eyed0.js",
+        "size": 232565
+      },
+      {
+        "ref": "29194twgvgfhb.js",
+        "size": 145701
+      },
+      {
+        "ref": "turbopack-1fddhuq_c4ptr.js",
+        "size": 10580
+      },
+      {
+        "ref": "34fmhvhss3qwl.js",
+        "size": 33443
+      },
+      {
+        "ref": "2q2rv8ka3poj9.js",
+        "size": 327546
+      },
+      {
+        "ref": "14mrh2-p_w84d.js",
+        "size": 54646
+      },
+      {
+        "ref": "2zyrkxeqlp0e-.js",
+        "size": 2830
+      },
+      {
+        "ref": "0eu3y49_q4ap0.js",
+        "size": 831
+      },
+      {
+        "ref": "3yfws5w0qut5d.js",
+        "size": 29419
+      },
+      {
+        "ref": "2csd7lenf9kj3.js",
+        "size": 35625
+      },
+      {
+        "ref": "2yd6mgj24k_2n.js",
+        "size": 238944
+      },
+      {
+        "ref": "1wqgoxlulbqb3.js",
+        "size": 5487
+      },
+      {
+        "ref": "0cz1d0mv5g_q7.js",
+        "size": 112594
+      }
+    ]
+  },
+  {
+    "route": "/products",
+    "htmlSize": 1026147,
+    "inlineJs": 1020452,
+    "rscPayload": 1019128,
+    "jsTotal": 1047683,
+    "jsCount": 13,
+    "total": 2073830,
+    "jsSizes": [
+      {
+        "ref": "0sqgp1fd-2gdw.js",
+        "size": 23972
+      },
+      {
+        "ref": "0paxexg6-m0de.js",
+        "size": 43946
+      },
+      {
+        "ref": "3skbipb8eyed0.js",
+        "size": 232565
+      },
+      {
+        "ref": "29194twgvgfhb.js",
+        "size": 145701
+      },
+      {
+        "ref": "turbopack-1fddhuq_c4ptr.js",
+        "size": 10580
+      },
+      {
+        "ref": "34fmhvhss3qwl.js",
+        "size": 33443
+      },
+      {
+        "ref": "2q2rv8ka3poj9.js",
+        "size": 327546
+      },
+      {
+        "ref": "14mrh2-p_w84d.js",
+        "size": 54646
+      },
+      {
+        "ref": "2zyrkxeqlp0e-.js",
+        "size": 2830
+      },
+      {
+        "ref": "3h_foao60gm_t.js",
+        "size": 21617
+      },
+      {
+        "ref": "0hcel_fn9spa7.js",
+        "size": 37412
+      },
+      {
+        "ref": "0eu3y49_q4ap0.js",
+        "size": 831
+      },
+      {
+        "ref": "0cz1d0mv5g_q7.js",
+        "size": 112594
+      }
+    ]
+  },
+  {
+    "route": "/categories",
+    "htmlSize": 150039,
+    "inlineJs": 87335,
+    "rscPayload": 85109,
+    "jsTotal": 999562,
+    "jsCount": 12,
+    "total": 1149601,
+    "jsSizes": [
+      {
+        "ref": "0sqgp1fd-2gdw.js",
+        "size": 23972
+      },
+      {
+        "ref": "0paxexg6-m0de.js",
+        "size": 43946
+      },
+      {
+        "ref": "3skbipb8eyed0.js",
+        "size": 232565
+      },
+      {
+        "ref": "29194twgvgfhb.js",
+        "size": 145701
+      },
+      {
+        "ref": "turbopack-1fddhuq_c4ptr.js",
+        "size": 10580
+      },
+      {
+        "ref": "34fmhvhss3qwl.js",
+        "size": 33443
+      },
+      {
+        "ref": "2q2rv8ka3poj9.js",
+        "size": 327546
+      },
+      {
+        "ref": "14mrh2-p_w84d.js",
+        "size": 54646
+      },
+      {
+        "ref": "2zyrkxeqlp0e-.js",
+        "size": 2830
+      },
+      {
+        "ref": "3kvc6geg3u6k2.js",
+        "size": 10908
+      },
+      {
+        "ref": "0eu3y49_q4ap0.js",
+        "size": 831
+      },
+      {
+        "ref": "0cz1d0mv5g_q7.js",
+        "size": 112594
+      }
+    ]
+  },
+  {
+    "route": "/categories/skincare",
+    "htmlSize": 501820,
+    "inlineJs": 493178,
+    "rscPayload": 491854,
+    "jsTotal": 1048730,
+    "jsCount": 13,
+    "total": 1550550,
+    "jsSizes": [
+      {
+        "ref": "0sqgp1fd-2gdw.js",
+        "size": 23972
+      },
+      {
+        "ref": "0paxexg6-m0de.js",
+        "size": 43946
+      },
+      {
+        "ref": "3skbipb8eyed0.js",
+        "size": 232565
+      },
+      {
+        "ref": "29194twgvgfhb.js",
+        "size": 145701
+      },
+      {
+        "ref": "turbopack-1fddhuq_c4ptr.js",
+        "size": 10580
+      },
+      {
+        "ref": "34fmhvhss3qwl.js",
+        "size": 33443
+      },
+      {
+        "ref": "2q2rv8ka3poj9.js",
+        "size": 327546
+      },
+      {
+        "ref": "14mrh2-p_w84d.js",
+        "size": 54646
+      },
+      {
+        "ref": "2zyrkxeqlp0e-.js",
+        "size": 2830
+      },
+      {
+        "ref": "43kabh42vp8mf.js",
+        "size": 22664
+      },
+      {
+        "ref": "0hcel_fn9spa7.js",
+        "size": 37412
+      },
+      {
+        "ref": "0eu3y49_q4ap0.js",
+        "size": 831
+      },
+      {
+        "ref": "0cz1d0mv5g_q7.js",
+        "size": 112594
+      }
+    ]
+  },
+  {
+    "route": "/products/yq-754",
+    "htmlSize": 262915,
+    "inlineJs": 98999,
+    "rscPayload": 96170,
+    "jsTotal": 1030535,
+    "jsCount": 12,
+    "total": 1293450,
+    "jsSizes": [
+      {
+        "ref": "0sqgp1fd-2gdw.js",
+        "size": 23972
+      },
+      {
+        "ref": "0paxexg6-m0de.js",
+        "size": 43946
+      },
+      {
+        "ref": "3skbipb8eyed0.js",
+        "size": 232565
+      },
+      {
+        "ref": "29194twgvgfhb.js",
+        "size": 145701
+      },
+      {
+        "ref": "turbopack-1fddhuq_c4ptr.js",
+        "size": 10580
+      },
+      {
+        "ref": "34fmhvhss3qwl.js",
+        "size": 33443
+      },
+      {
+        "ref": "2q2rv8ka3poj9.js",
+        "size": 327546
+      },
+      {
+        "ref": "14mrh2-p_w84d.js",
+        "size": 54646
+      },
+      {
+        "ref": "2zyrkxeqlp0e-.js",
+        "size": 2830
+      },
+      {
+        "ref": "1lo9_pqz3w_mk.js",
+        "size": 41881
+      },
+      {
+        "ref": "0eu3y49_q4ap0.js",
+        "size": 831
+      },
+      {
+        "ref": "0cz1d0mv5g_q7.js",
+        "size": 112594
+      }
+    ]
+  },
+  {
+    "route": "/brands",
+    "htmlSize": 277007,
+    "inlineJs": 156577,
+    "rscPayload": 154351,
+    "jsTotal": 1003131,
+    "jsCount": 12,
+    "total": 1280138,
+    "jsSizes": [
+      {
+        "ref": "0sqgp1fd-2gdw.js",
+        "size": 23972
+      },
+      {
+        "ref": "0paxexg6-m0de.js",
+        "size": 43946
+      },
+      {
+        "ref": "3skbipb8eyed0.js",
+        "size": 232565
+      },
+      {
+        "ref": "29194twgvgfhb.js",
+        "size": 145701
+      },
+      {
+        "ref": "turbopack-1fddhuq_c4ptr.js",
+        "size": 10580
+      },
+      {
+        "ref": "34fmhvhss3qwl.js",
+        "size": 33443
+      },
+      {
+        "ref": "2q2rv8ka3poj9.js",
+        "size": 327546
+      },
+      {
+        "ref": "14mrh2-p_w84d.js",
+        "size": 54646
+      },
+      {
+        "ref": "2zyrkxeqlp0e-.js",
+        "size": 2830
+      },
+      {
+        "ref": "1e2nir1q6bfdz.js",
+        "size": 14477
+      },
+      {
+        "ref": "0eu3y49_q4ap0.js",
+        "size": 831
+      },
+      {
+        "ref": "0cz1d0mv5g_q7.js",
+        "size": 112594
+      }
+    ]
+  },
+  {
+    "route": "/compare",
+    "htmlSize": 22138,
+    "inlineJs": 15966,
+    "rscPayload": 14642,
+    "jsTotal": 1136677,
+    "jsCount": 14,
+    "total": 1158815,
+    "jsSizes": [
+      {
+        "ref": "0sqgp1fd-2gdw.js",
+        "size": 23972
+      },
+      {
+        "ref": "0paxexg6-m0de.js",
+        "size": 43946
+      },
+      {
+        "ref": "3skbipb8eyed0.js",
+        "size": 232565
+      },
+      {
+        "ref": "29194twgvgfhb.js",
+        "size": 145701
+      },
+      {
+        "ref": "turbopack-1fddhuq_c4ptr.js",
+        "size": 10580
+      },
+      {
+        "ref": "34fmhvhss3qwl.js",
+        "size": 33443
+      },
+      {
+        "ref": "2q2rv8ka3poj9.js",
+        "size": 327546
+      },
+      {
+        "ref": "14mrh2-p_w84d.js",
+        "size": 54646
+      },
+      {
+        "ref": "2zyrkxeqlp0e-.js",
+        "size": 2830
+      },
+      {
+        "ref": "0eu3y49_q4ap0.js",
+        "size": 831
+      },
+      {
+        "ref": "0xdjwmrcglyfs.js",
+        "size": 5431
+      },
+      {
+        "ref": "24xd2-j-dpfc-.js",
+        "size": 106967
+      },
+      {
+        "ref": "2csd7lenf9kj3.js",
+        "size": 35625
+      },
+      {
+        "ref": "0cz1d0mv5g_q7.js",
+        "size": 112594
+      }
+    ]
+  },
+  {
+    "route": "/about",
+    "htmlSize": 57792,
+    "inlineJs": 15305,
+    "rscPayload": 13079,
+    "jsTotal": 1036392,
+    "jsCount": 12,
+    "total": 1094184,
+    "jsSizes": [
+      {
+        "ref": "0sqgp1fd-2gdw.js",
+        "size": 23972
+      },
+      {
+        "ref": "0paxexg6-m0de.js",
+        "size": 43946
+      },
+      {
+        "ref": "3skbipb8eyed0.js",
+        "size": 232565
+      },
+      {
+        "ref": "29194twgvgfhb.js",
+        "size": 145701
+      },
+      {
+        "ref": "turbopack-1fddhuq_c4ptr.js",
+        "size": 10580
+      },
+      {
+        "ref": "34fmhvhss3qwl.js",
+        "size": 33443
+      },
+      {
+        "ref": "2q2rv8ka3poj9.js",
+        "size": 327546
+      },
+      {
+        "ref": "14mrh2-p_w84d.js",
+        "size": 54646
+      },
+      {
+        "ref": "2zyrkxeqlp0e-.js",
+        "size": 2830
+      },
+      {
+        "ref": "0eu3y49_q4ap0.js",
+        "size": 831
+      },
+      {
+        "ref": "401cdttp-2v9j.js",
+        "size": 47738
+      },
+      {
+        "ref": "0cz1d0mv5g_q7.js",
+        "size": 112594
+      }
+    ]
+  },
+  {
+    "route": "/search",
+    "htmlSize": 21435,
+    "inlineJs": 16214,
+    "rscPayload": 14890,
+    "jsTotal": 1036369,
+    "jsCount": 13,
+    "total": 1057804,
+    "jsSizes": [
+      {
+        "ref": "0sqgp1fd-2gdw.js",
+        "size": 23972
+      },
+      {
+        "ref": "0paxexg6-m0de.js",
+        "size": 43946
+      },
+      {
+        "ref": "3skbipb8eyed0.js",
+        "size": 232565
+      },
+      {
+        "ref": "29194twgvgfhb.js",
+        "size": 145701
+      },
+      {
+        "ref": "turbopack-1fddhuq_c4ptr.js",
+        "size": 10580
+      },
+      {
+        "ref": "34fmhvhss3qwl.js",
+        "size": 33443
+      },
+      {
+        "ref": "2q2rv8ka3poj9.js",
+        "size": 327546
+      },
+      {
+        "ref": "14mrh2-p_w84d.js",
+        "size": 54646
+      },
+      {
+        "ref": "2zyrkxeqlp0e-.js",
+        "size": 2830
+      },
+      {
+        "ref": "3p_k9q3tcq6hb.js",
+        "size": 12090
+      },
+      {
+        "ref": "2csd7lenf9kj3.js",
+        "size": 35625
+      },
+      {
+        "ref": "0eu3y49_q4ap0.js",
+        "size": 831
+      },
+      {
+        "ref": "0cz1d0mv5g_q7.js",
+        "size": 112594
+      }
+    ]
+  }
+]

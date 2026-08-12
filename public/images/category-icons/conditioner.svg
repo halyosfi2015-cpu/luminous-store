@@ -1,0 +1,15 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="conditionerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#A855F7"/>
+    </linearGradient>
+  </defs>
+  <path d="M18 8C18 4.686 20.686 2 24 2H40C43.314 2 46 4.686 46 8V16C46 18.209 44 20 42 20H22C19.791 20 18 18.209 18 16V8Z" fill="url(#conditionerGradient)" stroke="white" stroke-width="2"/>
+  <ellipse cx="32" cy="44" rx="16" ry="12" fill="url(#conditionerGradient)" stroke="white" stroke-width="2"/>
+  <path d="M26 34C26 30 29 28 33 28C37 28 40 30 40 34V42C40 46 37 48 33 48C29 48 26 46 26 42V34Z" fill="white" opacity="0.3"/>
+  <path d="M32 32V48" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M28 38L36 38" stroke="url(#conditionerGradient)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M24 12C24 12 26 14 32 14C38 14 40 12 40 12" stroke="white" stroke-width="2.5" fill="none"/>
+  <path d="M32 18C32 14 28 12 24 12" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+</svg>

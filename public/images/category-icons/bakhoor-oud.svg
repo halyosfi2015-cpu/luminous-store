@@ -1,0 +1,14 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="oudGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+  </defs>
+  <path d="M32 6C26 6 22 12 22 18V24C22 30 26 36 32 36C38 36 42 30 42 24V18C42 12 38 6 32 6Z" fill="url(#oudGradient)" stroke="white" stroke-width="2"/>
+  <path d="M24 24C24 20 27 18 31 18C35 18 38 20 38 24" stroke="white" stroke-width="2.5" fill="none"/>
+  <circle cx="32" cy="28" r="3" fill="white"/>
+  <path d="M14 30C14 24 18 20 24 20C30 20 34 24 34 30V50C34 55.523 29.523 60 24 60H18C12.477 60 8 55.523 8 50V36C8 32 10 30 14 30Z" fill="url(#oudGradient)" stroke="white" stroke-width="2"/>
+  <path d="M50 40C50 36 53 34 57 34C61 34 63 36 63 40V50C63 57.732 56.732 64 49 64H43C35.268 64 29 57.732 29 50V40C29 36 31 34 34 34C37 34 41 36 41 40V50C41 52.761 43.239 55 46 55H54C56.761 55 59 52.761 59 50V40C59 36 54 34 50 40Z" fill="url(#oudGradient)" stroke="white" stroke-width="2"/>
+  <circle cx="32" cy="32" r="2" fill="white" opacity="0.4"/>
+</svg>

@@ -1,0 +1,16 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shampooGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#A855F7"/>
+    </linearGradient>
+  </defs>
+  <path d="M16 8C16 4.686 18.686 2 22 2H42C45.314 2 48 4.686 48 8V20H16V8Z" fill="url(#shampooGradient)" stroke="white" stroke-width="2"/>
+  <ellipse cx="32" cy="38" rx="18" ry="12" fill="url(#shampooGradient)" stroke="white" stroke-width="2"/>
+  <circle cx="32" cy="32" r="5" fill="white"/>
+  <path d="M24 22C24 18 27 16 30 16C33 16 36 18 36 22" stroke="url(#shampooGradient)" stroke-width="2.5" fill="none"/>
+  <path d="M20 26C20 22 24 20 28 20H36C40 20 44 22 44 26" stroke="url(#shampooGradient)" stroke-width="2" fill="none"/>
+  <path d="M20 30C20 26 24 24 28 24H36C40 24 44 26 44 30" stroke="url(#shampooGradient)" stroke-width="2" fill="none"/>
+  <path d="M32 18V30" stroke="white" stroke-width="2"/>
+  <circle cx="32" cy="36" r="3" fill="white" opacity="0.3"/>
+</svg>

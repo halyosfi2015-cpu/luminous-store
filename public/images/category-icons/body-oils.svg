@@ -1,0 +1,17 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bodyOilsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="32" cy="42" rx="14" ry="10" fill="url(#bodyOilsGradient)" stroke="white" stroke-width="2"/>
+  <path d="M20 28C20 22 26 18 32 18C38 18 44 22 44 28" stroke="white" stroke-width="3" fill="none"/>
+  <circle cx="32" cy="32" r="3" fill="url(#bodyOilsGradient)" stroke="white" stroke-width="1.5"/>
+  <path d="M32 28V16C32 16 36 14 40 14" stroke="url(#bodyOilsGradient)" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M28 22C28 18 32 16 36 16" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M48 42L52 38" stroke="url(#bodyOilsGradient)" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M48 46L52 50" stroke="url(#bodyOilsGradient)" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M52 42L46 46L52 42Z" fill="url(#bodyOilsGradient)"/>
+  <circle cx="22" cy="40" r="3" fill="white"/>
+</svg>

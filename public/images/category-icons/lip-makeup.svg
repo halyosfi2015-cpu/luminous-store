@@ -1,0 +1,16 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="lipMakeupGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#F43F5E"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="32" cy="44" rx="18" ry="10" fill="url(#lipMakeupGradient)" stroke="white" stroke-width="2"/>
+  <circle cx="24" cy="38" r="5" fill="white"/>
+  <circle cx="40" cy="38" r="5" fill="white"/>
+  <path d="M16 34C16 28 20 24 26 22C32 20 38 24 42 26C46 28 48 32 48 36V40C48 48 40 54 32 54C24 54 16 48 16 40V34Z" fill="white"/>
+  <path d="M22 26C22 22 26 20 30 18C34 16 38 18 42 22" stroke="url(#lipMakeupGradient)" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M54 32C54 26 52 22 48 20" stroke="url(#lipMakeupGradient)" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <ellipse cx="24" cy="40" rx="6" ry="3" fill="white" opacity="0.4"/>
+  <ellipse cx="40" cy="40" rx="6" ry="3" fill="white" opacity="0.4"/>
+</svg>

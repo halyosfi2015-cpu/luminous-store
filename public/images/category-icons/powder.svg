@@ -1,0 +1,14 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="powderGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+  </defs>
+  <path d="M18 14C18 10.686 20.686 8 24 8H40C43.314 8 46 10.686 46 14V18C46 21.314 43.314 24 40 24H24C20.686 24 18 21.314 18 18V14Z" fill="url(#powderGradient)" stroke="white" stroke-width="2"/>
+  <ellipse cx="32" cy="42" rx="18" ry="12" fill="url(#powderGradient)" stroke="white" stroke-width="2"/>
+  <circle cx="32" cy="38" r="6" fill="white"/>
+  <path d="M22 36C22 32 26 30 30 30H34C38 30 42 32 42 36V40C42 44 38 46 34 46C30 46 26 44 26 40V36Z" fill="none" stroke="white" stroke-width="2"/>
+  <path d="M16 14L18 18H46L48 14H16Z" fill="white" stroke="url(#powderGradient)" stroke-width="1.5"/>
+  <path d="M32 20C30 20 29 18 29 16C29 15 30 14 32 14C34 14 35 15 35 16C35 18 34 20 32 20Z" fill="white"/>
+</svg>

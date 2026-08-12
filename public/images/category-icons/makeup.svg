@@ -1,0 +1,17 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="makeupGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+    <linearGradient id="makeupHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A855F7"/>
+      <stop offset="100%" stop-color="#F43F5E"/>
+    </linearGradient>
+  </defs>
+  <path d="M16 44C16 36.268 22.268 30 30 30C33.993 30 37.598 32.147 39.454 35.447C41.687 32.454 45.361 30.576 49.5 30.576C54.895 30.576 59.405 35.064 59.405 40.458C59.405 43.07 57.965 45.403 55.656 46.788C56.479 48.489 57 50.458 57 52.626C57 56.458 53.941 59.626 50 59.626H22C18.06 59.626 15 56.567 15 52.626C15 50.035 16.52 47.742 19 46.742" fill="url(#makeupGradient)" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M39.5 24.5C39.5 21.463 41.963 19 45 19C48.037 19 50.5 21.463 50.5 24.5C50.5 27.537 48.037 30 45 30C41.963 30 39.5 27.537 39.5 24.5Z" fill="white"/>
+  <path d="M45 13C46.657 13 48 11.657 48 10C48 8.343 46.657 7 45 7C43.343 7 42 8.343 42 10C42 11.657 43.343 13 45 13Z" fill="url(#makeupHighlight)"/>
+  <circle cx="45" cy="19" r="2.5" fill="url(#makeupHighlight)"/>
+  <path d="M45 33C36.715 33 30 26.285 30 18C30 9.715 36.715 3 45 3C53.285 3 60 9.715 60 18C60 22.5 57.122 26.5 53 28.5" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/>
+</svg>

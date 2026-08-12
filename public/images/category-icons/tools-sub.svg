@@ -1,0 +1,17 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="toolsSubGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9CA3AF"/>
+      <stop offset="100%" stop-color="#6B7280"/>
+    </linearGradient>
+  </defs>
+  <circle cx="24" cy="28" r="6" fill="url(#toolsSubGradient)"/>
+  <circle cx="40" cy="28" r="6" fill="url(#toolsSubGradient)"/>
+  <path d="M18 48C18 48 16 42 20 38C24 34 29 34 32 38" stroke="url(#toolsSubGradient)" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M32 42C32 42 28 40 26 36C24 32 26 28 29 26" stroke="url(#toolsSubGradient)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M46 48C46 48 48 42 43 39C38 36 34 38 34 41" stroke="url(#toolsSubGradient)" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <line x1="32" y1="42" x2="32" y2="48" stroke="url(#toolsSubGradient)" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="32" cy="52" r="5" fill="url(#toolsSubGradient)"/>
+  <rect x="12" y="12" width="8" height="12" rx="2" fill="url(#toolsSubGradient)"/>
+  <rect x="44" y="12" width="8" height="12" rx="2" fill="url(#toolsSubGradient)"/>
+</svg>

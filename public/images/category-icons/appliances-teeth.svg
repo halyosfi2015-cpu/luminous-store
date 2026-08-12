@@ -1,0 +1,17 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="oralCareGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9CA3AF"/>
+      <stop offset="100%" stop-color="#6B7280"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="32" cy="44" rx="16" ry="12" fill="url(#oralCareGradient)" stroke="white" stroke-width="2"/>
+  <circle cx="32" cy="34" r="4" fill="white"/>
+  <path d="M24 34C24 30 27 28 31 28C35 28 39 30 39 34V42C39 46 35 48 31 48C27 48 23 46 23 42V34Z" fill="none" stroke="white" stroke-width="2.5"/>
+  <path d="M22 22C22 18 25 16 29 16C33 16 37 18 37 22V26" stroke="url(#oralCareGradient)" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <rect x="26" y="16" width="12" height="6" rx="2" fill="url(#oralCareGradient)"/>
+  <path d="M24 28C24 24 27 22 31 22C35 22 39 24 39 28" stroke="url(#oralCareGradient)" stroke-width="2.5" fill="none"/>
+  <path d="M16 42C16 36 20 32 25 32H39C44 32 48 36 48 42V52C48 57.523 44.523 62 40 62H24C19.477 62 16 57.523 16 52V42Z" fill="url(#oralCareGradient)"/>
+  <circle cx="32" cy="49" r="3" fill="white"/>
+  <path d="M32 46V52" stroke="white" stroke-width="2" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,78 @@
+<svg viewBox="0 0 700 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="pbg" x1="0%" y1="0%" x2="100%" y2="70%">
+      <stop offset="0%" stop-color="#fdf2f6" />
+      <stop offset="55%" stop-color="#fbdce9" />
+      <stop offset="100%" stop-color="#f2cfe4" />
+    </linearGradient>
+    <linearGradient id="pskin" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f4c8b4" />
+      <stop offset="100%" stop-color="#dfa084" />
+    </linearGradient>
+    <linearGradient id="phair" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4a2e2b" />
+      <stop offset="100%" stop-color="#231411" />
+    </linearGradient>
+    <radialGradient id="pglow" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="pbottleA" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#f4e3ea" />
+    </linearGradient>
+    <linearGradient id="pbottleB" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#6b4226" />
+      <stop offset="100%" stop-color="#3f2716" />
+    </linearGradient>
+    <linearGradient id="pdrop" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f0d878" />
+      <stop offset="100%" stop-color="#d4af37" />
+    </linearGradient>
+  </defs>
+
+  <rect width="700" height="800" fill="url(#pbg)" />
+  <rect width="700" height="800" fill="url(#pglow)" />
+  <circle cx="590" cy="150" r="180" fill="#ffffff" opacity="0.35" />
+  <circle cx="120" cy="680" r="120" fill="#e8a0bf" opacity="0.18" />
+  <circle cx="660" cy="700" r="90" fill="#d4af37" opacity="0.12" />
+
+  <!-- shoulders / body -->
+  <path d="M350 800 C360 620 470 540 560 540 C650 540 700 640 720 800 Z" fill="#f6d6e6" opacity="0.95" />
+
+  <!-- neck -->
+  <path d="M478 430 L478 540 Q512 570 548 540 L548 430 Z" fill="url(#pskin)" />
+
+  <!-- face profile -->
+  <path d="M440 270 Q422 360 452 442 Q478 490 526 504 Q592 508 618 452 Q640 398 618 336 Q600 262 528 226 Q460 204 440 270 Z" fill="url(#pskin)" />
+
+  <!-- ear -->
+  <path d="M432 380 Q415 392 420 416 Q427 438 448 436 Q450 418 448 398 Z" fill="url(#pskin)" stroke="#e2a184" stroke-width="2" />
+
+  <!-- hair -->
+  <path d="M430 270 Q396 120 512 96 Q640 100 612 250 Q598 170 522 160 Q436 162 424 300 Q414 292 430 270 Z" fill="url(#phair)" />
+  <path d="M404 320 Q380 430 432 560 Q420 460 420 340 Z" fill="url(#phair)" />
+  <path d="M620 240 Q648 220 652 280 Q652 330 634 380 Z" fill="url(#phair)" />
+
+  <!-- eyelash line -->
+  <path d="M470 340 Q486 326 508 332" stroke="#5b2a86" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.7" />
+  <path d="M528 352 Q540 348 552 356" stroke="#5b2a86" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.6" />
+
+  <!-- hand near face -->
+  <path d="M400 430 Q372 396 396 360 Q430 334 452 366 Q464 398 442 428 Q422 448 400 430 Z" fill="url(#pskin)" opacity="0.95" />
+
+  <!-- product bottles bottom left -->
+  <ellipse cx="190" cy="738" rx="150" ry="18" fill="#7c2d5c" opacity="0.10" />
+  <rect x="70" y="580" width="80" height="160" rx="16" fill="url(#pbottleA)" stroke="#e3b9cb" stroke-width="2" />
+  <rect x="86" y="545" width="48" height="42" rx="9" fill="#c48aa5" />
+  <rect x="84" y="628" width="62" height="24" rx="5" fill="#7c2d5c" opacity="0.15" />
+  <rect x="160" y="545" width="66" height="195" rx="33" fill="url(#pbottleB)" />
+  <rect x="176" y="498" width="34" height="52" rx="7" fill="#241206" />
+  <rect x="240" y="600" width="70" height="140" rx="12" fill="#e8c39a" />
+  <ellipse cx="275" cy="600" rx="35" ry="11" fill="#a9713f" />
+
+  <!-- golden droplet accents -->
+  <path d="M350 90 c6 26 16 37 42 43 -26 6 -36 17 -42 43 -6-26 -16-37 -42-43 26-6 36-17 42-43z" fill="url(#pdrop)" opacity="0.9" />
+  <circle cx="300" cy="180" r="10" fill="#d4af37" opacity="0.4" />
+  <circle cx="120" cy="120" r="7" fill="#d4af37" opacity="0.35" />
+</svg>

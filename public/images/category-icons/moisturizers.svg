@@ -1,0 +1,16 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="moisturizersGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#F43F5E"/>
+    </linearGradient>
+  </defs>
+  <path d="M24 10C24 6.686 26.686 4 30 4H34C37.314 4 40 6.686 40 10V18H24V10Z" fill="url(#moisturizersGradient)" stroke="white" stroke-width="2"/>
+  <path d="M20 20C20 20 16 22 16 28V48C16 53.523 20.477 58 26 58H38C43.523 58 48 53.523 48 48V28C48 22 44 20 44 20H20Z" fill="url(#moisturizersGradient)" stroke="white" stroke-width="2"/>
+  <path d="M28 14C28 14 30 10 34 10" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M34 4V12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="32" cy="44" r="5" fill="white"/>
+  <path d="M32 36V44M29 41H35" stroke="url(#moisturizersGradient)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M26 30C26 34 26 36 26 38" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M38 30C38 34 38 36 38 38" stroke="white" stroke-width="2" stroke-linecap="round"/>
+</svg>

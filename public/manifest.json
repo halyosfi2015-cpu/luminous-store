@@ -1,0 +1,31 @@
+{
+  "name": "Luminous Derma",
+  "short_name": "Luminous Derma",
+  "description": "منتجات العناية بالبشرة الأصلية من أفضل الماركات العالمية",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFF7F2",
+  "theme_color": "#322144",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/images/logo/luminous-derma-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/logo/luminous-derma-full-logo.png",
+      "sizes": "520x140",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["shopping", "lifestyle", "health"],
+  "lang": "ar",
+  "dir": "rtl"
+}

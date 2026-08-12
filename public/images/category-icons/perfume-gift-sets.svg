@@ -1,0 +1,16 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="giftSetsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14B8A6"/>
+      <stop offset="100%" stop-color="#0D9488"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 24C20 20 23 18 27 18H37C41 18 44 20 44 24V32C44 36 40 38 37 38H27C24 38 20 36 20 32V24Z" fill="url(#giftSetsGradient)" stroke="white" stroke-width="2"/>
+  <path d="M26 18V12C26 9 29 6 32 6C35 6 38 9 38 12V18" fill="url(#giftSetsGradient)" stroke="white" stroke-width="2"/>
+  <rect x="28" y="12" width="8" height="8" rx="2" fill="white"/>
+  <rect x="26" y="26" width="12" height="8" rx="2" fill="url(#giftSetsGradient)"/>
+  <rect x="38" y="26" width="12" height="8" rx="2" fill="url(#giftSetsGradient)"/>
+  <rect x="50" y="26" width="12" height="8" rx="2" fill="url(#giftSetsGradient)"/>
+  <circle cx="32" cy="50" r="8" fill="url(#giftSetsGradient)"/>
+  <path d="M26 46L30 50L38 42" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>

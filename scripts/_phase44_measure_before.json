@@ -1,0 +1,12 @@
+[
+  { "route": "/", "htmlSize": 2141166, "inlineJs": 21469, "rscPayload": 18853, "jsTotal": 1923148, "jsCount": 15, "total": 4064314 },
+  { "route": "/products", "htmlSize": 1026147, "inlineJs": 1020452, "rscPayload": 1019128, "jsTotal": 1672778, "jsCount": 13, "total": 2698925 },
+  { "route": "/categories", "htmlSize": 150039, "inlineJs": 87335, "rscPayload": 85109, "jsTotal": 1624672, "jsCount": 12, "total": 1774711 },
+  { "route": "/categories/skincare", "htmlSize": 501820, "inlineJs": 493178, "rscPayload": 491854, "jsTotal": 1673840, "jsCount": 13, "total": 2175660 },
+  { "route": "/products/yq-754", "htmlSize": 262915, "inlineJs": 98999, "rscPayload": 96170, "jsTotal": 1655630, "jsCount": 12, "total": 1918545 },
+  { "route": "/brands", "htmlSize": 277007, "inlineJs": 156577, "rscPayload": 154351, "jsTotal": 1628226, "jsCount": 12, "total": 1905233 },
+  { "route": "/experts", "htmlSize": 39956, "inlineJs": 26573, "rscPayload": 25249, "jsTotal": 1613749, "jsCount": 11, "total": 1653705 },
+  { "route": "/articles", "htmlSize": 46134, "inlineJs": 29804, "rscPayload": 27578, "jsTotal": 1628226, "jsCount": 12, "total": 1674360 },
+  { "route": "/about", "htmlSize": 57792, "inlineJs": 15305, "rscPayload": 13079, "jsTotal": 1661487, "jsCount": 12, "total": 1719279 },
+  { "route": "/contact", "htmlSize": 34189, "inlineJs": 20942, "rscPayload": 19618, "jsTotal": 1620478, "jsCount": 12, "total": 1654667 }
+]

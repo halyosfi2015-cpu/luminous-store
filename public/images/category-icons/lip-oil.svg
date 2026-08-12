@@ -1,0 +1,14 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="lipOilGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#F43F5E"/>
+    </linearGradient>
+  </defs>
+  <path d="M24 12C24 8 27 6 30 6H34C37 6 40 8 40 12V16C40 20 37 22 34 22H30C27 22 24 20 24 16V12Z" fill="url(#lipOilGradient)" stroke="white" stroke-width="2"/>
+  <ellipse cx="32" cy="44" rx="16" ry="12" fill="url(#lipOilGradient)" stroke="white" stroke-width="2"/>
+  <circle cx="24" cy="38" r="5" fill="white"/>
+  <circle cx="40" cy="38" r="5" fill="white"/>
+  <path d="M28 30C28 26 30 24 33 24C36 24 38 26 38 30V44C38 46 34 48 32 48C30 48 26 46 26 44V30Z" fill="none" stroke="white" stroke-width="2"/>
+  <path d="M36 40C36 38 35 37 33 37" stroke="url(#lipOilGradient)" stroke-width="2" fill="none"/>
+</svg>

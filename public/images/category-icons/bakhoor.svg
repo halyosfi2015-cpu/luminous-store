@@ -1,0 +1,16 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M48 12C48 7.582 44.418 4 40 4H24C19.582 4 16 7.582 16 12V44C16 55.046 24.954 64 36 64H40C51.046 64 60 55.046 60 44V12C60 7.582 56.418 4 52 4L48 12Z" fill="url(#bakhoorGradient)" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <defs>
+    <linearGradient id="bakhoorGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+  </defs>
+  <path d="M32 50C36.418 50 40 46.418 40 42C40 37.582 36.418 34 32 34C27.582 34 24 37.582 24 42C24 46.418 27.582 50 32 50Z" fill="url(#bakhoorGradient)" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M32 34V28" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M28 30C28 30 24 31 24 36" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M36 30C36 30 40 31 40 36" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M37 56C37 56 39 58 42 58C45 58 47 56 47 54" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M22 54C22 54 20 56 17 56C14 56 12 54 12 52" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="32" cy="22" r="4" fill="white"/>
+</svg>

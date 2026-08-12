@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e8f0fe"/>
+      <stop offset="100%" stop-color="#d5e5f5"/>
+    </linearGradient>
+    <linearGradient id="hair" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#0f0f1a"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#bg)" rx="200"/>
+  <!-- Hair -->
+  <path d="M130 140 Q140 90 200 80 Q260 90 270 140 L275 170 Q270 155 200 150 Q130 155 125 170 Z" fill="url(#hair)"/>
+  <!-- Face -->
+  <ellipse cx="200" cy="195" rx="60" ry="68" fill="#e8c49a"/>
+  <!-- Eyes -->
+  <ellipse cx="180" cy="190" rx="5.5" ry="5" fill="#1a1a2e"/>
+  <ellipse cx="220" cy="190" rx="5.5" ry="5" fill="#1a1a2e"/>
+  <circle cx="180" cy="189" r="1.8" fill="white"/>
+  <circle cx="220" cy="189" r="1.8" fill="white"/>
+  <!-- Eyebrows -->
+  <path d="M170 177 Q180 173 190 177" stroke="#1a1a2e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M210 177 Q220 173 230 177" stroke="#1a1a2e" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Nose -->
+  <path d="M197 200 Q200 207 203 200" stroke="#c49a6c" stroke-width="1.5" fill="none"/>
+  <!-- Smile -->
+  <path d="M187 218 Q200 227 213 218" stroke="#b87a5a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- Short hair sides -->
+  <path d="M130 140 Q125 160 128 175" stroke="#0f0f1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M270 140 Q275 160 272 175" stroke="#0f0f1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- Lab coat -->
+  <path d="M130 280 Q140 260 200 255 Q260 260 270 280 L280 400 L120 400 Z" fill="white"/>
+  <path d="M175 255 L180 290 L200 295 L220 290 L225 255" fill="white" stroke="#e8e8e8" stroke-width="1"/>
+  <!-- Pen in pocket -->
+  <rect x="235" y="270" width="3" height="20" rx="1.5" fill="#1a1a2e"/>
+  <circle cx="236.5" cy="269" r="2.5" fill="#D4AF37"/>
+</svg>

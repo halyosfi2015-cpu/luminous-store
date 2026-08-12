@@ -1,0 +1,15 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="masksGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14B8A6"/>
+      <stop offset="100%" stop-color="#0D9488"/>
+    </linearGradient>
+  </defs>
+  <path d="M12 40C12 32 20 24 28 24H36C44 24 52 32 52 40V52C52 59.234 46.234 64 38.929 60H25.071C17.766 64 12 59.234 12 52V40Z" fill="url(#masksGradient)" stroke="white" stroke-width="2"/>
+  <circle cx="32" cy="32" r="10" fill="white" opacity="0.3"/>
+  <path d="M22 22C22 16 28 12 34 12C40 12 46 16 46 22" stroke="white" stroke-width="2.5" fill="none"/>
+  <path d="M22 28C22 24 26 22 30 22H34C38 22 42 24 42 28" stroke="url(#masksGradient)" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M28 36C28 34 30 32 32 32C34 32 36 34 36 36" fill="white" opacity="0.4"/>
+  <path d="M26 38C26 40 28 42 30 42C32 42 34 40 34 38" fill="white" opacity="0.4"/>
+  <path d="M44 36C44 38 42 40 40 40C38 40 36 42 36 44" fill="white" opacity="0.4"/>
+</svg>

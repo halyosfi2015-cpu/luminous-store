@@ -1,0 +1,20 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="appliancesHairGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9CA3AF"/>
+      <stop offset="100%" stop-color="#6B7280"/>
+    </linearGradient>
+    <linearGradient id="hairDryerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#93C5FD"/>
+      <stop offset="100%" stop-color="#60A5FA"/>
+    </linearGradient>
+  </defs>
+  <rect x="14" y="16" width="36" height="8" rx="4" fill="url(#hairDryerGradient)"/>
+  <path d="M12 16L8 22L12 28L16 24L12 16Z" fill="url(#hairDryerGradient)"/>
+  <ellipse cx="44" cy="42" rx="16" ry="12" fill="url(#appliancesHairGradient)" stroke="white" stroke-width="2"/>
+  <path d="M40 32C40 28 43 26 47 26C51 26 55 28 55 32V42C55 46 51 48 47 48" stroke="white" stroke-width="2.5" fill="none"/>
+  <path d="M36 36L32 42L36 48" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="48" cy="38" r="5" fill="url(#hairDryerGradient)"/>
+  <path d="M34 24L28 34" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M42 24L48 30" stroke="white" stroke-width="2" stroke-linecap="round"/>
+</svg>

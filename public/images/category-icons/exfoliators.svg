@@ -1,0 +1,17 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="exfoliatorsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#F43F5E"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="32" cy="44" rx="18" ry="10" fill="url(#exfoliatorsGradient)" stroke="white" stroke-width="2"/>
+  <path d="M18 30C18 24 26 20 32 20C38 20 46 24 46 30" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M14 32C14 26 22 22 28 22C34 22 42 26 42 32" stroke="white" stroke-width="2.5" fill="none"/>
+  <path d="M10 34C10 28 18 24 24 24C30 24 38 28 38 34" stroke="white" stroke-width="2" fill="none"/>
+  <path d="M54 34C54 28 46 24 40 24C34 24 28 28 28 34" fill="white" stroke="url(#exfoliatorsGradient)" stroke-width="2" fill="none"/>
+  <path d="M22 36C22 40 26 42 30 42" stroke="url(#exfoliatorsGradient)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M42 36C42 40 38 42 34 42" stroke="url(#exfoliatorsGradient)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <circle cx="32" cy="48" r="4" fill="white"/>
+  <path d="M32 44V52" stroke="white" stroke-width="2" stroke-linecap="round"/>
+</svg>

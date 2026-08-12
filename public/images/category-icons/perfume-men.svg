@@ -1,0 +1,19 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="perfumeMenGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14B8A6"/>
+      <stop offset="100%" stop-color="#0D9488"/>
+    </linearGradient>
+    <linearGradient id="metallic" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9CA3AF"/>
+      <stop offset="100%" stop-color="#6B7280"/>
+    </linearGradient>
+  </defs>
+  <path d="M28 8C28 5.791 30 4 32 4C34 4 36 5.791 36 8" fill="none" stroke="url(#metallic)" stroke-width="3" stroke-linecap="round"/>
+  <rect x="26" y="10" width="6" height="14" rx="3" fill="url(#metallic)"/>
+  <path d="M24 20C24 20 22 24 22 28V42C22 48 26 52 30 56H34C38 56 42 52 42 46V32C42 28 40 24 40 24H24Z" fill="url(#perfumeMenGradient)" stroke="white" stroke-width="2"/>
+  <rect x="28" y="22" width="4" height="6" fill="url(#metallic)"/>
+  <circle cx="32" cy="40" r="4" fill="white"/>
+  <path d="M32 46V50" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M26 48L38 48" stroke="white" stroke-width="2" stroke-linecap="round"/>
+</svg>

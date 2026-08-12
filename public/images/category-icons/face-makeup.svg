@@ -1,0 +1,14 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="faceMakeupGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+  </defs>
+  <rect x="20" y="12" width="24" height="32" rx="8" fill="url(#faceMakeupGradient)" stroke="white" stroke-width="2"/>
+  <rect x="22" y="14" width="20" height="20" rx="4" fill="white" opacity="0.3"/>
+  <rect x="22" y="36" width="20" height="8" rx="3" fill="white" opacity="0.4"/>
+  <circle cx="32" cy="58" r="6" fill="url(#faceMakeupGradient)"/>
+  <path d="M16 28C16 22 21 18 27 18H37C43 18 48 22 48 28V32C48 35.314 43 38 37 38H27C21 38 16 35.314 16 32V28Z" fill="none" stroke="white" stroke-width="2"/>
+  <path d="M32 38C32 38 28 40 28 44C28 48 32 50 36 50" stroke="white" stroke-width="2.5" fill="none"/>
+</svg>

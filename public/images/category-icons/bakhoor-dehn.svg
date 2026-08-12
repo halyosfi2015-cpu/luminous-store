@@ -1,0 +1,15 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="dehnGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="32" cy="40" rx="16" ry="12" fill="url(#dehnGradient)" stroke="white" stroke-width="2"/>
+  <path d="M20 24C20 18 25 14 30 14C35 14 40 18 40 24V30" stroke="white" stroke-width="3" fill="none"/>
+  <circle cx="32" cy="30" r="4" fill="white"/>
+  <path d="M24 32C24 28 27 26 30 26H34C37 26 40 28 40 32V40C40 44 36 46 33 46C30 46 26 44 26 40V32Z" fill="none" stroke="url(#dehnGradient)" stroke-width="2.5"/>
+  <path d="M26 38C26 36 28 34 30 34C32 34 34 36 34 38" stroke="white" stroke-width="2" fill="none"/>
+  <circle cx="50" cy="50" r="10" fill="url(#dehnGradient)"/>
+  <circle cx="50" cy="50" r="4" fill="white"/>
+</svg>

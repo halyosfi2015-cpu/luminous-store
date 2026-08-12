@@ -1,0 +1,19 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="perfumeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14B8A6"/>
+      <stop offset="100%" stop-color="#0D9488"/>
+    </linearGradient>
+    <linearGradient id="perfumeBottle" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5EEAD4"/>
+      <stop offset="100%" stop-color="#94F2C4"/>
+    </linearGradient>
+  </defs>
+  <path d="M32 8C24 8 18 14 18 22V42C18 50 24 56 32 56C40 56 46 50 46 42V22C46 14 40 8 32 8Z" fill="url(#perfumeGradient)" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M28 22V18C28 13.582 31.582 10 36 10H38C42.418 10 48 5.418 48 0H16C16 5.418 21.582 10 26 10H28V18" fill="white"/>
+  <path d="M28 22H36V42H28V22Z" fill="white" opacity="0.3"/>
+  <circle cx="32" cy="42" r="4" fill="url(#perfumeBottle)" stroke="white" stroke-width="2"/>
+  <path d="M32 28C30 28 29 29 29 31C29 33 31 35 33 35C35 35 37 33 37 31C37 29 36 28 34 28H32Z" fill="white"/>
+  <path d="M24 46C24 46 18 48 18 54" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M40 46C40 46 46 48 46 54" stroke="white" stroke-width="2" stroke-linecap="round"/>
+</svg>

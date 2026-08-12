@@ -1,0 +1,12 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M48 8C48 8 42 14 32 14C22 14 16 8 16 8C16 8 22 2 32 2C42 2 48 8 48 8Z" fill="url(#hairGradient)" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <defs>
+    <linearGradient id="hairGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#A855F7"/>
+    </linearGradient>
+  </defs>
+  <path d="M52 22C52 22 46 28 36 28C26 28 20 22 20 22C20 22 26 28 36 28C46 28 52 22 52 22Z" fill="url(#hairGradient)" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M44 30C44 30 40 34 32 36C24 38 20 34 20 34V42C20 51.941 28.059 60 40 60H48C51.314 60 54 57.314 54 54V34C52 33 48 31 44 30Z" fill="url(#hairGradient)" stroke="white" stroke-width="2"/>
+  <path d="M32 28C36.418 28 40 24.418 40 20C40 15.582 36.418 12 32 12C27.582 12 24 15.582 24 20C24 24.418 27.582 28 32 28Z" fill="white" opacity="0.3"/>
+</svg>

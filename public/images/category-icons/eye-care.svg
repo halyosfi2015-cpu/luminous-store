@@ -1,0 +1,18 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="eyeCareGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14B8A6"/>
+      <stop offset="100%" stop-color="#0D9488"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="24" cy="32" rx="8" ry="10" fill="url(#eyeCareGradient)" stroke="white" stroke-width="2"/>
+  <ellipse cx="40" cy="32" rx="8" ry="10" fill="url(#eyeCareGradient)" stroke="white" stroke-width="2"/>
+  <path d="M32 22C32 18 36 14 40 14C44 14 48 18 48 22" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M32 42C32 46 28 50 24 50C20 50 16 46 16 42" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="24" cy="28" r="3" fill="white"/>
+  <circle cx="40" cy="28" r="3" fill="white"/>
+  <path d="M24 22L26 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M40 22L38 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M24 42L26 46" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M40 42L38 46" stroke="white" stroke-width="2" stroke-linecap="round"/>
+</svg>

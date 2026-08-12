@@ -1,0 +1,15 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="lipstickGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#F43F5E"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 16C20 10 26 4 32 4C38 4 44 10 44 16V24C44 28 42 30 38 30H26C22 30 20 28 20 24V16Z" fill="url(#lipstickGradient)" stroke="white" stroke-width="2"/>
+  <ellipse cx="32" cy="42" rx="16" ry="10" fill="url(#lipstickGradient)" stroke="white" stroke-width="2"/>
+  <circle cx="32" cy="36" r="5" fill="white"/>
+  <path d="M24 42C24 38 28 36 32 36C36 36 40 38 40 42" stroke="white" stroke-width="2.5" fill="none"/>
+  <path d="M22 22C22 18 25 16 28 16C31 16 34 18 34 22" stroke="url(#lipstickGradient)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M42 22C42 18 39 16 36 16C33 16 30 18 30 22" stroke="url(#lipstickGradient)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <circle cx="32" cy="52" r="4" fill="white"/>
+</svg>

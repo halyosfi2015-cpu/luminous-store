@@ -1,0 +1,3 @@
+gallery: ["/images/products/yq-754.png"],
+    ingredients: { ar: ["ماء","جلسرين","مستخلص الصبار","بابونج"], en: ["Aqua","Glycerin","Aloe Vera Extract","Chamomile"] },
+    usageInstructions: { ar: "بلل

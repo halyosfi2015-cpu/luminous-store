@@ -1,0 +1,16 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="vitaminsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#14B8A6"/>
+    </linearGradient>
+  </defs>
+  <rect x="18" y="14" width="26" height="36" rx="8" fill="url(#vitaminsGradient)" stroke="white" stroke-width="2"/>
+  <path d="M20 16C20 12 23 10 26 10H38C41 10 44 12 44 16V22" fill="url(#vitaminsGradient)" stroke="white" stroke-width="2"/>
+  <path d="M24 18C24 15 26 13 28 13H36C38 13 40 15 40 18" fill="none" stroke="white" stroke-width="2.5"/>
+  <circle cx="32" cy="28" r="4" fill="white"/>
+  <path d="M22 24C22 20 25 18 29 18C33 18 36 20 36 24V42C36 46 32 48 28 48C24 48 20 46 20 42V24Z" fill="none" stroke="white" stroke-width="2"/>
+  <path d="M42 36C42 32 45 30 49 30C53 30 57 32 57 36V46C57 51.523 52.523 56 47 56H41C35.477 56 31 51.523 31 46V40" fill="none" stroke="url(#vitaminsGradient)" stroke-width="2.5"/>
+  <circle cx="46" cy="40" r="3" fill="white"/>
+  <path d="M44 38L48 36" stroke="white" stroke-width="2" stroke-linecap="round"/>
+</svg>

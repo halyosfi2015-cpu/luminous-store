@@ -1,0 +1,14 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bakhoorPremiumGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+  </defs>
+  <path d="M18 12C18 7.582 21.582 4 26 4H38C42.418 4 46 7.582 46 12V20H18V12Z" fill="url(#bakhoorPremiumGradient)" stroke="white" stroke-width="2"/>
+  <ellipse cx="32" cy="40" rx="16" ry="12" fill="url(#bakhoorPremiumGradient)" stroke="white" stroke-width="2"/>
+  <circle cx="32" cy="36" r="4" fill="white"/>
+  <path d="M24 24C24 20 27 18 30 18H34C37 18 40 20 40 24V32C40 36 40 38 34 40C28 42 24 38 24 34V24Z" fill="none" stroke="white" stroke-width="2.5"/>
+  <path d="M28 28C28 26 30 24 32 24C34 24 36 26 36 28" stroke="url(#bakhoorPremiumGradient)" stroke-width="2" fill="none"/>
+  <circle cx="32" cy="46" r="6" fill="white"/>
+</svg>

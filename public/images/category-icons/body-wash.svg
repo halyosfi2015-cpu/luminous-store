@@ -1,0 +1,15 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bodyWashGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+  </defs>
+  <path d="M20 12C20 7.582 23.582 4 28 4H36C40.418 4 44 7.582 44 12V16H20V12Z" fill="url(#bodyWashGradient)" stroke="white" stroke-width="2"/>
+  <ellipse cx="32" cy="42" rx="16" ry="12" fill="url(#bodyWashGradient)" stroke="white" stroke-width="2"/>
+  <path d="M24 26C24 22 27 24 30 24C33 24 36 22 36 26" stroke="white" stroke-width="2.5" fill="none"/>
+  <circle cx="32" cy="34" r="4" fill="white"/>
+  <path d="M32 28V34V40" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <path d="M26 38C26 38 28 36 32 36C36 36 38 38 38 38V42C38 44 34 46 32 46C30 46 26 44 26 42V38Z" fill="none" stroke="url(#bodyWashGradient)" stroke-width="2.5"/>
+  <path d="M42 36C42 36 44 34 44 32C44 30 42 28 40 28" stroke="white" stroke-width="2" fill="none"/>
+</svg>

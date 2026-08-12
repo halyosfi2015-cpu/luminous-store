@@ -1,0 +1,17 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="lipCareGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#F43F5E"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="32" cy="44" rx="16" ry="10" fill="url(#lipCareGradient)" stroke="white" stroke-width="2"/>
+  <circle cx="32" cy="36" r="6" fill="white"/>
+  <path d="M26 36C26 36 24 38 24 40C24 42 26 44 28 44C30 44 32 46 32 48" stroke="url(#lipCareGradient)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M38 36C38 36 40 38 40 40C40 42 38 44 36 44C34 44 32 46 32 48" stroke="url(#lipCareGradient)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M12 20C12 14 18 10 24 10H40C46 10 52 14 52 20V38C52 44 46 50 40 50H24C18 50 12 44 12 38V20Z" fill="url(#lipCareGradient)" stroke="white" stroke-width="2" opacity="0.4"/>
+  <path d="M28 22C28 18 32 16 36 16C40 16 44 18 44 22" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+  <circle cx="28" cy="26" r="2" fill="white"/>
+  <circle cx="36" cy="26" r="2" fill="white"/>
+  <circle cx="44" cy="26" r="2" fill="white"/>
+</svg>

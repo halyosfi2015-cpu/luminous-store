@@ -1,0 +1,67 @@
+<svg viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="60%">
+      <stop offset="0%" stop-color="#fdf2f6" />
+      <stop offset="55%" stop-color="#fbdce9" />
+      <stop offset="100%" stop-color="#f7c6dc" />
+    </linearGradient>
+    <linearGradient id="skin1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f2c3b0" />
+      <stop offset="100%" stop-color="#e2a184" />
+    </linearGradient>
+    <linearGradient id="hair1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#5b3a35" />
+      <stop offset="100%" stop-color="#301c19" />
+    </linearGradient>
+    <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="bottleA" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#f4e3ea" />
+    </linearGradient>
+    <linearGradient id="bottleB" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#6b4226" />
+      <stop offset="100%" stop-color="#3f2716" />
+    </linearGradient>
+    <linearGradient id="bottleC" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e8c39a" />
+      <stop offset="100%" stop-color="#c98f57" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="700" fill="url(#bg1)" />
+  <circle cx="920" cy="150" r="260" fill="url(#glow1)" />
+  <circle cx="1120" cy="560" r="10" fill="#7c2d5c" opacity="0.35" />
+  <circle cx="980" cy="90" r="7" fill="#7c2d5c" opacity="0.3" />
+
+  <!-- shoulders / body -->
+  <path d="M600 700 C630 540 760 470 870 470 C980 470 1110 540 1150 700 Z" fill="#f8dde9" opacity="0.9" />
+
+  <!-- neck -->
+  <path d="M810 380 L810 470 Q850 505 890 470 L890 380 Z" fill="url(#skin1)" />
+
+  <!-- face / profile (elegant, non-identifiable) -->
+  <path d="M755 220 Q740 320 772 395 Q798 445 850 458 Q918 465 942 408 Q960 358 940 298 Q926 222 862 188 Q793 164 755 220 Z" fill="url(#skin1)" />
+
+  <!-- hair -->
+  <path d="M742 225 Q712 95 850 82 Q985 88 965 232 Q956 165 868 158 Q778 158 760 258 Q748 244 742 225 Z" fill="url(#hair1)" />
+  <path d="M718 268 Q702 390 754 495 Q740 400 740 288 Z" fill="url(#hair1)" />
+
+  <!-- hand near face -->
+  <path d="M700 380 Q680 350 700 320 Q730 300 745 330 Q755 360 735 385 Q715 400 700 380 Z" fill="url(#skin1)" opacity="0.95" />
+
+  <!-- product bottle cluster, bottom right -->
+  <ellipse cx="1055" cy="672" rx="140" ry="16" fill="#7c2d5c" opacity="0.10" />
+
+  <rect x="945" y="520" width="70" height="150" rx="14" fill="url(#bottleA)" stroke="#e3b9cb" stroke-width="2" />
+  <rect x="958" y="490" width="44" height="36" rx="8" fill="#c48aa5" />
+  <rect x="955" y="565" width="56" height="22" rx="4" fill="#7c2d5c" opacity="0.15" />
+
+  <rect x="1025" y="480" width="60" height="190" rx="30" fill="url(#bottleB)" />
+  <rect x="1040" y="440" width="30" height="46" rx="6" fill="#241206" />
+
+  <rect x="1095" y="545" width="66" height="125" rx="10" fill="url(#bottleC)" />
+  <ellipse cx="1128" cy="545" rx="33" ry="10" fill="#a9713f" />
+</svg>

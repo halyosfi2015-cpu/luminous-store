@@ -1,0 +1,13 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bodyLotionGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+  </defs>
+  <path d="M24 10C24 6.686 26.686 4 30 4H34C37.314 4 40 6.686 40 10V20C40 24.418 36.418 28 32 28C27.582 28 24 24.418 24 20V10Z" fill="url(#bodyLotionGradient)" stroke="white" stroke-width="2"/>
+  <ellipse cx="32" cy="38" rx="16" ry="12" fill="url(#bodyLotionGradient)" stroke="white" stroke-width="2"/>
+  <path d="M22 26C22 26 24 22 28 20C32 18 36 22 36 26" stroke="white" stroke-width="2.5" fill="none"/>
+  <path d="M26 30C26 30 28 28 32 28C36 28 38 30 38 30V40C38 44 34 46 32 46C30 46 26 44 26 40V30Z" fill="none" stroke="url(#bodyLotionGradient)" stroke-width="2.5"/>
+  <circle cx="32" cy="24" r="3" fill="white"/>
+</svg>

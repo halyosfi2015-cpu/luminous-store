@@ -1,0 +1,95 @@
+﻿Γû▓ Next.js 16.2.12 (Turbopack)
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 93s
+  Running TypeScript ...
+  Finished TypeScript in 26.9s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/487) ...
+  Generating static pages using 11 workers (121/487) 
+  Generating static pages using 11 workers (243/487) 
+  Generating static pages using 11 workers (365/487) 
+Γ£ô Generating static pages using 11 workers (487/487) in 27.9s
+  Finalizing page optimization ...
+
+Route (app)
+Γöî Γùï /
+Γö£ Γùï /_not-found
+Γö£ Γùï /about
+Γö£ Γùï /account
+Γö£ Γùï /account/addresses
+Γö£ Γùï /account/orders
+Γö£ Γùï /account/profile
+Γö£ Γùï /admin
+Γö£ Γùï /admin/experts
+Γö£ Γùï /admin/hero
+Γö£ Γùï /admin/offers
+Γö£ Γùï /admin/routines
+Γö£ Γùï /admin/shipping
+Γö£ Γùï /articles
+Γö£ ΓùÅ /articles/[slug]
+Γöé Γö£ /articles/how-to-build-morning-skincare-routine
+Γöé Γö£ /articles/best-moisturizer-for-dry-skin
+Γöé Γö£ /articles/vitamin-c-benefits-for-skin
+Γöé Γöö [+5 more paths]
+Γö£ Γùï /brands
+Γö£ ╞Æ /brands/[slug]
+Γö£ Γùï /bundles
+Γö£ ΓùÅ /bundles/[slug]
+Γöé Γö£ /bundles/bundle-engagement
+Γöé Γö£ /bundles/bundle-wedding
+Γöé Γö£ /bundles/bundle-valentine
+Γöé Γöö /bundles/bundle-summer
+Γö£ Γùï /bundles/design
+Γö£ Γùï /careers
+Γö£ Γùï /cart
+Γö£ Γùï /categories
+Γö£ ΓùÅ /categories/[slug]
+Γöé Γö£ /categories/cleansers
+Γöé Γö£ /categories/toners
+Γöé Γö£ /categories/serums
+Γöé Γöö [+48 more paths]
+Γö£ Γùï /checkout
+Γö£ Γùï /compare
+Γö£ Γùï /contact
+Γö£ Γùï /experts
+Γö£ ╞Æ /experts/[slug]
+Γö£ Γùï /faq
+Γö£ Γùï /login
+Γö£ Γùï /new-arrivals
+Γö£ Γùï /offers
+Γö£ Γùï /order/confirmation
+Γö£ ╞Æ /order/confirmation/[id]
+Γö£ Γùï /payment
+Γö£ Γùï /press
+Γö£ Γùï /privacy
+Γö£ ╞Æ /problems/[concern]
+Γö£ Γùï /products
+Γö£ ΓùÅ /products/[slug]
+Γöé Γö£ /products/yq-754
+Γöé Γö£ /products/yq-960
+Γöé Γö£ /products/yq-1680
+Γöé Γöö [+351 more paths]
+Γö£ Γùï /quiz
+Γö£ Γùï /register
+Γö£ Γùï /returns
+Γö£ Γùï /rewards
+Γö£ Γùï /robots.txt
+Γö£ Γùï /routines
+Γö£ ΓùÅ /routines/[id]
+Γöé Γö£ /routines/rt1
+Γöé Γö£ /routines/rt2
+Γöé Γö£ /routines/rt3
+Γöé Γöö [+20 more paths]
+Γö£ Γùï /search
+Γö£ Γùï /shipping
+Γö£ Γùï /sitemap.xml
+Γö£ Γùï /terms
+Γö£ Γùï /track-order
+Γöö Γùï /wishlist
+
+
+Γùï  (Static)   prerendered as static content
+ΓùÅ  (SSG)      prerendered as static HTML (uses generateStaticParams)
+╞Æ  (Dynamic)  server-rendered on demand
+

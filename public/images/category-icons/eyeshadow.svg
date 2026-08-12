@@ -1,0 +1,16 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="eyeshadowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="32" cy="38" rx="14" ry="10" fill="url(#eyeshadowGradient)" stroke="white" stroke-width="2"/>
+  <ellipse cx="24" cy="34" rx="5" ry="3" fill="white"/>
+  <ellipse cx="40" cy="34" rx="5" ry="3" fill="white"/>
+  <circle cx="32" cy="38" r="2" fill="url(#eyeshadowGradient)"/>
+  <path d="M18 24C18 20 21 18 24 18H40C43 18 46 20 46 24V30" fill="none" stroke="url(#eyeshadowGradient)" stroke-width="3" stroke-linecap="round"/>
+  <rect x="24" y="18" width="16" height="8" rx="2" fill="white"/>
+  <path d="M32 14C32 14 29 18 28 18"/>
+  <path d="M32 14C32 14 35 18 36 18"/>
+</svg>
