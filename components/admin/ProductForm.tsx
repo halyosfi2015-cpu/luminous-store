@@ -2,11 +2,15 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Save, Database, Check, Undo2, AlertTriangle, Loader2 } from "lucide-react";
+import Image from "next/image";
+import { Save, Database, Check, Undo2, AlertTriangle, Loader2, Tag, Layers, X, Search } from "lucide-react";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 import { useAdminData } from "@/src/admin/AdminDataProvider";
+import { useAdminToast } from "@/components/admin/ui/AdminToast";
+import { bumpCacheVersion } from "@/hooks/useProducts";
+import { productSummaries } from "@/src/data/product-summaries";
 import type { Product } from "@/src/types/product";
 import type { CategoryInfo } from "@/src/types/product";
 import type { Brand } from "@/src/data/brands";
@@ -187,6 +191,7 @@ function Toggle({
 
 export default function ProductForm({ initialProduct }: { initialProduct?: Product }) {
   const { services } = useAdminData();
+  const { toast } = useAdminToast();
   const [form, setForm] = useState<FormState>(() =>
     initialProduct ? formFromProduct(initialProduct) : emptyForm,
   );
@@ -200,13 +205,51 @@ export default function ProductForm({ initialProduct }: { initialProduct?: Produ
   const [isBestSeller, setIsBestSeller] = useState<boolean>(() =>
     Boolean(initialProduct?.isBestSeller),
   );
-  const [inStock, setInStock] = useState<boolean>(() => initialProduct?.inStock !== false);
+  const [availability, setAvailability] = useState<"hidden" | "available" | "out_of_stock">(() => {
+    if (!initialProduct) return "hidden";
+    if (initialProduct.inStock === true) return "available";
+    if (initialProduct.inStock === false) return "out_of_stock";
+    return "hidden";
+  });
   const [categories, setCategories] = useState<CategoryInfo[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
   const [built, setBuilt] = useState<Product | null>(null);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+
+  // Alternatives state
+  const [copyPrice, setCopyPrice] = useState<string>("");
+  const [familyId, setFamilyId] = useState<string>("");
+  const [altQuery, setAltQuery] = useState("");
+  const [altSaved, setAltSaved] = useState(false);
+
+  // Load existing alternatives
+  useEffect(() => {
+    if (!initialProduct) return;
+    fetch(`/api/admin/product-alternatives?productId=${initialProduct.id}`, { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!d) return;
+        if (d.copy_price) setCopyPrice(String(d.copy_price));
+        if (d.family_alternative_id) setFamilyId(d.family_alternative_id);
+      })
+      .catch(() => {});
+  }, [initialProduct?.id]);
+
+  const familyProduct = familyId ? productSummaries.find((p) => p.id === familyId) : null;
+
+  const altResults = altQuery.trim()
+    ? productSummaries
+        .filter(
+          (p) =>
+            p.id !== initialProduct?.id &&
+            (p.name.ar.includes(altQuery) ||
+              p.name.en.toLowerCase().includes(altQuery.toLowerCase()) ||
+              p.brand.toLowerCase().includes(altQuery.toLowerCase())),
+        )
+        .slice(0, 20)
+    : [];
 
   useEffect(() => {
     let cancelled = false;
@@ -249,7 +292,7 @@ export default function ProductForm({ initialProduct }: { initialProduct?: Produ
     setFeatured(false);
     setIsNew(true);
     setIsBestSeller(false);
-    setInStock(true);
+    setAvailability("hidden");
     setErrors([]);
     setBuilt(null);
   }, []);
@@ -282,7 +325,8 @@ export default function ProductForm({ initialProduct }: { initialProduct?: Produ
 
     const product: Product = {
       ...initialProduct,
-      id: initialProduct?.id || `new-${Date.now()}`,
+      // products.id is a UUID column — generate a proper UUID for new products.
+      id: initialProduct?.id || crypto.randomUUID(),
       slug,
       sku: form.sku.trim(),
       name: { ar: form.nameAr.trim(), en: form.nameEn.trim() || form.nameAr.trim() },
@@ -306,7 +350,8 @@ export default function ProductForm({ initialProduct }: { initialProduct?: Produ
       benefits: initialProduct?.benefits ?? { ar: [], en: [] },
       stock: stockValue,
       stockQuantity: stockValue,
-      inStock,
+      // Tri-state Availability Display — independent of stock quantity.
+      inStock: availability === "available" ? true : availability === "out_of_stock" ? false : null,
       rating: initialProduct?.rating ?? 0,
       reviewCount: initialProduct?.reviewCount ?? 0,
       featured,
@@ -349,14 +394,7 @@ export default function ProductForm({ initialProduct }: { initialProduct?: Produ
         if (!r.ok) throw new Error(data.error || `HTTP ${r.status}`);
         setBuilt(product);
         setSaveError(null);
-        // Refresh static list via localStorage
-        try {
-          const existing = JSON.parse(window.localStorage.getItem("luminous-products") || "[]");
-          const idx = existing.findIndex((p: Product) => p.id === product.id);
-          if (idx >= 0) existing[idx] = product;
-          else existing.push(product);
-          window.localStorage.setItem("luminous-products", JSON.stringify(existing));
-        } catch {}
+        bumpCacheVersion();
       })
       .catch((err) => {
         console.error("فشل حفظ المنتج:", err);
@@ -521,7 +559,18 @@ export default function ProductForm({ initialProduct }: { initialProduct?: Produ
               </label>
             </div>
             <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <Toggle label="متوفر في المخزون" checked={inStock} onChange={setInStock} />
+              <label className="flex flex-col gap-1">
+                <span className="block text-xs font-bold text-muted">حالة التوفر (ما يظهر للعميل)</span>
+                <select
+                  value={availability}
+                  onChange={(e) => setAvailability(e.target.value as typeof availability)}
+                  className="w-full rounded-xl border border-border bg-white px-3 py-2.5 text-sm text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+                >
+                  <option value="hidden">إخفاء حالة التوفر</option>
+                  <option value="available">متوفر</option>
+                  <option value="out_of_stock">خلصت الكمية</option>
+                </select>
+              </label>
               <Toggle label="منتج جديد" checked={isNew} onChange={setIsNew} />
               <Toggle label="منتج مميز" checked={featured} onChange={setFeatured} />
               <Toggle label="الأكثر مبيعاً" checked={isBestSeller} onChange={setIsBestSeller} />
@@ -572,10 +621,138 @@ export default function ProductForm({ initialProduct }: { initialProduct?: Produ
             </div>
           </Card>
 
+          <Card padding="md">
+            <h2 className="mb-1 text-sm font-bold text-foreground">البدائل</h2>
+            <p className="mb-4 text-xs text-muted">أضف بدائل أوفى للمنتج. يظهر الزبون خيارين: &quot;نسخة من المنتج&quot; و&quot;بديل من نفس العائلة&quot;.</p>
+
+            {/* ─── نسخة من المنتج (سعر فقط) ─── */}
+            <div className="mb-4">
+              <label className="mb-1.5 block text-xs font-bold text-muted">نسخة من المنتج — سعر البديل</label>
+              <div className="flex items-center gap-2">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-50">
+                  <Tag size={14} className="text-green-600" />
+                </div>
+                <input
+                  type="number"
+                  value={copyPrice}
+                  onChange={(e) => { setCopyPrice(e.target.value); setAltSaved(false); }}
+                  placeholder="مثال: 12000"
+                  min="0"
+                  className="flex-1 rounded-xl border border-border bg-white px-3 py-2.5 text-sm text-foreground outline-none transition focus:border-green-400 focus:ring-2 focus:ring-green-100"
+                />
+                <span className="text-xs font-bold text-muted">ر.ي</span>
+              </div>
+            </div>
+
+            {/* ─── بديل من نفس العائلة (اختيار منتج) ─── */}
+            <div>
+              <label className="mb-1.5 block text-xs font-bold text-muted">بديل من نفس العائلة — اختر منتجًا</label>
+              <div className="flex items-center gap-2">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-green-50">
+                  <Layers size={14} className="text-green-700" />
+                </div>
+                {familyProduct ? (
+                  <div className="flex flex-1 items-center gap-3 rounded-xl border border-border bg-white px-3 py-2">
+                    <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg bg-muted-bg">
+                      {familyProduct.heroImage || familyProduct.gallery?.[0] ? (
+                        <Image src={familyProduct.heroImage || familyProduct.gallery[0]} alt={familyProduct.name.ar} fill sizes="40px" className="object-cover" />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-lg">🧴</div>
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-bold text-foreground line-clamp-1">{familyProduct.name.ar}</p>
+                      <p className="text-[11px] text-muted">{familyProduct.brand} · {familyProduct.pricing.price?.toLocaleString("ar-YE")} ر.ي</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => { setFamilyId(""); setAltSaved(false); }}
+                      className="flex h-6 w-6 items-center justify-center rounded-full text-muted hover:bg-muted-bg hover:text-foreground"
+                    >
+                      <X size={12} />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="relative flex-1">
+                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-green-400" />
+                    <input
+                      type="text"
+                      value={altQuery}
+                      onChange={(e) => setAltQuery(e.target.value)}
+                      onFocus={() => setAltQuery("")}
+                      placeholder="ابحث بالاسم أو العلامة..."
+                      className="w-full rounded-xl border border-border bg-white py-2.5 pl-9 pr-3 text-sm text-foreground outline-none transition focus:border-green-400 focus:ring-2 focus:ring-green-100"
+                    />
+                    {altResults.length > 0 && (
+                      <div className="absolute inset-x-0 top-full z-50 mt-1 max-h-60 overflow-auto rounded-xl border border-border bg-card shadow-lg">
+                        {altResults.map((p) => (
+                          <button
+                            key={p.id}
+                            type="button"
+                            onClick={() => { setFamilyId(p.id); setAltQuery(""); setAltSaved(false); }}
+                            className="flex w-full items-center gap-3 px-3 py-2.5 text-start hover:bg-muted-bg/50 transition-colors"
+                          >
+                            <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-lg bg-muted-bg">
+                              {p.heroImage || p.gallery?.[0] ? (
+                                <Image src={p.heroImage || p.gallery[0]} alt={p.name.ar} fill sizes="32px" className="object-cover" />
+                              ) : (
+                                <div className="flex h-full w-full items-center justify-center text-sm">🧴</div>
+                              )}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="text-sm font-bold text-foreground line-clamp-1">{p.name.ar}</p>
+                              <p className="text-[10px] text-muted">{p.brand}</p>
+                            </div>
+                            <span className="text-xs font-bold text-green-600">{p.pricing.price?.toLocaleString("ar-YE")}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {(copyPrice || familyId) && altSaved === false && (
+              <p className="mt-3 text-[11px] text-warning-fg bg-warning-soft border border-warning-border rounded-lg px-3 py-2">
+                اضغط &quot;حفظ البدائل&quot; لتطبيق التغييرات
+              </p>
+            )}
+          </Card>
+
           <div className="flex flex-wrap gap-3">
             <Button onClick={handleSubmit} loading={saving} disabled={saving}>
               <Save className="h-4 w-4" />
               بناء المنتج والتحقق
+            </Button>
+            <Button
+              variant="outline"
+              onClick={async () => {
+                if (!initialProduct) return;
+                try {
+                  const res = await fetch("/api/admin/product-alternatives", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      sourceProductId: initialProduct.id,
+                      copyPrice: copyPrice ? Number(copyPrice) : null,
+                      familyAlternativeId: familyId || null,
+                    }),
+                  });
+                  if (res.ok) {
+                    setAltSaved(true);
+                    toast("تم حفظ البدائل بنجاح", "success");
+                  } else {
+                    const err = await res.json().catch(() => ({ error: "خطأ غير معروف" }));
+                    toast(err.error || "تعذر حفظ البدائل", "error");
+                  }
+                } catch (e) {
+                  toast(e instanceof Error ? e.message : "تعذر الاتصال بالخادم", "error");
+                }
+              }}
+              disabled={!initialProduct}
+            >
+              حفظ البدائل
             </Button>
             <Button variant="outline" onClick={reset} disabled={saving}>
               إعادة تعيين

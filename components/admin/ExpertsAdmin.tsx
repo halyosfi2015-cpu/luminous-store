@@ -5,7 +5,6 @@ import { Stethoscope, Plus, Pencil, Trash2, Power, Save, Check } from "lucide-re
 import Container from "@/components/ui/Container";
 import Input from "@/components/ui/Input";
 import type { Expert } from "@/src/types/expert";
-import { listExperts, saveExpertLocal, removeExpertLocal } from "@/src/admin/adapters/local/experts";
 import { getExpertImage, DEFAULT_MALE_IMAGE, DEFAULT_FEMALE_IMAGE } from "@/lib/expert-images";
 import { EmptyState, LoadingState } from "@/components/admin/ui/States";
 import ConfirmDialog from "@/components/admin/ui/ConfirmDialog";
@@ -26,6 +25,7 @@ export default function ExpertsAdmin() {
   const [editData, setEditData] = useState<Partial<Expert>>({});
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
   const { toast } = useAdminToast();
@@ -38,7 +38,7 @@ export default function ExpertsAdmin() {
         if (!cancelled) setExperts(list);
       })
       .catch(() => {
-        if (!cancelled) setExperts(listExperts());
+        if (!cancelled) setLoadError(true);
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -55,7 +55,6 @@ export default function ExpertsAdmin() {
 
   const saveExpert = (expert: Expert) => {
     setExperts((prev) => prev.map((e) => (e.id === expert.id ? expert : e)));
-    saveExpertLocal(expert);
     fetch("/api/admin/experts", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -95,7 +94,6 @@ export default function ExpertsAdmin() {
 
   const addExpert = (newExpert: Expert) => {
     setExperts((prev) => [...prev, newExpert]);
-    saveExpertLocal(newExpert);
     fetch("/api/admin/experts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -109,7 +107,6 @@ export default function ExpertsAdmin() {
     const expert = experts.find((e) => e.id === deleteId);
     setDeleting(true);
     setExperts((prev) => prev.filter((e) => e.id !== deleteId));
-    removeExpertLocal(deleteId);
     if (expert) {
       fetch(`/api/admin/experts/${encodeURIComponent(expert.slug)}`, { method: "DELETE" })
         .then((res) => {
@@ -288,7 +285,7 @@ function AddExpertForm({ onAdd }: { onAdd: (e: Expert) => void }) {
     gender: "male" as "male" | "female",
     cityAr: "", cityEn: "", languages: ["ar"], consultationTypes: ["online"],
     isVerified: true, availableForConsultation: true, isFeatured: false,
-    yearsOfExperience: 0, rating: 5, reviewCount: 0,
+    rating: 5, reviewCount: 0,
     socialLinks: [], services: [], products: [], articles: [], specialties: [], specialtiesAr: [],
   });
 
@@ -320,7 +317,6 @@ function AddExpertForm({ onAdd }: { onAdd: (e: Expert) => void }) {
       articles: form.articles,
       specialties: form.specialties,
       specialtiesAr: form.specialtiesAr,
-      yearsOfExperience: form.yearsOfExperience,
       isVerified: form.isVerified,
       availableForConsultation: form.availableForConsultation,
       rating: form.rating,
@@ -345,7 +341,6 @@ function AddExpertForm({ onAdd }: { onAdd: (e: Expert) => void }) {
         <Input label="اللقب بالعربي" value={form.titleAr} onChange={(e) => handleChange("titleAr", e.target.value)} />
         <Input label="التخصص بالعربي" value={form.specialtyAr} onChange={(e) => handleChange("specialtyAr", e.target.value)} />
         <Input label="المدينة (عربي)" value={form.cityAr} onChange={(e) => handleChange("cityAr", e.target.value)} />
-        <Input label="سنوات الخبرة" type="number" min="0" value={form.yearsOfExperience} onChange={(e) => handleChange("yearsOfExperience", Number(e.target.value))} />
         <div className="sm:col-span-2">
           <label className="mb-1.5 block text-xs font-semibold text-foreground">الصورة الشخصية</label>
           <Input

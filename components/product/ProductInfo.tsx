@@ -1,6 +1,7 @@
 import { Star, ShieldCheck, Award } from "lucide-react";
 import type { Product } from "@/types/product";
 import { safeRatingDisplay, safeReviewCountDisplay } from "@/lib/ratings";
+import ProductBadges from "@/components/product/ProductBadges";
 
 type ProductInfoProps = {
   product: Product;
@@ -19,16 +20,7 @@ export default function ProductInfo({ product }: ProductInfoProps) {
         <span className="text-sm font-medium text-primary bg-primary/5 px-3 py-1 rounded-full">
           {product.brand}
         </span>
-        {product.isNew && (
-          <span className="text-xs font-semibold text-success-fg bg-success-soft px-2.5 py-0.5 rounded-full">
-            جديد
-          </span>
-        )}
-        {product.isBestSeller && (
-          <span className="text-xs font-semibold text-warning-fg bg-warning-soft px-2.5 py-0.5 rounded-full">
-            الأكثر مبيعاً
-          </span>
-        )}
+        <ProductBadges product={product} position="" isAr={true} />
         {product.seoMetadata.keywords.includes("vitamin c") && (
           <span className="inline-flex items-center gap-1 text-xs font-semibold text-primary bg-primary/5 px-2.5 py-0.5 rounded-full">
             <ShieldCheck size={12} />

@@ -1,3 +1,29 @@
+export type CartItemKind = "product" | "bundle" | "routine";
+
+export type BundleLineItem = {
+  productId: string;
+  nameAr: string;
+  nameEn?: string;
+  price: number;
+  quantity: number;
+  image?: string;
+};
+
+export type BundleCartPayload = {
+  bundleId: string;
+  bundleName: string;
+  discountPercent: number;
+  originalSubtotal: number;
+  discount: number;
+  deliveryFee?: number;
+  deliveryLabel?: string;
+  giftMessage?: string;
+  addons?: { id: string; labelAr: string; price: number }[];
+  items: BundleLineItem[];
+  /** Routine steps (product → time) when kind === "routine". */
+  steps?: { productId: string; time: string }[];
+};
+
 export type CartItem = {
   productId: string;
   slug: string;
@@ -7,6 +33,8 @@ export type CartItem = {
   image: string;
   quantity: number;
   inStock: boolean;
+  kind?: CartItemKind;
+  bundle?: BundleCartPayload;
 };
 
 export type Cart = {
@@ -25,7 +53,17 @@ export type ShippingAddress = {
   notes?: string;
 };
 
-export type OrderStatus = "pending" | "confirmed" | "shipped" | "delivered" | "cancelled";
+export type OrderStatus =
+  | "pending"
+  | "awaiting_review"
+  | "contacted"
+  | "confirmed"
+  | "awaiting_payment"
+  | "paid"
+  | "processing"
+  | "shipped"
+  | "delivered"
+  | "cancelled";
 
 export type Order = {
   id: string;
@@ -36,4 +74,6 @@ export type Order = {
   address: ShippingAddress;
   status: OrderStatus;
   createdAt: string;
+  /** Optional source/section label (e.g. "باقة مخصصة", "هدية", "روتين", "عرض"). */
+  source?: string;
 };

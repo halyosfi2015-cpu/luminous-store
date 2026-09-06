@@ -1,5 +1,6 @@
-import { productSummaries, routines } from "@/src/data/product-summaries";
+import { publishedProductSummaries as productSummaries, routines } from "@/src/data/product-summaries";
 import { getRoutines, resolveRoutineProducts } from "@/src/data/routines-store";
+import { getTaxonomySummariesForNode } from "@/src/lib/taxonomy";
 import type { ProductSummary } from "@/src/types/product";
 
 export interface HeroSectionConfig {
@@ -18,18 +19,11 @@ export interface HeroSectionConfig {
 }
 
 export function getDailyKey(): string {
-  if (typeof window === "undefined") return "ssr";
   return new Date().toISOString().split("T")[0];
 }
 
 export function getSessionId(): string {
-  if (typeof window === "undefined") return "ssr";
-  let id = sessionStorage.getItem("luminous-hero-session-id");
-  if (!id) {
-    id = crypto.randomUUID();
-    sessionStorage.setItem("luminous-hero-session-id", id);
-  }
-  return id;
+  return "luminous-derma";
 }
 
 export function getHeroSeed(): number {
@@ -55,7 +49,7 @@ export function createRNG(seed: number): () => number {
 
 function getRoutineProducts(): ProductSummary[] {
   if (typeof window !== "undefined") {
-    return getRoutines().flatMap(r => resolveRoutineProducts(r));
+    return getRoutines().flatMap(r => resolveRoutineProducts(r, productSummaries));
   }
   return routines.flatMap(r =>
     r.products.map(id => productSummaries.find(p => p.id === id)).filter(Boolean)
@@ -67,10 +61,7 @@ export const HERO_SECTIONS: HeroSectionConfig[] = [
     id: "skincare",
     labelAr: "العناية بالبشرة",
     labelEn: "Skincare",
-    categorySlugs: [
-      "cleansers", "toners", "serums", "moisturizers", "sunscreen",
-      "eye-care", "lip-care", "masks", "exfoliators", "body-wash", "body-lotion", "body-oils"
-    ],
+    categorySlugs: ["skincare", "bodycare"],
     gradientVar: "hero-grad-skincare",
     copyKeys: ["skincare"],
     minProducts: 5,
@@ -78,13 +69,13 @@ export const HERO_SECTIONS: HeroSectionConfig[] = [
     heroProductRatio: 0.38,
     enabled: true,
     sortOrder: 1,
-    targetUrl: "/categories/cleansers",
+    targetUrl: "/categories/skincare",
   },
   {
     id: "makeup",
     labelAr: "المكياج",
     labelEn: "Makeup",
-    categorySlugs: ["face-makeup", "eye-makeup", "lip-makeup"],
+    categorySlugs: ["makeup"],
     gradientVar: "hero-grad-makeup",
     copyKeys: ["makeup"],
     minProducts: 4,
@@ -92,13 +83,13 @@ export const HERO_SECTIONS: HeroSectionConfig[] = [
     heroProductRatio: 0.4,
     enabled: true,
     sortOrder: 2,
-    targetUrl: "/categories/face-makeup",
+    targetUrl: "/categories/makeup",
   },
   {
     id: "haircare",
     labelAr: "العناية بالشعر",
     labelEn: "Haircare",
-    categorySlugs: ["shampoo", "conditioner", "hair-oils", "appliances-hair"],
+    categorySlugs: ["haircare", "appliances-tools"],
     gradientVar: "hero-grad-haircare",
     copyKeys: ["haircare"],
     minProducts: 4,
@@ -106,16 +97,13 @@ export const HERO_SECTIONS: HeroSectionConfig[] = [
     heroProductRatio: 0.4,
     enabled: true,
     sortOrder: 3,
-    targetUrl: "/categories/shampoo",
+    targetUrl: "/categories/haircare",
   },
   {
     id: "fragrance",
-    labelAr: "العطور",
+    labelAr: "العطور والروائح",
     labelEn: "Fragrance",
-    categorySlugs: [
-      "perfume-women", "perfume-men", "perfume-musk", "perfume-gift-sets",
-      "bakhoor-premium", "bakhoor-oud", "bakhoor-dehn", "bakhoor-oils"
-    ],
+    categorySlugs: ["perfume", "home-fragrance"],
     gradientVar: "hero-grad-fragrance",
     copyKeys: ["fragrance"],
     minProducts: 4,
@@ -123,7 +111,7 @@ export const HERO_SECTIONS: HeroSectionConfig[] = [
     heroProductRatio: 0.35,
     enabled: true,
     sortOrder: 4,
-    targetUrl: "/categories/perfume-women",
+    targetUrl: "/categories/perfume",
   },
   {
     id: "routines",
@@ -210,29 +198,35 @@ export const HERO_COPY: Record<string, string[]> = {
 export const totalMessages = 50;
 
 export function getProductCount(): number {
-  if (typeof window === "undefined") return 6;
-  const w = window.innerWidth;
-  if (w < 640) return 5;
-  if (w < 1024) return 6;
-  if (w < 1440)  return 6;
-  return 7;
+  return 6;
 }
 
-function getSessionProducts(): ProductSummary[] {
+function getSessionProducts(sectionId: string): ProductSummary[] {
   if (typeof window === "undefined") return [];
   const stored = sessionStorage.getItem("luminous-hero-products");
   if (stored) {
     try {
-      return JSON.parse(stored) as ProductSummary[];
+      const parsed = JSON.parse(stored) as { seed: number; sectionId: string; products: ProductSummary[] };
+      if (
+        parsed &&
+        parsed.seed === getHeroSeed() &&
+        parsed.sectionId === sectionId &&
+        Array.isArray(parsed.products)
+      ) {
+        return parsed.products;
+      }
     } catch {}
   }
   return [];
 }
 
-function setSessionProducts(products: ProductSummary[]): void {
+function setSessionProducts(sectionId: string, products: ProductSummary[]): void {
   if (typeof window === "undefined") return;
   try {
-    sessionStorage.setItem("luminous-hero-products", JSON.stringify(products));
+    sessionStorage.setItem(
+      "luminous-hero-products",
+      JSON.stringify({ seed: getHeroSeed(), sectionId, products }),
+    );
   } catch {}
 }
 
@@ -240,8 +234,11 @@ export function getProductsForSection(sectionId: string, count: number, sceneKey
   const section = HERO_SECTIONS.find(s => s.id === sectionId);
   if (!section) return [];
 
-  const cached = getSessionProducts();
-  if (cached && cached.length === count && sceneKey === 0) {
+  // Client rotation scenes (sceneKey > 0) reuse the cached set for a stable marquee.
+  // Initial render (sceneKey === 0) NEVER reads the cache so the client computes the
+  // exact same deterministic products as the server during hydration.
+  const cached = getSessionProducts(sectionId);
+  if (cached && cached.length === count && sceneKey > 0) {
     return cached;
   }
 
@@ -251,11 +248,16 @@ export function getProductsForSection(sectionId: string, count: number, sceneKey
     const routineProducts = getRoutineProducts();
     pool.push(...routineProducts);
   } else {
-    pool.push(
-      ...productSummaries.filter(p =>
-        section.categorySlugs.includes(p.categorySlug ?? "")
-      )
-    );
+    const seen = new Set<string>();
+    for (const slug of section.categorySlugs) {
+      const matched = getTaxonomySummariesForNode(productSummaries, slug);
+      for (const p of matched) {
+        if (!seen.has(p.id)) {
+          seen.add(p.id);
+          pool.push(p);
+        }
+      }
+    }
   }
 
   if (pool.length === 0) return [];
@@ -269,9 +271,9 @@ export function getProductsForSection(sectionId: string, count: number, sceneKey
   /* Select first N products */
   const result = shuffled.slice(0, count);
 
-  /* Cache only for initial mount (sceneKey === 0) for SEO/SSR consistency */
+  /* Cache the initial mount set (sceneKey === 0) so rotation scenes stay stable on the client */
   if (sceneKey === 0) {
-    setSessionProducts(result);
+    setSessionProducts(sectionId, result);
   }
 
   return result;
@@ -291,7 +293,12 @@ export function getHeroCopy(sectionId: string): string {
 
   const rng = createRNG(getHeroSeed() + allMessages.length);
 
-  // اختيار رسالة عشوائية مع تجنب تكرار آخر رسالة معروضة
+  // Server: deterministic — no mutable module state, so SSR matches client hydration
+  if (typeof window === "undefined") {
+    return allMessages[Math.floor(rng() * allMessages.length)];
+  }
+
+  // Client: avoid repeating the last shown message (lastCopyMap is empty on first mount → matches server)
   const lastIndex = allMessages.findIndex(m => m === lastCopyMap.get(sectionId));
   let idx: number;
 

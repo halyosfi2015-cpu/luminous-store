@@ -20,7 +20,6 @@ export interface Expert {
   articles: string[];
   specialties: string[];
   specialtiesAr: string[];
-  yearsOfExperience: number;
   isVerified: boolean;
   availableForConsultation: boolean;
   rating: number;
@@ -30,6 +29,8 @@ export interface Expert {
   cityAr?: string;
   shortBio?: string;
   shortBioAr?: string;
+  consultationFee?: number;
+  availableSlots?: { day: string; from: string; to: string }[];
   socialLinks: {
     platform: string;
     url: string;
@@ -46,4 +47,42 @@ export interface Expert {
     };
     keywords: string[];
   };
+}
+
+export interface ConsultationRequest {
+  id: string;
+  expertId: string;
+  expertName: string;
+  clientName: string;
+  clientPhone: string;
+  clientEmail?: string;
+  consultationType: "online" | "in-person";
+  preferredDay: string;
+  preferredTime: string;
+  concern: string;
+  concernDetails?: string;
+  referralSource?: string;
+  referralExpertId?: string;
+  status: "pending" | "approved" | "rejected" | "completed";
+  adminNotes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ExpertEnrollment {
+  id: string;
+  name: string;
+  nameAr: string;
+  email: string;
+  phone: string;
+  specialty: string;
+  specialtyAr: string;
+  bio: string;
+  bioAr: string;
+  consultationTypes: string[];
+  city: string;
+  cityAr: string;
+  status: "pending" | "approved" | "rejected";
+  adminNotes?: string;
+  createdAt: string;
 }

@@ -1,17 +1,21 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import Link from "next/link";
+import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Sparkles, Check, ChevronLeft, ChevronRight, RotateCcw, Droplets, Award, Star, Package, ArrowLeft } from "lucide-react";
+import { Sparkles, Check, ChevronLeft, ChevronRight, RotateCcw, Droplets, Phone, User } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
-import ProductImage from "@/components/product/ProductImage";
 import { useSkinProfile } from "@/context/SkinProfileContext";
-import { quizQuestions, scoreQuiz, skinTypeLabels, skinConcernLabels } from "@/src/data/quiz";
-import { getPersonalizedProducts, getRoutineFromProfile } from "@/lib/recommendations";
-import { resolveRoutineProducts, getRoutines } from "@/src/data/routines-store";
-import { formatPrice } from "@/lib/utils";
+import { quizQuestions, scoreQuiz } from "@/src/data/quiz";
+import {
+  getAnalyzedProducts,
+  getAnalyzedRoutines,
+  getRecommendedExpert,
+} from "@/src/data/skin-analysis";
+import { generateQuizId, saveQuizResult } from "@/src/data/quiz-results";
+import { buildQuizWhatsAppMessage, QUIZ_WHATSAPP_NUMBER } from "@/lib/quiz-whatsapp";
+import { trackClient } from "@/src/lib/analytics/client";
+import { ANALYTICS_EVENT_TYPES } from "@/src/lib/analytics/types";
 
 export default function QuizPage() {
   const router = useRouter();
@@ -19,6 +23,12 @@ export default function QuizPage() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string[]>>({});
   const [finished, setFinished] = useState(false);
+  const [quizId, setQuizId] = useState("");
+  const [customerName, setCustomerName] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [saved, setSaved] = useState(false);
+  const [redirecting, setRedirecting] = useState(false);
 
   const question = quizQuestions[step];
   const isLast = step === quizQuestions.length - 1;
@@ -29,21 +39,64 @@ export default function QuizPage() {
     return scoreQuiz(answers);
   }, [finished, answers]);
 
-  // Get recommended products from database
   const recommendedProducts = useMemo(() => {
     if (!result) return [];
-    const profile = { skinTypes: result.skinTypes, skinConcerns: result.skinConcerns, completedAt: new Date().toISOString() };
-    return getPersonalizedProducts(profile, 6);
+    return getAnalyzedProducts(
+      { skinTypes: result.skinTypes, skinConcerns: result.skinConcerns },
+      6,
+    );
   }, [result]);
 
-  // Get recommended routines from database
   const recommendedRoutines = useMemo(() => {
     if (!result) return [];
-    const profile = { skinTypes: result.skinTypes, skinConcerns: result.skinConcerns, completedAt: new Date().toISOString() };
-    const routineIds = getRoutineFromProfile(profile);
-    const allRoutines = getRoutines();
-    return allRoutines.filter((r) => routineIds.includes(r.id) && r.active);
+    return getAnalyzedRoutines({
+      skinTypes: result.skinTypes,
+      skinConcerns: result.skinConcerns,
+    });
   }, [result]);
+
+  const recommendedExpert = useMemo(() => {
+    if (!result) return null;
+    return getRecommendedExpert({
+      skinTypes: result.skinTypes,
+      skinConcerns: result.skinConcerns,
+    });
+  }, [result]);
+
+  useEffect(() => {
+    if (finished && result && !saved) {
+      const id = generateQuizId();
+      setQuizId(id);
+      saveQuizResult({
+        id,
+        date: new Date().toISOString(),
+        name: customerName || undefined,
+        phone: "",
+        answers,
+        result,
+        score: result.skinTypes.length * 10 + result.skinConcerns.length * 5,
+        recommendedProducts: recommendedProducts.map((p) => p.id),
+        recommendedRoutines: recommendedRoutines.map((r) => r.id),
+        recommendedExpertId: recommendedExpert?.id,
+        source: "skin_quiz",
+        status: "new",
+      });
+      setSaved(true);
+
+      trackClient({
+        event_type: ANALYTICS_EVENT_TYPES.SKIN_ANALYSIS_COMPLETED,
+        entity_type: "skin_analysis",
+        entity_id: id,
+        properties: {
+          skin_types: result.skinTypes,
+          skin_concerns: result.skinConcerns,
+          products_count: recommendedProducts.length,
+          routines_count: recommendedRoutines.length,
+          expert_id: recommendedExpert?.id || null,
+        },
+      });
+    }
+  }, [finished, result, saved, answers, recommendedProducts, recommendedRoutines, recommendedExpert, customerName]);
 
   const toggleOption = (optionId: string) => {
     const q = quizQuestions[step];
@@ -79,12 +132,78 @@ export default function QuizPage() {
     setAnswers({});
     setStep(0);
     setFinished(false);
+    setSaved(false);
+    setQuizId("");
+    setCustomerName("");
+    setCustomerPhone("");
+    setPhoneError("");
+    setRedirecting(false);
   };
 
-  const saveAndContinue = () => {
-    if (!result) return;
+  const validatePhone = (phone: string): boolean => {
+    const cleaned = phone.replace(/[\s\-()]/g, "");
+    if (!cleaned) return false;
+    if (/^\+?\d{7,15}$/.test(cleaned)) return true;
+    return false;
+  };
+
+  const submitAndRedirect = () => {
+    if (!validatePhone(customerPhone)) {
+      setPhoneError("أدخلي رقم واتساب صحيح (مثال: 77xxxxxxx)");
+      return;
+    }
+    setPhoneError("");
+
+    if (!result || !quizId) return;
+
     saveProfile(result.skinTypes, result.skinConcerns);
-    router.push("/account/profile");
+
+    const finalExpertId = recommendedExpert?.id;
+
+    saveQuizResult({
+      id: quizId,
+      date: new Date().toISOString(),
+      name: customerName || undefined,
+      phone: customerPhone,
+      answers,
+      result,
+      score: result.skinTypes.length * 10 + result.skinConcerns.length * 5,
+      recommendedProducts: recommendedProducts.map((p) => p.id),
+      recommendedRoutines: recommendedRoutines.map((r) => r.id),
+      recommendedExpertId: finalExpertId,
+      source: "skin_quiz",
+      status: "new",
+      whatsappSent: true,
+      lastContact: new Date().toISOString(),
+    });
+
+    trackClient({
+      event_type: ANALYTICS_EVENT_TYPES.SKIN_ANALYSIS_WHATSAPP_SENT,
+      entity_type: "skin_analysis",
+      entity_id: quizId,
+      properties: {
+        phone: customerPhone,
+        expert_id: finalExpertId || null,
+      },
+    });
+
+    setRedirecting(true);
+    router.push(`/quiz/result/${quizId}`);
+  };
+
+  const openWhatsApp = () => {
+    if (!result || !quizId) return;
+    const msg = buildQuizWhatsAppMessage({
+      record: { id: quizId, name: customerName },
+      result,
+      recommendedProducts,
+      recommendedRoutines,
+    });
+    window.open(
+      `https://wa.me/${QUIZ_WHATSAPP_NUMBER}?text=${msg}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
   };
 
   return (
@@ -168,185 +287,87 @@ export default function QuizPage() {
                 السابق
               </Button>
               <Button onClick={next} disabled={!canNext} className="gap-1.5">
-                {isLast ? "عرض النتيجة" : "التالي"}
+                {isLast ? "إرسال التشخيص" : "التالي"}
                 <ChevronLeft size={16} />
               </Button>
             </div>
           </>
         )}
 
-        {finished && result && (
-          <>
-            <div className="rounded-card border border-border bg-card p-6 shadow-card sm:p-8">
-              <div className="mb-6 flex flex-col items-center text-center">
-                <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-success-soft">
-                  <Award size={32} className="text-success" />
-                </div>
-                <h2 className="text-xl font-bold text-foreground sm:text-2xl">نتيجة تحليل بشرتكِ</h2>
-                <p className="mt-1 text-sm text-muted">هذه توصيات مبنية على إجاباتك ويمكن تعديلها في أي وقت.</p>
+        {finished && (
+          <div className="rounded-card border border-border bg-card p-6 shadow-card sm:p-8">
+            <div className="mb-6 flex flex-col items-center text-center">
+              <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-success-soft">
+                <Check size={32} className="text-success" />
               </div>
-
-              <div className="mb-6">
-                <h3 className="mb-3 text-sm font-semibold text-foreground">نوع بشرتكِ</h3>
-                <div className="flex flex-wrap gap-2">
-                  {result.skinTypes.map((t) => (
-                    <span key={t} className="rounded-pill bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
-                      {skinTypeLabels[t]?.ar}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mb-8">
-                <h3 className="mb-3 text-sm font-semibold text-foreground">اهتماماتك الأساسية</h3>
-                <div className="flex flex-wrap gap-2">
-                  {result.skinConcerns.map((c) => (
-                    <span key={c} className="rounded-pill bg-secondary/10 px-4 py-2 text-sm font-semibold text-secondary">
-                      {skinConcernLabels[c]?.ar}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Recommended Products */}
-              {recommendedProducts.length > 0 && (
-                <div className="mb-8">
-                  <div className="mb-4 flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-foreground">منتجات مقترحة لكِ</h3>
-                    <Link
-                      href="/products"
-                      className="text-xs font-medium text-primary hover:underline"
-                    >
-                      عرض الكل
-                      <ArrowLeft size={12} className="inline ml-1" />
-                    </Link>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                    {recommendedProducts.map((product) => (
-                      <Link
-                        key={product.id}
-                        href={`/products/${product.slug}`}
-                        className="group block rounded-input border border-border bg-card overflow-hidden transition-all hover:border-primary/30 hover:shadow-lg"
-                      >
-                        <div className="relative aspect-square overflow-hidden bg-gray-50">
-                          <ProductImage
-                            src={product.gallery[0]}
-                            alt={product.name.ar}
-                            productId={product.id}
-                            variant="soft"
-                            className="h-full w-full transition-transform group-hover:scale-105"
-                            sizes="160px"
-                          />
-                          {product.discount && (
-                            <div className="absolute top-2 start-2 z-10">
-                              <span className="inline-flex items-center gap-0.5 rounded-full bg-red-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-lg">
-                                -{product.discount}%
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                        <div className="p-3 space-y-1">
-                          <h4 className="text-sm font-semibold text-gray-900 line-clamp-1 group-hover:text-primary transition-colors">
-                            {product.name.ar}
-                          </h4>
-                          <div className="flex items-baseline gap-1">
-                            <span className="text-sm font-extrabold text-gray-900">
-                              {formatPrice(product.pricing.price)}
-                            </span>
-                            {product.pricing.originalPrice && (
-                              <span className="text-xs text-gray-400 line-through">
-                                {formatPrice(product.pricing.originalPrice)}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
+              <h2 className="text-xl font-bold text-foreground sm:text-2xl">شكرًا لإكمالك التشخيص ✨</h2>
+              <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">
+                حللنا إجاباتك وحددنا النتيجة الأقرب لاحتياجات بشرتك. أدخلي رقم واتساب لإرسال نتيجتك والتوصيات المناسبة لكِ.
+              </p>
+              {quizId && (
+                <span className="mt-3 inline-flex items-center gap-1.5 rounded-pill bg-primary/10 px-4 py-1.5 text-xs font-bold text-primary">
+                  <Sparkles size={12} />
+                  معرّف نتيجتك: {quizId}
+                </span>
               )}
-
-              {/* Recommended Routines */}
-              {recommendedRoutines.length > 0 && (
-                <div className="mb-8">
-                  <div className="mb-4 flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-foreground">روتينات مقترحة لكِ</h3>
-                    <Link
-                      href="/routines"
-                      className="text-xs font-medium text-primary hover:underline"
-                    >
-                      عرض الكل
-                      <ArrowLeft size={12} className="inline ml-1" />
-                    </Link>
-                  </div>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {recommendedRoutines.map((routine) => {
-                      const routineProducts = resolveRoutineProducts(routine);
-                      const totalPrice = routineProducts.reduce((sum, p) => sum + p.pricing.price, 0);
-                      const discountedPrice = Math.round(totalPrice * (1 - routine.savingsPercent / 100));
-                      return (
-                        <Link
-                          key={routine.id}
-                          href={`/routines/${routine.id}`}
-                          className="group flex items-start gap-4 rounded-input border border-border bg-card p-4 transition-all hover:border-primary/30 hover:shadow-lg"
-                        >
-                          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-gray-50">
-                            {routineProducts[0]?.gallery?.[0] ? (
-                              <ProductImage
-                                src={routineProducts[0].gallery[0]}
-                                alt={routine.nameAr}
-                                productId={routineProducts[0].id}
-                                variant="soft"
-                                className="h-full w-full"
-                                sizes="80px"
-                              />
-                            ) : (
-                              <div className="flex h-full w-full items-center justify-center bg-primary-100">
-                                <Package size={20} className="text-primary/60" />
-                              </div>
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0 space-y-1">
-                            <h4 className="text-sm font-bold text-gray-900 line-clamp-1 group-hover:text-primary transition-colors">
-                              {routine.nameAr}
-                            </h4>
-                            <p className="text-xs text-muted line-clamp-2">{routine.descriptionAr}</p>
-                            <div className="flex items-center gap-2 text-[10px] text-muted">
-                              <span className="inline-flex items-center gap-1 bg-primary/10 px-2 py-0.5 rounded-full text-primary">
-                                {routineProducts.length} منتجات
-                              </span>
-                              <span className="inline-flex items-center gap-1">
-                                <Star size={10} className="fill-amber-400 text-amber-400" />
-                                {routine.savingsPercent}% توفير
-                              </span>
-                            </div>
-                            <p className="text-sm font-extrabold text-foreground">
-                              {formatPrice(discountedPrice)} <span className="text-[10px] font-normal text-muted">ر.ي</span>
-                            </p>
-                          </div>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-                <Button onClick={saveAndContinue} className="gap-2">
-                  <Award size={16} />
-                  حفظ النتيجة والاطلاع على التوصيات
-                </Button>
-                <Button variant="outline" onClick={retake} className="gap-2">
-                  <RotateCcw size={16} />
-                  إعادة الاختبار
-                </Button>
-              </div>
             </div>
 
-            <p className="mt-6 text-center text-xs text-muted">
-              <Link href="/" className="font-medium text-primary hover:underline">العودة إلى الرئيسية</Link>
-            </p>
-          </>
+            {/* Contact info — phone required */}
+            <div className="mb-6 space-y-3">
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <div className="relative flex-1">
+                  <User size={15} className="absolute start-3 top-1/2 -translate-y-1/2 text-muted" />
+                  <input
+                    type="text"
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    placeholder="اسمكِ (اختياري)"
+                    className="w-full rounded-input border border-border bg-muted-bg py-3 pe-4 ps-9 text-sm text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
+                  />
+                </div>
+                <div className="relative flex-1">
+                  <Phone size={15} className="absolute start-3 top-1/2 -translate-y-1/2 text-muted" />
+                  <input
+                    type="tel"
+                    value={customerPhone}
+                    onChange={(e) => {
+                      setCustomerPhone(e.target.value);
+                      if (phoneError) setPhoneError("");
+                    }}
+                    placeholder="رقم واتساب *"
+                    inputMode="tel"
+                    className={`w-full rounded-input border bg-muted-bg py-3 pe-4 ps-9 text-sm text-foreground transition-all focus:outline-none focus:ring-2 focus:ring-primary/10 ${
+                      phoneError
+                        ? "border-error focus:border-error focus:ring-error/10"
+                        : "border-border focus:border-primary focus:ring-primary/10"
+                    }`}
+                  />
+                </div>
+              </div>
+              {phoneError && (
+                <p className="text-xs text-error">{phoneError}</p>
+              )}
+              <p className="text-[11px] text-muted">
+                رقم الواتساب مطلوب لإرسال النتيجة والتوصيات. لن نستخدمه لأغراض أخرى.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+              <button
+                type="button"
+                onClick={submitAndRedirect}
+                disabled={redirecting}
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-bold text-white shadow-lg shadow-primary/30 transition-all hover:bg-primary-700 active:scale-[0.98] disabled:opacity-50 sm:w-auto sm:px-8"
+              >
+                {redirecting ? "جارٍ التوجيه..." : "عرض النتيجة والتوصيات"}
+                <ChevronLeft size={16} />
+              </button>
+              <Button variant="ghost" onClick={retake} className="gap-2">
+                <RotateCcw size={16} />
+                إعادة الاختبار
+              </Button>
+            </div>
+          </div>
         )}
       </Container>
     </main>

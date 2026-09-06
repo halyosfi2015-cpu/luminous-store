@@ -1,4 +1,5 @@
 import type { Navigation } from "@/src/types/navigation";
+import { WHATSAPP_URL } from "@/src/data/siteConfig";
 
 export const navigation: Navigation = {
   main: [
@@ -136,7 +137,7 @@ export const navigation: Navigation = {
       { id: "ft-tiktok", label: { ar: "تيك توك", en: "TikTok" }, href: "https://tiktok.com/@luminousderma", icon: "tiktok" },
       { id: "ft-snapchat", label: { ar: "سناب شات", en: "Snapchat" }, href: "https://snapchat.com/add/luminousderma", icon: "snapchat" },
       { id: "ft-youtube", label: { ar: "يوتيوب", en: "YouTube" }, href: "https://youtube.com/@luminousderma", icon: "youtube" },
-      { id: "ft-whatsapp", label: { ar: "واتساب", en: "WhatsApp" }, href: "https://wa.me/967771234567", icon: "whatsapp" },
+      { id: "ft-whatsapp", label: { ar: "واتساب", en: "WhatsApp" }, href: WHATSAPP_URL, icon: "whatsapp" },
     ],
   },
   mobile: [

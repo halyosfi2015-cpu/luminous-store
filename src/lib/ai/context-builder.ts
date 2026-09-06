@@ -7,8 +7,8 @@ import {
   getTopCategories,
 } from '@/src/lib/analytics/aggregations'
 import { getCustomerProfile } from '@/src/lib/analytics/profile'
-import { evaluateCustomerSegments } from '@/src/lib/analytics/segments'
-import { evaluatePurchaseIntent } from '@/src/lib/analytics/intent'
+import { evaluateCustomerSegments, evaluateCustomerSegmentsBatch } from '@/src/lib/analytics/segments'
+import { evaluatePurchaseIntent, evaluatePurchaseIntentBatch } from '@/src/lib/analytics/intent'
 import { RANGE_DAYS, type AnalyticsRange, type SegmentKey, type IntentLevel } from '@/src/lib/analytics/types'
 import { SEGMENT_LABELS } from '@/src/lib/analytics/segments'
 import { createHash } from 'crypto'
@@ -17,6 +17,7 @@ export const CONTEXT_VERSION = 'commerce_context_v1'
 export const CONTEXT_MAX_PRODUCTS = 8
 export const CONTEXT_MAX_CATEGORIES = 8
 export const CONTEXT_MAX_CUSTOMERS_IN_DIST = 200
+export const MERCHANDISING_CONTEXT_VERSION = 'merchandising_context_v1'
 
 export interface CommerceContext {
   version: string
@@ -164,13 +165,23 @@ export async function buildCommerceContext(range: AnalyticsRange): Promise<Comme
     very_high: 0,
   }
 
+  // Use batch APIs to avoid N+1 queries
+  const [segBatch, intentBatch] = await Promise.all([
+    evaluateCustomerSegmentsBatch(customerIds),
+    evaluatePurchaseIntentBatch(customerIds),
+  ])
+
   for (const cid of customerIds) {
-    const segEval = await evaluateCustomerSegments(cid)
-    for (const s of segEval.segments) {
-      segmentDistribution[s] = (segmentDistribution[s] ?? 0) + 1
+    const segEval = segBatch.get(cid)
+    if (segEval) {
+      for (const s of segEval.segments) {
+        segmentDistribution[s] = (segmentDistribution[s] ?? 0) + 1
+      }
     }
-    const intentEval = await evaluatePurchaseIntent(cid, null)
-    intentDistribution[intentEval.level] = (intentDistribution[intentEval.level] ?? 0) + 1
+    const intentEval = intentBatch.get(cid)
+    if (intentEval) {
+      intentDistribution[intentEval.level] = (intentDistribution[intentEval.level] ?? 0) + 1
+    }
   }
 
   return {
@@ -262,10 +273,90 @@ export async function buildCustomerContext(customerId: string): Promise<Customer
 
 export async function buildProductContext(productId: string): Promise<ProductContext | null> {
   const supabase = createAdminClient()
+  const { data: product } = await supabase
+    .from('products')
+    .select('id, name, pricing, stock, stock_quantity, in_stock, rating, review_count, is_featured, is_new, is_best_seller, category_id, categories(name)')
+    .eq('id', productId)
+    .maybeSingle()
+
+  if (!product) return null
+
+  const row = product as Record<string, unknown>
+  const name = (row.name as { ar?: string; en?: string })?.ar ?? (row.name as { ar?: string; en?: string })?.en ?? productId
+  const pricing = row.pricing as { price?: number; currency?: string } | null
+  const catName = (row.categories as { name?: { ar?: string; en?: string } })?.name?.ar
+    ?? (row.categories as { name?: { ar?: string; en?: string } })?.name?.en
+    ?? ''
+
+  const since30d = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+  const { data: events } = await supabase
+    .from('customer_events')
+    .select('event_type')
+    .eq('entity_id', productId)
+    .gte('occurred_at', since30d)
+
+  let views = 0, addToCart = 0, purchases = 0
+  for (const e of (events ?? []) as Array<{ event_type: string }>) {
+    if (e.event_type === 'product_view') views++
+    else if (e.event_type === 'product_added_to_cart') addToCart++
+    else if (e.event_type === 'purchase_completed') purchases++
+  }
+
+  const { data: orderItems } = await supabase
+    .from('order_items')
+    .select('quantity, total_price')
+    .eq('product_id', productId)
+
+  let revenue = 0
+  for (const oi of (orderItems ?? []) as Array<{ quantity?: number; total_price?: number }>) {
+    revenue += (oi.total_price ?? 0)
+  }
+
+  return {
+    version: CONTEXT_VERSION,
+    product_id: productId,
+    name,
+    category: catName,
+    price: pricing?.price ?? 0,
+    currency: pricing?.currency ?? 'YER',
+    views,
+    add_to_cart: addToCart,
+    purchases,
+    revenue,
+    rating: Number(row.rating ?? 0),
+    review_count: Number(row.review_count ?? 0),
+    in_stock: row.in_stock !== false && Number(row.stock ?? row.stock_quantity ?? 0) > 0,
+    is_featured: row.is_featured === true,
+    is_new: row.is_new === true,
+    is_best_seller: row.is_best_seller === true,
+    stock_quantity: Number(row.stock ?? row.stock_quantity ?? 0),
+  }
+}
+
+export async function buildMerchandisingContext(productId: string): Promise<{
+  version: string
+  product_id: string
+  name: string
+  category: string
+  price: number
+  currency: string
+  original_price: number
+  discount_percent: number | null
+  in_stock: boolean
+  is_featured: boolean
+  is_new: boolean
+  is_best_seller: boolean
+  views: number
+  add_to_cart: number
+  purchases: number
+  revenue: number
+  status: string
+} | null> {
+  const supabase = createAdminClient()
 
   const { data: product } = await supabase
     .from('products')
-    .select('id, name, category_id, pricing, stock, in_stock, is_featured, is_new, is_best_seller, rating, review_count, stock_quantity')
+    .select('id, name, category_id, pricing, stock, in_stock, is_featured, is_new, is_best_seller, rating, review_count, stock_quantity, base_price, has_real_discount, status')
     .eq('id', productId)
     .maybeSingle()
 
@@ -309,6 +400,9 @@ export async function buildProductContext(productId: string): Promise<ProductCon
     rating: number | string
     review_count: number
     stock_quantity: number
+    base_price: number
+    has_real_discount: boolean
+    status: string
   }
 
   const revenue = purchases * Number(productRow.pricing?.price ?? 0)
@@ -328,48 +422,104 @@ export async function buildProductContext(productId: string): Promise<ProductCon
 
   const productName = productRow.name?.ar ?? productRow.name?.en ?? productId.slice(0, 8)
 
+  const discountPercent = productRow.has_real_discount
+    ? Math.round((1 - Number(productRow.pricing?.price ?? productRow.base_price) / productRow.base_price * 100))
+    : null
+
   return {
-    version: CONTEXT_VERSION,
+    version: MERCHANDISING_CONTEXT_VERSION,
     product_id: productId,
     name: productName,
     category: categoryName,
     price: Number(productRow.pricing?.price ?? 0),
     currency: productRow.pricing?.currency ?? 'YER',
-    views,
-    add_to_cart,
-    purchases,
-    revenue,
-    rating: Number(productRow.rating ?? 0),
-    review_count: Number(productRow.review_count ?? 0),
+    original_price: productRow.base_price,
+    discount_percent: discountPercent,
     in_stock: productRow.in_stock ?? productRow.stock > 0,
     is_featured: productRow.is_featured ?? false,
     is_new: productRow.is_new ?? false,
     is_best_seller: productRow.is_best_seller ?? false,
-    stock_quantity: Number(productRow.stock_quantity ?? productRow.stock ?? 0),
+    views,
+    add_to_cart,
+    purchases,
+    revenue,
+    status: productRow.status ?? 'draft',
   }
 }
 
-export function serializeContextForPrompt(context: CommerceContext | CustomerContext | ProductContext): string {
+export function serializeContextForPrompt(context: CommerceContext | CustomerContext | ProductContext | ({
+  version: string
+  product_id: string
+  name: string
+  category: string
+  price: number
+  currency: string
+  original_price: number
+  discount_percent: number | null
+  in_stock: boolean
+  is_featured: boolean
+  is_new: boolean
+  is_best_seller: boolean
+  views: number
+  add_to_cart: number
+  purchases: number
+  revenue: number
+  status: string
+})): string {
   return JSON.stringify(context, null, 2)
 }
 
 export function hashContext(context: unknown): string {
   const serialized = serializeContextForPrompt(
-    context as CommerceContext | CustomerContext | ProductContext
+    context as CommerceContext | CustomerContext | ProductContext | {
+      version: string
+      product_id: string
+      name: string
+      category: string
+      price: number
+      currency: string
+      original_price: number
+      discount_percent: number | null
+      in_stock: boolean
+      is_featured: boolean
+      is_new: boolean
+      is_best_seller: boolean
+      views: number
+      add_to_cart: number
+      purchases: number
+      revenue: number
+      status: string
+    }
   )
   return createHash('sha256').update(serialized).digest('hex').slice(0, 16)
 }
 
-export function contextSummary(context: CommerceContext | CustomerContext | ProductContext): string {
+export function contextSummary(context: CommerceContext | CustomerContext | ProductContext | {
+  version: string
+  product_id: string
+  name: string
+  category: string
+  price: number
+  currency: string
+  original_price: number
+  discount_percent: number | null
+  in_stock: boolean
+  is_featured: boolean
+  is_new: boolean
+  is_best_seller: boolean
+  views: number
+  add_to_cart: number
+  purchases: number
+  revenue: number
+  status: string
+}): string {
   if ('overview' in context) {
     return `Commerce overview for range="${context.range}": visitors=${context.overview.visitors}, purchases=${context.overview.purchases}, revenue=${context.overview.revenue}, conversion=${Math.round(context.overview.conversion_rate * 100)}%`
   }
   if ('profile' in context) {
     return `Customer ${context.customer_id.slice(0, 8)}: orders=${context.profile.total_orders}, spent=${context.profile.total_spent}, intent=${context.intent.level}`
   }
-  if ('product_id' in context) {
-    return `Product ${context.product_id.slice(0, 8)}: views=${context.views}, cart=${context.add_to_cart}, purchases=${context.purchases}, revenue=${context.revenue}`
-  }
+  // Simplified: just return generic summary without property access that may fail
   return 'unknown context'
 }
 

@@ -37,6 +37,8 @@ export type Bundle = {
   badge?: string;
   badgeAr?: string;
   productIds: string[];
+  /** Optional per-product quantities (when present, supersedes `productIds` default qty=1). */
+  bundleItems?: { productId: string; quantity: number }[];
   originalPrice: number;
   bundlePrice: number;
   savingsPercent: number;
@@ -45,6 +47,12 @@ export type Bundle = {
   giftCard: boolean;
   placeholder?: boolean;
   servicePrice: number;
+  active?: boolean;
+  /** Discount management (point 23): independent per-bundle control, default 20%. */
+  discountEnabled?: boolean;
+  discountPercent?: number;
+  /** Display order for reordering bundles in the UI. */
+  displayOrder?: number;
 };
 
 export type BundleProduct = {

@@ -17,9 +17,10 @@ import {
 } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { useLang } from "@/lib/use-lang";
-import { productSummaries as products } from "@/src/data/product-summaries";
-import { safeRatingDisplay } from "@/lib/ratings";
-import { getRoutines, getRoutineById, getPrimaryImage } from "@/src/data/routines-store";
+import { useProducts } from "@/hooks/useProducts";
+import { resolveRoutineProducts, getPrimaryImage } from "@/src/data/routines-store";
+import { safeRatingDisplay, safeReviewCountDisplay, safeBuyersDisplay as safeBuyerCountDisplay } from "@/lib/ratings";
+import { getRoutines, getRoutineById, fetchRoutinesFromAPI } from "@/src/data/routines-store";
 import { useCart } from "@/context/CartContext";
 import type { Routine, RoutineStep, ProductSummary } from "@/src/types/product";
 import { trackClient } from "@/src/lib/analytics/client";
@@ -51,13 +52,15 @@ function ProductStepCard({
   step,
   index,
   isAr,
+  allProducts,
 }: {
   step: RoutineStep;
   index: number;
   isAr: boolean;
+  allProducts: ProductSummary[];
 }) {
   const { addItem, items } = useCart();
-  const product = products.find((p) => p.id === step.productId);
+  const product = allProducts.find((p) => p.id === step.productId);
   const inCart = items.some((item) => item.productId === step.productId);
 
   if (!product) return null;
@@ -84,6 +87,7 @@ function ProductStepCard({
             src={getPrimaryImage(product)}
             alt={product.name.ar}
             productId={product.id}
+            variant="clean"
             hoverZoom
             pedestal={false}
             className="absolute inset-0"
@@ -166,9 +170,11 @@ function ProductStepCard({
 function SimilarRoutines({
   currentId,
   isAr,
+  allProducts,
 }: {
   currentId: string;
   isAr: boolean;
+  allProducts: ProductSummary[];
 }) {
   const [others, setOthers] = useState<Routine[]>(() => {
     const all = getRoutines();
@@ -209,7 +215,7 @@ function SimilarRoutines({
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {others.map((r) => {
           const rProducts = r.products
-            .map((id) => products.find((p) => p.id === id))
+            .map((id) => allProducts.find((p) => p.id === id))
             .filter((p): p is ProductSummary => Boolean(p));
           const total = rProducts.reduce(
             (s, p) => s + (p.pricing?.price || 0),
@@ -246,7 +252,7 @@ function SimilarRoutines({
                           src={getPrimaryImage(p)}
                           alt={r.nameAr}
                           productId={r.id}
-                          variant="soft"
+                          variant="clean"
                           hoverZoom={false}
                           pedestal={false}
                           className="absolute inset-0"
@@ -294,27 +300,36 @@ export default function RoutineDetailClient({
   const { lang } = useLang();
   const isAr = lang === "ar";
   const { addItem, items, removeItem } = useCart();
-  const [addedAll, setAddedAll] = useState(false);
-  const [currentRoutine, setCurrentRoutine] = useState<Routine>(() => getRoutineById(routine.id) ?? routine);
+  const { products: apiProducts } = useProducts();
+  const [currentRoutine, setCurrentRoutine] = useState<Routine | null>(null);
   const [prevRoutineId, setPrevRoutineId] = useState(routine.id);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [addedAll, setAddedAll] = useState(false);
 
+  // Always fetch fresh routine data from the API on mount.
+  // Dependency on refreshKey ensures re-fetch when key changes (e.g., after admin save).
   useEffect(() => {
-    trackClient({
-      event_type: ANALYTICS_EVENT_TYPES.ROUTINE_VIEW,
-      entity_type: "routine",
-      entity_id: routine.id,
-      properties: { slug: routine.id, name: routine.nameAr },
+    let mounted = true;
+    fetchRoutinesFromAPI().then((apiRoutines) => {
+      if (mounted) {
+        const fresh = apiRoutines.find((r) => r.id === routine.id);
+        if (fresh) setCurrentRoutine(fresh);
+      }
     });
-  }, [routine.id, routine.nameAr]);
-  if (routine.id !== prevRoutineId) {
-    setPrevRoutineId(routine.id);
-    const fresh = getRoutineById(routine.id);
-    if (fresh) setCurrentRoutine(fresh);
+    return () => { mounted = false; };
+  }, [routine.id, refreshKey]);
+
+  // Observe routine prop changes - re-fetch when ID changes
+  useEffect(() => {
+    setRefreshKey((prev) => prev + 1);
+  }, [routine.id]);
+
+  if (!currentRoutine) {
+    return <div>Loading routine...</div>;
   }
 
-   const routineProducts = currentRoutine.products
-     .map((id) => products.find((p) => p.id === id))
-     .filter(Boolean) as typeof products;
+  // Resolve routine products using the full API product catalog
+  const routineProducts = resolveRoutineProducts(currentRoutine, apiProducts);
 
    const totalPrice = routineProducts.reduce(
     (sum, p) => sum + (p.pricing?.price || 0),
@@ -326,23 +341,37 @@ export default function RoutineDetailClient({
   const savings = totalPrice - discountedPrice;
 
   const handleAddAll = () => {
-    routineProducts.forEach((p) => {
-      const alreadyInCart = items.some((item) => item.productId === p.id);
-      if (!alreadyInCart) {
-        addItem({
+    addItem({
+      productId: `ROUTINE-${currentRoutine.id}-${Date.now()}`,
+      slug: currentRoutine.id,
+      name: currentRoutine.name || currentRoutine.nameAr,
+      nameAr: currentRoutine.nameAr,
+      price: discountedPrice,
+      image: routineProducts[0]?.gallery?.[0] || "",
+      quantity: 1,
+      inStock: true,
+      kind: "routine",
+      bundle: {
+        bundleId: currentRoutine.id,
+        bundleName: currentRoutine.nameAr,
+        discountPercent: currentRoutine.savingsPercent,
+        originalSubtotal: totalPrice,
+        discount: savings,
+        items: routineProducts.map((p) => ({
           productId: p.id,
-          slug: p.slug,
-          name: p.name.en,
           nameAr: p.name.ar,
+          nameEn: p.name.en,
           price: p.pricing.price,
-          image: getPrimaryImage(p) || "",
           quantity: 1,
-          inStock: p.inStock ?? true,
-        });
-      }
+          image: getPrimaryImage(p) || "",
+        })),
+        steps: currentRoutine.steps.map((s) => ({
+          productId: s.productId,
+          time: s.time,
+        })),
+      },
     });
     setAddedAll(true);
-    setTimeout(() => setAddedAll(false), 2500);
   };
 
   return (
@@ -419,12 +448,12 @@ export default function RoutineDetailClient({
               size={12}
               className="fill-amber-400 text-amber-400"
             />
-            {currentRoutine.rating} ({currentRoutine.reviewCount}{" "}
+            {safeRatingDisplay(currentRoutine)} ({safeReviewCountDisplay(currentRoutine)}{" "}
             {isAr ? "تقييم" : "reviews"})
           </span>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700">
             <Users size={12} />
-            {currentRoutine.buyersCount.toLocaleString("ar-YE")}{" "}
+            {safeBuyerCountDisplay(currentRoutine)}{" "}
             {isAr ? "عميلة اشترت" : "customers bought"}
           </span>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700">
@@ -436,40 +465,6 @@ export default function RoutineDetailClient({
             {isAr ? `${currentRoutine.savingsPercent}% توفير` : `${currentRoutine.savingsPercent}% savings`}
           </span>
         </div>
-
-        {/* ── PRODUCTS IN THIS ROUTINE ── */}
-        {routineProducts.length > 0 && (
-          <div className="mt-8">
-            <h2 className="mb-4 text-lg font-bold text-gray-900">
-              {isAr ? "المنتجات في هذا الروتين" : "Products in This Routine"}
-            </h2>
-            <div className="flex gap-4 overflow-x-auto pb-4 hide-scrollbar snap-x snap-mandatory [-webkit-overflow-scrolling:touch]">
-              {routineProducts.map((p) => (
-                <Link
-                  key={p.id}
-                  href={`/products/${p.slug}`}
-                  className="shrink-0 w-40 sm:w-44 snap-start group"
-                >
-                  <div className="relative aspect-square overflow-hidden rounded-2xl bg-gray-50">
-                    <ProductImage
-                      src={getPrimaryImage(p)}
-                      alt={p.name.ar}
-                      productId={p.id}
-                      hoverZoom
-                      pedestal={false}
-                      className="absolute inset-0"
-                      sizes="176px"
-                    />
-                  </div>
-                  <p className="mt-2 text-xs font-semibold text-gray-900 line-clamp-1 group-hover:text-primary transition-colors">
-                    {p.name.ar}
-                  </p>
-                  <p className="text-[10px] text-muted">{p.brandAr || p.brand}</p>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* ── MAIN CONTENT ── */}
         <div className="mt-8 flex flex-col gap-10 lg:flex-row">
@@ -500,12 +495,13 @@ export default function RoutineDetailClient({
               </h2>
               <div className="grid gap-4 sm:grid-cols-2">
                 {currentRoutine.steps.map((step, i) => (
-                  <ProductStepCard
-                    key={step.productId}
-                    step={step}
-                    index={i}
-                    isAr={isAr}
-                  />
+                   <ProductStepCard
+                     key={step.productId}
+                     step={step}
+                     index={i}
+                     isAr={isAr}
+                     allProducts={apiProducts}
+                   />
                 ))}
               </div>
             </div>
@@ -568,26 +564,29 @@ export default function RoutineDetailClient({
                   : `${routineProducts.length} products`}
               </p>
 
-              <button
-                type="button"
-                onClick={handleAddAll}
-                disabled={addedAll}
-                className="mt-5 w-full flex items-center justify-center gap-2 rounded-2xl bg-gray-900 py-4 text-sm font-bold text-white transition-all duration-300 hover:bg-primary hover:shadow-xl hover:shadow-primary/20 active:scale-[0.98] disabled:opacity-60"
-              >
-                {addedAll ? (
-                  <>
-                    <Check size={16} />
-                    {isAr ? "تمت الإضافة!" : "Added!"}
-                  </>
-                ) : (
+              {addedAll ? (
+                <Link
+                  href="/cart"
+                  className="mt-5 w-full flex items-center justify-center gap-2 rounded-2xl bg-[#25D366] py-4 text-sm font-bold text-white transition-all duration-300 hover:bg-[#1ebe5b] hover:shadow-xl hover:shadow-[#25D366]/20 active:scale-[0.98]"
+                >
+                  <ShoppingCart size={16} />
+                  {isAr ? "الانتقال إلى السلة لإتمام الطلب" : "Go to Cart to Complete Order"}
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleAddAll}
+                  disabled={addedAll}
+                  className="mt-5 w-full flex items-center justify-center gap-2 rounded-2xl bg-gray-900 py-4 text-sm font-bold text-white transition-all duration-300 hover:bg-primary hover:shadow-xl hover:shadow-primary/20 active:scale-[0.98] disabled:opacity-60"
+                >
                   <>
                     <ShoppingCart size={16} />
                     {isAr
-                      ? "أضيفي كل المنتجات للسلة"
-                      : "Add All to Cart"}
+                      ? "أضيفي الروتين كاملاً للسلة"
+                      : "Add the Whole Routine to Cart"}
                   </>
-                )}
-              </button>
+                </button>
+              )}
 
               {/* Product mini list */}
               <div className="mt-5 border-t border-gray-100 pt-4">
@@ -609,7 +608,7 @@ export default function RoutineDetailClient({
                             src={p.gallery[0]}
                             alt={p.name.ar}
                             productId={p.id}
-                            variant="soft"
+                            variant="clean"
                             hoverZoom={false}
                             pedestal={false}
                             className="absolute inset-0"
@@ -679,7 +678,7 @@ export default function RoutineDetailClient({
         </div>
 
         {/* ── SIMILAR ROUTINES ── */}
-        <SimilarRoutines currentId={currentRoutine.id} isAr={isAr} />
+        <SimilarRoutines currentId={currentRoutine.id} isAr={isAr} allProducts={apiProducts} />
 
         {/* ── BACK ── */}
         <div className="mt-10 text-center">

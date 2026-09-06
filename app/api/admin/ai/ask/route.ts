@@ -54,15 +54,15 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const validation = validateRequest(body)
-  if (!validation.valid) {
+  const validation = await validateRequest(body)
+  if (!validation.success) {
     return NextResponse.json(
       { error: validation.error },
       { status: 400 },
     )
   }
 
-  const input = validation.data
+  const input = validation.data as Record<string, unknown>
 
   if (input.scope === 'customer' && input.customerId) {
     const supabase = createAdminClient()
@@ -103,11 +103,20 @@ export async function POST(request: NextRequest) {
   try {
     const result = await processAIRequest(input)
     if (result.success && result.response) {
-      return NextResponse.json({ success: true, response: result.response })
+      return NextResponse.json({
+        success: true,
+        response: result.response,
+        provider: result.provider,
+        model: result.model,
+      })
     }
+    // Honest failure — real error code + message, mapped to a truthful status.
+    const err = typeof result.error === 'string'
+      ? { code: 'ai_provider_error', message: result.error }
+      : result.error ?? { code: 'internal_error', message: 'Unknown error' }
     return NextResponse.json(
-      { error: result.error ?? { code: 'internal_error', message: 'Unknown error' } },
-      { status: errorCodeToHttpStatus(result.error?.code ?? 'internal_error') },
+      { error: err },
+      { status: errorCodeToHttpStatus(err.code) },
     )
   } catch (err) {
     const msg = (err as Error).message
@@ -139,6 +148,7 @@ function errorCodeToHttpStatus(code: string): number {
       return 401
     case 'invalid_request':
       return 400
+    case 'service_unavailable':
     case 'ai_not_configured':
       return 503
     case 'insufficient_data':

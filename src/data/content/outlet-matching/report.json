@@ -1,0 +1,99 @@
+{
+  "generatedAt": "2026-08-22T12:50:18.137Z",
+  "totals": {
+    "catalog_total": 2764,
+    "outlet_scraped": 2357,
+    "pairs_evaluated": 595,
+    "unique_after_dedupe": 107,
+    "duplicate_or_conflict_suppressed": 55,
+    "previously_applied_excluded": 5
+  },
+  "classification": {
+    "high_confidence": 32,
+    "medium_confidence": 75,
+    "low_or_unmatched_outlet": 2250,
+    "low_or_unmatched_catalog": 2657
+  },
+  "safely_processable_now": 31,
+  "unmatched_outlet_reasons": {
+    "no-brand-candidate": 1542,
+    "brand-not-in-catalog": 210,
+    "weak-signal": 498
+  },
+  "diagnostics": {
+    "comparisons": 10824,
+    "outletTypeNull": 4533,
+    "lumTypeNull": 517,
+    "typeMismatch": 3670,
+    "sizeConflictOnly": 817,
+    "lowScore": 9412,
+    "sizeEqHits": 970,
+    "maxJac": 0.75
+  },
+  "brand_families_resolved": 25,
+  "brand_alias_unresolved_targets": [],
+  "high_distribution_by_brand": {
+    "دوف": 2,
+    "وادي النحل": 1,
+    "جيليت": 2,
+    "سنسوداين": 6,
+    "كاميل": 1,
+    "ناو": 2,
+    "فيم فريش": 3,
+    "كولجيت": 5,
+    "ليسترين": 1,
+    "Uriage": 1,
+    "نيزورال": 1,
+    "غارنييه": 1,
+    "اس في ار": 1,
+    "هيربال": 1,
+    "بيزلين": 1,
+    "فازلين": 1,
+    "كيوفي": 1,
+    "كرست": 1
+  },
+  "high_distribution_by_category": {
+    "deodorants": 6,
+    "body-oils": 2,
+    "oral-care": 12,
+    "hand-care": 1,
+    "hair-oils": 1,
+    "women-care": 4,
+    "shampoo": 2,
+    "baby-care": 2,
+    "cleansers": 1,
+    "body-lotion": 1
+  },
+  "medium_distribution_by_brand_top": {
+    "ريكسونا": 9,
+    "دوف": 8,
+    "لابيلو": 7,
+    "كولجيت": 5,
+    "سنسوداين": 4,
+    "جيليت": 4,
+    "كيوفي": 4,
+    "هيربال": 3,
+    "كلوس اب": 3,
+    "كرست": 3,
+    "اولاي": 3,
+    "نيتروجينا": 2,
+    "ناو": 2,
+    "بيزلين": 2,
+    "فيم فريش": 2
+  },
+  "pipeline_steps": [
+    "arabic-normalization+tokenization",
+    "brand-extraction-from-outlet-nameAr(via ar<->en family lexicon)",
+    "product-type-detection(arabic-lexicon:28-types)",
+    "size-extraction(ml/g/count/pack/spf)",
+    "candidate-filter:same-brand-family",
+    "scoring:brand+type+sizeExact+jaccard+containment",
+    "one-to-one-greedy-dedupe",
+    "already-applied-signature-exclusion"
+  ],
+  "rules": {
+    "high_requires": "mapped-brand AND same-type AND exact-size AND jaccard>=0.38(or containment>=0.9)",
+    "name_alone_is_never_a_content_source": true,
+    "no_product_files_modified_in_this_run": true
+  }
+}

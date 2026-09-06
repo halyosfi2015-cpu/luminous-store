@@ -1,18 +1,30 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Sparkles, Flower2, Scissors, Palette, FlaskRound, Baby, Sofa, Store, Newspaper, GraduationCap } from "lucide-react";
+import { Sparkles, Store, Newspaper, GraduationCap } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { useLang } from "@/lib/use-lang";
+import { getTaxonomyCategoryCards, type TaxonomyCategoryCard } from "@/src/lib/taxonomy";
+import { resolveTaxonomyIcon } from "@/components/layout/taxonomyCategoryUi";
 
-const categories = [
-  { label: { ar: "العناية بالشعر", en: "Haircare" }, href: "/categories/haircare", icon: Flower2, color: "from-violet-400 to-purple-400" },
-  { label: { ar: "العناية بالجسم", en: "Bodycare" }, href: "/categories/bodycare", icon: Scissors, color: "from-amber-400 to-orange-400" },
-  { label: { ar: "المكياج", en: "Makeup" }, href: "/categories/makeup", icon: Palette, color: "from-fuchsia-400 to-pink-400" },
-  { label: { ar: "العطور", en: "Perfume" }, href: "/categories/perfume", icon: FlaskRound, color: "from-teal-400 to-emerald-400" },
-  { label: { ar: "الأطفال والأمهات", en: "Baby & Mom" }, href: "/categories/baby", icon: Baby, color: "from-sky-400 to-blue-400" },
-  { label: { ar: "الأدوات والمستلزمات", en: "Tools & Accessories" }, href: "/categories/tools", icon: Sofa, color: "from-neutral-400 to-slate-400" },
-];
+interface NavItem {
+  label: { ar: string; en: string };
+  href: string;
+  icon: typeof Sparkles;
+  color: string;
+}
+
+function mapCategories(cards: TaxonomyCategoryCard[]): NavItem[] {
+  return cards.map((cat) => ({
+    label: { ar: cat.nameAr, en: cat.name },
+    href: `/categories/${cat.slug}`,
+    icon: resolveTaxonomyIcon(cat.icon),
+    color: "from-primary to-secondary",
+  }));
+}
+
+const defaultCategories = mapCategories(getTaxonomyCategoryCards());
 
 const quickLinks = [
   { label: { ar: "اختبار البشرة", en: "Skin Quiz" }, href: "/quiz", icon: Sparkles, color: "from-secondary to-primary" },
@@ -24,6 +36,18 @@ const quickLinks = [
 export default function Navbar() {
   const { lang } = useLang();
   const isAr = lang === "ar";
+  const [categories, setCategories] = useState(defaultCategories);
+
+  useEffect(() => {
+    fetch("/api/content/taxonomy", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data.categoryCards) && data.categoryCards.length > 0) {
+          setCategories(mapCategories(data.categoryCards));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="w-full border-y border-border bg-background/50">

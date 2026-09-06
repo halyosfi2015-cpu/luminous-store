@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { normalizeImageURL } from "@/src/lib/image-url-normalizer";
 
 /**
  * ProductImage — غلاف موحّد أنيق لصور المنتجات.
@@ -9,7 +10,7 @@ import Image from "next/image";
  * بشكل احترافي وفيها روح دون تغيير ملفات الصور نفسها.
  */
 
-export type ProductImageVariant = "auto" | "soft" | "glow" | "glass";
+export type ProductImageVariant = "auto" | "soft" | "glow" | "glass" | "clean";
 
 const GRADIENTS: string[] = [
   "from-primary-50 via-white to-secondary-50",
@@ -70,6 +71,8 @@ type ProductImageProps = {
   fill?: boolean;
   /** إظهار المنتج مرفوعاً عن القاع بظل إهليلجي (تبدو الصورة كتعبئة ملونة) */
   pedestal?: boolean;
+  /** إزالة الطبقات التزيينية (التوهج + التدرج العلوي) */
+  noOverlay?: boolean;
 };
 
 export default function ProductImage({
@@ -84,17 +87,26 @@ export default function ProductImage({
   className = "",
   objectPosition = "center",
   pedestal = true,
+  noOverlay = false,
 }: ProductImageProps) {
   const seed = hashSeed(productId || src);
   const gradient = pick(GRADIENTS, seed);
   const glow = pick(GLOW_COLORS, seed);
   const shadow = pick(SHADOW_COLORS, seed);
 
+  // Single shared normalization point for every image that flows through this
+  // component. Absolute http(s) URLs are repaired (https: // and https:/// →
+  // https://); local assets (/images/...) are passed through untouched.
+  const safeSrc =
+    typeof src === "string" && /^[a-z][a-z0-9+.-]*:\/\//i.test(src)
+      ? normalizeImageURL(src) ?? src
+      : src;
+
   if (variant === "soft") {
     return (
       <div className={`relative overflow-hidden bg-gradient-to-br ${gradient} ${className}`}>
         <Image
-          src={src}
+          src={safeSrc}
           alt={alt}
           fill
           sizes={sizes}
@@ -107,17 +119,36 @@ export default function ProductImage({
     );
   }
 
+  if (variant === "clean") {
+    return (
+      <Image
+        src={safeSrc}
+        alt={alt}
+        fill
+        sizes={sizes}
+        priority={priority}
+        unoptimized={unoptimized}
+        className={`object-cover ${hoverZoom ? "transition-transform duration-500 ease-out-smooth group-hover:scale-110" : ""}`}
+        style={{ objectPosition }}
+      />
+    );
+  }
+
   return (
     <div
       className={`relative overflow-hidden bg-gradient-to-br ${gradient} ${className} ${
         hoverZoom ? "transition-shadow duration-300 ease-out-smooth group-hover:shadow-2xl " + shadow : ""
       }`}
     >
-      {/* توهج ناعم خلف المنتج */}
-      <div className={`pointer-events-none absolute start-1/2 top-1/2 h-3/5 w-3/5 -translate-x-1/2 -translate-y-1/2 rounded-full blur-2xl ${glow} opacity-70 transition-opacity duration-500 group-hover:opacity-100`} />
+      {!noOverlay && (
+        <>
+          {/* توهج ناعم خلف المنتج */}
+          <div className={`pointer-events-none absolute start-1/2 top-1/2 h-3/5 w-3/5 -translate-x-1/2 -translate-y-1/2 rounded-full blur-2xl ${glow} opacity-70 transition-opacity duration-500 group-hover:opacity-100`} />
 
-      {/* لمعان علوي خفيف */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_28%_18%,rgba(255,255,255,0.95),transparent_55%)]" />
+          {/* لمعان علوي خفيف */}
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_28%_18%,rgba(255,255,255,0.95),transparent_55%)]" />
+        </>
+      )}
 
       {/* ظل إهليلجي يرسخ المنتج */}
       {pedestal && (
@@ -125,7 +156,7 @@ export default function ProductImage({
       )}
 
       <Image
-        src={src}
+        src={safeSrc}
         alt={alt}
         fill
         sizes={sizes}

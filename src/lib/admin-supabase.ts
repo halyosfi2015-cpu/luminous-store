@@ -1,5 +1,7 @@
-import { createHash } from 'crypto'
+import { createHash, randomUUID } from 'crypto'
 import { createServerSupabaseClient } from './supabase-server'
+import { createAdminClient } from './supabase'
+import { invalidateServerProductsCache } from './server-products'
 import type { Product, CategoryInfo, Routine, RoutineLevel, RoutineStep } from '@/src/types/product'
 import type { Brand } from '@/src/data/brands'
 import type { Expert } from '@/src/types/expert'
@@ -16,6 +18,7 @@ import type {
   AdminReview,
   AdminReviewStatus,
   AdminStats,
+  AuditEntry,
   HomepageSettings,
 } from '../admin/types'
 
@@ -51,6 +54,10 @@ function isSupabaseConfigured(): boolean {
   return !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 }
 
+function brandNormalize(s: string): string {
+  return s.toLowerCase().replace(/[أإآٱا]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').normalize('NFD').replace(/[\u0300-\u036f\u064B-\u065F\u0670]/g,'').replace(/^(ماركة|من|brand)\s+/,'').replace(/\s*-\s*\d+\s*(مل|ml).*$/i,'').replace(/[^a-z0-9\u0600-\u06FF]/g,'')
+}
+
 async function trySupabase<T>(
   tableName: string,
   queryFn: () => Promise<T>,
@@ -72,18 +79,21 @@ async function trySupabase<T>(
 
 async function dualWrite(
   tableName: string,
-  localFn: () => void,
+  _localFn: () => void,
   supabaseFn: () => Promise<void>,
 ): Promise<void> {
-  localFn()
-  if (!isSupabaseConfigured()) return
+  // B5: canonical persistence only — the legacy localStorage leg is disabled.
+  // Server-side localStorage was never meaningful and masked write failures.
+  if (!isSupabaseConfigured()) {
+    console.warn(`[Admin-Supabase] ${tableName}: Supabase not configured — write skipped`)
+    return
+  }
   try {
     await supabaseFn()
   } catch (error) {
-    console.warn(
-      `[Admin-Supabase] ${tableName}: Supabase write failed, data saved to localStorage only:`,
-      (error as Error).message,
-    )
+    console.error(`[Admin-Supabase] ${tableName}: Supabase write failed:`, (error as Error).message)
+    // Surface the failure honestly so Admin UI never reports fake success.
+    throw error
   }
 }
 
@@ -93,14 +103,78 @@ export async function supabaseGetProducts(): Promise<Product[]> {
   return trySupabase(
     'products',
     async () => {
-      const supabase = await createServerSupabaseClient()
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('is_active', true)
-        .order('created_at', { ascending: false })
-      if (error) throw error
-      return (data ?? []) as Product[]
+      // Service-role (server-only): authenticated lacks SELECT grants on catalog
+      // tables in the live DB — the user-scoped client silently fell back to
+      // static data here (see db/fix_authenticated_grants.sql).
+      const supabase = createAdminClient()
+      // Paginate past the PostgREST 1000-row default so the admin list reaches
+      // the whole catalog.
+      const all: Product[] = []
+      const pageSize = 1000
+      for (let from = 0; ; from += pageSize) {
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .eq('is_active', true)
+          .order('created_at', { ascending: false })
+          .range(from, from + pageSize - 1)
+        if (error) throw error
+        all.push(...((data ?? []) as Product[]))
+        if (!data || data.length < pageSize) break
+      }
+      const rows = all
+      // Brand/category display names: DB rows carry only brand_id/category_id
+      // UUIDs, so the admin table columns would render empty — resolve names here.
+      const brandMap = new Map<string, { name: string; nameAr: string }>()
+      const catMap = new Map<string, { slug: string; name: string; nameAr: string }>()
+      try {
+        const [{ data: brandRows }, { data: catRows }] = await Promise.all([
+          supabase.from('brands').select('id, name, name_ar'),
+          supabase.from('categories').select('id, slug, name'),
+        ])
+        for (const b of (brandRows ?? []) as { id: string; name: string; name_ar?: string | null }[]) {
+          brandMap.set(b.id, { name: b.name, nameAr: b.name_ar ?? b.name })
+        }
+        for (const c of (catRows ?? []) as { id: string; slug: string; name: { ar?: string; en?: string } | null }[]) {
+          catMap.set(c.id, { slug: c.slug, name: c.name?.en ?? c.slug, nameAr: c.name?.ar ?? c.slug })
+        }
+      } catch {
+        /* names fall back to static base below */
+      }
+      // Display-parity merge: enrich sparse DB rows with their bundled catalog
+      // counterparts (matched by legacy_id/id/sku) exactly like the storefront
+      // DAL does — DB values always win when non-default.
+      const byKey = new Map<string, Product>()
+      for (const p of products) {
+        byKey.set(p.id, p)
+        byKey.set(p.sku, p)
+      }
+      return rows.map((row) => {
+        const rowRec = row as unknown as Record<string, unknown>
+        const base = byKey.get(String(rowRec.legacy_id ?? '')) ?? byKey.get(String(rowRec.sku ?? ''))
+        const brandName = brandMap.get(String(rowRec.brand_id ?? ''))
+        const catName = catMap.get(String(rowRec.category_id ?? ''))
+        const withNames = {
+          ...row,
+          brand: (rowRec.brand as string) || brandName?.name || (base?.brand ?? ''),
+          brandAr: (rowRec.brandAr as string) || (rowRec.brand_ar as string) || brandName?.nameAr || (base?.brandAr ?? ''),
+          category: (rowRec.category as string) || catName?.name || (base?.category ?? ''),
+          categoryAr: (rowRec.categoryAr as string) || catName?.nameAr || (base?.categoryAr ?? ''),
+        }
+        if (!base) return withNames
+        const num = (v: unknown) => (Number.isFinite(Number(v)) ? Number(v) : 0)
+        const baseRec = base as unknown as Record<string, unknown>
+        return {
+          ...withNames,
+          rating: num(rowRec.rating) > 0 ? Number(rowRec.rating) : (base.rating ?? 0),
+          reviewCount: num(rowRec.review_count ?? rowRec.reviewCount) > 0 ? Number(rowRec.review_count ?? rowRec.reviewCount) : (base.reviewCount ?? 0),
+          featured: Boolean(rowRec.is_featured) || Boolean(baseRec.featured ?? baseRec.isFeatured),
+          isFeatured: Boolean(rowRec.is_featured) || Boolean(baseRec.isFeatured ?? baseRec.isFeatured),
+          new: Boolean(rowRec.is_new) || Boolean(baseRec.new ?? baseRec.isNew),
+          isNew: Boolean(rowRec.is_new) || Boolean(baseRec.isNew ?? baseRec.new),
+          isBestSeller: Boolean(rowRec.is_best_seller) || Boolean(baseRec.isBestSeller),
+        }
+      }) as Product[]
     },
     () => products,
   )
@@ -110,7 +184,7 @@ export async function supabaseGetProduct(id: string): Promise<Product | null> {
   return trySupabase(
     'products',
     async () => {
-      const supabase = await createServerSupabaseClient()
+      const supabase = createAdminClient()
       const { data, error } = await supabase
         .from('products')
         .select('*')
@@ -128,23 +202,54 @@ export async function supabaseSaveProduct(product: Product): Promise<void> {
     'products',
     () => { try { const existing = JSON.parse(window.localStorage.getItem('luminous-products') || '[]'); const idx = existing.findIndex((p: Product) => p.id === product.id); if (idx >= 0) existing[idx] = product; else existing.push(product); window.localStorage.setItem('luminous-products', JSON.stringify(existing)); } catch {} },
     async () => {
-      const supabase = await createServerSupabaseClient()
+      // Service-role, server-only: the authenticated role has no table grants
+      // for products/brands/categories in the live DB (see db/fix_authenticated_grants.sql).
+      // Access is already guarded by requireAdmin + RBAC at the API layer.
+      const supabase = createAdminClient()
 
-      // Resolve brand name → brand_id
+      // Resolve brand → brand_id via central resolver (Arabic alias → English canonical)
       const catSlug = product.categorySlug || product.category?.toLowerCase().replace(/\s+/g, '-')
-      const brandSlug = product.brand?.toLowerCase().replace(/\s+/g, '-')
-
-      const { data: brands } = await supabase.from('brands').select('id').eq('slug', brandSlug).limit(1)
-      if (!brands || brands.length === 0) throw new Error(`Brand not found: ${product.brand}`)
-      const brandId = (brands[0] as { id: string }).id
+      const brandInput = (product.brand || '').trim()
+      const brandNorm = brandNormalize(brandInput)
+      // Fetch brands for normalized matching with English priority
+      const { data: allBrands } = await supabase.from('brands').select('id, slug, name, name_ar')
+      if (!allBrands) throw new Error(`Brand lookup failed: ${product.brand}`)
+      const normMap = new Map<string, { id: string; slug: string }[]>()
+      for(const b of allBrands as { id: string; slug: string; name: string; name_ar: string | null }[]){
+        for(const v of [b.slug, b.name, b.name_ar]){
+          if(!v) continue
+          const n = brandNormalize(v)
+          if(!n) continue
+          if(!normMap.has(n)) normMap.set(n, [])
+          normMap.get(n)!.push({id: b.id, slug: b.slug})
+        }
+      }
+      // Curated Arabic→English overrides
+      const overrides: Record<string,string> = {'دوف':'dove','افين':'avene','أفين':'avene','لوريال':'loreal-paris','غارنييه':'garnier','غارنية':'garnier','اوبتيمال':'optimal','أوبتيمال':'optimal','بيوديرما':'bioderma','يوسيرين':'eucerin'}
+      for(const [ar, eng] of Object.entries(overrides)){
+        const n = brandNormalize(ar)
+        const target = (allBrands as any[]).find((b:any)=> b.slug===eng)
+        if(target && n) normMap.set(n, [{id: target.id, slug: target.slug}])
+      }
+      const candidates = normMap.get(brandNorm)
+      if (!candidates || candidates.length===0) throw new Error(`Brand not found: ${product.brand}`)
+      // English priority
+      let chosen = candidates[0]
+      const engCands = candidates.filter(c=> /^[a-z0-9-]+$/.test(c.slug))
+      if(engCands.length>0) chosen = engCands[0]
+      const brandId = chosen.id
 
       const { data: cats } = await supabase.from('categories').select('id').eq('slug', catSlug).limit(1)
       if (!cats || cats.length === 0) throw new Error(`Category not found: ${product.category}`)
       const catId = (cats[0] as { id: string }).id
 
+      // Generate proper UUID for new products (id column is UUID type)
+      const isNew = !product.id || product.id.startsWith('new-');
+      const productId = isNew ? randomUUID() : product.id;
+
       const row = {
-        id: product.id,
-        legacy_id: product.id,
+        id: productId,
+        legacy_id: product.id || null,
         slug: product.slug,
         sku: product.sku,
         name: product.name,
@@ -164,26 +269,52 @@ export async function supabaseSaveProduct(product: Product): Promise<void> {
         skin_concerns: product.skinConcerns || [],
         benefits: product.benefits || { ar: [], en: [] },
         stock: product.stock || product.stockQuantity || 0,
-        in_stock: product.inStock !== false,
+        // Tri-state Availability Display: null=hidden, true=available, false=out_of_stock.
+        // Never derived from stock quantity.
+        in_stock: product.inStock === undefined ? null : product.inStock,
         stock_quantity: product.stockQuantity || product.stock || 0,
         rating: product.rating || 0,
         review_count: product.reviewCount || 0,
-        is_featured: product.featured || product.isFeatured || false,
-        is_new: product.new || product.isNew || false,
-        is_best_seller: product.isBestSeller || false,
+        is_featured: product.isFeatured ?? product.featured ?? false,
+        is_new: product.isNew ?? product.new ?? false,
+        is_best_seller: product.isBestSeller ?? false,
         is_doctor_recommended: product.isDoctorRecommended || false,
         tags: product.tags || [],
         seo_metadata: product.seoMetadata || {},
+        // ─── Phase 7: Admin-managed operational fields ───
+        status: product.status ?? "published",
+        base_price: product.basePrice ?? null,
+        has_real_discount: product.hasRealDiscount ?? false,
+        display_order: product.displayOrder ?? null,
+        search_aliases: product.searchAliases || [],
+        source: product.source || null,
+        duplicate_of: product.duplicateOf ?? null,
+        hero_image: product.heroImage ?? null,
+        audit: product.audit || [],
       }
 
       // Check for duplicate slug (exclude current product)
-      const { data: dup } = await supabase.from('products').select('id').eq('slug', product.slug).neq('id', product.id).limit(1)
+      const { data: dup } = await supabase.from('products').select('id').eq('slug', product.slug).neq('id', productId).limit(1)
       if (dup && dup.length > 0) throw new Error(`Duplicate slug: ${product.slug} (already used by product ${(dup[0] as { id: string }).id})`)
 
       // Upsert
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { error } = await (supabase.from('products') as any).upsert(row, { onConflict: 'id' })
       if (error) throw error
+
+      // Read-back verification (idempotent — verifies the write landed)
+      const { data: readback, error: rbError } = await supabase
+        .from('products')
+        .select('id, slug, status, pricing, base_price, has_real_discount')
+        .eq('id', productId)
+        .single()
+      if (rbError) throw rbError
+      if (!readback || (readback as { id?: string }).id !== productId) {
+        throw new Error(`Read-back verification failed for product ${productId}`)
+      }
+
+      // Invalidate homepage server-products cache so storefront reflects changes immediately
+      invalidateServerProductsCache()
     },
   )
 }
@@ -193,10 +324,12 @@ export async function supabaseDeleteProduct(id: string): Promise<void> {
     'products',
     () => { try { const existing = JSON.parse(window.localStorage.getItem('luminous-products') || '[]'); window.localStorage.setItem('luminous-products', JSON.stringify(existing.filter((p: Product) => p.id !== id))); } catch {} },
     async () => {
-      const supabase = await createServerSupabaseClient()
+      const supabase = createAdminClient()
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { error } = await (supabase.from('products') as any).update({ is_active: false }).eq('id', id)
       if (error) throw error
+      // Invalidate homepage server-products cache so storefront reflects changes immediately
+      invalidateServerProductsCache()
     },
   )
 }
@@ -348,7 +481,10 @@ export async function supabaseGetBrands(): Promise<Brand[]> {
   return trySupabase(
     'brands',
     async () => {
-      const supabase = await createServerSupabaseClient()
+      // Service-role (server-only): authenticated lacks SELECT grants on brands
+      // in the live DB — the user-scoped client silently fell back to static
+      // data here (see db/fix_authenticated_grants.sql).
+      const supabase = createAdminClient()
       const { data, error } = await supabase
         .from('brands')
         .select('*')
@@ -366,7 +502,10 @@ export async function supabaseSaveBrand(brand: Brand): Promise<void> {
     'brands',
     () => saveBrandLocal(brand),
     async () => {
-      const supabase = await createServerSupabaseClient()
+      // Service-role (server-only): authenticated lacks SELECT grants on brands
+      // in the live DB (see db/fix_authenticated_grants.sql). Guarded upstream
+      // by requireAdmin + RBAC.
+      const supabase = createAdminClient()
       const { data: existing } = await supabase
         .from('brands')
         .select('id')
@@ -537,7 +676,6 @@ function mapExpertRow(row: ExpertRow): Expert {
     articles: [],
     specialties: row.specialties_arr ?? [],
     specialtiesAr: row.specialties_ar ?? [],
-    yearsOfExperience: row.years_of_experience ?? 0,
     isVerified: row.is_verified ?? false,
     availableForConsultation: row.available_for_consultation ?? true,
     rating: row.rating ?? 0,
@@ -577,7 +715,6 @@ function toExpertRow(expert: Expert): ExpertRow {
     services: expert.services || [],
     specialties_arr: expert.specialties || [],
     specialties_ar: expert.specialtiesAr || [],
-    years_of_experience: expert.yearsOfExperience || 0,
     is_verified: expert.isVerified || false,
     available_for_consultation: expert.availableForConsultation !== false,
     rating: expert.rating || 0,
@@ -819,7 +956,7 @@ export async function supabaseGetRoutines(): Promise<Routine[]> {
   return trySupabase(
     'routines',
     async () => {
-      const supabase = await createServerSupabaseClient()
+      const supabase = createAdminClient()
       const { data, error } = await supabase
         .from('routines')
         .select('*')
@@ -908,7 +1045,7 @@ export async function supabaseGetRoutines(): Promise<Routine[]> {
 }
 
 async function syncRoutineRelations(
-  supabase: Awaited<ReturnType<typeof createServerSupabaseClient>>,
+  supabase: ReturnType<typeof createAdminClient>,
   routine: Routine,
   routineId: string,
 ) {
@@ -959,17 +1096,27 @@ async function syncRoutineRelations(
     if (delStepErr) throw delStepErr
   }
   const stepRows = (routine.steps || [])
-    .filter((s) => stepUuidById[s.productId])
-    .map((s, n) => ({
+    .map((s) => {
+      // Support both legacy IDs (yq-XXX) and UUIDs in step.productId
+      const uuid = stepUuidById[s.productId]
+      if (!uuid) {
+        // If productId is already a UUID, use it directly; otherwise look up by legacy_id
+        const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s.productId)
+        return isUUID ? s.productId : null
+      }
+      return uuid
+    })
+    .filter((uuid): uuid is string => Boolean(uuid))
+    .map((product_id, n) => ({
       id: slugToUUID('rt-step:' + routine.id + ':' + (n + 1)),
       routine_id: routineId,
-      product_id: stepUuidById[s.productId],
+      product_id,
       step_number: n + 1,
-      title_ar: s.titleAr || '',
-      title_en: s.titleEn || '',
-      description_ar: s.descriptionAr || '',
-      description_en: s.descriptionEn || '',
-      time_of_day: s.time,
+      title_ar: routine.steps[n]?.titleAr || '',
+      title_en: routine.steps[n]?.titleEn || '',
+      description_ar: routine.steps[n]?.descriptionAr || '',
+      description_en: routine.steps[n]?.descriptionEn || '',
+      time_of_day: routine.steps[n]?.time || 'both',
     }))
   if (stepRows.length > 0) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -983,7 +1130,7 @@ export async function supabaseSaveRoutine(routine: Routine): Promise<void> {
     'routines',
     () => saveRoutineLocal(routine),
     async () => {
-      const supabase = await createServerSupabaseClient()
+      const supabase = createAdminClient()
       const row = toRoutineRow(routine)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { error } = await (supabase.from('routines') as any).upsert(row, {
@@ -1000,7 +1147,7 @@ export async function supabaseDeleteRoutine(id: string): Promise<void> {
     'routines',
     () => removeRoutineLocal(id),
     async () => {
-      const supabase = await createServerSupabaseClient()
+      const supabase = createAdminClient()
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { error } = await (supabase.from('routines') as any)
         .update({ is_active: false })
@@ -1031,6 +1178,10 @@ type BundleRow = {
   gift_card?: boolean | null
   service_price?: number | null
   placeholder?: boolean | null
+  discount_enabled?: boolean | null
+  discount_percent?: number | null
+  is_active?: boolean | null
+  display_order?: number | null
 }
 
 function mapBundleRow(row: BundleRow): Bundle {
@@ -1054,19 +1205,21 @@ function mapBundleRow(row: BundleRow): Bundle {
     giftCard: row.gift_card ?? false,
     placeholder: row.placeholder ?? false,
     servicePrice: row.service_price ?? 0,
+    active: row.is_active !== false,
+    discountEnabled: row.discount_enabled ?? true,
+    discountPercent: row.discount_percent ?? 20,
+    displayOrder: row.display_order ?? 0,
   }
 }
 
-export async function supabaseGetBundles(): Promise<Bundle[]> {
+export async function supabaseGetBundles(activeOnly = true): Promise<Bundle[]> {
   return trySupabase(
     'bundles',
     async () => {
       const supabase = await createServerSupabaseClient()
-      const { data, error } = await supabase
-        .from('bundles')
-        .select('*')
-        .eq('is_active', true)
-        .order('slug')
+      let query = supabase.from('bundles').select('*')
+      if (activeOnly) query = query.eq('is_active', true)
+      const { data, error } = await query.order('display_order', { ascending: true }).order('slug')
       if (error) throw error
       const rows = ((data ?? []) as BundleRow[]).filter((r) => r.slug)
       if (rows.length === 0) return []
@@ -1130,14 +1283,25 @@ function toBundleRow(bundle: Bundle) {
     gift_card: bundle.giftCard || false,
     service_price: bundle.servicePrice ?? 0,
     placeholder: bundle.placeholder || false,
+    discount_enabled: bundle.discountEnabled ?? true,
+    discount_percent: bundle.discountPercent ?? 20,
+    is_active: bundle.active !== false,
+    display_order: bundle.displayOrder ?? 0,
   }
 }
 
 async function syncBundleProducts(
-  supabase: Awaited<ReturnType<typeof createServerSupabaseClient>>,
+  supabase: ReturnType<typeof createAdminClient>,
   bundleId: string,
   productIds: string[],
+  bundleItems?: { productId: string; quantity: number }[],
 ) {
+  const qtyMap = new Map<string, number>();
+  if (bundleItems) {
+    for (const item of bundleItems) {
+      qtyMap.set(item.productId, item.quantity || 1);
+    }
+  }
   const ids = (productIds || []).filter(Boolean)
   if (ids.length === 0) return
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1151,10 +1315,13 @@ async function syncBundleProducts(
     .eq('bundle_id', bundleId)
   if (delErr) throw delErr
   if (validProductIds.length > 0) {
+    const insertRows = validProductIds.map((product_id) => {
+      const legacyId = ids.find((id) => true);
+      const qty = qtyMap.get(product_id) ?? 1;
+      return { bundle_id: bundleId, product_id, quantity: qty };
+    });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error: insErr } = await (supabase.from('bundle_products') as any).insert(
-      validProductIds.map((product_id) => ({ bundle_id: bundleId, product_id })),
-    )
+    const { error: insErr } = await (supabase.from('bundle_products') as any).insert(insertRows)
     if (insErr) throw insErr
   }
 }
@@ -1164,16 +1331,22 @@ export async function supabaseSaveBundles(list: Bundle[]): Promise<void> {
     'bundles',
     () => { try { window.localStorage.setItem('luminous-bundles', JSON.stringify(list)) } catch {} },
     async () => {
-      const supabase = await createServerSupabaseClient()
+      const supabase = createAdminClient()
       for (const bundle of list) {
         if (!bundle?.slug) continue
         const row = toBundleRow(bundle)
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data: existing, error: lookupErr } = await (supabase.from('bundles') as any)
+          .select('id')
+          .eq('slug', row.slug)
+          .maybeSingle()
+        if (lookupErr) throw lookupErr
+        if (existing) row.id = existing.id
         const { error } = await (supabase.from('bundles') as any).upsert(row, {
           onConflict: 'id',
         })
         if (error) throw error
-        await syncBundleProducts(supabase, row.id, bundle.productIds)
+        await syncBundleProducts(supabase, row.id, bundle.productIds, bundle.bundleItems)
       }
     },
   )
@@ -1188,7 +1361,7 @@ export async function supabaseDeleteBundle(slug: string): Promise<void> {
       removeBundleLocal(match ? match.id : slug)
     },
     async () => {
-      const supabase = await createServerSupabaseClient()
+      const supabase = createAdminClient()
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { error } = await (supabase.from('bundles') as any)
         .update({ is_active: false })
@@ -1218,14 +1391,35 @@ export async function supabaseGetHero(): Promise<HeroOverride | null> {
   )
 }
 
+function heroOverrideToRow(override: HeroOverride): Record<string, unknown> {
+  const now = new Date().toISOString()
+  return {
+    id: override.campaignId || crypto.randomUUID(),
+    title: override.title || { ar: '', en: '' },
+    subtitle: override.subtitle || { ar: '', en: '' },
+    image: null,
+    image_mobile: null,
+    cta_text: override.primaryCta || { ar: '', en: '' },
+    cta_link: override.primaryLink || null,
+    is_active: true,
+    starts_at: null,
+    ends_at: null,
+    sort_order: 0,
+    created_by: null,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  }
+}
+
 export async function supabaseSaveHero(override: HeroOverride): Promise<void> {
   await dualWrite(
     'hero_campaigns',
     () => heroAdapter.save(override),
     async () => {
       const supabase = await createServerSupabaseClient()
+      const row = heroOverrideToRow(override)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await (supabase.from('hero_campaigns') as any).upsert(override)
+      const { error } = await (supabase.from('hero_campaigns') as any).upsert(row)
       if (error) throw error
     },
   )
@@ -1280,14 +1474,34 @@ export async function supabaseGetBanners(): Promise<AdminBanner[]> {
   )
 }
 
+function adminBannerToRow(banner: AdminBanner): Record<string, unknown> {
+  return {
+    id: banner.id || crypto.randomUUID(),
+    title: { ar: banner.titleAr, en: banner.titleEn },
+    subtitle: {},
+    image: banner.image,
+    image_mobile: null,
+    link: banner.link,
+    position: banner.position,
+    is_active: banner.active,
+    starts_at: null,
+    ends_at: null,
+    sort_order: 0,
+    created_by: null,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  }
+}
+
 export async function supabaseSaveBanners(list: AdminBanner[]): Promise<void> {
   await dualWrite(
     'banners',
     () => saveBanners(list),
     async () => {
       const supabase = await createServerSupabaseClient()
+      const rows = list.map(adminBannerToRow)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await (supabase.from('banners') as any).upsert(list)
+      const { error } = await (supabase.from('banners') as any).upsert(rows)
       if (error) throw error
     },
   )
@@ -1630,4 +1844,74 @@ export async function supabaseDeleteOffers(
   }
   const { error } = await query
   if (error) throw error
+}
+
+// ─── Phase 7: Audit log + operational persistence (idempotent upsert + read-back) ───
+
+export async function supabaseGetAuditLog(): Promise<AuditEntry[]> {
+  return trySupabase(
+    'audit_log',
+    async () => {
+      const supabase = await createServerSupabaseClient()
+      const { data, error } = await supabase
+        .from('audit_log')
+        .select('*')
+        .order('at', { ascending: false })
+        .limit(2000)
+      if (error) throw error
+      return (data ?? []) as AuditEntry[]
+    },
+    () => [],
+  )
+}
+
+export async function supabaseSaveAuditLog(entries: AuditEntry[]): Promise<void> {
+  if (!entries || entries.length === 0) return
+  const supabase = await createServerSupabaseClient()
+  const rows = entries.map((e) => ({
+    id: e.id,
+    at: e.at,
+    by: e.by,
+    action: e.action,
+    resource: e.resource,
+    target_id: e.targetId ?? null,
+    target_label: e.targetLabel ?? null,
+    note: e.note ?? null,
+    before: e.before ? JSON.stringify(e.before) : null,
+    after: e.after ? JSON.stringify(e.after) : null,
+  }))
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabase.from('audit_log') as any).upsert(rows, {
+    onConflict: 'id',
+  })
+  if (error) throw error
+}
+
+export async function supabaseAppendAudit(entry: AuditEntry): Promise<void> {
+  await dualWrite(
+    'audit_log',
+    () => {
+      // local audit handled by src/admin/operations.ts
+    },
+    async () => {
+      const supabase = await createServerSupabaseClient()
+      const row = {
+        id: entry.id,
+        at: entry.at,
+        by: entry.by,
+        action: entry.action,
+        resource: entry.resource,
+        target_id: entry.targetId ?? null,
+        target_label: entry.targetLabel ?? null,
+        note: entry.note ?? null,
+        before: entry.before ? JSON.stringify(entry.before) : null,
+        after: entry.after ? JSON.stringify(entry.after) : null,
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabase.from('audit_log') as any).upsert(row, {
+        onConflict: 'id',
+      })
+      if (error) throw error
+    },
+  )
 }

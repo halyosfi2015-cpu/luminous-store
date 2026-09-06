@@ -7,7 +7,7 @@ import { SearchX } from "lucide-react";
 import Container from "@/components/ui/Container";
 import ProductGrid from "@/components/product/ProductGrid";
 import Button from "@/components/ui/Button";
-import { productSummaries } from "@/src/data/product-summaries";
+import type { ProductSummary } from "@/src/types/product";
 
 function normalizeAr(value: string): string {
   return value
@@ -22,7 +22,7 @@ function normalizeAr(value: string): string {
     .toLowerCase();
 }
 
-export default function SearchResultsContent() {
+export default function SearchResultsContent({ products }: { products: ProductSummary[] }) {
   const searchParams = useSearchParams();
   const q = searchParams.get("q") ?? "";
 
@@ -30,7 +30,8 @@ export default function SearchResultsContent() {
     const term = q.trim();
     if (!term) return [];
     const nq = normalizeAr(term);
-    return productSummaries
+        return products
+
       .map((p) => {
         let score = -1;
         const nameAr = normalizeAr(p.name.ar);
@@ -50,7 +51,7 @@ export default function SearchResultsContent() {
       .filter((x) => x.score >= 0)
       .sort((a, b) => b.score - a.score)
       .map((x) => x.p);
-  }, [q]);
+  }, [q, products]);
 
   return (
     <div dir="rtl" className="w-full pb-16">

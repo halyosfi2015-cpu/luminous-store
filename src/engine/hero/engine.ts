@@ -1,4 +1,4 @@
-import { productSummaries as products } from "@/src/data/product-summaries";
+import { publishedProductSummaries as products } from "@/src/data/product-summaries";
 import type {
   HeroCampaign,
   HeroContent,

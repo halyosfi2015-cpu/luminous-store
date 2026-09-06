@@ -13,12 +13,11 @@ function formatPrice(amount: number): string {
 
 export default function CartSummary() {
   const { subtotal, totalItems } = useCart();
-  const shipping = subtotal >= 50000 ? 0 : 5000;
 
   const handleCheckout = () => {
     trackClient({
       event_type: ANALYTICS_EVENT_TYPES.CHECKOUT_STARTED,
-      properties: { item_count: totalItems, subtotal, shipping },
+      properties: { item_count: totalItems, subtotal },
     });
   };
 
@@ -30,18 +29,16 @@ export default function CartSummary() {
           <span>المنتجات ({totalItems})</span>
           <span>{formatPrice(subtotal)} ر.ي</span>
         </div>
-        <div className="flex justify-between text-muted">
-          <span>الشحن</span>
-          <span>{shipping === 0 ? "مجاني" : `${formatPrice(shipping)} ر.ي`}</span>
+        <div className="flex items-center justify-between gap-3 text-muted">
+          <span className="shrink-0">الشحن</span>
+          <span className="text-end text-xs">يُحدَّد عند إتمام الطلب (صنعاء 700 / بقية المحافظات 1500)</span>
         </div>
         <div className="border-t border-border pt-2">
           <div className="flex justify-between font-semibold text-foreground">
             <span>المجموع</span>
-            <span>{formatPrice(subtotal + shipping)} ر.ي</span>
+            <span>{formatPrice(subtotal)} ر.ي</span>
           </div>
-          {shipping === 0 && (
-            <p className="mt-1 text-xs text-success">تهانينا! الشحن مجاني</p>
-          )}
+          <p className="mt-1 text-xs text-muted">المجموع لا يشمل التوصيل</p>
         </div>
       </div>
       <Link href="/checkout" onClick={handleCheckout}>

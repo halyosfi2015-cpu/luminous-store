@@ -32,6 +32,27 @@ export const DEFAULT_GOVERNORATES: Governorate[] = [
 
 export const SHIPPING_STORAGE_KEY = "luminous-shipping-governorates";
 
+let cachedAPIGovernorates: Governorate[] | null = null;
+
+export async function fetchGovernoratesFromAPI(): Promise<Governorate[]> {
+  try {
+    const res = await fetch("/api/content/shipping", { cache: "no-store" });
+    if (!res.ok) return loadGovernorates();
+    const data = await res.json();
+    const apiGovernorates = (data.governorates ?? []) as Governorate[];
+    if (apiGovernorates.length > 0) {
+      cachedAPIGovernorates = apiGovernorates;
+      return apiGovernorates;
+    }
+  } catch {}
+  return loadGovernorates();
+}
+
+export function getGovernoratesFromCache(): Governorate[] {
+  if (cachedAPIGovernorates && cachedAPIGovernorates.length > 0) return cachedAPIGovernorates;
+  return loadGovernorates();
+}
+
 export function loadGovernorates(): Governorate[] {
   if (typeof window === "undefined") return DEFAULT_GOVERNORATES;
   try {

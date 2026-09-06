@@ -378,8 +378,10 @@ async function main() {
 
   // ─── VERIFY ─────────────────────────────────────────────────────
   console.log('\n=== VERIFICATION ===');
+  const expectedProducts = products.length;
+  const expectedBrands = brands.length;
   const checks: [string, number][] = [
-    ['categories', 51], ['brands', 108], ['products', 354], ['reviews', 53],
+    ['categories', 59], ['brands', expectedBrands], ['products', expectedProducts], ['reviews', 53],
     ['routines', 23], ['routine_steps', 92], ['routine_products', 92],
     ['experts', 8], ['expert_products', expProd.length], ['expert_articles', expArt.length],
     ['articles', 8], ['article_products', artProd.length], ['bundles', 4],

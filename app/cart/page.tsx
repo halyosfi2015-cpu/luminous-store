@@ -24,20 +24,20 @@ export default function CartPage() {
   return (
     <main dir="rtl" className="min-h-screen bg-background py-8">
       <Container>
-        <div className="mb-6 flex items-center justify-between">
-          <h1 className="flex items-center gap-2 text-2xl font-bold text-foreground">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <h1 className="flex min-w-0 items-center gap-2 text-2xl font-bold text-foreground">
             <ShoppingCart size={24} className="text-primary" />
             سلة التسوق
             {totalItems > 0 && <span className="text-base font-normal text-muted">({totalItems})</span>}
           </h1>
-          <Link href="/" className="flex items-center gap-1 text-sm text-muted transition-colors hover:text-primary">
+          <Link href="/" className="shrink-0 flex items-center gap-1 text-sm text-muted transition-colors hover:text-primary">
             <ArrowLeft size={16} />
             متابعة التسوق
           </Link>
         </div>
 
         {items.length === 0 ? (
-          <div className="flex flex-col items-center gap-4 py-20">
+          <div role="status" className="flex flex-col items-center gap-4 py-20">
             <ShoppingCart size={64} className="text-muted/30" />
             <p className="text-lg font-medium text-muted">سلة التسوق فارغة</p>
             <Link href="/"><Button variant="outline">تسوق الآن</Button></Link>

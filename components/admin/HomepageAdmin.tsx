@@ -10,19 +10,48 @@ import { useAdminToast } from "@/components/admin/ui/AdminToast";
 import { useAdminData } from "@/src/admin/AdminDataProvider";
 import type {
   HomepageSectionKey,
+  AllAdminHomepageKey,
   HomepageSettings,
   AdminStats,
 } from "@/src/admin/types";
 
-const SECTION_EDITORS: Partial<Record<HomepageSectionKey, string>> = {
+const SECTION_EDITORS: Partial<Record<string, string>> = {
   hero: "/admin/hero",
+  categories: "/admin/taxonomy",
+  bestSellers: "/admin/merchandising",
+  newArrivals: "/admin/merchandising",
   offers: "/admin/offers",
   bundles: "/admin/bundles",
   experts: "/admin/experts",
   articles: "/admin/articles",
+  // Main sections -> full control pages
+  trendingNow: "/admin/trending",
+  routines: "/admin/routines",
+  problemSolutions: "/admin/problemSolutions",
+  brands: "/admin/brands",
+  services: "/admin/services",
+  productsFeatured: "/admin/merchandising",
+  productsFavorites: "/admin/merchandising",
+  smartRecommendations: "/admin/ai/recommendations",
+  weeklyOffers: "/admin/offers",
+  // Grid variants -> same as parent
+  about: "/admin/luminous-stage",
+  testimonials: "/admin/reviews",
+  features: "/admin/luminous-stage",
+  newsletter: "/admin/luminous-stage",
+  premiumServices: "/admin/services",
+  productMarquee: "/admin/merchandising",
+  problemSolutionsGrid: "/admin/problemSolutions",
+  customerReviewsGrid: "/admin/reviews",
+  expertGrid: "/admin/experts",
+  brandsGrid: "/admin/brands",
+  bundlesGrid: "/admin/bundles",
+  newArrivalsGrid: "/admin/merchandising",
+  smartRecsGrid: "/admin/ai/recommendations",
+  weeklyOffersGrid: "/admin/offers",
 };
 
-const SECTION_STATUS: Record<HomepageSectionKey, (stats: AdminStats) => string> = {
+const SECTION_STATUS: Record<string, (stats: AdminStats) => string> = {
   hero: (stats) => (stats.heroActive ? "واجهة مخصصة" : "واجهة افتراضية"),
   categories: (stats) => `${stats.categoryCount} تصنيف`,
   bestSellers: (stats) => `${stats.bestSellers} منتج`,
@@ -31,9 +60,23 @@ const SECTION_STATUS: Record<HomepageSectionKey, (stats: AdminStats) => string> 
   bundles: (stats) => `${stats.bundlesCount} باقة`,
   experts: (stats) => `${stats.expertsCount} خبير`,
   articles: (stats) => `${stats.articlesCount} مقال`,
+  about: () => "قسم تعريفي",
+  testimonials: () => "آراء العملاء",
+  features: () => "المميزات",
+  newsletter: () => "النشرة البريدية",
+  premiumServices: () => "خدمات مميزة",
+  productMarquee: () => "شريط المنتجات",
+  problemSolutionsGrid: () => "شبكة مشاكل البشرة",
+  customerReviewsGrid: () => "شبكة التقييمات",
+  expertGrid: () => "شبكة الخبراء",
+  brandsGrid: () => "شبكة الماركات",
+  bundlesGrid: () => "شبكة الباقات",
+  newArrivalsGrid: () => "شبكة وصل حديثاً",
+  smartRecsGrid: () => "شبكة موصى لك",
+  weeklyOffersGrid: () => "شبكة العروض الأسبوعية",
 };
 
-const SECTION_KEYS: HomepageSectionKey[] = [
+const SECTION_KEYS: AllAdminHomepageKey[] = [
   "hero",
   "categories",
   "bestSellers",
@@ -42,6 +85,21 @@ const SECTION_KEYS: HomepageSectionKey[] = [
   "bundles",
   "experts",
   "articles",
+  // Missing control sections — now controllable (visibility + copy)
+  "about",
+  "testimonials",
+  "features",
+  "newsletter",
+  "premiumServices",
+  "productMarquee",
+  "problemSolutionsGrid",
+  "customerReviewsGrid",
+  "expertGrid",
+  "brandsGrid",
+  "bundlesGrid",
+  "newArrivalsGrid",
+  "smartRecsGrid",
+  "weeklyOffersGrid",
 ];
 
 export default function HomepageAdmin() {
@@ -85,11 +143,11 @@ export default function HomepageAdmin() {
     setReloadKey((key) => key + 1);
   }, []);
 
-  const toggle = (key: HomepageSectionKey) => {
+  const toggle = (key: AllAdminHomepageKey) => {
     if (!settings) return;
-    const sections = { ...settings.sections, [key]: !settings.sections[key] };
-    const next = { sections };
-    const wasVisible = settings.sections[key] !== false;
+    const sections: any = { ...settings.sections, [key]: !settings.sections[key] };
+    const next: any = { sections };
+    const wasVisible = (settings.sections as any)[key] !== false;
     setSettings(next);
     services.persistHomepageSettings(next);
     fetch("/api/admin/homepage", {

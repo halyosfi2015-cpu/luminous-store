@@ -10,7 +10,7 @@ import { useLang } from "@/lib/use-lang";
 import { getCurrentWeekOffers, getWeekLabel } from "@/src/engine/engine";
 import type { OfferProduct } from "@/src/engine/types";
 import type { ProductSummary } from "@/src/types/product";
-import { productSummaries as allProducts } from "@/src/data/product-summaries";
+import { useProducts } from "@/hooks/useProducts";
 
 interface Countdown {
   days: number;
@@ -30,20 +30,10 @@ function getCountdown(targetDate: Date): Countdown {
   };
 }
 
-const REASON_META: Record<string, { ar: string; en: string; color: string }> = {
-  best_seller:   { ar: "الأكثر مبيعاً", en: "Best Seller",     color: "bg-amber-100 text-amber-700" },
-  high_demand:   { ar: "طلب مرتفع",  en: "High Demand",      color: "bg-emerald-100 text-emerald-700" },
-  low_demand:    { ar: "تحفيز المبيعات", en: "Boost Sales",  color: "bg-blue-100 text-blue-700" },
-  new:           { ar: "جديد",       en: "New",              color: "bg-purple-100 text-purple-700" },
-  seasonal:      { ar: "موسمي",      en: "Seasonal",         color: "bg-orange-100 text-orange-700" },
-  boost_sales:   { ar: "تعزيز",      en: "Boost",            color: "bg-pink-100 text-pink-700" },
-  admin_pinned:  { ar: "مثبت",       en: "Pinned",           color: "bg-red-100 text-red-700" },
-  month_top:     { ar: "top الشهر",  en: "Month Top",        color: "bg-yellow-100 text-yellow-700" },
-};
-
 export default function OffersPage() {
   const { lang } = useLang();
   const isAr = lang === "ar";
+  const { products: allProducts, loading: productsLoading } = useProducts();
 
   const [countdown, setCountdown] = useState<Countdown>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [weekLabel, setWeekLabel] = useState("");
@@ -57,6 +47,9 @@ export default function OffersPage() {
     let timer: ReturnType<typeof setInterval> | undefined;
     const apply = () => {
       try {
+        if (!allProducts || allProducts.length === 0) {
+          throw new Error("No products loaded");
+        }
         const data = getCurrentWeekOffers(allProducts);
         setOffers(data.offers);
         if (data.campaign) {
@@ -74,11 +67,13 @@ export default function OffersPage() {
         setLoading(false);
       }
     };
-    apply();
+    if (allProducts && allProducts.length > 0) {
+      apply();
+    }
     return () => {
       if (timer) clearInterval(timer);
     };
-  }, [isAr, reloadKey]);
+  }, [isAr, reloadKey, allProducts]);
 
   useEffect(() => {
     const failSafe = setTimeout(() => {
@@ -105,6 +100,17 @@ export default function OffersPage() {
         <div className="flex items-center gap-3 text-[var(--muted)]">
           <div className="h-5 w-5 animate-spin rounded-full border-2 border-[var(--primary)] border-t-transparent" />
           <span className="text-sm">{isAr ? "جارٍ تحميل العروض..." : "Loading offers..."}</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (productsLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center" style={{ background: "var(--background)" }}>
+        <div className="flex items-center gap-3 text-[var(--muted)]">
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-[var(--primary)] border-t-transparent" />
+          <span className="text-sm">{isAr ? "جارٍ تحميل المنتجات..." : "Loading products..."}</span>
         </div>
       </div>
     );
@@ -221,10 +227,6 @@ export default function OffersPage() {
                   {/* Discount Badge */}
                   <span className="absolute top-3 end-3 z-10 inline-flex items-center gap-1 rounded-full bg-[var(--error)] px-2.5 py-1 text-[10px] font-bold text-white shadow-lg">
                     -{offer.discount}%
-                  </span>
-                  {/* Reason Badge */}
-                  <span className={`absolute top-3 start-3 z-10 inline-flex items-center gap-1 rounded-full px-2 py-1 text-[9px] font-bold ${REASON_META[offer.reason]?.color ?? "bg-gray-100 text-gray-700"}`}>
-                    {REASON_META[offer.reason]?.ar ?? offer.reason}
                   </span>
                 </div>
               </div>

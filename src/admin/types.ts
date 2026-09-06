@@ -30,7 +30,16 @@ export type AdminResource =
   | "shipping"
   | "analytics"
   | "customer_intelligence"
-  | "ai";
+  | "ai"
+  | "catalog_health"
+  | "sources"
+  | "media"
+  | "merchandising"
+  | "audit"
+  | "import_export"
+  | "content"
+  | "store_ops"
+  | "quiz_results";
 
 export type AdminPermission = "view" | "edit";
 
@@ -122,6 +131,82 @@ export type HomepageSectionKey =
   | "experts"
   | "articles";
 
+export type AllAdminHomepageKey = HomepageSectionKey | import("@/src/lib/home-content").MissingHomeSectionKey;
+
 export type HomepageSettings = {
-  sections: Partial<Record<HomepageSectionKey, boolean>>;
+  sections: Partial<Record<AllAdminHomepageKey, boolean>>;
+};
+
+// ─── Phase 7: Operational / Control Center types ─────────────────────────────
+
+export type AuditAction =
+  | "create"
+  | "update"
+  | "delete"
+  | "status_change"
+  | "publish"
+  | "unpublish"
+  | "duplicate"
+  | "pricing"
+  | "merchandising"
+  | "bulk"
+  | "import"
+  | "export"
+  | "source_verify"
+  | "media"
+  | "ai_generate"
+  | "ai_approve";
+
+export type AuditEntry = {
+  id: string;
+  at: string;
+  by: string;
+  action: AuditAction;
+  resource: string;
+  targetId?: string;
+  targetLabel?: string;
+  note?: string;
+  before?: unknown;
+  after?: unknown;
+  newValue?: string;
+  reason?: string;
+};
+
+export type SourceRecord = {
+  id: string;
+  provider: string;
+  productId?: string;
+  verified: boolean;
+  verifiedAt?: string;
+  notes?: string;
+};
+
+export type MediaAsset = {
+  id: string;
+  url: string;
+  type: "image" | "video";
+  label?: string;
+  tags?: string[];
+  createdAt?: string;
+};
+
+export type HealthIssue = {
+  id: string;
+  severity: "error" | "warning" | "info";
+  category: string;
+  labelAr: string;
+  labelEn: string;
+  count?: number;
+  sampleIds?: string[];
+};
+
+export type CatalogHealthReport = {
+  issues: HealthIssue[];
+  totalProducts: number;
+  publishedProducts: number;
+  bySeverity: {
+    error: number;
+    warning: number;
+    info: number;
+  };
 };

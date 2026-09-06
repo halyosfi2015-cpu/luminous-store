@@ -46,12 +46,16 @@ export default function WeeklyOffers() {
   const { lang } = useLang();
   const isAr = lang === "ar";
 
+  const [mounted, setMounted] = useState(false);
   const [countdown, setCountdown] = useState<Countdown>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
+  useEffect(() => setMounted(true), []);
+
   const weekData = useMemo(() => {
+    if (!mounted) return { offers: [] as OfferProduct[], campaign: null as any };
     const data = getCurrentWeekOffers(allProducts);
     return data;
-  }, []);
+  }, [mounted]);
 
   const { offers, campaign } = weekData;
   const weekLabel = isAr ? "الأسبوع" : "This Week";
@@ -83,6 +87,7 @@ export default function WeeklyOffers() {
       .filter(Boolean) as { product: ProductSummary; offer: OfferProduct }[];
   }, [offers]);
 
+  if (!mounted) return null;
   if (offerProducts.length === 0) return null;
 
   return (
@@ -137,7 +142,7 @@ export default function WeeklyOffers() {
         </div>
 
         {/* Products */}
-        <HorizontalCarousel ariaLabel={isAr ? "عروض الأسبوع" : "Weekly offers"}>
+        <HorizontalCarousel ariaLabel={isAr ? "عروض الأسبوع" : "Weekly offers"} autoplay autoplaySpeed={2000}>
           {offerProducts.map(({ product, offer }) => (
             <div key={product.id} className="w-60 shrink-0 sm:w-64">
               <div className="relative">

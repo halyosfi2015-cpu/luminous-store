@@ -1,52 +1,39 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowLeft, Sparkles, Flower2, Scissors, Palette, FlaskRound, Baby, Sofa, Flame, Pill } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
 import HorizontalCarousel from "@/components/ui/HorizontalCarousel";
-import { sectionCategories } from "@/src/data/product-summaries";
 import { useLang } from "@/lib/use-lang";
+import {
+  taxonomyCategoryIcons,
+  taxonomyCategoryColors,
+  taxonomyCategoryBgColors,
+  resolveTaxonomyIcon,
+} from "@/components/layout/taxonomyCategoryUi";
+import { getTaxonomyCategoryCards, type TaxonomyCategoryCard } from "@/src/lib/taxonomy";
 
-export const categoryIcons: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
-  skincare: Sparkles,
-  haircare: Flower2,
-  bodycare: Scissors,
-  makeup: Palette,
-  perfume: FlaskRound,
-  bakhoor: Flame,
-  baby: Baby,
-  supplements: Pill,
-  tools: Sofa,
-};
-
-export const categoryColors: Record<string, string> = {
-  skincare: "from-primary to-secondary",
-  haircare: "from-secondary to-primary",
-  bodycare: "from-accent to-accent/80",
-  makeup: "from-primary/80 to-secondary/80",
-  perfume: "from-accent/80 to-primary/60",
-  bakhoor: "from-amber-500 to-orange-600",
-  baby: "from-secondary/80 to-primary/80",
-  supplements: "from-emerald-500 to-teal-600",
-  tools: "from-neutral-400 to-slate-400",
-};
-
-export const categoryBgColors: Record<string, string> = {
-  skincare: "from-primary/5 to-secondary/5",
-  haircare: "from-secondary/5 to-primary/5",
-  bodycare: "from-accent/10 to-accent/5",
-  makeup: "from-primary/5 to-secondary/5",
-  perfume: "from-accent/5 to-primary/5",
-  bakhoor: "from-amber-50 to-orange-50",
-  baby: "from-secondary/5 to-primary/5",
-  supplements: "from-emerald-50 to-teal-50",
-  tools: "from-neutral-100 to-slate-100",
-};
+export const categoryIcons = taxonomyCategoryIcons;
+export const categoryColors = taxonomyCategoryColors;
+export const categoryBgColors = taxonomyCategoryBgColors;
 
 export default function Categories() {
   const { lang } = useLang();
   const isAr = lang === "ar";
+  const [sectionCategories, setSectionCategories] = useState<TaxonomyCategoryCard[]>(() => getTaxonomyCategoryCards());
+
+  useEffect(() => {
+    fetch("/api/content/taxonomy", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data.categoryCards) && data.categoryCards.length > 0) {
+          setSectionCategories(data.categoryCards);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <section className="w-full bg-gradient-to-b from-card via-accent-50/30 to-card py-16 sm:py-20 lg:py-24">
@@ -69,10 +56,10 @@ export default function Categories() {
             </Link>
           }
         />
-        <HorizontalCarousel ariaLabel={isAr ? "الفئات" : "Categories"}>
+        <HorizontalCarousel ariaLabel={isAr ? "الفئات" : "Categories"} autoplay autoplaySpeed={2500}>
           {sectionCategories.map((cat) => {
-            const Icon = categoryIcons[cat.slug] || Sparkles;
-             const bgColor = categoryBgColors[cat.slug] || "from-primary/5 to-secondary/5";
+            const Icon = categoryIcons[cat.slug] || resolveTaxonomyIcon(cat.icon) || ArrowLeft;
+            const bgColor = categoryBgColors[cat.slug] || "from-primary/5 to-secondary/5";
             return (
               <Link
                 key={cat.slug}
@@ -83,9 +70,9 @@ export default function Categories() {
                   className={`absolute inset-0 bg-gradient-to-br ${bgColor} opacity-0 transition-opacity duration-300 ease-out-smooth group-hover:opacity-100`}
                 />
                 <div className="relative flex flex-col items-center gap-2.5">
-                   <span className="flex h-18 w-18 items-center justify-center rounded-button bg-primary text-white text-2xl shadow-card transition-transform duration-300 ease-spring group-hover:-rotate-6 group-hover:scale-110 sm:h-20 sm:w-20 sm:text-3xl">
-                     <Icon size={30} />
-                   </span>
+                  <span className="flex h-18 w-18 items-center justify-center rounded-button bg-primary text-white text-2xl shadow-card transition-transform duration-300 ease-spring group-hover:-rotate-6 group-hover:scale-110 sm:h-20 sm:w-20 sm:text-3xl">
+                    <Icon size={30} />
+                  </span>
                   <span className="text-sm font-semibold text-foreground transition-colors duration-200 group-hover:text-primary sm:text-base">
                     {isAr ? cat.nameAr : cat.name}
                   </span>

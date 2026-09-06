@@ -1,4 +1,5 @@
 import type { Bundle } from "@/src/types/bundle";
+import { bundles as canonicalBundles } from "@/src/data/bundles";
 
 export const BUNDLES_STORAGE_KEY = "luminous-bundles";
 
@@ -71,6 +72,7 @@ export function saveGiftOptions(list: GiftOption[]) {
 export function getBundlesWithDefaults(): Bundle[] {
   const stored = loadBundles();
   if (stored.length > 0) return stored;
+  if (Array.isArray(canonicalBundles) && canonicalBundles.length > 0) return canonicalBundles;
   return [];
 }
 

@@ -1,119 +1,106 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
-import Container from "@/components/ui/Container";
-import SectionTitle from "@/components/ui/SectionTitle";
-import ProductCard from "@/components/product/ProductCard";
-import { productSummaries, sectionCategoriesMap } from "@/src/data/product-summaries";
 import { useLang } from "@/lib/use-lang";
-import type { ProductSummary } from "@/src/types/product";
+import { getTaxonomyCategoryCards, type TaxonomyCategoryCard } from "@/src/lib/taxonomy";
+import { useSectionContent } from "@/components/site-content/SiteContentProvider";
+import { taxonomyCategoryIcons, resolveTaxonomyIcon } from "@/components/layout/taxonomyCategoryUi";
 
-function isGlobalBrand(brand: string): boolean {
-  return /[a-zA-Z]/.test(brand || "");
-}
+const CATEGORY_IMAGE_MAP: Record<string, string> = {
+  skincare: "/images/categories-luminous/category-skincare.webp",
+  bodycare: "/images/categories-luminous/category-bodycare.webp",
+  haircare: "/images/categories-luminous/category-haircare.webp",
+  makeup: "/images/categories-luminous/category-makeup.webp",
+  perfume: "/images/categories-luminous/category-perfume.webp",
+  "oral-care": "/images/categories-luminous/category-oral-care.webp",
+  "personal-care": "/images/categories-luminous/category-personal-care.webp",
+  "contact-lenses": "/images/categories-luminous/category-contact-lenses.webp",
+  "mother-baby": "/images/categories-luminous/category-mother-baby.webp",
+  "health-wellness": "/images/categories-luminous/category-health-wellness.webp",
+  "appliances-tools": "/images/categories-luminous/category-appliances-tools.webp",
+  "home-fragrance": "/images/categories-luminous/category-home-fragrance.webp",
+  accessories: "/images/categories-luminous/category-accessories.webp",
+};
 
-function getTopProducts(slug: string, count = 4): ProductSummary[] {
-  const cat = sectionCategoriesMap.find((c) => c.slug === slug);
-  if (!cat) return [];
-  const list = productSummaries.filter(
-    (p) => p.categorySlug && cat.children.includes(p.categorySlug)
-  );
-  return list
-    .map((p) => {
-      let score = 0;
-      if (p.isBestSeller) score += 1000;
-      if (p.isFeatured) score += 800;
-      if (p.isNew) score += 400;
-      score += (p.rating || 0) * 50;
-      score += Math.min(p.reviewCount || 0, 200);
-      if (isGlobalBrand(p.brand)) score += 300;
-      return { p, score };
-    })
-    .sort((a, b) => b.score - a.score)
-    .slice(0, count)
-    .map((x) => x.p);
-}
-
+// All categories on the homepage are shown; extra tabs wrap to a centered row
 export default function TrendingNow() {
   const { lang } = useLang();
   const isAr = lang === "ar";
-  const [activeSlug, setActiveSlug] = useState(sectionCategoriesMap[0]?.slug ?? "skincare");
+  const content = useSectionContent("trendingNow");
+  const [tabCategories, setTabCategories] = useState<TaxonomyCategoryCard[]>(() => getTaxonomyCategoryCards());
 
-  const activeCat = useMemo(
-    () => sectionCategoriesMap.find((c) => c.slug === activeSlug) ?? sectionCategoriesMap[0],
-    [activeSlug]
+  useEffect(() => {
+    fetch("/api/content/taxonomy", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data.categoryCards) && data.categoryCards.length > 0) {
+          setTabCategories(data.categoryCards);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const categoryImages = useMemo(
+    () => new Map(tabCategories.map((cat) => [cat.slug, CATEGORY_IMAGE_MAP[cat.slug]])),
+    [tabCategories]
   );
 
-  const topProducts = useMemo(
-    () => getTopProducts(activeSlug, 4),
-    [activeSlug]
-  );
+  if (!content.visible) return null;
 
   return (
     <section className="w-full bg-white py-8 sm:py-10 lg:py-12">
-      <Container>
-        <SectionTitle
-          eyebrow={isAr ? "تصفحي حسب القسم" : "Browse by Category"}
-          title={isAr ? "أبرز منتجات كل قسم" : "Top Products per Category"}
-          subtitle={
-            isAr
-              ? "كل قسم يعرض لك أشهر المنتجات من أفضل الماركات العالمية"
-              : "Each section shows you the best-selling products from top global brands"
-          }
-        />
-
-        {/* Category tabs — horizontally scrollable on phones */}
-        <div className="mt-6 -mx-4 overflow-x-auto px-4 pb-2 hide-scrollbar sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-          <div className="flex w-max items-center gap-2.5">
-            {sectionCategoriesMap.map((cat) => {
-              const isActive = cat.slug === activeSlug;
+      {/* Enlarged circular category rail — direct link to category page, no container, spaced */}
+      <div className="overflow-x-auto px-4 pb-4 sm:px-6 lg:px-8">
+        <div className="flex min-w-max items-start justify-center gap-8 sm:grid sm:min-w-0 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 lg:gap-x-8 lg:gap-y-8">
+            {tabCategories.map((cat, categoryIndex) => {
+              const Icon = taxonomyCategoryIcons[cat.slug] || resolveTaxonomyIcon(cat.icon);
+              const imageSrc = categoryImages.get(cat.slug);
               return (
-                <button
+                <Link
                   key={cat.slug}
-                  type="button"
-                  onClick={() => setActiveSlug(cat.slug)}
-                  className={`shrink-0 rounded-pill border px-4 py-2.5 text-sm font-bold transition-colors duration-150 ease-out ${
-                    isActive
-                      ? "border-primary bg-primary text-white shadow-md shadow-primary/30"
-                      : "border-border bg-card text-muted hover:border-primary/40 hover:text-primary"
-                  }`}
+                  href={`/categories/${cat.slug}`}
+                  aria-label={isAr ? `تصفحي منتجات ${cat.nameAr}` : `Browse ${cat.name}`}
+                  className="group flex w-[148px] shrink-0 flex-col items-center gap-3 text-center text-foreground transition-colors duration-200 ease-out-smooth hover:text-primary sm:w-auto"
                 >
-                  {cat.nameAr}
-                </button>
+                  <span
+                    className="category-orbit relative flex h-[148px] w-[148px] items-center justify-center rounded-full sm:h-[164px] sm:w-[164px]"
+                    style={{ "--category-delay": `${(categoryIndex % 7) * 140}ms` } as React.CSSProperties}
+                  >
+                    <span className="relative z-10 flex h-[136px] w-[136px] items-center justify-center overflow-hidden rounded-full border-2 border-white bg-[#f9e2e8] shadow-card transition-all duration-300 ease-out-smooth group-hover:scale-105 group-hover:border-primary/40 sm:h-[152px] sm:w-[152px]">
+                      <span
+                        data-category-icon
+                        className={`category-product-move flex items-center justify-center text-primary ${imageSrc ? "hidden" : ""}`}
+                        style={{ "--category-delay": `${(categoryIndex % 7) * 140}ms` } as React.CSSProperties}
+                      >
+                        <Icon size={34} strokeWidth={1.6} aria-hidden="true" />
+                      </span>
+                      {imageSrc && (
+                        <>
+                          {/* eslint-disable-next-line @next/next/no-img-element -- curated local category artwork */}
+                          <img
+                            src={imageSrc}
+                            alt=""
+                            className="category-product-move h-full w-full object-cover"
+                            style={{ "--category-delay": `${(categoryIndex % 7) * 140}ms` } as React.CSSProperties}
+                            draggable={false}
+                            onError={(event) => {
+                              event.currentTarget.style.display = "none";
+                              event.currentTarget.parentElement?.previousElementSibling?.classList.remove("hidden");
+                            }}
+                          />
+                        </>
+                      )}
+                    </span>
+                  </span>
+                  <span className="max-w-[148px] text-sm font-bold leading-tight sm:text-[15px]">
+                    {isAr ? cat.nameAr : cat.name}
+                  </span>
+                </Link>
               );
             })}
           </div>
         </div>
-
-        {/* Top products grid — instant switching, mobile friendly */}
-        <div key={activeSlug} className="mt-6">
-          {topProducts.length > 0 ? (
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
-              {topProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-border bg-card py-16 text-center">
-              <p className="text-sm text-muted">
-                {isAr ? "لا توجد منتجات في هذا القسم بعد" : "No products in this category yet"}
-              </p>
-            </div>
-          )}
-
-          {activeCat && (
-            <div className="mt-8 text-center">
-              <Link
-                href={`/categories/${activeCat.slug}`}
-                className="inline-flex items-center gap-2 rounded-pill border border-primary/30 bg-primary/5 px-6 py-3 text-sm font-bold text-primary transition-all duration-200 ease-out-smooth hover:bg-primary hover:text-white hover:shadow-lg hover:shadow-primary/20"
-              >
-                {isAr ? `تصفحي كل منتجات ${activeCat.nameAr}` : `Browse all ${activeCat.name}`}
-              </Link>
-            </div>
-          )}
-        </div>
-      </Container>
     </section>
   );
 }

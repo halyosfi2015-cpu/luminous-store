@@ -35,6 +35,7 @@ export type PersonalizationConditionOperator =
   | 'less_than'
   | 'in'
   | 'not_in'
+  | 'starts_with'
 
 export interface PersonalizationCondition {
   id?: string
@@ -288,11 +289,39 @@ function evaluateCondition(
       if (condition.operator === 'less_than') return totalOrders < (condition.value as number)
       return false
 
-    case 'session_property':
+    case 'session_property': {
+      const field = condition.field || ''
+      if (field === 'pathname') {
+        const pathname = context.pathname ?? ''
+        if (condition.operator === 'contains') return pathname.includes(condition.value as string)
+        if (condition.operator === 'not_contains') return !pathname.includes(condition.value as string)
+        if (condition.operator === 'equals') return pathname === condition.value
+        if (condition.operator === 'not_equals') return pathname !== condition.value
+        if (condition.operator === 'starts_with') return pathname.startsWith(condition.value as string)
+      }
+      if (field === 'referrer') {
+        const referrer = context.referrer ?? ''
+        if (condition.operator === 'contains') return referrer.includes(condition.value as string)
+        if (condition.operator === 'equals') return referrer === condition.value
+      }
       return false
+    }
 
-    case 'geo_location':
+    case 'geo_location': {
+      const field = condition.field || 'country'
+      if (field === 'country') {
+        const country = context.geoCountry ?? ''
+        if (condition.operator === 'equals') return country === condition.value
+        if (condition.operator === 'in') return (condition.value as string[]).includes(country)
+        if (condition.operator === 'not_equals') return country !== condition.value
+      }
+      if (field === 'city') {
+        const city = context.geoCity ?? ''
+        if (condition.operator === 'equals') return city === condition.value
+        if (condition.operator === 'contains') return city.includes(condition.value as string)
+      }
       return false
+    }
 
     case 'device_type':
       if (condition.operator === 'equals') return context.deviceType === condition.value

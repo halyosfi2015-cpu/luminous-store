@@ -5,7 +5,7 @@ import Container from "@/components/ui/Container";
 
 export const metadata: Metadata = {
   title: "طرق الدفع - Luminous Derma",
-  description: "تعرفي على طرق الدفع المتاحة في لومينوس ديرما: الدفع عند الاستلام، تطبيقات الدفع الإلكتروني اليمنية مثل كريمي وفلوسك، والتحويل البنكي",
+  description: "تعرفي على خيارات الدفع المتاحة عند تأكيد طلبك في لومينوس ديرما، ومنها الدفع عند الاستلام وبعض المحافظ والتحويل البنكي حسب التوفر.",
 };
 
 const paymentMethods = [
@@ -58,8 +58,12 @@ export default function PaymentPage() {
         <div className="mx-auto max-w-3xl">
           <h1 className="mb-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">طرق الدفع المتاحة</h1>
           <p className="mb-8 text-sm text-muted">
-            نقدم لكِ عدة خيارات دفع آمنة ومريحة لإنهاء طلبيك.
+            تظهر خيارات الدفع المتاحة فعليًا عند تأكيد طلبك، وقد تختلف حسب المحافظة وحالة الطلب. هذه الصفحة تعريفية ولا تنفذ دفعًا إلكترونيًا مباشرة.
           </p>
+
+          <div role="note" className="mb-5 rounded-card border border-warning-border bg-warning-soft p-3 text-sm text-warning-fg">
+            الدفع عند الاستلام هو الخيار المتاح افتراضيًا في رحلة checkout الحالية، أما المحافظ والتحويل البنكي فتحتاج إلى تأكيد مباشر من فريق الطلبات قبل التنفيذ.
+          </div>
 
           <div className="space-y-3">
             {paymentMethods.map((method) => {

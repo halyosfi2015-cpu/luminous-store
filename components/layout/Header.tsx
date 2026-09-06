@@ -62,14 +62,14 @@ const NAV_ITEMS: NavItem[] = [
     id: "offers",
     labelAr: "العروض",
     labelEn: "Offers",
-    href: "/#offers",
+    href: "/offers",
     icon: Sparkles,
   },
   {
     id: "bundles",
     labelAr: "باقات وهدايا",
     labelEn: "Bundles & Gifts",
-    href: "/bundles",
+    sectionId: "bundles",
     icon: Gift,
   },
   {
@@ -94,7 +94,7 @@ const NAV_ITEMS: NavItem[] = [
   },
   {
     id: "brands",
-    labelAr: "وكالات تجارية",
+    labelAr: "العلامات التجارية",
     labelEn: "Beauty Partners",
     sectionId: "brands",
     icon: Store,
@@ -112,6 +112,7 @@ function getMobileHref(item: NavItem): string {
   if (item.href) return item.href;
   if (item.mega === "categories") return "/categories";
   if (item.mega === "services") return "/contact";
+  if (item.sectionId) return `/#${item.sectionId}`;
   return "/";
 }
 
@@ -183,25 +184,7 @@ export default function Header() {
 
   const handleOffersClick = (e?: React.MouseEvent) => {
     e?.preventDefault();
-    const scroll = () => {
-      const el = document.getElementById("offers");
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-    };
-    if (pathname === "/") {
-      scroll();
-      return;
-    }
-    router.push("/");
-    let attempts = 0;
-    const timer = window.setInterval(() => {
-      attempts += 1;
-      if (document.getElementById("offers")) {
-        window.clearInterval(timer);
-        scroll();
-      } else if (attempts > 60) {
-        window.clearInterval(timer);
-      }
-    }, 100);
+    router.push("/offers");
   };
 
   const scheduleClose = () => {
@@ -241,8 +224,8 @@ export default function Header() {
       <div data-nav-dropdown className={headerClassName}>
         <div className="relative">
           <LayoutContainer className="relative">
-            <div className="flex h-20 items-center justify-between gap-3 sm:gap-4 rtl:flex-row-reverse">
-              <div className="flex shrink-0 items-center gap-3">
+            <div className="flex min-h-[96px] py-2 items-center justify-between gap-3 sm:gap-4 rtl:flex-row-reverse">
+              <div className="flex shrink-0 items-center">
                 <Logo />
               </div>
 
@@ -268,7 +251,7 @@ export default function Header() {
                   className="relative"
                   href="/wishlist"
                 >
-                  <Heart className="w-5 h-5" />
+                  <Heart className="w-5 h-5 text-primary" />
                   {wishlistCount > 0 && (
                     <span className="absolute -top-0.5 -end-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-secondary text-[10px] font-bold text-secondary-foreground">
                       {wishlistCount > 9 ? "9+" : wishlistCount}
@@ -312,7 +295,7 @@ export default function Header() {
                   className="relative"
                   href="/account"
                 >
-                  <User className="w-5 h-5" />
+                  <User className="w-5 h-5 text-primary" />
                 </IconButton>
 
                 <button
@@ -322,7 +305,7 @@ export default function Header() {
                   aria-label={isAr ? "القائمة" : "Menu"}
                   aria-expanded={menuOpen}
                 >
-                  {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                  {menuOpen ? <X className="w-6 h-6 text-primary" /> : <Menu className="w-6 h-6 text-primary" />}
                 </button>
               </div>
             </div>
@@ -410,15 +393,27 @@ export default function Header() {
                           <span>{isAr ? item.labelAr : item.labelEn}</span>
                         </button>
                       ) : (
-                        <Link
-                          href={item.href!}
-                          role="menuitem"
-                          onClick={() => setActiveMenu(null)}
-                          className="relative flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-muted transition-colors hover:text-foreground"
-                        >
-                          {item.icon && <item.icon size={15} />}
-                          <span>{isAr ? item.labelAr : item.labelEn}</span>
-                        </Link>
+                        (() => {
+                          const isActive = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href!);
+                          return (
+                            <Link
+                              href={item.href!}
+                              role="menuitem"
+                              onClick={() => setActiveMenu(null)}
+                              className={`relative flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium transition-colors ${
+                                isActive
+                                  ? "text-primary"
+                                  : "text-muted hover:text-foreground"
+                              }`}
+                            >
+                              {item.icon && <item.icon size={15} />}
+                              <span>{isAr ? item.labelAr : item.labelEn}</span>
+                              {isActive && (
+                                <span className="absolute inset-x-3 -bottom-0.5 h-0.5 origin-center rounded-full bg-primary" />
+                              )}
+                            </Link>
+                          );
+                        })()
                       )}
                     </li>
                   ))}
@@ -455,20 +450,17 @@ export default function Header() {
                       if (isOffersItem(item)) {
                         return (
                           <li key={item.id} role="none">
-                            <button
-                              type="button"
+                            <Link
+                              href="/offers"
+                              onClick={() => setMenuOpen(false)}
                               role="menuitem"
                               className="flex w-full items-center gap-3 px-3 py-3 rounded-xl text-base font-medium text-foreground hover:bg-accent transition-colors"
-                              onClick={() => {
-                                handleOffersClick();
-                                setMenuOpen(false);
-                              }}
                             >
                               <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
                                 <Icon size={18} />
                               </span>
                               <span>{isAr ? item.labelAr : item.labelEn}</span>
-                            </button>
+                            </Link>
                           </li>
                         );
                       }
@@ -497,7 +489,15 @@ export default function Header() {
                           <Link
                             href={getMobileHref(item)}
                             role="menuitem"
-                            className="flex items-center gap-3 px-3 py-3 rounded-xl text-base font-medium text-foreground hover:bg-accent transition-colors"
+                            className={`flex items-center gap-3 px-3 py-3 rounded-xl text-base font-medium transition-colors ${
+                              getMobileHref(item) === "/"
+                                ? pathname === "/"
+                                  ? "bg-primary/10 text-primary"
+                                  : "text-foreground hover:bg-accent"
+                                : pathname.startsWith(getMobileHref(item))
+                                  ? "bg-primary/10 text-primary"
+                                  : "text-foreground hover:bg-accent"
+                            }`}
                             onClick={() => setMenuOpen(false)}
                           >
                             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">

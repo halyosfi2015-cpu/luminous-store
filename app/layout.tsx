@@ -1,10 +1,18 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Suspense } from "react";
 import Providers from "@/components/Providers";
 import BackButton from "@/components/ui/BackButton";
 import SearchOverlay from "@/components/search/SearchOverlay";
+import { AssistantChat } from "@/components/assistant";
 import { rootStructuredData, websiteStructuredData } from "@/lib/structured-data";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#6b4c5a",
+};
 
 export const metadata: Metadata = {
   title: { default: "Luminous Derma — العناية الفاخرة بالبشرة", template: "%s | Luminous Derma" },
@@ -31,7 +39,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ar" dir="rtl" className="h-full scroll-smooth">
+    <html lang="ar" dir="rtl" suppressHydrationWarning className="h-full scroll-smooth">
       <head>
         <script
           type="application/ld+json"
@@ -63,6 +71,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           </Suspense>
           <Suspense fallback={null}>
             <SearchOverlay />
+          </Suspense>
+          <Suspense fallback={null}>
+            <AssistantChat />
           </Suspense>
         </Providers>
       </body>

@@ -28,16 +28,30 @@ export default function ShippingAdmin() {
       .finally(() => setLoading(false));
   }, []);
 
-  const persist = (list: Governorate[]) => {
-    setGovernorates(list);
-    saveGovernorates(list);
-    fetch("/api/admin/shipping", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(list),
-    }).catch(() => {});
-    setSaved(true);
-    setTimeout(() => setSaved(false), 1500);
+  const [saving, setSaving] = useState(false);
+
+  const persist = async (list: Governorate[]) => {
+    if (saving) return;
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/shipping", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(list),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error ?? `HTTP ${res.status}`);
+      }
+      setGovernorates(list);
+      saveGovernorates(list);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 1500);
+    } catch (err) {
+      toast((err as Error).message || "حدث خطأ أثناء حفظ بيانات التوصيل", "error");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const toggleEnabled = (id: string) => {
@@ -70,27 +84,29 @@ export default function ShippingAdmin() {
     setNewFee(1500);
   };
 
-const confirmDelete = () => {
+const confirmDelete = async () => {
     if (deleting || !deleteId) return;
     setDeleting(true);
-    saveGovernorates(governorates.filter((g) => g.id !== deleteId));
-    setGovernorates((prev) => prev.filter((g) => g.id !== deleteId));
-    fetch("/api/admin/shipping", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(governorates.filter((g) => g.id !== deleteId)),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        toast("تم حذف المحافظة بنجاح", "success");
-      })
-      .catch(() => {
-        toast("حدث خطأ أثناء حذف المحافظة", "error");
-      })
-      .finally(() => {
-        setDeleting(false);
-        setDeleteId(null);
+    try {
+      const newList = governorates.filter((g) => g.id !== deleteId);
+      const res = await fetch("/api/admin/shipping", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newList),
       });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error ?? `HTTP ${res.status}`);
+      }
+      setGovernorates(newList);
+      saveGovernorates(newList);
+      toast("تم حذف المحافظة بنجاح", "success");
+    } catch (err) {
+      toast((err as Error).message || "حدث خطأ أثناء حذف المحافظة", "error");
+    } finally {
+      setDeleting(false);
+      setDeleteId(null);
+    }
   };
 
   return (

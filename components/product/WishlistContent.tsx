@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Heart, ShoppingCart, Star } from "lucide-react";
 import Link from "next/link";
@@ -11,6 +11,7 @@ import Button from "@/components/ui/Button";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
 import WishlistButton from "@/components/product/WishlistButton";
+import CommercePrice from "@/components/product/CommercePrice";
 
 function formatPrice(amount: number): string {
   return amount.toLocaleString("ar-YE");
@@ -94,19 +95,12 @@ export default function WishlistContent() {
                 </div>
               )}
               <div className="flex items-baseline gap-1.5 mt-0.5">
-                <span className="text-sm font-bold text-foreground">
-                  {formatPrice(product.pricing.price)} ر.ي
-                </span>
-                {product.pricing.originalPrice && (
-                  <span className="text-xs text-muted line-through">
-                    {formatPrice(product.pricing.originalPrice)} ر.ي
-                  </span>
-                )}
+                <CommercePrice product={product} />
               </div>
             </div>
             <Button variant="outline" className="w-full gap-1.5 text-xs mt-auto">
               <ShoppingCart size={13} />
-              أضف إلى السلة
+              إضافة للسلة
             </Button>
           </Card>
         ))}

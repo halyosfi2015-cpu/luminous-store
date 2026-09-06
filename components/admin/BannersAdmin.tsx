@@ -84,18 +84,21 @@ export default function BannersAdmin() {
         ...form,
         id: Date.now().toString(),
       };
-      await services.addBanner(banner);
-      fetch("/api/admin/banners", {
+      const res = await fetch("/api/admin/banners", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(banner),
-      }).catch(() => {
-        toast("حدث خطأ أثناء حفظ البانر", "error");
       });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error ?? `HTTP ${res.status}`);
+      }
       toast("تم إنشاء البانر بنجاح", "success");
       setReloadKey((k) => k + 1);
       setForm(emptyForm);
       setEditingId(null);
+    } catch (err) {
+      toast((err as Error).message || "حدث خطأ أثناء حفظ البانر", "error");
     } finally {
       setSaving(false);
     }
@@ -105,18 +108,21 @@ export default function BannersAdmin() {
     if (saving || !editingId) return;
     setSaving(true);
     try {
-      await services.updateBanner(form);
-      fetch(`/api/admin/banners/${form.id}`, {
+      const res = await fetch(`/api/admin/banners/${form.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
-      }).catch(() => {
-        toast("حدث خطأ أثناء حفظ التعديلات", "error");
       });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error ?? `HTTP ${res.status}`);
+      }
       toast("تم حفظ تعديلات البانر بنجاح", "success");
       setReloadKey((k) => k + 1);
       setForm(emptyForm);
       setEditingId(null);
+    } catch (err) {
+      toast((err as Error).message || "حدث خطأ أثناء حفظ التعديلات", "error");
     } finally {
       setSaving(false);
     }
@@ -126,14 +132,17 @@ export default function BannersAdmin() {
     if (deleting || !deleteId) return;
     setDeleting(true);
     try {
-      await services.deleteBanner(deleteId);
-      fetch(`/api/admin/banners/${deleteId}`, {
+      const res = await fetch(`/api/admin/banners/${deleteId}`, {
         method: "DELETE",
-      }).catch(() => {
-        toast("حدث خطأ أثناء حذف البانر", "error");
       });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error ?? `HTTP ${res.status}`);
+      }
       toast("تم حذف البانر بنجاح", "success");
       setReloadKey((k) => k + 1);
+    } catch (err) {
+      toast((err as Error).message || "حدث خطأ أثناء حذف البانر", "error");
     } finally {
       setDeleting(false);
       setDeleteId(null);

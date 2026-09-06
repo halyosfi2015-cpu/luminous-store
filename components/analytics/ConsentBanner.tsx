@@ -19,7 +19,7 @@ export default function ConsentBanner() {
 
   return (
     <div
-      className="fixed inset-x-0 bottom-3 z-40 mx-auto w-[min(96%,720px)] rounded-card border border-border bg-card p-3 shadow-card sm:p-4"
+      className="fixed inset-x-0 bottom-3 z-40 mx-auto w-[min(96%,720px)] rounded-card border border-border bg-card p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-card sm:p-4 sm:pb-4"
       dir="rtl"
       role="dialog"
       aria-live="polite"
@@ -38,7 +38,7 @@ export default function ConsentBanner() {
             <button
               type="button"
               onClick={grant}
-              className="rounded-input bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground hover:bg-primary/90"
+              className="rounded-input bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               أوافق على التحليلات
             </button>
@@ -48,7 +48,7 @@ export default function ConsentBanner() {
                 revoke();
                 setDismissed(true);
               }}
-              className="rounded-input border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted hover:bg-muted-bg"
+              className="rounded-input border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               رفض
             </button>
@@ -58,7 +58,7 @@ export default function ConsentBanner() {
           type="button"
           aria-label="إغلاق"
           onClick={() => setDismissed(true)}
-          className="rounded-full p-1 text-muted hover:bg-muted-bg"
+          className="rounded-full p-1 text-muted hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         >
           <X size={14} />
         </button>

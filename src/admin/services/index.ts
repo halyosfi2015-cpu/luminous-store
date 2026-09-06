@@ -1,3 +1,12 @@
+/**
+ * ADMIN SERVICES LAYER — canonical API-backed implementations (B5).
+ * Every function talks to /api/admin/<resource> (server-side RBAC +
+ * Supabase persistence). No localStorage anywhere in this layer.
+ *
+ * Errors are thrown so callers can show honest failure states; the API
+ * returns 401/403/4xx/5xx which we surface verbatim.
+ */
+
 import type { Product, CategoryInfo, Routine } from "@/src/types/product";
 import type { Brand } from "@/src/data/brands";
 import type { Expert } from "@/src/types/expert";
@@ -15,155 +24,141 @@ import type {
   AdminStats,
   HomepageSettings,
 } from "../types";
-import { listProducts } from "../adapters/local/products";
-import { listCategories } from "../adapters/local/categories";
-import { listBrands } from "../adapters/local/brands";
-import { listOrders } from "../adapters/local/orders";
-import { updateOrderStatus as updateOrderStatusAdapter } from "../adapters/local/orders";
-import { listCustomers } from "../adapters/local/customers";
-import { listExperts } from "../adapters/local/experts";
-import { listArticles } from "../adapters/local/articles";
-import { listRoutines } from "../adapters/local/routines";
-import { listBundles } from "../adapters/local/bundles";
-import { listBanners } from "../adapters/local/banners";
-import { addBanner as addBannerAdapter } from "../adapters/local/banners";
-import { updateBanner as updateBannerAdapter } from "../adapters/local/banners";
-import { deleteBanner as deleteBannerAdapter } from "../adapters/local/banners";
-import { getBanner as getBannerAdapter } from "../adapters/local/banners";
-import { computeStats } from "../adapters/local/stats";
-import { heroAdapter } from "../adapters/local/hero";
-import { shippingAdapter } from "../adapters/local/shipping";
-import {
-  listCoupons,
-  saveCoupons,
-  createCoupon,
-  updateCoupon,
-  deleteCoupon,
-} from "../adapters/local/coupons";
-import {
-  listReviews,
-  setReviewStatus as setReviewStatusLocal,
-} from "../adapters/local/reviews";
-import {
-  loadHomepageSettings,
-  saveHomepageSettings,
-} from "../adapters/local/homepage";
+
+async function apiGet<T>(resource: string): Promise<T> {
+  const res = await fetch(`/api/admin/${resource}`, { cache: "no-store" });
+  if (!res.ok) throw new Error(`GET ${resource} failed: ${res.status}`);
+  return (await res.json()) as T;
+}
+
+async function apiVoid(method: string, resource: string, body?: unknown): Promise<void> {
+  const res = await fetch(`/api/admin/${resource}`, {
+    method,
+    headers: body ? { "Content-Type": "application/json" } : undefined,
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  if (!res.ok) throw new Error(`${method} ${resource} failed: ${res.status}`);
+}
 
 export async function getProducts(): Promise<Product[]> {
-  return listProducts();
+  return apiGet<Product[]>("products");
 }
 
 export async function getCategories(): Promise<CategoryInfo[]> {
-  return listCategories();
+  return apiGet<CategoryInfo[]>("categories");
 }
 
 export async function getBrands(): Promise<Brand[]> {
-  return listBrands();
+  return apiGet<Brand[]>("brands");
 }
 
 export async function getOrders(): Promise<Order[]> {
-  return listOrders();
+  return apiGet<Order[]>("orders");
 }
 
 export async function getCustomers(): Promise<AdminCustomer[]> {
-  return listCustomers();
+  return apiGet<AdminCustomer[]>("customers");
 }
 
-export async function changeOrderStatus(
-  id: string,
-  status: OrderStatus,
-): Promise<void> {
-  updateOrderStatusAdapter(id, status);
+export async function changeOrderStatus(id: string, status: OrderStatus): Promise<void> {
+  // Server validates transitions (ORDER_STATUS_TRANSITIONS → 409 on invalid).
+  await apiVoid("PUT", `orders/${id}/status`, { status });
 }
 
 export async function getExperts(): Promise<Expert[]> {
-  return listExperts();
+  return apiGet<Expert[]>("experts");
 }
 
 export async function getArticles(): Promise<Article[]> {
-  return listArticles();
+  return apiGet<Article[]>("articles");
 }
 
 export async function getRoutines(): Promise<Routine[]> {
-  return listRoutines();
+  return apiGet<Routine[]>("routines");
 }
 
 export async function getBundles(): Promise<Bundle[]> {
-  return listBundles();
+  return apiGet<Bundle[]>("bundles");
 }
 
 export async function saveHero(override: HeroOverride): Promise<void> {
-  heroAdapter.save(override);
+  await apiVoid("PUT", "hero", override);
 }
 
 export async function saveShipping(governorates: Governorate[]): Promise<void> {
-  shippingAdapter.save(governorates);
+  await apiVoid("PUT", "shipping", governorates);
 }
 
 export async function getStats(): Promise<AdminStats> {
-  return computeStats();
+  return apiGet<AdminStats>("stats");
 }
 
 export async function getBanners(): Promise<AdminBanner[]> {
-  return listBanners();
+  return apiGet<AdminBanner[]>("banners");
 }
 
 export async function addBanner(banner: AdminBanner): Promise<AdminBanner[]> {
-  return addBannerAdapter(banner);
+  await apiVoid("POST", "banners", banner);
+  return getBanners();
 }
 
 export async function updateBanner(banner: AdminBanner): Promise<AdminBanner[]> {
-  return updateBannerAdapter(banner);
+  await apiVoid("PUT", `banners/${banner.id}`, banner);
+  return getBanners();
 }
 
 export async function deleteBanner(id: string): Promise<AdminBanner[]> {
-  return deleteBannerAdapter(id);
+  await apiVoid("DELETE", `banners/${id}`);
+  return getBanners();
 }
 
 export async function getBanner(id: string): Promise<AdminBanner | null> {
-  return getBannerAdapter(id);
+  const banners = await getBanners();
+  return banners.find((b) => b.id === id) ?? null;
 }
 
 export async function getCoupons(): Promise<AdminCoupon[]> {
-  return listCoupons();
+  return apiGet<AdminCoupon[]>("coupons");
 }
 
-export async function persistCoupons(list: AdminCoupon[]): Promise<void> {
-  saveCoupons(list);
+/** Coupons are managed individually via the canonical API — bulk persist removed. */
+export async function persistCoupons(_list: AdminCoupon[]): Promise<void> {
+  throw new Error("persistCoupons is not supported — use addCoupon/patchCoupon/removeCoupon");
 }
 
 export async function addCoupon(coupon: AdminCoupon): Promise<AdminCoupon[]> {
-  return createCoupon(coupon);
+  await apiVoid("POST", "coupons", coupon);
+  return getCoupons();
 }
 
 export async function patchCoupon(
   id: string,
   patch: Partial<AdminCoupon>,
 ): Promise<AdminCoupon[]> {
-  return updateCoupon(id, patch);
+  await apiVoid("PUT", `coupons/${id}`, patch);
+  return getCoupons();
 }
 
 export async function removeCoupon(id: string): Promise<AdminCoupon[]> {
-  return deleteCoupon(id);
+  await apiVoid("DELETE", `coupons/${id}`);
+  return getCoupons();
 }
 
 export async function getReviews(): Promise<AdminReview[]> {
-  return listReviews();
+  return apiGet<AdminReview[]>("reviews");
 }
 
 export async function updateReviewStatus(
   id: string,
   status: AdminReviewStatus,
 ): Promise<void> {
-  setReviewStatusLocal(id, status);
+  await apiVoid("PUT", `reviews/${id}`, { status });
 }
 
 export async function getHomepageSettings(): Promise<HomepageSettings> {
-  return loadHomepageSettings();
+  return apiGet<HomepageSettings>("homepage");
 }
 
-export async function persistHomepageSettings(
-  settings: HomepageSettings,
-): Promise<void> {
-  saveHomepageSettings(settings);
+export async function persistHomepageSettings(settings: HomepageSettings): Promise<void> {
+  await apiVoid("PUT", "homepage", settings);
 }

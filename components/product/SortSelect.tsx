@@ -10,6 +10,7 @@ type SortSelectProps = {
 };
 
 const options: { value: SortOption; label: string }[] = [
+  { value: "smart", label: "الترتيب الذكي" },
   { value: "popular", label: "الأكثر مبيعاً" },
   { value: "newest", label: "الأحدث" },
   { value: "price_asc", label: "السعر: من الأقل للأعلى" },

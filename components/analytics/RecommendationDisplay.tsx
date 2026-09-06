@@ -176,7 +176,7 @@ export default function RecommendationDisplay({
             <span className="text-sm font-bold text-foreground">
               {item.metadata?.price ? formatPrice(item.metadata.price as number) + " ر.ي" : ""}
             </span>
-            {!!item.metadata?.originalPrice && (
+            {!!metadata?.discount && !!item.metadata?.originalPrice && (
               <span className="text-xs text-muted line-through">
                 {formatPrice(item.metadata.originalPrice as number)} ر.ي
               </span>
@@ -185,7 +185,7 @@ export default function RecommendationDisplay({
         </div>
         <Button variant="outline" className="w-full gap-1.5 text-xs mt-auto" onClick={() => handleClick(item, index)}>
           <ShoppingCart size={13} />
-          أضف إلى السلة
+          إضافة للسلة
         </Button>
       </Card>
     );

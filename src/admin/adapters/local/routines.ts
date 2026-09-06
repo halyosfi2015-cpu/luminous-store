@@ -1,13 +1,27 @@
-import {
-  ROUTINES_STORAGE_KEY,
-  loadCustomRoutines,
-  saveCustomRoutines,
-} from "@/src/data/routines-store";
 import { routines as canonicalRoutines } from "@/src/data/product-summaries";
 import type { Routine } from "@/types/product";
 import type { ResourceAdapter } from "./types";
 
 export const ROUTINES_DELETED_KEY = "luminous-routines-deleted";
+const ROUTINES_STORAGE_KEY = "luminous-routines-custom";
+
+function loadCustomRoutines(): Routine[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(ROUTINES_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) return parsed as Routine[];
+    }
+  } catch {}
+  return [];
+}
+
+function saveCustomRoutines(list: Routine[]) {
+  try {
+    window.localStorage.setItem(ROUTINES_STORAGE_KEY, JSON.stringify(list));
+  } catch {}
+}
 
 /**
  * Overlay locally-saved routine overrides (created/edited via the admin) on top
@@ -42,7 +56,7 @@ export function saveRoutineLocal(routine: Routine) {
   if (typeof window === "undefined") return;
   try {
     const existing = loadCustomRoutines();
-    const index = existing.findIndex((item) => item.id === routine.id);
+    const index = existing.findIndex((item: Routine) => item.id === routine.id);
     if (index >= 0) existing[index] = routine;
     else existing.push(routine);
     saveCustomRoutines(existing);
@@ -57,7 +71,7 @@ export function saveRoutineLocal(routine: Routine) {
 export function removeRoutineLocal(id: string) {
   if (typeof window === "undefined") return;
   try {
-    saveCustomRoutines(loadCustomRoutines().filter((routine) => routine.id !== id));
+    saveCustomRoutines(loadCustomRoutines().filter((routine: Routine) => routine.id !== id));
     const deleted = new Set(
       JSON.parse(window.localStorage.getItem(ROUTINES_DELETED_KEY) || "[]") as string[],
     );

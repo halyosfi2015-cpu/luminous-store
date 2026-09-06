@@ -5,27 +5,12 @@ import Link from "next/link";
 import { Clock, ArrowLeft } from "lucide-react";
 import Container from "@/components/ui/Container";
 import ProductImage from "@/components/product/ProductImage";
-import { productSummaries } from "@/src/data/product-summaries";
+import { useProducts } from "@/hooks/useProducts";
 import { useLang } from "@/lib/use-lang";
 import type { ProductSummary } from "@/src/types/product";
 
 function formatPrice(amount: number): string {
   return amount.toLocaleString("ar-YE");
-}
-
-function getRecentlyViewed(): ProductSummary[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const stored = localStorage.getItem("recentlyViewed");
-    if (!stored) return [];
-    const ids: string[] = JSON.parse(stored);
-    return ids
-      .map((id) => productSummaries.find((p) => p.id === id))
-      .filter(Boolean)
-      .slice(0, 10) as ProductSummary[];
-  } catch {
-    return [];
-  }
 }
 
 function trackView(productId: string) {
@@ -42,7 +27,28 @@ function trackView(productId: string) {
 export default function RecentlyViewed() {
   const { lang } = useLang();
   const isAr = lang === "ar";
-  const [recentProducts, setRecentProducts] = useState<ProductSummary[]>(() => getRecentlyViewed());
+  const { products: allProducts, loading, error } = useProducts();
+
+  function getRecentlyViewed(): ProductSummary[] {
+    if (typeof window === "undefined") return [];
+    try {
+      const stored = localStorage.getItem("recentlyViewed");
+      if (!stored) return [];
+      const ids: string[] = JSON.parse(stored);
+      return ids
+        .map((id) => allProducts.find((p) => p.id === id))
+        .filter(Boolean)
+        .slice(0, 10) as ProductSummary[];
+    } catch {
+      return [];
+    }
+  }
+
+  const [recentProducts, setRecentProducts] = useState<ProductSummary[]>([]);
+
+  useEffect(() => {
+    setRecentProducts(getRecentlyViewed());
+  }, [allProducts]);
 
   // Listen for storage changes
   useEffect(() => {
@@ -54,6 +60,22 @@ export default function RecentlyViewed() {
       clearInterval(interval);
     };
   }, []);
+
+  if (loading) return null;
+  if (error) {
+    return (
+      <section className="w-full py-8" style={{ background: "var(--background)" }}>
+        <Container>
+          <div className="text-center py-12 text-[var(--muted)]">
+            <p>{isAr ? "فشل تحميل المنتجات المضافة مؤخراً" : "Failed to load recently viewed"}</p>
+            <button onClick={() => window.location.reload()} className="mt-4 text-[var(--primary)] underline">
+              {isAr ? "إعادة المحاولة" : "Retry"}
+            </button>
+          </div>
+        </Container>
+      </section>
+    );
+  }
 
   if (recentProducts.length === 0) return null;
 

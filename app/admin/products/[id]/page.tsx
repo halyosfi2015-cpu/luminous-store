@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { notFound } from "next/navigation";
 import { LoadingState } from "@/components/admin/ui/States";
 import ProductForm from "@/components/admin/ProductForm";
-import { applyProductOverrides } from "@/src/admin/adapters/local/products";
 import type { Product } from "@/src/types/product";
 
 export default function AdminEditProductPage({
@@ -22,7 +21,7 @@ export default function AdminEditProductPage({
       try {
         const res = await fetch("/api/admin/products");
         const base = (res.ok ? await res.json() : []) as Product[];
-        const merged = applyProductOverrides(base);
+        const merged = base;
         const found = merged.find((p) => p.id === id || p.slug === id) ?? null;
         if (!cancelled) setProduct(found);
       } catch {

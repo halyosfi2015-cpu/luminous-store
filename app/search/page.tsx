@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
+import nextDynamic from "next/dynamic";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import Container from "@/components/ui/Container";
+import { productSummaries } from "@/src/data/product-summaries";
+import { getServerProducts } from "@/src/lib/server-products";
+import ProductGridSkeleton from "@/components/product/ProductGridSkeleton";
 
-const SearchResultsContent = dynamic(() => import("@/components/search/SearchResultsContent"));
+const SearchResultsContent = nextDynamic(() => import("@/components/search/SearchResultsContent"));
 
 export const metadata: Metadata = {
   title: "نتائج البحث - Luminous Derma",
@@ -13,7 +16,12 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://luminousderma.com/search" },
 };
 
-export default function SearchPage() {
+export const dynamic = "force-dynamic";
+
+export default async function SearchPage() {
+  const liveCatalog = await getServerProducts();
+  const catalogProducts = liveCatalog.products.length > 0 ? liveCatalog.products : productSummaries;
+
   return (
     <div dir="rtl" className="w-full pb-16">
       <Container>
@@ -27,8 +35,8 @@ export default function SearchPage() {
           </ol>
         </nav>
       </Container>
-      <Suspense fallback={null}>
-        <SearchResultsContent />
+      <Suspense fallback={<ProductGridSkeleton count={8} />}>
+        <SearchResultsContent products={catalogProducts} />
       </Suspense>
     </div>
   );

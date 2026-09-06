@@ -1,5 +1,5 @@
 import type { SkinType, SkinConcern } from "@/types/product";
-import { productSummaries } from "@/src/data/product-summaries";
+import { publishedProductSummaries as productSummaries } from "@/src/data/product-summaries";
 import type { ProductSummary } from "@/src/types/product";
 
 export type SkinProfile = {

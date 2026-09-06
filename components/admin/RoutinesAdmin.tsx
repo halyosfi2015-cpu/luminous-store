@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -17,17 +17,17 @@ import {
   Layers,
 } from "lucide-react";
 import Container from "@/components/ui/Container";
-import { productSummaries as products } from "@/src/data/product-summaries";
+import { useProducts } from "@/hooks/useProducts";
 import {
-  loadCustomRoutines,
   getRoutineTypes,
+  resolveRoutineProducts,
 } from "@/src/data/routines-store";
 import {
   listRoutines,
   saveRoutineLocal,
   removeRoutineLocal,
 } from "@/src/admin/adapters/local/routines";
-import type { Routine, RoutineLevel } from "@/types/product";
+import type { Routine, RoutineLevel, ProductSummary } from "@/src/types/product";
 import { EmptyState, LoadingState } from "@/components/admin/ui/States";
 import ConfirmDialog from "@/components/admin/ui/ConfirmDialog";
 import { useAdminToast } from "@/components/admin/ui/AdminToast";
@@ -51,6 +51,7 @@ const LEVEL_COLORS: Record<RoutineLevel | "none", string> = {
 };
 
 export default function RoutinesAdmin() {
+  const { products: allApiProducts } = useProducts();
   const [allRoutines, setAllRoutines] = useState<Routine[]>([]);
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [query, setQuery] = useState("");
@@ -62,10 +63,16 @@ export default function RoutinesAdmin() {
   const [deleting, setDeleting] = useState(false);
   const { toast } = useAdminToast();
 
+  const normalize = (data: unknown): Routine[] => {
+    if (Array.isArray(data)) return data;
+    if (data && typeof data === "object" && Array.isArray((data as any).routines)) return (data as any).routines;
+    return listRoutines();
+  };
+
   const refresh = () => {
     fetch("/api/admin/routines")
       .then((r) => r.json())
-      .then(setAllRoutines)
+      .then((data) => setAllRoutines(normalize(data)))
       .catch(() => setAllRoutines(listRoutines()));
   };
 
@@ -73,8 +80,8 @@ export default function RoutinesAdmin() {
     let cancelled = false;
     fetch("/api/admin/routines")
       .then((r) => r.json())
-      .then((list) => {
-        if (!cancelled) setAllRoutines(list);
+      .then((data) => {
+        if (!cancelled) setAllRoutines(normalize(data));
       })
       .catch(() => {
         if (!cancelled) setAllRoutines(listRoutines());
@@ -270,15 +277,18 @@ export default function RoutinesAdmin() {
             >
               <div className="flex min-w-0 items-center gap-3">
                 <span className="relative hidden h-11 w-11 shrink-0 overflow-hidden rounded-lg bg-background sm:block">
-                  {(r.heroImage || r.products[0]) && (
-                    <Image
-                      src={r.heroImage || products.find((p) => p.id === r.products[0])?.gallery?.[0] || ""}
-                      alt=""
-                      fill
-                      unoptimized
-                      className="object-cover"
-                    />
-                  )}
+                  {(() => {
+                    const imgSrc = r.heroImage || allApiProducts.find((p) => p.id === r.products[0])?.gallery?.[0];
+                    return imgSrc ? (
+                      <Image
+                        src={imgSrc}
+                        alt=""
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    ) : null;
+                  })()}
                 </span>
                 <div className="min-w-0">
                   <p className="truncate font-semibold text-foreground">{r.nameAr}</p>
@@ -346,7 +356,7 @@ export default function RoutinesAdmin() {
                 <button
                   type="button"
                   onClick={() => setDeleteId(r.id)}
-                  disabled={!loadCustomRoutines().some((c) => c.id === r.id) || deleting}
+                  disabled={deleting}
                   className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 text-gray-400 transition-all hover:border-red-300 hover:text-red-500 disabled:opacity-30 disabled:hover:border-gray-200 disabled:hover:text-gray-400"
                   aria-label="حذف"
                 >
@@ -417,23 +427,32 @@ function RoutineEditor({
   onCancel: () => void;
   onSave: (draft: Routine) => void;
 }) {
+  const { products: allApiProducts } = useProducts();
   const [draft, setDraft] = useState<Routine>({ ...routine, steps: [...routine.steps] });
   const [selectedIds, setSelectedIds] = useState<string[]>(routine.products);
   const [productQuery, setProductQuery] = useState("");
 
+  // Derive selected products from selected IDs and the full API catalog
+  const selectedProducts = useMemo<ProductSummary[]>(
+    () => selectedIds.map((id) => allApiProducts.find((p) => p.id === id)).filter((p): p is ProductSummary => Boolean(p)),
+    [selectedIds, allApiProducts]
+  );
+
   const filteredProducts = useMemo(() => {
     const q = productQuery.trim().toLowerCase();
-    if (!q) return products.slice(0, 60);
-    return products
+    if (!q) {
+      // No query: return all products from the API catalog
+      return allApiProducts;
+    }
+    return allApiProducts
       .filter(
         (p) =>
           p.name.ar.includes(q) ||
           p.name.en.toLowerCase().includes(q) ||
           (p.brandAr || "").includes(q) ||
           p.brand.toLowerCase().includes(q)
-      )
-      .slice(0, 60);
-  }, [productQuery]);
+      );
+  }, [productQuery, allApiProducts]);
 
   const set = <K extends keyof Routine>(key: K, value: Routine[K]) =>
     setDraft((d) => ({ ...d, [key]: value }));
@@ -456,9 +475,7 @@ function RoutineEditor({
     setDraft((d) => ({ ...d, products: selectedIds, steps }));
   };
 
-  const selectedProducts = selectedIds
-    .map((id) => products.find((p) => p.id === id))
-    .filter(Boolean) as typeof products;
+  // selectedProducts is now derived via useMemo above
 
   return (
     <div className="mb-6 overflow-hidden rounded-card border-2 border-primary/30 bg-card shadow-card-hover">
@@ -614,7 +631,7 @@ function RoutineEditor({
                 className="inline-flex items-center gap-1.5 rounded-pill border border-primary/30 bg-primary/5 px-3 py-1.5 text-[11px] font-bold text-primary transition-all hover:bg-red-50 hover:border-red-300 hover:text-red-500"
               >
                 <span className="relative h-5 w-5 overflow-hidden rounded-full">
-                  <Image src={p.gallery[0]} alt="" fill unoptimized className="object-cover" />
+                  {p.gallery[0] ? <Image src={p.gallery[0]} alt="" fill unoptimized className="object-cover" /> : null}
                 </span>
                 {p.name.ar}
                 <X size={10} />
@@ -650,7 +667,7 @@ function RoutineEditor({
                   className="h-4 w-4 accent-primary"
                 />
                 <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg bg-background">
-                  <Image src={p.gallery[0]} alt="" fill unoptimized className="object-cover" />
+                  {p.gallery[0] ? <Image src={p.gallery[0]} alt="" fill unoptimized className="object-cover" /> : null}
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate font-semibold text-foreground">{p.name.ar}</span>
@@ -661,8 +678,8 @@ function RoutineEditor({
             ))}
           </div>
 
-          <p className="text-[11px] text-muted">
-            تعرض هذه القائمة أول 60 منتجاً مطابقاً للبحث. يمكنك أيضاً نسخ منتجات من روتين موجود:
+<p className="text-[11px] text-muted">
+            تعرض هذه القائمة جميع منتجات الكتالوج. يمكنك أيضاً نسخ منتجات من روتين موجود:
           </p>
           <div className="flex flex-wrap gap-2">
             {allRoutines.slice(0, 5).map((r) => (

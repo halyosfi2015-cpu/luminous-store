@@ -125,7 +125,10 @@ export default function HeroAdmin() {
 
   const set = (key: keyof typeof form) => (v: string) => setForm((prev) => ({ ...prev, [key]: v }));
 
-  const handleSave = () => {
+  const [saving, setSaving] = useState(false);
+
+  const handleSave = async () => {
+    if (saving) return;
     const override: HeroOverride = { campaignId, custom };
 
     if (custom) {
@@ -141,27 +144,50 @@ export default function HeroAdmin() {
       override.theme = form.theme;
     }
 
-    saveHeroOverride(override);
-    fetch("/api/admin/hero", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(override),
-    }).catch(() => {});
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/hero", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(override),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error ?? `HTTP ${res.status}`);
+      }
+      saveHeroOverride(override);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      alert((err as Error).message || "فشل حفظ البانر الرئيسي");
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleReset = () => {
-    clearHeroOverride();
-    fetch("/api/admin/hero", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(null),
-    }).catch(() => {});
-    setCampaignId("glow");
-    setCustom(false);
-    setSaved(false);
-    setConfirmReset(false);
+  const handleReset = async () => {
+    if (saving) return;
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/hero", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(null),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error ?? `HTTP ${res.status}`);
+      }
+      clearHeroOverride();
+      setCampaignId("glow");
+      setCustom(false);
+      setSaved(false);
+      setConfirmReset(false);
+    } catch (err) {
+      alert((err as Error).message || "فشل استعادة الافتراضي");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const preview = buildHeroContent(new Date().getMonth() + 1, {
@@ -287,9 +313,10 @@ export default function HeroAdmin() {
               <button
                 type="button"
                 onClick={handleSave}
-                className="flex-1 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primary-dark active:scale-[0.98]"
+                disabled={saving}
+                className="flex-1 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-primary-dark active:scale-[0.98] disabled:opacity-50"
               >
-                {saved ? "تم الحفظ والتطبيق ✓" : "حفظ وتطبيق"}
+                {saving ? "جارٍ الحفظ..." : saved ? "تم الحفظ والتطبيق ✓" : "حفظ وتطبيق"}
               </button>
               <button
                 type="button"

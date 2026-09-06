@@ -52,43 +52,18 @@ function levelFor(score: number): IntentLevel {
   return 'low';
 }
 
-export async function evaluatePurchaseIntent(
+const BATCH_SIZE = 50;
+
+function computeIntentFromEvents(
   customerId: string | null,
   sessionId: string | null,
-): Promise<IntentEvaluation> {
-  const supabase = createAdminClient();
-  const since = new Date(Date.now() - 30 * DAY_MS).toISOString();
-
-  let query = supabase
-    .from('customer_events')
-    .select('event_type, entity_id, session_id, occurred_at')
-    .gte('occurred_at', since);
-
-  if (customerId) {
-    query = query.eq('customer_id', customerId);
-  } else if (sessionId) {
-    query = query.eq('session_id', sessionId);
-  } else {
-    return {
-      customer_id: customerId,
-      session_id: sessionId,
-      score: 0,
-      level: 'low',
-      signals: emptySignals(),
-      contributors: [],
-      rules_version: INTENT_RULES_VERSION,
-      evaluated_at: new Date().toISOString(),
-    };
-  }
-
-  const { data: eventsRaw } = await query;
-  const list = (eventsRaw ?? []) as Array<{ event_type: string; entity_id: string | null; session_id: string | null; occurred_at: string }>;
-
+  events: Array<{ event_type: string; entity_id: string | null; session_id: string | null; occurred_at: string }>,
+): IntentEvaluation {
   const signals: IntentSignals = emptySignals();
   const productViewCounts = new Map<string, number>();
   const sessionIds = new Set<string>();
 
-  for (const e of list) {
+  for (const e of events) {
     if (e.session_id) sessionIds.add(e.session_id);
     const key = e.entity_id ?? '';
     switch (e.event_type) {
@@ -152,6 +127,74 @@ export async function evaluatePurchaseIntent(
   };
 }
 
+export async function evaluatePurchaseIntent(
+  customerId: string | null,
+  sessionId: string | null,
+): Promise<IntentEvaluation> {
+  const supabase = createAdminClient();
+  const since = new Date(Date.now() - 30 * DAY_MS).toISOString();
+
+  let query = supabase
+    .from('customer_events')
+    .select('event_type, entity_id, session_id, occurred_at')
+    .gte('occurred_at', since);
+
+  if (customerId) {
+    query = query.eq('customer_id', customerId);
+  } else if (sessionId) {
+    query = query.eq('session_id', sessionId);
+  } else {
+    return {
+      customer_id: customerId,
+      session_id: sessionId,
+      score: 0,
+      level: 'low',
+      signals: emptySignals(),
+      contributors: [],
+      rules_version: INTENT_RULES_VERSION,
+      evaluated_at: new Date().toISOString(),
+    };
+  }
+
+  const { data: eventsRaw } = await query;
+  const list = (eventsRaw ?? []) as Array<{ event_type: string; entity_id: string | null; session_id: string | null; occurred_at: string }>;
+
+  return computeIntentFromEvents(customerId, sessionId, list);
+}
+
+export async function evaluatePurchaseIntentBatch(
+  customerIds: string[],
+): Promise<Map<string, IntentEvaluation>> {
+  if (customerIds.length === 0) return new Map();
+
+  const supabase = createAdminClient();
+  const since = new Date(Date.now() - 30 * DAY_MS).toISOString();
+  const result = new Map<string, IntentEvaluation>();
+
+  const eventsById = new Map<string, Array<{ event_type: string; entity_id: string | null; session_id: string | null; occurred_at: string }>>();
+
+  for (let i = 0; i < customerIds.length; i += BATCH_SIZE) {
+    const batch = customerIds.slice(i, i + BATCH_SIZE);
+    const { data: eventsRaw } = await supabase
+      .from('customer_events')
+      .select('event_type, entity_id, session_id, occurred_at, customer_id')
+      .in('customer_id', batch)
+      .gte('occurred_at', since);
+
+    const events = (eventsRaw ?? []) as Array<{ event_type: string; entity_id: string | null; session_id: string | null; occurred_at: string; customer_id: string }>;
+    for (const cid of batch) {
+      eventsById.set(cid, events.filter((e) => e.customer_id === cid).map(({ customer_id: _unused, ...rest }) => rest));
+    }
+  }
+
+  for (const cid of customerIds) {
+    const events = eventsById.get(cid) ?? [];
+    result.set(cid, computeIntentFromEvents(cid, null, events));
+  }
+
+  return result;
+}
+
 function emptySignals(): IntentSignals {
   return {
     product_views: 0,
@@ -171,8 +214,8 @@ export async function getIntentDistribution(
   customerIds: string[],
 ): Promise<Record<IntentLevel, number>> {
   const result: Record<IntentLevel, number> = { low: 0, medium: 0, high: 0, very_high: 0 };
-  for (const id of customerIds) {
-    const ev = await evaluatePurchaseIntent(id, null);
+  const batch = await evaluatePurchaseIntentBatch(customerIds);
+  for (const ev of batch.values()) {
     result[ev.level]++;
   }
   return result;

@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import Container from "@/components/ui/Container";
+import HorizontalCarousel from "@/components/ui/HorizontalCarousel";
 import SectionTitle from "@/components/ui/SectionTitle";
 import ProductImage from "@/components/product/ProductImage";
-import { productSummaries } from "@/src/data/product-summaries";
+import { useProducts } from "@/hooks/useProducts";
 import { useLang } from "@/lib/use-lang";
+import { useSectionContent, useSiteContent } from "@/components/site-content/SiteContentProvider";
 import { safeRatingDisplay, safeReviewCountDisplay } from "@/lib/ratings";
 import { getRecommendations, trackProductView, trackCategoryVisit, trackBrandVisit, getFeaturedPick } from "@/src/engine/recommendations/engine";
 import type { ScoredProduct } from "@/src/engine/recommendations/types";
@@ -97,7 +99,7 @@ function RecommendationCard({ sp, isAr }: { sp: ScoredProduct; isAr: boolean }) 
           <span className="text-lg font-extrabold text-gray-900">{formatPrice(product.pricing.price)}</span>
           <span className="text-[9px] font-normal text-gray-400">ريال</span>
         </div>
-        {product.pricing.originalPrice && product.pricing.originalPrice > product.pricing.price && (
+        {product.discount && product.pricing.originalPrice && product.pricing.originalPrice > product.pricing.price && (
           <div className="flex items-center gap-1.5">
             <span className="text-[11px] text-gray-400 line-through">{formatPrice(product.pricing.originalPrice)}</span>
             {product.discount && <span className="rounded-full bg-red-50 px-1.5 py-0.5 text-[9px] font-bold text-red-600">-{product.discount}%</span>}
@@ -111,64 +113,122 @@ function RecommendationCard({ sp, isAr }: { sp: ScoredProduct; isAr: boolean }) 
 export default function SmartRecommendations() {
   const { lang } = useLang();
   const isAr = lang === "ar";
-  const [recommendations, setRecommendations] = useState<ScoredProduct[]>(() => getRecommendations(productSummaries));
-  const [featured, setFeatured] = useState<ScoredProduct | null>(() => getFeaturedPick(productSummaries));
-  const marqueeRef = useRef<HTMLDivElement>(null);
+  const content = useSectionContent("smartRecommendations");
+  const siteContent = useSiteContent();
+  const { products: allProducts, loading, error } = useProducts();
+
+
+  // Engine remains the source of truth; admin overrides are layered on top.
+  // - excluded: removed from engine output
+  // - pinned: admin-selected products forced into the section (resolved from canonical summaries)
+  const buildItems = (): ScoredProduct[] => {
+    const override = siteContent?.products?.smartRecommendations;
+    if (!override || (!override.pinned?.length && !override.excluded?.length)) {
+      return getRecommendations(allProducts);
+    }
+    // ScoredProduct wraps the product, so filter/pin manually instead of
+    // using applySectionProductOverride (which expects top-level slug).
+    const excluded = new Set(override.excluded ?? []);
+    const pinnedSlugs = override.pinned ?? [];
+    const enginePicks = getRecommendations(allProducts).filter(
+      (r) => !excluded.has(r.product.slug),
+    );
+    const present = new Set(enginePicks.map((r) => r.product.slug));
+    const pinnedExtras = pinnedSlugs
+      .filter((slug) => !present.has(slug))
+      .map((slug) => allProducts.find((p) => p.slug === slug))
+      .filter((p): p is (typeof allProducts)[0] => Boolean(p))
+      .map<ScoredProduct>((p) => ({
+        product: p,
+        score: 1000,
+        reason: "similar",
+        reasonAr: "مثبت لك",
+        reasonEn: "Pinned for you",
+        badge: "مثبت لك",
+        badgeEn: "Pinned for you",
+      }));
+    return [...pinnedExtras, ...enginePicks];
+  };
+
+  const [recommendations, setRecommendations] = useState<ScoredProduct[]>([]);
+  const [featured, setFeatured] = useState<ScoredProduct | null>(null);
+
+  useEffect(() => {
+    setRecommendations(buildItems());
+    setFeatured(getFeaturedPick(allProducts));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [siteContent?.products?.smartRecommendations, allProducts.length]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setRecommendations(getRecommendations(productSummaries));
-      setFeatured(getFeaturedPick(productSummaries));
+      setRecommendations(buildItems());
+      setFeatured(getFeaturedPick(allProducts));
     }, 30000);
 
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  if (loading) return null;
+  if (error) {
+    return (
+      <section className="w-full py-8" style={{ background: "var(--background)" }}>
+        <Container>
+          <div className="text-center py-12 text-[var(--muted)]">
+            <p>{isAr ? "فشل تحميل التوصيات" : "Failed to load recommendations"}</p>
+            <button onClick={() => window.location.reload()} className="mt-4 text-[var(--primary)] underline">
+              {isAr ? "إعادة المحاولة" : "Retry"}
+            </button>
+          </div>
+        </Container>
+      </section>
+    );
+  }
 
-  const pauseMarquee = useCallback(() => {
-    if (marqueeRef.current) marqueeRef.current.style.animationPlayState = "paused";
-  }, []);
-
-  const resumeMarquee = useCallback(() => {
-    if (marqueeRef.current) marqueeRef.current.style.animationPlayState = "running";
-  }, []);
+  // Engine remains the source of truth
 
   const items = featured
     ? [featured, ...recommendations.filter((r) => r.product.id !== featured.product.id)]
     : recommendations;
 
-  if (items.length === 0) return null;
+  if (!content.visible) return null;
+  if (items.length === 0) {
+    return (
+      <section id="recommended" className="w-full overflow-hidden bg-white py-8 sm:py-10 lg:py-12">
+        <div className="mx-auto w-full max-w-[1800px] px-4 sm:px-6 lg:px-8">
+          <SectionTitle
+            eyebrow={<>
+              <span className="h-0.5 w-6 rounded-pill bg-primary" />
+              <span className="text-sm font-bold text-primary">{isAr ? content.eyebrowAr : content.eyebrowEn}</span>
+            </>}
+            title={isAr ? content.titleAr : content.titleEn}
+            subtitle={isAr ? content.subtitleAr : content.subtitleEn}
+          />
+          <p className="text-center text-sm text-muted py-8">
+            {isAr ? "بيانات غير كافية" : "Not enough data yet"}
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section id="recommended" className="w-full overflow-hidden bg-gradient-to-b from-white via-primary/[0.02] to-white py-8 sm:py-10 lg:py-12">
+    <section id="recommended" className="w-full overflow-hidden bg-white py-8 sm:py-10 lg:py-12">
       <Container>
         <SectionTitle
           eyebrow={<>
             <span className="h-0.5 w-6 rounded-pill bg-primary" />
-            <span className="text-sm font-bold text-primary">{isAr ? "موصى لك" : "Recommended"}</span>
+            <span className="text-sm font-bold text-primary">{isAr ? content.eyebrowAr : content.eyebrowEn}</span>
           </>}
-          title={isAr ? "منتجات قد تعجبك" : "You Might Also Like"}
-          subtitle={isAr ? "مختارة خصيصًا لك بناءً على اهتماماتك وتصفحك داخل المتجر" : "Personalized picks based on your browsing and interests"}
+          title={isAr ? content.titleAr : content.titleEn}
+          subtitle={isAr ? content.subtitleAr : content.subtitleEn}
         />
-
-        <div className="relative group/carousel" onMouseEnter={pauseMarquee} onMouseLeave={resumeMarquee}>
-          <div className="relative overflow-hidden py-4" dir="ltr">
-            <div className="pointer-events-none absolute inset-y-0 start-0 z-10 w-16 bg-gradient-to-r from-white to-transparent sm:w-24" />
-            <div className="pointer-events-none absolute inset-y-0 end-0 z-10 w-16 bg-gradient-to-l from-white to-transparent sm:w-24" />
-
-            <div
-              ref={marqueeRef}
-              id="smart-rec-marquee"
-              className="flex w-max gap-4 animate-marquee group-hover/carousel:[animation-play-state:paused]"
-              style={{ animationDuration: "80s" }}
-            >
-              {[...items, ...items, ...items].map((sp, i) => (
-                <div key={`${sp.product.id}-${i}`}>
-                  <RecommendationCard sp={sp} isAr={isAr} />
-                </div>
-              ))}
+        <HorizontalCarousel ariaLabel={isAr ? "توصيات ذكية" : "Smart recommendations"} autoplay autoplaySpeed={2500}>
+          {items.map((sp) => (
+            <div key={sp.product.id} className="shrink-0">
+              <RecommendationCard sp={sp} isAr={isAr} />
             </div>
-          </div>
-        </div>
+          ))}
+        </HorizontalCarousel>
       </Container>
     </section>
   );

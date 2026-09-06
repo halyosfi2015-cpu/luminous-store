@@ -108,7 +108,7 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
         <button
           onClick={onClose}
           aria-label="إغلاق القائمة"
-          className="rounded-pill p-1.5 text-muted transition-colors hover:bg-muted-bg hover:text-foreground lg:hidden"
+          className="rounded-pill p-1.5 text-muted transition-colors hover:bg-muted-bg hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 lg:hidden"
         >
           <X className="h-5 w-5" />
         </button>
@@ -123,12 +123,18 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
               return (
                 <li key={item.labelEn}>
                   <button
-                    onClick={() => toggleGroup(item.labelEn)}
+                    onClick={() => {
+                      if (item.href) {
+                        window.location.assign(item.href);
+                        return;
+                      }
+                      toggleGroup(item.labelEn);
+                    }}
                     aria-expanded={isOpen}
                     aria-controls={`admin-group-${item.labelEn}`}
                     className={`
                       flex w-full items-center justify-between gap-3 rounded-card px-3 py-2.5 text-sm font-medium
-                      transition-colors hover:bg-muted-bg
+                      transition-colors hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset
                       ${Icon ? "text-foreground" : "text-muted"}
                     `}
                   >
@@ -160,7 +166,7 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
       </nav>
 
       <div className="border-t border-border px-5 py-3 text-[11px] text-muted">
-        Phase 5 — بيئة محلية (بدون قاعدة بيانات)
+        Luminous Control Center — متصل بقاعدة البيانات
       </div>
     </div>
   );

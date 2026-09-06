@@ -1,8 +1,17 @@
+﻿export type ProductStatus =
+  | "published"
+  | "draft"
+  | "hidden"
+  | "archived"
+  | "rejected"
+  | "duplicate"
+  | "retired";
+
 export type SkinType = "dry" | "oily" | "combination" | "sensitive" | "normal" | "all";
 
 export type SkinConcern = "acne" | "dryness" | "pigmentation" | "aging" | "redness" | "large_pores" | "uneven_texture" | "dark_circles" | "oiliness" | "sensitivity";
 
-export type SortOption = "popular" | "newest" | "price_asc" | "price_desc" | "rating" | "name_asc";
+export type SortOption = "popular" | "newest" | "price_asc" | "price_desc" | "rating" | "name_asc" | "smart";
 
 export type FilterState = {
   brands: string[];
@@ -76,7 +85,7 @@ export interface Product {
     en: string[];
   };
   stock: number;
-  inStock?: boolean;
+  inStock?: boolean | null;
   stockQuantity?: number;
   rating: number;
   reviewCount?: number;
@@ -88,7 +97,7 @@ export interface Product {
   isBestSeller?: boolean;
   isDoctorRecommended?: boolean;
   tags?: string[];
-  seoMetadata: {
+   seoMetadata: {
     title: {
       ar: string;
       en: string;
@@ -99,6 +108,75 @@ export interface Product {
     };
     keywords: string[];
   };
+  sizeLabel?: string;
+  cheaperAlternative?: {
+    id: string;
+    slug: string;
+    name: { ar: string; en: string };
+    price: number;
+    savings: number;
+  };
+  alternativeFeature?: "hidden" | "enabled";
+  recommendations?: string[];
+  trustGuidance?: {
+    keyMessage: { ar: string; en: string };
+    trustPoints: { ar: string[]; en: string[] };
+  };
+  objectionHandling?: {
+    concern: { ar: string; en: string };
+    resolution: { ar: string; en: string };
+  };
+  conversionUX?: {
+    urgencyTrigger: { ar: string; en: string };
+    socialProof: string;
+  };
+  personalization?: {
+    skinTypeMatch: boolean;
+    concernMatch: string[];
+  };
+  customerIntelligence?: {
+    popularityScore: number;
+    conversionLikelihood: number;
+  };
+  purchaseIntent?: number;
+
+  // â”€â”€â”€ Phase 7: Operational / Admin-managed fields (all optional for BC) â”€â”€â”€
+  status?: ProductStatus;
+  /**
+   * Base pricing rule (before any promotional discount).
+   * When `basePrice` is set, storefront shows `basePrice` as the reference
+   * "before" price and `pricing.price` as the discounted price. `-200 YER`
+   * rule is applied automatically at save when no real discount is present,
+   * but must NEVER display a "-200 YER" as a fake discount badge.
+   */
+  basePrice?: number;
+  /** True when a genuine promotional discount exists (not the -200 base rule). */
+  hasRealDiscount?: boolean;
+  /** Optional manual display order for merchandising within a category/section. */
+  displayOrder?: number;
+  /** Search identity: extra aliases/keywords used by searchProducts. */
+  searchAliases?: string[];
+  /** Source/verification metadata (Phase 7 Source & Verification center). */
+  source?: {
+    provider?: string;
+    verified?: boolean;
+    verifiedAt?: string;
+    verifiedBy?: string;
+    notes?: string;
+  };
+  /** Duplicate lineage: id of the canonical product this one duplicates. */
+  duplicateOf?: string;
+  /** Audit trail (most recent first). */
+  audit?: {
+    action: string;
+    at: string;
+    by?: string;
+    note?: string;
+  }[];
+  /** Optional hero/primary image override for merchandising. */
+  heroImage?: string;
+  /** Optional image caption labels keyed by gallery index. */
+  imageLabels?: string[];
 }
 
 export interface ProductSummary {
@@ -110,6 +188,8 @@ export interface ProductSummary {
   };
   brand: string;
   brandAr?: string;
+  brandSlug?: string;
+  brandId?: string | null;
   category: string;
   categoryAr?: string;
   categorySlug?: string;
@@ -120,11 +200,12 @@ export interface ProductSummary {
   };
   discount?: number;
   gallery: string[];
+  heroImage?: string;
   skinTypes: string[];
   suitableFor?: string[];
   skinConcerns?: string[];
   stock: number;
-  inStock?: boolean;
+  inStock?: boolean | null;
   rating: number;
   reviewCount?: number;
   featured?: boolean;
@@ -134,6 +215,8 @@ export interface ProductSummary {
   isBestSeller?: boolean;
   isDoctorRecommended?: boolean;
   tags?: string[];
+  /** Phase 7: publication status carried in the slim client payload. */
+  status?: ProductStatus;
 }
 
 export type ProductCompareDetail = {

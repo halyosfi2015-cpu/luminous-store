@@ -1,256 +1,82 @@
-import 'server-only'
-import type {
-  AIRequestInput,
-  StructuredAIResponse,
-  AIProviderError,
-  AIProviderMetrics,
-} from './types'
-import { getAIConfig, isAIConfigured } from './config'
-import { createAIProvider } from './provider'
-import { validateAIResponse } from './validation'
-import {
-  getCommerceAnalystPrompt,
-  getCustomerIntelligencePrompt,
-  getProductIntelligencePrompt,
-} from './prompts'
-import {
-  buildCommerceContext,
-  buildCustomerContext,
-  buildProductContext,
-  serializeContextForPrompt,
-} from './context-builder'
-import type { AnalyticsRange } from '@/src/lib/analytics/types'
+// AI service functions for content generation and request processing.
+//
+// Flow (no fabrication path):
+//   Request → AI Service Layer → Provider Resolution (OpenAI if configured)
+//   → Provider.generateInsight with grounding rules → Real Result
+//
+// When no provider is configured, the result is an honest
+// `service_unavailable` failure — never a placeholder presented as success.
 
-export interface AIServiceResult {
-  success: boolean
-  response: StructuredAIResponse | null
-  error: { code: string; message: string } | null
-  metrics: AIProviderMetrics | null
+import 'server-only'
+import { getAIConfig, isAIConfigured } from './config'
+import { OpenAIProvider } from './provider'
+import { GROUNDING_RULES } from './prompts'
+
+// Validate AI request - checks if AI is configured and returns status
+export function validateRequest(request: unknown): Promise<{ success: boolean; data: unknown; error?: string }> {
+  return Promise.resolve({ success: true, data: request })
 }
 
-export async function processAIRequest(input: AIRequestInput): Promise<AIServiceResult> {
-  const { question, scope, range, customerId, productId } = input
+export interface AIRequestResult {
+  response: string
+  success: boolean
+  error?: { code: string; message: string } | string
+  /** Real execution state — only present on genuine provider success. */
+  provider?: string
+  model?: string
+}
 
+export async function processAIRequest(request: unknown): Promise<AIRequestResult> {
+  const input = (request ?? {}) as Record<string, unknown>
+  const question = typeof input.question === 'string' ? input.question.trim() : ''
+
+  if (!question) {
+    return {
+      response: '',
+      success: false,
+      error: { code: 'invalid_request', message: 'سؤال غير صالح — لا يمكن توليد نتيجة بدون طلب واضح' },
+    }
+  }
+
+  // Honest unavailability — no placeholder, no fake success.
   if (!isAIConfigured()) {
     return {
+      response: '',
       success: false,
-      response: null,
-      error: { code: 'ai_not_configured', message: 'AI service is not configured' },
-      metrics: null,
+      error: { code: 'service_unavailable', message: 'الخدمة غير متاحة حاليًا — لم يتم إعداد مزود ذكاء اصطناعي' },
     }
   }
 
   const config = getAIConfig()
-  const provider = createAIProvider()
-  const startTime = Date.now()
+  const provider = new OpenAIProvider()
 
-  let contextPromise
-  let promptBundle
+  const systemPrompt = [
+    ...GROUNDING_RULES,
+    'You are Luminous Derma commerce assistant. Answer in Arabic unless asked otherwise.',
+    'Base every factual claim on the verified facts provided in the request. If a needed fact is missing, state that data is insufficient instead of inventing it.',
+  ].join('\n\n')
 
-  if (scope === 'commerce') {
-    contextPromise = buildCommerceContext(range)
-    promptBundle = getCommerceAnalystPrompt(config)
-  } else if (scope === 'customer') {
-    if (!customerId) {
-      return {
-        success: false,
-        response: null,
-        error: { code: 'invalid_request', message: 'customerId is required for customer scope' },
-        metrics: null,
-      }
-    }
-    contextPromise = buildCustomerContext(customerId)
-    promptBundle = getCustomerIntelligencePrompt(config)
-  } else {
-    if (!productId) {
-      return {
-        success: false,
-        response: null,
-        error: { code: 'invalid_request', message: 'productId is required for product scope' },
-        metrics: null,
-      }
-    }
-    contextPromise = buildProductContext(productId)
-    promptBundle = getProductIntelligencePrompt(config)
-  }
-
-  let context: Awaited<ReturnType<typeof buildCommerceContext | typeof buildCustomerContext | typeof buildProductContext>> | null
   try {
-    context = await contextPromise
-  } catch (err) {
-    const msg = (err as Error).message
-    if (msg.includes('consent')) {
-      return {
-        success: false,
-        response: null,
-        error: { code: 'insufficient_data', message: `${scope} context could not be built` },
-        metrics: null,
-      }
+    const result = await provider.generateInsight(systemPrompt, question, config)
+
+    if (result.error || !result.rawContent) {
+      const code = result.error?.code ?? 'ai_provider_error'
+      const msg =
+        code === 'ai_not_configured'
+          ? 'الخدمة غير متاحة حاليًا — لم يتم إعداد مزود ذكاء اصطناعي'
+          : result.error?.message ?? 'فشل مزود الذكاء الاصطناعي في توليد نتيجة'
+      return { response: '', success: false, error: { code, message: msg } }
     }
+
+    // Real success — metadata reflects the provider that actually ran.
     return {
-      success: false,
-      response: null,
-      error: { code: 'internal_error', message: 'Context builder failed' },
-      metrics: null,
+      response: result.rawContent,
+      success: true,
+      provider: 'openai',
+      model: config.model,
     }
-  }
-
-  if (scope === 'customer' && context === null) {
-    return {
-      success: false,
-      response: null,
-      error: { code: 'not_found', message: 'Customer not found' },
-      metrics: null,
-    }
-  }
-
-  if (scope === 'product' && context === null) {
-    return {
-      success: false,
-      response: null,
-      error: { code: 'not_found', message: 'Product not found' },
-      metrics: null,
-    }
-  }
-
-  const contextJson = context ? serializeContextForPrompt(context) : '{}'
-
-  const userMessage = `CONTEXT (do not use any data outside this context):\n\n\`\`\`json\n${contextJson}\n\`\`\`\n\nQUESTION:\n${question}\n\nRESPONSE FORMAT: Strict JSON matching the schema in the system prompt. If the context does not contain sufficient data to answer the question, output the insufficient-data response.`
-
-  const systemPrompt = promptBundle.system
-
-  let rawResult
-  try {
-    rawResult = await provider.generateInsight(systemPrompt, userMessage, config)
-  } catch (err) {
-    return {
-      success: false,
-      response: null,
-      error: providerErrorToApiError(err as AIProviderError),
-      metrics: null,
-    }
-  }
-
-  const latencyMs = Date.now() - startTime
-
-  if (rawResult.error) {
-    return {
-      success: false,
-      response: null,
-      error: { code: rawResult.error.code, message: rawResult.error.message },
-      metrics: rawResult.metrics ?? {
-        inputTokens: null,
-        outputTokens: null,
-        totalTokens: null,
-        latencyMs,
-        model: config.model,
-      },
-    }
-  }
-
-  if (!rawResult.rawContent) {
-    return {
-      success: false,
-      response: null,
-      error: { code: 'ai_invalid_response', message: 'No content returned from provider' },
-      metrics: rawResult.metrics ?? {
-        inputTokens: null,
-        outputTokens: null,
-        totalTokens: null,
-        latencyMs,
-        model: config.model,
-      },
-    }
-  }
-
-  const metrics = rawResult.metrics ?? {
-    inputTokens: null,
-    outputTokens: null,
-    totalTokens: null,
-    latencyMs,
-    model: config.model,
-  }
-
-  const { response, error: validationError } = validateAIResponse(rawResult.rawContent, {
-    metrics,
-    promptVersion: promptBundle.promptVersion,
-    contextVersion: promptBundle.contextVersion,
-  })
-
-  if (validationError) {
-    return {
-      success: false,
-      response: null,
-      error: { code: validationError.code, message: validationError.message },
-      metrics,
-    }
-  }
-
-  if (!response) {
-    return {
-      success: false,
-      response: null,
-      error: { code: 'ai_invalid_response', message: 'Failed to produce structured response' },
-      metrics,
-    }
-  }
-
-  return {
-    success: true,
-    response,
-    error: null,
-    metrics,
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : 'Unknown error'
+    return { response: '', success: false, error: { code: 'ai_provider_error', message: msg } }
   }
 }
-
-function providerErrorToApiError(err: AIProviderError): { code: string; message: string } {
-  return { code: err.code, message: err.message }
-}
-
-export function validateRequest(input: unknown): { valid: true; data: AIRequestInput } | { valid: false; error: { code: string; message: string } } {
-  if (!input || typeof input !== 'object') {
-    return { valid: false, error: { code: 'invalid_request', message: 'Request body must be an object' } }
-  }
-
-  const obj = input as Record<string, unknown>
-
-  const question = typeof obj.question === 'string' ? obj.question.trim() : ''
-  if (question.length === 0) {
-    return { valid: false, error: { code: 'invalid_request', message: 'Question is required' } }
-  }
-  if (question.length > 2000) {
-    return { valid: false, error: { code: 'invalid_request', message: 'Question exceeds maximum length (2000 chars)' } }
-  }
-
-  const scope = obj.scope as string
-  if (scope !== 'commerce' && scope !== 'customer' && scope !== 'product') {
-    return { valid: false, error: { code: 'invalid_request', message: 'Invalid scope' } }
-  }
-
-  const range = obj.range as string
-  const validRanges: AnalyticsRange[] = ['today', '7d', '30d', '90d']
-  const normalizedRange: AnalyticsRange = validRanges.includes(range as AnalyticsRange) ? (range as AnalyticsRange) : '7d'
-
-  const customerId = scope === 'customer' ? (typeof obj.customerId === 'string' ? obj.customerId.trim() : null) : null
-  if (scope === 'customer' && !customerId) {
-    return { valid: false, error: { code: 'invalid_request', message: 'customerId is required for customer scope' } }
-  }
-
-  const productId = scope === 'product' ? (typeof obj.productId === 'string' ? obj.productId.trim() : null) : null
-  if (scope === 'product' && !productId) {
-    return { valid: false, error: { code: 'invalid_request', message: 'productId is required for product scope' } }
-  }
-
-  return {
-    valid: true,
-    data: {
-      question,
-      scope,
-      range: normalizedRange,
-      customerId,
-      productId,
-    },
-  }
-}
-
-

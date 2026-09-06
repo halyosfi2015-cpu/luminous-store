@@ -6,14 +6,15 @@ import ProductImage from "@/components/product/ProductImage";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import SectionTitle from "@/components/ui/SectionTitle";
-import type { Product } from "@/types/product";
+import type { ProductSummary } from "@/src/types/product";
 import { safeRatingDisplay } from "@/lib/ratings";
 import { useEffect } from "react";
 import { trackClient } from "@/src/lib/analytics/client";
 import { ANALYTICS_EVENT_TYPES } from "@/src/lib/analytics/types";
+import { useCart } from "@/context/CartContext";
 
 type RelatedProductsProps = {
-  products: Product[];
+  products: ProductSummary[];
 };
 
 function formatPrice(amount: number): string {
@@ -22,6 +23,20 @@ function formatPrice(amount: number): string {
 
 export default function RelatedProducts({ products }: RelatedProductsProps) {
   const recommendationType = "similar" as const;
+  const { addItem } = useCart();
+
+  const handleAddToCart = (product: ProductSummary) => {
+    addItem({
+      productId: product.id,
+      slug: product.slug,
+      name: product.name.en,
+      nameAr: product.name.ar,
+      price: product.pricing.price,
+      image: product.gallery[0],
+      quantity: 1,
+      inStock: product.stock > 0,
+    });
+  };
 
   useEffect(() => {
     trackClient({
@@ -103,16 +118,16 @@ export default function RelatedProducts({ products }: RelatedProductsProps) {
                 <span className="text-sm font-bold text-foreground">
                   {formatPrice(product.pricing.price)} ر.ي
                 </span>
-                {product.pricing.originalPrice && (
+                {product.discount && product.pricing.originalPrice && (
                   <span className="text-xs text-muted line-through">
                     {formatPrice(product.pricing.originalPrice)} ر.ي
                   </span>
                 )}
               </div>
             </div>
-            <Button variant="outline" className="w-full gap-1.5 text-xs mt-auto">
+            <Button variant="outline" className="mt-auto w-full gap-1.5 text-xs" onClick={() => handleAddToCart(product)} disabled={product.stock <= 0}>
               <ShoppingCart size={13} />
-              أضف إلى السلة
+              إضافة للسلة
             </Button>
           </Card>
         ))}

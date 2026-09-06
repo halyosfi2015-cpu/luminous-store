@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Brain, RefreshCcw, Search } from "lucide-react";
+import { Brain, RefreshCcw, Search, Shield, TrendingUp, AlertTriangle, Target } from "lucide-react";
 import { LoadingState, ErrorState, EmptyState } from "@/components/admin/ui/States";
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
@@ -30,6 +30,10 @@ type CustomerProfile = {
   total_spent: number;
   average_order_value: number;
   last_purchase_at: string | null;
+  lifecycle_state: string;
+  top_products: Array<{ product_id: string; units: number; spend: number }>;
+  top_categories: Array<{ category_id: string; views: number }>;
+  repeat_purchase_rate: number;
 };
 
 type SegmentEvaluation = {
@@ -43,13 +47,80 @@ type IntentEvaluation = {
   customer_id: string | null;
   score: number;
   level: IntentLevel;
+  signals: Record<string, number>;
+  contributors: Array<{ signal: string; weight: number; count: number; contribution: number }>;
   rules_version: string;
+  evaluated_at: string;
+};
+
+type RFMScore = {
+  recency: number;
+  frequency: number;
+  monetary: number;
+  segment: string;
+  segmentAr: string;
+  explanation: string;
+};
+
+type CustomerValue = {
+  totalSpend: number;
+  orderCount: number;
+  averageOrderValue: number;
+  purchaseFrequency: number;
+  recencyDays: number;
+  valueTier: "vip" | "high" | "medium" | "low";
+  valueTierAr: string;
+  explanation: string;
+};
+
+type RetentionAlert = {
+  type: string;
+  priority: "high" | "medium" | "low";
+  reason: string;
+  reasonAr: string;
+  evidence: string;
+  recommendedAction: string;
+  recommendedActionAr: string;
+};
+
+type CustomerOpportunity = {
+  type: string;
+  priority: "high" | "medium" | "low";
+  explanationAr: string;
+  evidence: string;
+  recommendedActionAr: string;
 };
 
 type CustomerIntelligence = {
   profile: CustomerProfile;
   segments: SegmentEvaluation;
   intent: IntentEvaluation;
+  intelligence: {
+    rfm: RFMScore;
+    value: CustomerValue;
+    retention: RetentionAlert[];
+    opportunities: CustomerOpportunity[];
+    summary: {
+      segmentAr: string;
+      valueAr: string;
+      riskLevel: "low" | "medium" | "high";
+      riskLevelAr: string;
+      nextActionAr: string;
+    };
+  } | null;
+};
+
+type Overview = {
+  totalCustomers: number;
+  activeCustomers: number;
+  newCustomers: number;
+  returningCustomers: number;
+  vipCustomers: number;
+  atRiskCustomers: number;
+  inactiveCustomers: number;
+  totalRevenue: number;
+  averageOrderValue: number;
+  segmentDistribution: Array<{ segment: string; segmentAr: string; count: number; percentage: number }>;
 };
 
 const SEGMENT_LABELS: Record<SegmentKey, { ar: string; en: string }> = {
@@ -61,6 +132,15 @@ const SEGMENT_LABELS: Record<SegmentKey, { ar: string; en: string }> = {
   high_value: { ar: "قيمة عالية", en: "High Value" },
   at_risk: { ar: "معرّض للخطر", en: "At Risk" },
   inactive: { ar: "غير نشط", en: "Inactive" },
+};
+
+const LIFECYCLE_LABELS: Record<string, { ar: string; variant: "neutral" | "primary" | "success" | "warning" | "error" }> = {
+  new: { ar: "جديد", variant: "primary" },
+  active: { ar: "نشط", variant: "primary" },
+  returning: { ar: "عائد", variant: "success" },
+  high_value: { ar: "قيمة عالية", variant: "success" },
+  at_risk: { ar: "معرّض للخطر", variant: "warning" },
+  inactive: { ar: "غير نشط", variant: "neutral" },
 };
 
 const INTENT_TONE: Record<IntentLevel, "neutral" | "warning" | "primary" | "success"> = {
@@ -77,6 +157,25 @@ const INTENT_AR: Record<IntentLevel, string> = {
   very_high: "مرتفع جدًا",
 };
 
+const VALUE_TONE: Record<string, "success" | "primary" | "warning" | "neutral"> = {
+  vip: "success",
+  high: "primary",
+  medium: "warning",
+  low: "neutral",
+};
+
+const RISK_TONE: Record<string, "error" | "warning" | "neutral"> = {
+  high: "error",
+  medium: "warning",
+  low: "neutral",
+};
+
+const PRIORITY_TONE: Record<string, "error" | "warning" | "primary"> = {
+  high: "error",
+  medium: "warning",
+  low: "primary",
+};
+
 function formatInt(n: number): string {
   return Number.isFinite(n) ? n.toLocaleString("ar-YE") : "0";
 }
@@ -90,37 +189,36 @@ function formatDate(iso: string | null): string {
   }
 }
 
-function deriveLifecycle(p: CustomerProfile): { key: string; ar: string; variant: "neutral" | "primary" | "success" | "warning" | "error" } {
-  const now = Date.now();
-  const last = p.last_active_at ? new Date(p.last_active_at).getTime() : 0;
-  const days = last ? Math.floor((now - last) / (24 * 60 * 60 * 1000)) : Number.POSITIVE_INFINITY;
-  if (p.total_orders === 0 && p.first_seen && now - new Date(p.first_seen).getTime() < 7 * 24 * 60 * 60 * 1000) return { key: "new", ar: "جديد", variant: "primary" };
-  if (Number.isFinite(days) && days >= 90) return { key: "inactive", ar: "غير نشط", variant: "neutral" };
-  if (Number.isFinite(days) && days >= 30) return { key: "at_risk", ar: "معرّض للخطر", variant: "warning" };
-  if (p.total_orders >= 3 || p.total_spent >= 100000) return { key: "high_value", ar: "قيمة عالية", variant: "success" };
-  if (p.total_orders >= 1) return { key: "returning", ar: "عائد", variant: "success" };
-  return { key: "active", ar: "نشط", variant: "primary" };
+function getLifecycle(label: string): { ar: string; variant: "neutral" | "primary" | "success" | "warning" | "error" } {
+  return LIFECYCLE_LABELS[label] ?? { ar: label, variant: "neutral" };
 }
 
 export default function CustomerIntelligenceAdmin() {
   const [items, setItems] = useState<CustomerIntelligence[]>([]);
+  const [overview, setOverview] = useState<Overview | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const [showOverview, setShowOverview] = useState(true);
 
-  const fetchData = useCallback(async (): Promise<CustomerIntelligence[]> => {
-    const r = await fetch("/api/analytics/customers?limit=100");
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    const json = (await r.json()) as { items: CustomerIntelligence[] };
-    return Array.isArray(json.items) ? json.items : [];
+  const fetchData = useCallback(async (): Promise<{ items: CustomerIntelligence[]; overview: Overview | null }> => {
+    const [itemsRes, overviewRes] = await Promise.all([
+      fetch("/api/analytics/customers?limit=100"),
+      fetch("/api/analytics/customers?mode=overview"),
+    ]);
+    if (!itemsRes.ok) throw new Error(`HTTP ${itemsRes.status}`);
+    const itemsJson = (await itemsRes.json()) as { items: CustomerIntelligence[] };
+    const overviewJson = overviewRes.ok ? (await overviewRes.json()) as Overview : null;
+    return { items: Array.isArray(itemsJson.items) ? itemsJson.items : [], overview: overviewJson };
   }, []);
 
   const applyData = useCallback(
-    (promise: Promise<CustomerIntelligence[]>, isCurrent: () => boolean) => {
+    (promise: Promise<{ items: CustomerIntelligence[]; overview: Overview | null }>, isCurrent: () => boolean) => {
       void promise
-        .then((items) => {
+        .then((data) => {
           if (!isCurrent()) return;
-          setItems(items);
+          setItems(data.items);
+          if (data.overview) setOverview(data.overview);
           setError(null);
           setLoading(false);
         })
@@ -163,9 +261,16 @@ export default function CustomerIntelligenceAdmin() {
             <Brain size={20} className="text-primary" />
             ذكاء العملاء
           </h1>
-          <p className="text-xs text-muted">ملخص محدود من البيانات السلوكية والتجريبية</p>
+          <p className="text-xs text-muted">تحليل RFM + قيمة العميل + الاحتفاظ + الفرص — بيانات حقيقية من Supabase</p>
         </div>
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowOverview(!showOverview)}
+            className="flex items-center gap-1.5 rounded-input border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted hover:bg-muted-bg"
+            type="button"
+          >
+            {showOverview ? "إخفاء الملخص" : "عرض الملخص"}
+          </button>
           <div className="relative">
             <Search size={14} className="absolute end-2 top-1/2 -translate-y-1/2 text-muted" />
             <input
@@ -187,11 +292,49 @@ export default function CustomerIntelligenceAdmin() {
         </div>
       </div>
 
+      {/* Overview Dashboard */}
+      {showOverview && overview && overview.totalCustomers === 0 && (
+        <Card>
+          <div className="text-sm font-bold text-foreground">ملخص ذكاء العملاء</div>
+          <p className="mt-2 text-xs text-muted">
+            بيانات غير كافية — لا يوجد عملاء أو طلبات بعد في قاعدة البيانات، لذلك لا يمكن
+            إنتاج تحليلات موثوقة (شرائح، قيمة، احتفاظ).
+          </p>
+        </Card>
+      )}
+      {showOverview && overview && overview.totalCustomers > 0 && (
+        <Card>
+          <div className="mb-3 text-sm font-bold text-foreground">ملخص ذكاء العملاء</div>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <Stat label="إجمالي العملاء" value={formatInt(overview.totalCustomers)} />
+            <Stat label="الإيرادات" value={`${formatInt(overview.totalRevenue)} ر.ي`} />
+            <Stat label="متوسط الطلب" value={`${formatInt(overview.averageOrderValue)} ر.ي`} />
+            <Stat label="عملاء VIP" value={formatInt(overview.vipCustomers)} />
+            <Stat label="جديد" value={formatInt(overview.newCustomers)} />
+            <Stat label="عائد" value={formatInt(overview.returningCustomers)} />
+            <Stat label="معرّض للخطر" value={formatInt(overview.atRiskCustomers)} />
+            <Stat label="غير نشط" value={formatInt(overview.inactiveCustomers)} />
+          </div>
+          {overview.segmentDistribution.length > 0 && (
+            <div className="mt-3">
+              <div className="text-[10px] font-medium text-muted mb-1">توزيع الشرائح</div>
+              <div className="flex flex-wrap gap-1">
+                {overview.segmentDistribution.map((s) => (
+                  <Badge key={s.segment} variant="primary">
+                    {s.segmentAr}: {s.count} ({s.percentage}%)
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+        </Card>
+      )}
+
       {filtered.length === 0 ? (
         <Card>
           <EmptyState
             title="لا توجد بيانات ذكاء عملاء بعد"
-            description="ستظهر شرائح العملاء ونيّة الشراء بمجرد تسجيل الأحداث والطلبات."
+            description="ستظهر شرائح العملاء ونيّة الشراء وتحليل RFM بمجرد تسجيل الأحداث والطلبات."
           />
         </Card>
       ) : (
@@ -206,10 +349,17 @@ export default function CustomerIntelligenceAdmin() {
 }
 
 function CustomerCard({ data }: { data: CustomerIntelligence }) {
-  const { profile, segments, intent } = data;
-  const lifecycle = deriveLifecycle(profile);
+  const { profile, segments, intent, intelligence } = data;
+  const lifecycle = getLifecycle(profile.lifecycle_state);
+  const rfm = intelligence?.rfm;
+  const value = intelligence?.value;
+  const retention = intelligence?.retention ?? [];
+  const opportunities = intelligence?.opportunities ?? [];
+  const summary = intelligence?.summary;
+
   return (
     <Card>
+      {/* Header */}
       <div className="mb-3 flex items-start justify-between gap-2">
         <div className="min-w-0">
           <div className="font-mono text-[10px] text-muted">{profile.customer_id.slice(0, 8)}…</div>
@@ -229,6 +379,7 @@ function CustomerCard({ data }: { data: CustomerIntelligence }) {
         </div>
       </div>
 
+      {/* Core Stats */}
       <div className="grid grid-cols-3 gap-2 text-center text-xs">
         <Stat label="الجلسات" value={formatInt(profile.total_sessions)} />
         <Stat label="مشاهدات" value={formatInt(profile.total_product_views)} />
@@ -238,6 +389,127 @@ function CustomerCard({ data }: { data: CustomerIntelligence }) {
         <Stat label="متوسط الطلب" value={`${formatInt(profile.average_order_value)} ر.ي`} />
       </div>
 
+      {/* RFM + Value */}
+      {rfm && value && (
+        <div className="mt-3 rounded-input border border-border bg-muted-bg/30 p-2.5">
+          <div className="mb-1.5 flex items-center gap-1.5 text-[10px] font-medium text-foreground">
+            <Shield size={12} className="text-primary" />
+            تحليل RFM + القيمة
+          </div>
+          <div className="grid grid-cols-3 gap-2 text-[10px]">
+            <div>
+              <div className="text-muted">الحداثة</div>
+              <div className="font-bold text-foreground">{rfm.recency}/5</div>
+            </div>
+            <div>
+              <div className="text-muted">التكرار</div>
+              <div className="font-bold text-foreground">{rfm.frequency}/5</div>
+            </div>
+            <div>
+              <div className="text-muted">القيمة</div>
+              <div className="font-bold text-foreground">{rfm.monetary}/5</div>
+            </div>
+          </div>
+          <div className="mt-1.5 flex flex-wrap gap-1">
+            <Badge variant="primary">{rfm.segmentAr}</Badge>
+            <Badge variant={VALUE_TONE[value.valueTier] ?? "neutral"}>{value.valueTierAr}</Badge>
+          </div>
+          <div className="mt-1 text-[10px] text-muted">{rfm.explanation}</div>
+        </div>
+      )}
+
+      {/* Risk Summary */}
+      {summary && (
+        <div className="mt-2 rounded-input border border-border bg-muted-bg/30 p-2.5">
+          <div className="flex items-center gap-1.5 text-[10px] font-medium text-foreground">
+            <TrendingUp size={12} className="text-primary" />
+            ملخص: {summary.segmentAr} — {summary.valueAr}
+          </div>
+          <div className="mt-1 flex flex-wrap gap-1">
+            <Badge variant={RISK_TONE[summary.riskLevel] ?? "neutral"}>
+              المخاطر: {summary.riskLevelAr}
+            </Badge>
+            <Badge variant="primary">{summary.nextActionAr}</Badge>
+          </div>
+        </div>
+      )}
+
+      {/* Retention Alerts */}
+      {retention.length > 0 && (
+        <div className="mt-2 rounded-input border border-warning/20 bg-warning/5 p-2.5">
+          <div className="mb-1 flex items-center gap-1.5 text-[10px] font-medium text-foreground">
+            <AlertTriangle size={12} className="text-warning" />
+            تنبيهات الاحتفاظ ({retention.length})
+          </div>
+          {retention.map((alert, i) => (
+            <div key={i} className="mt-1 text-[10px]">
+              <Badge variant={PRIORITY_TONE[alert.priority] ?? "neutral"}>
+                {alert.priority === "high" ? "عالي" : alert.priority === "medium" ? "متوسط" : "منخفض"}
+              </Badge>{" "}
+              {alert.reasonAr}
+              <div className="text-muted">{alert.evidence}</div>
+              <div className="text-primary">{alert.recommendedActionAr}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Opportunities */}
+      {opportunities.length > 0 && (
+        <div className="mt-2 rounded-input border border-success/20 bg-success/5 p-2.5">
+          <div className="mb-1 flex items-center gap-1.5 text-[10px] font-medium text-foreground">
+            <Target size={12} className="text-success" />
+            فرص ({opportunities.length})
+          </div>
+          {opportunities.map((opp, i) => (
+            <div key={i} className="mt-1 text-[10px]">
+              <Badge variant={PRIORITY_TONE[opp.priority] ?? "neutral"}>
+                {opp.type === "retention" ? "احتفاظ" : opp.type === "cross_sell" ? "بيع مشترك" : opp.type === "loyalty" ? "ولاء" : opp.type === "upsell" ? "زيادة قيمة" : opp.type}
+              </Badge>{" "}
+              {opp.explanationAr}
+              <div className="text-primary">{opp.recommendedActionAr}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Top Products */}
+      {profile.top_products.length > 0 && (
+        <div className="mt-3">
+          <div className="text-[10px] font-medium text-muted mb-1">المنتجات الأكثر شراءً</div>
+          <div className="space-y-1">
+            {profile.top_products.slice(0, 3).map((p, i) => (
+              <div key={i} className="flex items-center justify-between text-[10px]">
+                <span className="font-mono text-muted">{p.product_id.slice(0, 6)}…</span>
+                <span className="text-foreground">{formatInt(p.units)} وحدة / {formatInt(p.spend)} ر.ي</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Top Categories */}
+      {profile.top_categories.length > 0 && (
+        <div className="mt-2">
+          <div className="text-[10px] font-medium text-muted mb-1">أهم الفئات</div>
+          <div className="flex flex-wrap gap-1">
+            {profile.top_categories.slice(0, 3).map((c, i) => (
+              <span key={i} className="text-[10px] text-muted">
+                {c.category_id} ({formatInt(c.views)})
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Repeat Purchase Rate */}
+      {profile.total_orders > 0 && (
+        <div className="mt-2 text-[10px] text-muted">
+          معدل إعادة الشراء: {profile.repeat_purchase_rate}%
+        </div>
+      )}
+
+      {/* Dates */}
       <div className="mt-3 grid grid-cols-2 gap-2 text-[10px] text-muted">
         <div>
           <div className="text-muted">أول ظهور</div>

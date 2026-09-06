@@ -24,6 +24,12 @@ export const ANALYTICS_EVENT_TYPES = {
   EXPERT_VIEW: 'expert_view',
   RECOMMENDATION_IMPRESSION: 'recommendation_impression',
   RECOMMENDATION_CLICK: 'recommendation_click',
+  SKIN_ANALYSIS_COMPLETED: 'skin_analysis_completed',
+  SKIN_ANALYSIS_RESULT_VIEWED: 'skin_analysis_result_viewed',
+  SKIN_ANALYSIS_WHATSAPP_SENT: 'skin_analysis_whatsapp_sent',
+  SKIN_ANALYSIS_EXPERT_CLICKED: 'skin_analysis_expert_clicked',
+  SKIN_ANALYSIS_ROUTINE_CLICKED: 'skin_analysis_routine_clicked',
+  SKIN_ANALYSIS_PRODUCT_CLICKED: 'skin_analysis_product_clicked',
 } as const;
 
 export type AnalyticsEventType =

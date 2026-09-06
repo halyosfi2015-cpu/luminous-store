@@ -1,0 +1,1500 @@
+{
+ "generatedAt": "2026-08-22T14:57:38.322Z",
+ "audit_only": true,
+ "brands": {
+  "Bioderma": {
+   "totals": {
+    "found_on_yaqoot": 68,
+    "already_in_luminous_pool_size": 49,
+    "exact_duplicates_rejected": 50,
+    "equivalent_variants_requiring_review": 11,
+    "recommended_for_addition": 7,
+    "lacking_outlet_verification": 7,
+    "lacking_imagery": 0
+   },
+   "recommended_ranked": [
+    {
+     "yaqoot_id": "2819",
+     "name_ar": "بايوديرما واقى شمس للبشرة الدهنية والمختلطة كفر تاتش مينرال لون فاتح - من بايوديرما",
+     "size_variant": "-",
+     "yaqoot_price": 5880,
+     "yaqoot_old_price": 12000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=2819",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1786649484_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.27,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.5,
+     "priority_score": 54
+    },
+    {
+     "yaqoot_id": "2818",
+     "name_ar": "بايوديرما واقى شمس للبشرة الدهنية والمختلطة كفر تاتش مينرال لون فاتح جدا- من بايوديرما",
+     "size_variant": "-",
+     "yaqoot_price": 5880,
+     "yaqoot_old_price": 12000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=2818",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1786649161_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.25,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.5,
+     "priority_score": 54
+    },
+    {
+     "yaqoot_id": "2758",
+     "name_ar": "بايوديرما غسول البشرة الدهنية والمختلطة 400 مل - من بايوديرما",
+     "size_variant": "ml=400",
+     "yaqoot_price": 9360,
+     "yaqoot_old_price": 12000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=2758",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1783590964_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.25,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.5,
+     "priority_score": 51
+    },
+    {
+     "yaqoot_id": "1039",
+     "name_ar": "بايوديرما سيروم هيالو+ من هيدرابيو لبشرة اكثر ترطيب وامتلاء- من بايو ديرما",
+     "size_variant": "-",
+     "yaqoot_price": 14000,
+     "yaqoot_old_price": 20000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=1039",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1722903968_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.08,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.5,
+     "priority_score": 50
+    },
+    {
+     "yaqoot_id": "1356",
+     "name_ar": "بايوديرما كريم سيبيوم مات كنترول - من بايو ديرما",
+     "size_variant": "-",
+     "yaqoot_price": 9360,
+     "yaqoot_old_price": 12000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=1356",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1737370415_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.17,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.5,
+     "priority_score": 47
+    },
+    {
+     "yaqoot_id": "326",
+     "name_ar": "بايوديرما كريم مفتح للمناطق الحساسه - من بايو ديرما",
+     "size_variant": "-",
+     "yaqoot_price": 11560,
+     "yaqoot_old_price": 17000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=326",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1686702201_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.3,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.5,
+     "priority_score": 47
+    },
+    {
+     "yaqoot_id": "1296",
+     "name_ar": "بايوديرما شامبو نود دى اس ضد القشرة -من بايو ديرما",
+     "size_variant": "-",
+     "yaqoot_price": 7000,
+     "yaqoot_old_price": 10000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=1296",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1736236437_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.25,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.5,
+     "priority_score": 44
+    }
+   ],
+   "equivalent_variants_review": [
+    {
+     "yaqoot_id": "2759",
+     "name_ar": "بايوديرما بلسم سيكابيو لترميم الشفاة المتشققة والجافة جدا - من بايوديرما",
+     "size_variant": "-",
+     "yaqoot_price": 5250,
+     "yaqoot_old_price": 7000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=2759",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1783603680_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.09,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.6,
+     "closest_existing": {
+      "id": "yq-101",
+      "name": "بايوديرما مرطب شفاه 4 غرام"
+     },
+     "reason_review": "same-line variant/size differs from existing Luminous SKU"
+    },
+    {
+     "yaqoot_id": "2394",
+     "name_ar": "بايوديرما كريم جل سيبيوم كيراتو بلس مضاد للعيوب - من بيوديرما",
+     "size_variant": "-",
+     "yaqoot_price": 9600,
+     "yaqoot_old_price": 12000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=2394",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1776615909_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.2,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.71,
+     "closest_existing": {
+      "id": "yq-1035",
+      "name": "بايوديرما سيروم سيبيوم مضاد للعيوب 30 مل"
+     },
+     "reason_review": "same-line variant/size differs from existing Luminous SKU"
+    },
+    {
+     "yaqoot_id": "1260",
+     "name_ar": "بايوديرما غسول البشرة الجافة والحساسه 500 مل +كريم مرطب 85غرام 1+1 مجاناً",
+     "size_variant": "ml=500",
+     "yaqoot_price": 14060,
+     "yaqoot_old_price": 19000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=1260",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1735711710_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.19,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.67,
+     "closest_existing": {
+      "id": "yq-1066",
+      "name": "بايوديرما غسول حجم التوفير 500 مل"
+     },
+     "reason_review": "same-line variant/size differs from existing Luminous SKU"
+    },
+    {
+     "yaqoot_id": "1065",
+     "name_ar": "بايوديرما كريم مرطب اتوديرم الترا للبشرة الجافة والحساسه حجم 200 مل - من بايو ديرما",
+     "size_variant": "ml=200",
+     "yaqoot_price": 7300,
+     "yaqoot_old_price": 10000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=1065",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1727455004_1.png?v=2",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.29,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.75,
+     "closest_existing": {
+      "id": "yq-284",
+      "name": "بايوديرما غسول 200 مل"
+     },
+     "reason_review": "same-line variant/size differs from existing Luminous SKU"
+    },
+    {
+     "yaqoot_id": "1064",
+     "name_ar": "بايوديرما واقي شمس سائل لكل انواع البشرة حماية 100% معا لون فاتح اشتر 1 واحصل على 1مجانا- من بايو ديرما",
+     "size_variant": "-",
+     "yaqoot_price": 9720,
+     "yaqoot_old_price": 18000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=1064",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1727294120_1.png?v=3",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.12,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.69,
+     "closest_existing": {
+      "id": "yq-323",
+      "name": "بايوديرما واقي شمس سائل معا نسبه حمايه 100% من اشعه الشمس مرطب 40 مل"
+     },
+     "reason_review": "same-line variant/size differs from existing Luminous SKU"
+    },
+    {
+     "yaqoot_id": "1038",
+     "name_ar": "بايوديرما سيروم ديفينسيف من سينسيبيو مرطب ومهدء - من بايو ديرما",
+     "size_variant": "-",
+     "yaqoot_price": 13500,
+     "yaqoot_old_price": 18000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=1038",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1722903269_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.09,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.6,
+     "closest_existing": {
+      "id": "yq-101",
+      "name": "بايوديرما مرطب شفاه 4 غرام"
+     },
+     "reason_review": "same-line variant/size differs from existing Luminous SKU"
+    },
+    {
+     "yaqoot_id": "983",
+     "name_ar": "بايوديرما مزيل مكياج بايوديرما للبشرة الحساسة + مسكرا الاميره الخضراء ايسنيس هدية",
+     "size_variant": "-",
+     "yaqoot_price": 5900,
+     "yaqoot_old_price": 10000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=983",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1716251471_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.21,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.67,
+     "closest_existing": {
+      "id": "yq-314",
+      "name": "بايوديرما مزيل مكياج منظف 250 مل"
+     },
+     "reason_review": "same-line variant/size differs from existing Luminous SKU"
+    },
+    {
+     "yaqoot_id": "627",
+     "name_ar": "بايوديرما واقي شمس سائل لكل انواع البشرة حماية 100% معا لون فاتح جدا - من بايو ديرما",
+     "size_variant": "-",
+     "yaqoot_price": 7900,
+     "yaqoot_old_price": 10000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=627",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1696554860_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.17,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.69,
+     "closest_existing": {
+      "id": "yq-323",
+      "name": "بايوديرما واقي شمس سائل معا نسبه حمايه 100% من اشعه الشمس مرطب 40 مل"
+     },
+     "reason_review": "same-line variant/size differs from existing Luminous SKU"
+    },
+    {
+     "yaqoot_id": "471",
+     "name_ar": "بايوديرما العرض الاول مرطب 200 مل اوتو ديرم + مزيل مكايج هدية+ عينات واقي شمس عدد2 هدية - من بايو ديرما",
+     "size_variant": "ml=200",
+     "yaqoot_price": 11040,
+     "yaqoot_old_price": 16000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=471",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1691685956_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.12,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.75,
+     "closest_existing": {
+      "id": "yq-284",
+      "name": "بايوديرما غسول 200 مل"
+     },
+     "reason_review": "same-line variant/size differs from existing Luminous SKU"
+    },
+    {
+     "yaqoot_id": "470",
+     "name_ar": "بايوديرما كريم مرطب للبشرة الجافة والحساسه حجم التوفير 500 مل - من بايو ديرما",
+     "size_variant": "ml=500",
+     "yaqoot_price": 10400,
+     "yaqoot_old_price": 16000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=470",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1691681597_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.31,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.83,
+     "closest_existing": {
+      "id": "yq-1066",
+      "name": "بايوديرما غسول حجم التوفير 500 مل"
+     },
+     "reason_review": "same-line variant/size differs from existing Luminous SKU"
+    },
+    {
+     "yaqoot_id": "316",
+     "name_ar": "بايوديرما غسول البشرة الدهنية والمختلطة 100 - من بايوديرما",
+     "size_variant": "-",
+     "yaqoot_price": 3920,
+     "yaqoot_old_price": 8000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=316",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1686695212_1.png?v=3",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.22,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.75,
+     "closest_existing": {
+      "id": "yq-284",
+      "name": "بايوديرما غسول 200 مل"
+     },
+     "reason_review": "same-line variant/size differs from existing Luminous SKU"
+    }
+   ],
+   "exact_duplicates": [
+    {
+     "yaqoot_id": "2762",
+     "name_ar": "بايوديرما واقي شمس بخاخ فوتوديرم بيدياتركس للأطفال 200 مل - من بايوديرما",
+     "price": 15300,
+     "matched_luminous_id": "yq-2762",
+     "matched_name": "Bioderma واقي شمس بخاخ فوتوديرم بيدياتركس للاطفال رعاية أطفال 200 مل",
+     "jaccard": 0.64,
+     "containment": 0.78
+    },
+    {
+     "yaqoot_id": "2761",
+     "name_ar": "بايوديرما غسول زيتي اتوديرم فائق التغذية 200 مل - من بايوديرما",
+     "price": 8500,
+     "matched_luminous_id": "yq-284",
+     "matched_name": "بايوديرما غسول 200 مل",
+     "jaccard": 0.75,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "2760",
+     "name_ar": "بايوديرما غسول زيتي اتوديرم فائق التغذية 100 مل - من بايوديرما",
+     "price": 5100,
+     "matched_luminous_id": "yq-316",
+     "matched_name": "بايوديرما غسول 100 مل",
+     "jaccard": 0.75,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "2644",
+     "name_ar": "بايوديرما مجموعة العناية بالبشرة الدهنية والمعرضه لحب الشباب غسول و مرطب واقي لون فاتح جد - من بايودير",
+     "price": 21000,
+     "matched_luminous_id": "yq-2644",
+     "matched_name": "Bioderma مجموعه والمعرضه لحب الشباب غسول مرطب واقي لون فاتح جد",
+     "jaccard": 0.63,
+     "containment": 0.83
+    },
+    {
+     "yaqoot_id": "2643",
+     "name_ar": "بايوديرما مجموعة العناية بالبشرة الدهنية والمعرضه لحب الشباب غسول و مرطب واقي لون فاتح حجم كبير - من بايودير",
+     "price": 21000,
+     "matched_luminous_id": "yq-2643",
+     "matched_name": "Bioderma مجموعه والمعرضه لحب الشباب غسول مرطب واقي لون فاتح",
+     "jaccard": 0.53,
+     "containment": 0.82
+    },
+    {
+     "yaqoot_id": "2634",
+     "name_ar": "بايوديرما غسول اوتو ديرم للجسم والوجه واليدين بدون عطور مناسب للبشرة الحساسة 200 مل - من بايو ديرما",
+     "price": 6000,
+     "matched_luminous_id": "yq-284",
+     "matched_name": "بايوديرما غسول 200 مل",
+     "jaccard": 0.47,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "2612",
+     "name_ar": "بايوديرما مجموعة العناية بالبشرة الدهنية والمعرضه لحب الشباب 4 منتجات حجم كبير - من بايوديرما",
+     "price": 28800,
+     "matched_luminous_id": "yq-2612",
+     "matched_name": "Bioderma مجموعه والمعرضه لحب الشباب 4 منتجات مرطب",
+     "jaccard": 0.38,
+     "containment": 0.63
+    },
+    {
+     "yaqoot_id": "2041",
+     "name_ar": "بايوديرما مرطب انتينسيف بوم للبشرة الجافة والجافة جدًا والمتهيجة والأكزيما 45 مل - من بايوديرما",
+     "price": 3000,
+     "matched_luminous_id": "yq-2041",
+     "matched_name": "Bioderma مرطب انتينسيف بوم والمتهيجه والاكزيما 45 مل",
+     "jaccard": 0.5,
+     "containment": 0.75
+    },
+    {
+     "yaqoot_id": "2040",
+     "name_ar": "بايوديرما مرطب انتينسيف بوم للبشرة الجافة والجافة جدًا والمتهيجة والأكزيما 75 مل - من بايوديرما",
+     "price": 5250,
+     "matched_luminous_id": "yq-2040",
+     "matched_name": "Bioderma مرطب انتينسيف بوم والمتهيجه والاكزيما 75 مل",
+     "jaccard": 0.5,
+     "containment": 0.75
+    },
+    {
+     "yaqoot_id": "2039",
+     "name_ar": "بايوديرما مرطب انتينسيف بوم للبشرة الجافة والجافة جدًا والمتهيجة والأكزيما200 مل - من بايوديرما",
+     "price": 9360,
+     "matched_luminous_id": "yq-2039",
+     "matched_name": "Bioderma مرطب انتينسيف بوم والمتهيجه والاكزيما200 200 مل",
+     "jaccard": 0.5,
+     "containment": 0.75
+    },
+    {
+     "yaqoot_id": "2038",
+     "name_ar": "بايوديرما مرطب انتينسيف بوم للبشرة الجافة والجافة جدًا والمتهيجة والأكزيما 500 مل - من بايوديرما",
+     "price": 12800,
+     "matched_luminous_id": "yq-2038",
+     "matched_name": "Bioderma مرطب انتينسيف بوم والمتهيجه والاكزيما 500 مل",
+     "jaccard": 0.5,
+     "containment": 0.75
+    },
+    {
+     "yaqoot_id": "2033",
+     "name_ar": "بايوديرما غسول للبشره الحساسه 45 مل - من بايوديرما",
+     "price": 2600,
+     "matched_luminous_id": "yq-2032",
+     "matched_name": "بايوديرما غسول 45 مل",
+     "jaccard": 0.6,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "2032",
+     "name_ar": "بايوديرما غسول البشرة الدهنية والمختلطة 45 مل - من بايوديرما",
+     "price": 2600,
+     "matched_luminous_id": "yq-2032",
+     "matched_name": "بايوديرما غسول 45 مل",
+     "jaccard": 0.5,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "1971",
+     "name_ar": "بايوديرما كريم اليدين سيكابيو مرطب ومرمم لليدين - من بايوديرما",
+     "price": 4500,
+     "matched_luminous_id": "yq-1971",
+     "matched_name": "بايوديرما كريم سيكابيو مرطب ومرمم 50 مل",
+     "jaccard": 0.63,
+     "containment": 0.86
+    },
+    {
+     "yaqoot_id": "1970",
+     "name_ar": "بايوديرما واقي شمس اكني مات للبشرة الدهنية و المختلطة و المعرضة لحب الشباب30%- من بايوديرما",
+     "price": 8760,
+     "matched_luminous_id": "yq-1970",
+     "matched_name": "بايوديرما واقي شمس اكني مات لحب الشباب30% مرطب 40 مل",
+     "jaccard": 0.54,
+     "containment": 0.8
+    },
+    {
+     "yaqoot_id": "1928",
+     "name_ar": "بايوديرما كريم مضاد لشوائب الوجه علاج للمسام سيبيم بور ريفينر - من بايوديرما",
+     "price": 6545,
+     "matched_luminous_id": "yq-1928",
+     "matched_name": "بايوديرما كريم مضاد لشوائب علاج للمسام سيبيم بور ريفينر 30 مل",
+     "jaccard": 0.82,
+     "containment": 0.91
+    },
+    {
+     "yaqoot_id": "1925",
+     "name_ar": "بايوديرما واقي شمس سائل لكل انواع البشرة حماية 100% معا لون فاتح- - من بايو ديرما",
+     "price": 7900,
+     "matched_luminous_id": "yq-323",
+     "matched_name": "بايوديرما واقي شمس سائل معا نسبه حمايه 100% من اشعه الشمس مرطب 40 مل",
+     "jaccard": 0.39,
+     "containment": 0.69
+    },
+    {
+     "yaqoot_id": "1751",
+     "name_ar": "بايوديرما واقي شمس سائل فوتوديرم إكس ديفينس لون 1 بعامل حماية من الشمس 50+ من بايوديرما",
+     "price": 9940,
+     "matched_luminous_id": "yq-1750",
+     "matched_name": "بايوديرما واقي شمس سائل فوتوديرم اكس ديفينس لون 2 بعامل حمايه من الشمس 50+ مرطب 40 مل",
+     "jaccard": 0.85,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "1750",
+     "name_ar": "بايوديرما واقي شمس سائل فوتوديرم إكس ديفينس لون 2 بعامل حماية من الشمس 50+ من بايوديرما",
+     "price": 9940,
+     "matched_luminous_id": "yq-1750",
+     "matched_name": "بايوديرما واقي شمس سائل فوتوديرم اكس ديفينس لون 2 بعامل حمايه من الشمس 50+ مرطب 40 مل",
+     "jaccard": 0.85,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "1749",
+     "name_ar": "بايوديرما واقي شمس سائل فوتوديرم بعامل حماية من الشمس 50+ من بايوديرما",
+     "price": 9940,
+     "matched_luminous_id": "yq-1749",
+     "matched_name": "بايوديرما واقي شمس سائل فوتوديرم بعامل حمايه من الشمس 50+ مرطب 40 مل",
+     "jaccard": 0.8,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "1748",
+     "name_ar": "بايوديرما كريم جل للعين سنسيبيو للعناية منطقه حول العين - من بايوديرما",
+     "price": 8500,
+     "matched_luminous_id": "yq-1748",
+     "matched_name": "بايوديرما كريم جل سنسيبيو منطقه حول 15 مل",
+     "jaccard": 0.6,
+     "containment": 0.88
+    },
+    {
+     "yaqoot_id": "1394",
+     "name_ar": "بايوديرما غسول وجه سيبيم منظف للبشره الدهنيه الاخضر 200 مل- من بايوديرما",
+     "price": 8400,
+     "matched_luminous_id": "yq-1394",
+     "matched_name": "بايوديرما غسول وجه سيبيم منظف الاخضر 200 مل",
+     "jaccard": 0.78,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "1123",
+     "name_ar": "بايوديرما واقي شمس سائل لكل انواع البشرة حماية 50% معا لون فاتح - من بايو ديرما",
+     "price": 7900,
+     "matched_luminous_id": "yq-788",
+     "matched_name": "بايوديرما واقي شمس سائل معا نسبه حمايه 50% من اشعه الشمس مرطب",
+     "jaccard": 0.41,
+     "containment": 0.75
+    },
+    {
+     "yaqoot_id": "1066",
+     "name_ar": "بايوديرما غسول للبشره الحساسه حجم التوفير 500 مل - من بايوديرما",
+     "price": 11200,
+     "matched_luminous_id": "yq-1066",
+     "matched_name": "بايوديرما غسول حجم التوفير 500 مل",
+     "jaccard": 0.71,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "1035",
+     "name_ar": "بايوديرما سيروم سيبيوم مضاد للعيوب البشرة - من بايوديرما",
+     "price": 13500,
+     "matched_luminous_id": "yq-1035",
+     "matched_name": "بايوديرما سيروم سيبيوم مضاد للعيوب 30 مل",
+     "jaccard": 0.71,
+     "containment": 0.86
+    },
+    {
+     "yaqoot_id": "846",
+     "name_ar": "بايوديرما غسول رغوي مفتح للمناطق الحساسه بيجمينتبيو - من بايوديرما",
+     "price": 8400,
+     "matched_luminous_id": "yq-846",
+     "matched_name": "بايوديرما غسول رغوي مفتح للمناطق بيجمينتبيو 200 مل",
+     "jaccard": 0.75,
+     "containment": 0.88
+    },
+    {
+     "yaqoot_id": "828",
+     "name_ar": "بايوديرما عرض بايو ديرما للبشرة الجافة والحساسه كريم مرطب 200 مل + غسول 100 مل هدية",
+     "price": 9920,
+     "matched_luminous_id": "yq-284",
+     "matched_name": "بايوديرما غسول 200 مل",
+     "jaccard": 0.25,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "790",
+     "name_ar": "بايوديرما مزيل مكايج سيبم للبشرة الدهنية والمختلطة حجم التوفير - من بايوديرما",
+     "price": 7920,
+     "matched_luminous_id": "yq-790",
+     "matched_name": "بايوديرما مزيل مكايج سيبم حجم التوفير منظف 500 مل",
+     "jaccard": 0.55,
+     "containment": 0.78
+    },
+    {
+     "yaqoot_id": "789",
+     "name_ar": "بايوديرما مزيل مكياج للبشرة العادية و الجافة الحساسه حجم التوفير 500 مل - من بايوديرما",
+     "price": 7200,
+     "matched_luminous_id": "yq-789",
+     "matched_name": "بايوديرما مزيل مكياج حجم التوفير منظف 500 مل",
+     "jaccard": 0.55,
+     "containment": 0.88
+    },
+    {
+     "yaqoot_id": "788",
+     "name_ar": "بايوديرما واقي شمس سائل معا نسبة حماية 50% من اشعة الشمس - من بايوديرما",
+     "price": 8000,
+     "matched_luminous_id": "yq-788",
+     "matched_name": "بايوديرما واقي شمس سائل معا نسبه حمايه 50% من اشعه الشمس مرطب",
+     "jaccard": 0.9,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "781",
+     "name_ar": "بايوديرما كريم مرطب مرمم مهداء للبشرة سيكابيو - من بايوديرما",
+     "price": 7300,
+     "matched_luminous_id": "yq-781",
+     "matched_name": "بايوديرما كريم مرطب مرمم مهداء سيكابيو 40 مل",
+     "jaccard": 0.75,
+     "containment": 0.88
+    },
+    {
+     "yaqoot_id": "492",
+     "name_ar": "بايوديرما العرض الثاني من بايو ديرما كريم 200 مل + غسول 200 مل + كريم كريم بيور ريفينر هدية",
+     "price": 22500,
+     "matched_luminous_id": "yq-284",
+     "matched_name": "بايوديرما غسول 200 مل",
+     "jaccard": 0.27,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "339",
+     "name_ar": "بايوديرما كريم مفتح للبشرة خلال الليل - من بايوديرما",
+     "price": 14940,
+     "matched_luminous_id": "yq-339",
+     "matched_name": "بايوديرما كريم مفتح خلال الليل 50 مل",
+     "jaccard": 0.71,
+     "containment": 0.86
+    },
+    {
+     "yaqoot_id": "334",
+     "name_ar": "بايوديرما كريم مفتح مضاد لتصبغات معا 50% حماية من اشعة الشمس - من بايوديرما",
+     "price": 12750,
+     "matched_luminous_id": "yq-334",
+     "matched_name": "بايوديرما كريم مفتح مضاد لتصبغات معا 50% حمايه من اشعه الشمس 40 مل",
+     "jaccard": 0.91,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "333",
+     "name_ar": "بايوديرما غسول سنسيبيو للبشرة الجافة والحساسه 100 مل - من بايوديرما",
+     "price": 4275,
+     "matched_luminous_id": "yq-333",
+     "matched_name": "بايوديرما غسول سنسيبيو 100 مل",
+     "jaccard": 0.57,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "332",
+     "name_ar": "بايوديرما واقي شمس كريم معا نسبة حماية 50% مضاد لتجاعيد والبقع الداكنه- من بايوديرما",
+     "price": 8760,
+     "matched_luminous_id": "yq-332",
+     "matched_name": "بايوديرما واقي شمس كريم معا نسبه حمايه 50% مضاد لتجاعيد والبقع الداكنه 40 مل",
+     "jaccard": 0.92,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "330",
+     "name_ar": "بايوديرما سيروم مضاد لتصبغات مفتح معا فيتامين سي - من بايوديرما",
+     "price": 14220,
+     "matched_luminous_id": "yq-330",
+     "matched_name": "بايوديرما سيروم مضاد لتصبغات مفتح معا فيتامين سي 150 مل",
+     "jaccard": 0.89,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "329",
+     "name_ar": "بايوديرما غسول البشرة الجافة والحساسه 200 مل - من بايوديرما",
+     "price": 6545,
+     "matched_luminous_id": "yq-284",
+     "matched_name": "بايوديرما غسول 200 مل",
+     "jaccard": 0.5,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "323",
+     "name_ar": "بايوديرما واقي شمس سائل معا نسبة حماية 100% من اشعة الشمس - من بايوديرما",
+     "price": 7900,
+     "matched_luminous_id": "yq-323",
+     "matched_name": "بايوديرما واقي شمس سائل معا نسبه حمايه 100% من اشعه الشمس مرطب 40 مل",
+     "jaccard": 0.82,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "321",
+     "name_ar": "بايوديرما كريم مضاد لشوائب الوجه علاج للمسام سيبيم بور ريفينر اشتر 1 واحصل على 1مجانا- من بايوديرما",
+     "price": 8928,
+     "matched_luminous_id": "yq-321",
+     "matched_name": "بايوديرما كريم مضاد لشوائب علاج للمسام سيبيم بور ريفينر اشتر 1 واحصل 1مجانا 30 مل",
+     "jaccard": 0.8,
+     "containment": 0.93
+    }
+   ]
+  },
+  "Eucerin": {
+   "totals": {
+    "found_on_yaqoot": 61,
+    "already_in_luminous_pool_size": 59,
+    "exact_duplicates_rejected": 58,
+    "equivalent_variants_requiring_review": 2,
+    "recommended_for_addition": 1,
+    "lacking_outlet_verification": 1,
+    "lacking_imagery": 0
+   },
+   "recommended_ranked": [
+    {
+     "yaqoot_id": "1026",
+     "name_ar": "يوسرين كريم العين ايفن بيجمنت بيرفيكتور دارك سيركل -من يوسيرين",
+     "size_variant": "-",
+     "yaqoot_price": 18750,
+     "yaqoot_old_price": 25000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=1026",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1722218554_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.17,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.5,
+     "priority_score": 48
+    }
+   ],
+   "equivalent_variants_review": [
+    {
+     "yaqoot_id": "2820",
+     "name_ar": "يوسرين غسول الجسم مرطب لتخفيف الاكزيما خالي من العطور والصابون 400 مل - من يوسرين",
+     "size_variant": "ml=400",
+     "yaqoot_price": 10200,
+     "yaqoot_old_price": 12000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=2820",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1786654244_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.2,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.67,
+     "closest_existing": {
+      "id": "yq-7",
+      "name": "يوسرين لوشن ph مرطب 400 مل"
+     },
+     "reason_review": "same-line variant/size differs from existing Luminous SKU"
+    },
+    {
+     "yaqoot_id": "1022",
+     "name_ar": "يوسرين مرطب اكوابورين للوجه للبشرة العاديه والمختلطه والدهنية - من يوسرين",
+     "size_variant": "-",
+     "yaqoot_price": 11200,
+     "yaqoot_old_price": 16000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=1022",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1721869838_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.29,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.8,
+     "closest_existing": {
+      "id": "yq-1022",
+      "name": "يوسرين مرطب اكوابورين 50 مل"
+     },
+     "reason_review": "same-line variant/size differs from existing Luminous SKU"
+    }
+   ],
+   "exact_duplicates": [
+    {
+     "yaqoot_id": "2486",
+     "name_ar": "يوسرين لوشن مرطب للاطفال لا يسبب الحساسية وخالٍ من العطور - من يوسرين",
+     "price": 9600,
+     "matched_luminous_id": "yq-2486",
+     "matched_name": "Eucerin لوشن مرطب للاطفال لا يسبب الحساسيه وخال رعاية أطفال",
+     "jaccard": 0.58,
+     "containment": 0.7
+    },
+    {
+     "yaqoot_id": "2485",
+     "name_ar": "يوسرين لوشن للجسم بالكامل للبشرة الجافة والمصابة بالحكة، غني بالشوفان الطبيعي- من يوسرين",
+     "price": 10560,
+     "matched_luminous_id": "yq-2485",
+     "matched_name": "Eucerin لوشن بالكامل والمصابه بالحكه غني بالشوفان الطبيعي",
+     "jaccard": 0.58,
+     "containment": 0.78
+    },
+    {
+     "yaqoot_id": "2225",
+     "name_ar": "يوسرين واقي شمس جل كريم اويل كنترول مع لون وسط ميديم -50+ - من يوسرين",
+     "price": 7920,
+     "matched_luminous_id": "yq-153",
+     "matched_name": "يوسرين واقي شمس جل كريم اويل كنترول 50 مل",
+     "jaccard": 0.83,
+     "containment": 0.89
+    },
+    {
+     "yaqoot_id": "2079",
+     "name_ar": "يوسرين غسول جل ومقشر إيفن بيجمنت بيرفكتور لعلاج التصبغات وتحيد لون البشرة - من يوسرين",
+     "price": 11200,
+     "matched_luminous_id": "yq-2079",
+     "matched_name": "يوسرين غسول جل ومقشر ايفن بيجمنت بيرفكتور لعلاج التصبغات وتحيد 200 مل",
+     "jaccard": 0.77,
+     "containment": 0.92
+    },
+    {
+     "yaqoot_id": "2060",
+     "name_ar": "يوسرين كريم المضاد للتصبغات للمناطق الحساسة والجسم - من يوسرين",
+     "price": 15000,
+     "matched_luminous_id": "yq-2060",
+     "matched_name": "يوسرين كريم المضاد للتصبغات للمناطق والجسم لوشن جسم 200 مل",
+     "jaccard": 0.6,
+     "containment": 0.88
+    },
+    {
+     "yaqoot_id": "1871",
+     "name_ar": "يوسرين كريم نهاري هيالورون فيلر مضاد للشيخوخة يملأ التجاعيد العميقة ويحسن مرونة البشرة- من يوسرين",
+     "price": 19800,
+     "matched_luminous_id": "yq-1871",
+     "matched_name": "يوسرين كريم نهاري هيالورون فيلر مضاد للشيخوخه يملا التجاعيد العميقه ويحسن مرونه 50 مل",
+     "jaccard": 0.86,
+     "containment": 0.93
+    },
+    {
+     "yaqoot_id": "1870",
+     "name_ar": "يوسرين كريم الليل هيالورون فيلر مضاد للشيخوخة يملأ التجاعيد العميقة ويحسن مرونة البشرة- من يوسرين",
+     "price": 19800,
+     "matched_luminous_id": "yq-1870",
+     "matched_name": "يوسرين كريم الليل هيالورون فيلر مضاد للشيخوخه يملا التجاعيد العميقه ويحسن مرونه",
+     "jaccard": 0.92,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "1718",
+     "name_ar": "يوسرين كريم مرطب للتحكم في الزيوت من ديرموبيوريفير للبشرة الدهنية والمعرضة لحب الشباب- من يوسرين",
+     "price": 7900,
+     "matched_luminous_id": "yq-1718",
+     "matched_name": "يوسرين كريم مرطب للتحكم في الزيوت من ديرموبيوريفير والمعرضه لحب الشباب 50 مل",
+     "jaccard": 0.75,
+     "containment": 0.91
+    },
+    {
+     "yaqoot_id": "1657",
+     "name_ar": "يوسرين واقي شمس سائل هايدرو بروتيكت خفيف حماية عالية الأشعة فوق البنفسجية - من يوسرين",
+     "price": 7500,
+     "matched_luminous_id": "yq-1657",
+     "matched_name": "يوسرين واقي شمس سائل هايدرو بروتيكت خفيف حمايه عاليه الاشعه فوق البنفسجيه مرطب 50 مل",
+     "jaccard": 0.86,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "1396",
+     "name_ar": "يوسرين مرطب شفاه أكوافور - من يوسرين",
+     "price": null,
+     "matched_luminous_id": "yq-1396",
+     "matched_name": "يوسرين مرطب شفاه اكوافور 10 مل",
+     "jaccard": 0.8,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "1140",
+     "name_ar": "يوسرين سيروم التتصبغات ايفن بيجمنت سكين بيرفكتنج من يوسرين",
+     "price": 16000,
+     "matched_luminous_id": "yq-1140",
+     "matched_name": "يوسرين سيروم التتصبغات ايفن بيجمنت سكين بيرفكتنج 30 مل",
+     "jaccard": 0.88,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "1031",
+     "name_ar": "يوسرين سائل مرطب للبشرة الدهنية والمختلطة مضاد لتصبغات مع 30% حماية من الشمس - من يوسرين",
+     "price": 7520,
+     "matched_luminous_id": "yq-1031",
+     "matched_name": "يوسرين سائل مرطب مضاد لتصبغات مع 30% حمايه من الشمس 50 مل",
+     "jaccard": 0.67,
+     "containment": 0.9
+    },
+    {
+     "yaqoot_id": "1006",
+     "name_ar": "يوسرين كريم هيالورون فيلر الليلي المضاد للشيخوخة- من يوسرين",
+     "price": 19750,
+     "matched_luminous_id": "yq-1006",
+     "matched_name": "يوسرين كريم هيالورون فيلر الليلي المضاد للشيخوخه 50 مل",
+     "jaccard": 0.88,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "966",
+     "name_ar": "يوسرين واقي شمس كريم مضاد لشيخوخة معا لون وسط - من يوسرين",
+     "price": 9940,
+     "matched_luminous_id": "yq-966",
+     "matched_name": "يوسرين واقي شمس كريم مضاد لشيخوخه معا لون وسط 50 مل",
+     "jaccard": 0.9,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "963",
+     "name_ar": "يوسرين غسول نسائي للمناطق الحميميه للبشرة الحساسة - من يوسرين",
+     "price": 7500,
+     "matched_luminous_id": "yq-963",
+     "matched_name": "يوسرين غسول نسائي للمناطق الحميميه 250 مل",
+     "jaccard": 0.63,
+     "containment": 0.86
+    },
+    {
+     "yaqoot_id": "933",
+     "name_ar": "يوسرين كريم القضاء على الخشونة علبة 454 غرام -من يوسرين",
+     "price": 12000,
+     "matched_luminous_id": "yq-933",
+     "matched_name": "يوسرين كريم القضاء الخشونه علبه لوشن جسم 454 غرام",
+     "jaccard": 0.67,
+     "containment": 0.88
+    },
+    {
+     "yaqoot_id": "887",
+     "name_ar": "يوسرين واقي شمس سائل للتحكم في التصبغات لكل انواع البشرة - من يوسرين",
+     "price": 9940,
+     "matched_luminous_id": "yq-887",
+     "matched_name": "يوسرين واقي شمس سائل للتحكم في التصبغات مرطب 50 مل",
+     "jaccard": 0.55,
+     "containment": 0.78
+    },
+    {
+     "yaqoot_id": "872",
+     "name_ar": "يوسرين مزيل عرق رول للبشرة الحساسه بدون كحول - من يوسرين",
+     "price": 7800,
+     "matched_luminous_id": "yq-872",
+     "matched_name": "يوسرين مزيل عرق رول بدون كحول 50 مل",
+     "jaccard": 0.67,
+     "containment": 0.88
+    },
+    {
+     "yaqoot_id": "871",
+     "name_ar": "يوسرين غسول الوجه المرطب الرغوي للاستخدام اليومي بحمض الهيالورونيك -من يوسرين",
+     "price": 6900,
+     "matched_luminous_id": "yq-871",
+     "matched_name": "يوسرين غسول المرطب الرغوي بحمض الهيالورونيك 150 مل",
+     "jaccard": 0.6,
+     "containment": 0.88
+    },
+    {
+     "yaqoot_id": "851",
+     "name_ar": "يوسرين مرطب شفاه العميق مع حماية 20% من اشعة الشمس - من يوسرين",
+     "price": 3944,
+     "matched_luminous_id": "yq-851",
+     "matched_name": "يوسرين مرطب شفاه مع حمايه 20% من اشعه الشمس 5 مل",
+     "jaccard": 0.78,
+     "containment": 0.89
+    },
+    {
+     "yaqoot_id": "649",
+     "name_ar": "يوسرين لوشن للترطيب اليومي وواقي من اشعة الشمس بعامل حماية 15 من يوسرين",
+     "price": 10500,
+     "matched_luminous_id": "yq-649",
+     "matched_name": "يوسرين لوشن للترطيب وواقي من اشعه الشمس بعامل حمايه 15 500 مل",
+     "jaccard": 0.8,
+     "containment": 0.9
+    },
+    {
+     "yaqoot_id": "635",
+     "name_ar": "يوسرين كريم اليدين ايفين بيجمنت بيرفيكتور بعامل وقاية من اشعة الشمس30%- من يوسرين",
+     "price": 9000,
+     "matched_luminous_id": "yq-635",
+     "matched_name": "يوسرين كريم ايفين بيجمنت بيرفيكتور بعامل وقايه من اشعه الشمس30% 75 مل",
+     "jaccard": 0.82,
+     "containment": 0.91
+    },
+    {
+     "yaqoot_id": "588",
+     "name_ar": "يوسرين مقشر لتنقية البشرة - من يوسرين",
+     "price": 7500,
+     "matched_luminous_id": "yq-588",
+     "matched_name": "يوسرين مقشر لتنقيه 100 مل",
+     "jaccard": 0.6,
+     "containment": 0.8
+    },
+    {
+     "yaqoot_id": "529",
+     "name_ar": "يوسرين سيروم الهيالورون فلير فيتامين سي - من يوسرين",
+     "price": 8400,
+     "matched_luminous_id": "yq-529",
+     "matched_name": "يوسرين سيروم الهيالورون فلير فيتامين سي 8 مل",
+     "jaccard": 0.86,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "464",
+     "name_ar": "يوسرين سيروم مزدوج مضاد لتصبغات - من يوسرين",
+     "price": 19500,
+     "matched_luminous_id": "yq-464",
+     "matched_name": "يوسرين سيروم مزدوج مضاد لتصبغات 30 مل",
+     "jaccard": 0.83,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "432",
+     "name_ar": "يوسرين غسول رغوي مضاد لتصبغات مفتح - من يوسرين",
+     "price": 11250,
+     "matched_luminous_id": "yq-432",
+     "matched_name": "يوسرين غسول رغوي مضاد لتصبغات مفتح 160 مل",
+     "jaccard": 0.86,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "393",
+     "name_ar": "يوسرين كريم العلاج الأصلي للبشرة الجافة جدا- من يوسرين",
+     "price": 1300,
+     "matched_luminous_id": "yq-393",
+     "matched_name": "يوسرين كريم العلاج الاصلي لوشن جسم 30 مل",
+     "jaccard": 0.4,
+     "containment": 0.63
+    },
+    {
+     "yaqoot_id": "384",
+     "name_ar": "يوسرين غسول الوجه المرطب غني بحمض الهيالورونيك - من يوسرين",
+     "price": 8400,
+     "matched_luminous_id": "yq-384",
+     "matched_name": "يوسرين غسول المرطب غني بحمض الهيالورونيك 200 مل",
+     "jaccard": 0.75,
+     "containment": 0.88
+    },
+    {
+     "yaqoot_id": "370",
+     "name_ar": "يوسرين غسول اويل كنترول للبشرة الدهنية والمختلطة- من يوسرين",
+     "price": 8500,
+     "matched_luminous_id": "yq-370",
+     "matched_name": "يوسرين غسول اويل كنترول",
+     "jaccard": 0.57,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "350",
+     "name_ar": "يوسرين كريم مرطب للوجه معا 5% يوريا- من يوسرين",
+     "price": 9600,
+     "matched_luminous_id": "yq-350",
+     "matched_name": "يوسرين كريم مرطب معا 5% يوريا 50 مل",
+     "jaccard": 0.75,
+     "containment": 0.88
+    },
+    {
+     "yaqoot_id": "207",
+     "name_ar": "يوسرين كريم اليدين هيالورون فيلر بعامل حماية من الشمس 30% وتركيبة مقاومة لعلامات التقدم في السن- من يوسرين",
+     "price": 9680,
+     "matched_luminous_id": "yq-207",
+     "matched_name": "يوسرين كريم هيالورون فيلر بعامل حمايه من الشمس 30% وتركيبه مقاومه لعلامات التقدم في السن 75 مل",
+     "jaccard": 0.87,
+     "containment": 0.93
+    },
+    {
+     "yaqoot_id": "205",
+     "name_ar": "يوسرين كريم ليلي مضاد للتجاعيد غني بالريتينول ومساعد إنزيم Q10 - من يوسرين",
+     "price": 8400,
+     "matched_luminous_id": "yq-205",
+     "matched_name": "يوسرين كريم ليلي مضاد للتجاعيد غني بالريتينول ومساعد انزيم q10 48 غرام",
+     "jaccard": 0.91,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "204",
+     "name_ar": "يوسرين كريم الوجه النهاري بتركيبة Q10 المضاد للتجاعيد- من يوسرين",
+     "price": 8400,
+     "matched_luminous_id": "yq-204",
+     "matched_name": "يوسرين كريم النهاري بتركيبه q10 المضاد للتجاعيد 48 غرام",
+     "jaccard": 0.78,
+     "containment": 0.89
+    },
+    {
+     "yaqoot_id": "201",
+     "name_ar": "يوسرين كريم هيالورن فيلر + فوليوم ليفت الليلي، - من يوسرين",
+     "price": 23240,
+     "matched_luminous_id": "yq-201",
+     "matched_name": "يوسرين كريم هيالورن فيلر + فوليوم ليفت الليلي 50 مل",
+     "jaccard": 0.88,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "194",
+     "name_ar": "يوسرين كريم القدمين مرطب معا 10% يوريا- من يوسرين",
+     "price": 7200,
+     "matched_luminous_id": "yq-194",
+     "matched_name": "يوسرين كريم القدمين مرطب معا 10% يوريا 100 مل",
+     "jaccard": 0.88,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "188",
+     "name_ar": "يوسرين لوشن ترميم مكثف -من يوسرين",
+     "price": 10560,
+     "matched_luminous_id": "yq-188",
+     "matched_name": "يوسرين لوشن ترميم مكثف 500 مل",
+     "jaccard": 0.8,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "184",
+     "name_ar": "يوسرين لوشن مرطب الاصلي للبشرة شديدة الجفاف- من يوسرين",
+     "price": 10560,
+     "matched_luminous_id": "yq-184",
+     "matched_name": "يوسرين لوشن مرطب الاصلي شديده الجفاف 500 مل",
+     "jaccard": 0.75,
+     "containment": 0.88
+    },
+    {
+     "yaqoot_id": "183",
+     "name_ar": "يوسرين كريم العين هيالورون فيلر مكثف لملء التجاعيد - من يوسرين",
+     "price": 19200,
+     "matched_luminous_id": "yq-183",
+     "matched_name": "يوسرين كريم هيالورون فيلر مكثف لملء التجاعيد 15 مل",
+     "jaccard": 0.78,
+     "containment": 0.89
+    },
+    {
+     "yaqoot_id": "175",
+     "name_ar": "يوسرين كريم لليلي المضاد للتصبغات - من يوسرين",
+     "price": 19500,
+     "matched_luminous_id": "yq-175",
+     "matched_name": "يوسرين كريم لليلي المضاد للتصبغات 50 مل",
+     "jaccard": 0.83,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "174",
+     "name_ar": "يوسرين كريم النهار المضاد للتصبغات مع 30% حماية من اشعة الشمس - من يوسرين",
+     "price": 16500,
+     "matched_luminous_id": "yq-174",
+     "matched_name": "يوسرين كريم النهار المضاد للتصبغات مع 30% حمايه من اشعه الشمس 50 مل",
+     "jaccard": 0.9,
+     "containment": 1
+    }
+   ]
+  },
+  "La Roche-Posay": {
+   "totals": {
+    "found_on_yaqoot": 34,
+    "already_in_luminous_pool_size": 35,
+    "exact_duplicates_rejected": 31,
+    "equivalent_variants_requiring_review": 2,
+    "recommended_for_addition": 1,
+    "lacking_outlet_verification": 1,
+    "lacking_imagery": 0
+   },
+   "recommended_ranked": [
+    {
+     "yaqoot_id": "2422",
+     "name_ar": "لاروش بوزيه غسول الوجه إيفاكلار للبشرة الدهنية والمختلطة 300 مل - من لاروش بوزية",
+     "size_variant": "ml=300",
+     "yaqoot_price": 9720,
+     "yaqoot_old_price": 12000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=2422",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1777328905_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.23,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.36,
+     "priority_score": 51
+    }
+   ],
+   "equivalent_variants_review": [
+    {
+     "yaqoot_id": "1900",
+     "name_ar": "لاروش بوزيه غسول الوجه إيفاكلار للبشرة الدهنية والمختلطة 200 مل - من لاروش بوزية",
+     "size_variant": "ml=200",
+     "yaqoot_price": 8500,
+     "yaqoot_old_price": 10000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=1900",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1759532921_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.23,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.67,
+     "closest_existing": {
+      "id": "yq-1948",
+      "name": "لاروش بوزية غسول للتخلص من حب الشباب 200 مل"
+     },
+     "reason_review": "same-line variant/size differs from existing Luminous SKU"
+    },
+    {
+     "yaqoot_id": "526",
+     "name_ar": "لاروش بوزيه جل سيكابلاست بي 5 مرمم للبشرة المتضررة-من لا روش بوزاي",
+     "size_variant": "-",
+     "yaqoot_price": 10200,
+     "yaqoot_old_price": 12000,
+     "availability": "live on yaqootstoreye.com",
+     "evidence_url": "https://yaqootstoreye.com/product.php?id=526",
+     "image_url": "https://yaqootstoreye.com/files/items/item_1693128488_1.png?v=1",
+     "image_available": true,
+     "outlet_exact_match": "NO",
+     "outlet_match_score": 0.13,
+     "outlet_specs_available": "NO",
+     "line_overlap_with_luminous": 0.57,
+     "closest_existing": {
+      "id": "yq-61",
+      "name": "لاروش بوزية غسول ايفاكلار 400 مل"
+     },
+     "reason_review": "same-line variant/size differs from existing Luminous SKU"
+    }
+   ],
+   "exact_duplicates": [
+    {
+     "yaqoot_id": "2138",
+     "name_ar": "لاروش بوزيه واقي شمس سائل شفاف أنثيليوس مضاد للبقع الداكنة +50 لكل انواع البشرة - من لاروش بوزية",
+     "price": 12800,
+     "matched_luminous_id": "yq-2138",
+     "matched_name": "لاروش بوزية واقي شمس سائل شفاف انثيليوس مضاد للبقع الداكنه +50 مرطب 50 مل",
+     "jaccard": 0.69,
+     "containment": 0.87
+    },
+    {
+     "yaqoot_id": "1991",
+     "name_ar": "لاروش بوزيه واقي شمس سائل انثيلوس يو في مون قوة 30% بدون لون لكل انواع البشرة - من لاروش بوزية",
+     "price": 5600,
+     "matched_luminous_id": "yq-1991",
+     "matched_name": "لاروش بوزية واقي شمس سائل انثيلوس يو في مون قوه 30% بدون لون مرطب 50 مل",
+     "jaccard": 0.71,
+     "containment": 0.88
+    },
+    {
+     "yaqoot_id": "1952",
+     "name_ar": "لاروش بوزيه غسول الوجه إيفاكلار للبشرة الدهنية والمختلطة 50 مل - من لاروش بوزية",
+     "price": 2800,
+     "matched_luminous_id": "yq-1952",
+     "matched_name": "لاروش بوزية غسول ايفاكلار 50 مل",
+     "jaccard": 0.56,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "1948",
+     "name_ar": "لاروش بوزيه غسول الوجه للتخلص من حب الشباب 200 مل - من لاروش بوزية",
+     "price": 8500,
+     "matched_luminous_id": "yq-1948",
+     "matched_name": "لاروش بوزية غسول للتخلص من حب الشباب 200 مل",
+     "jaccard": 0.88,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "1901",
+     "name_ar": "لاروش بوزيه كريم ميلا ب3 مع SPF30 لمحاربة البقع الداكنة مع النياسيناميد لجميع أنواع البشرة - من لاروش بوزية",
+     "price": 21000,
+     "matched_luminous_id": "yq-455",
+     "matched_name": "لاروش بوزية واقي شمس كريم 50 مل",
+     "jaccard": 0.39,
+     "containment": 0.63
+    },
+    {
+     "yaqoot_id": "1660",
+     "name_ar": "لاروش بوزيه واقي شمس سائل انثيلوس يو في مون 400 بدون لون للبشرة الدهنية - من لاروش بوزية",
+     "price": 12800,
+     "matched_luminous_id": "yq-42",
+     "matched_name": "لاروش بوزية واقي شمس سائل انثيلوس يو في مون 400 بدون لون مرطب 50 مل",
+     "jaccard": 0.71,
+     "containment": 0.86
+    },
+    {
+     "yaqoot_id": "1655",
+     "name_ar": "لاروش بوزيه سيروم ميلا ب3 لمحاربة البقع الداكنة مع النياسيناميد لجميع أنواع البشرة - من لاروش بوزية",
+     "price": 24300,
+     "matched_luminous_id": "yq-1401",
+     "matched_name": "لاروش بوزية سيروم ريتينول بي 3 سيروم مجدد 30 مل",
+     "jaccard": 0.4,
+     "containment": 0.6
+    },
+    {
+     "yaqoot_id": "1457",
+     "name_ar": "لاروش بوزيه مرطب سيكابلاست للشفاه إصلاح الحواجز والشفاه المتضررة- من لاروش بوزية",
+     "price": 5920,
+     "matched_luminous_id": "yq-61",
+     "matched_name": "لاروش بوزية غسول ايفاكلار 400 مل",
+     "jaccard": 0.43,
+     "containment": 0.57
+    },
+    {
+     "yaqoot_id": "1401",
+     "name_ar": "لاروش بوزيه سيروم ريتينول بي 3 سيروم مجدد للوجه - من لاروش بوزية",
+     "price": 19500,
+     "matched_luminous_id": "yq-1401",
+     "matched_name": "لاروش بوزية سيروم ريتينول بي 3 سيروم مجدد 30 مل",
+     "jaccard": 0.75,
+     "containment": 0.9
+    },
+    {
+     "yaqoot_id": "1202",
+     "name_ar": "لاروش بوزيه جل استحمام ليبيكار للبشرة الجافة -من لاروش بوزيه",
+     "price": 8400,
+     "matched_luminous_id": "yq-1202",
+     "matched_name": "لاروش بوزيه جل استحمام ليبيكار غسول جسم 400 مل",
+     "jaccard": 0.5,
+     "containment": 0.78
+    },
+    {
+     "yaqoot_id": "1162",
+     "name_ar": "لاروش بوزيه ايفاكلار ديو+جل كريم مكافح للشوائب البشرة - من لاروش بوزية",
+     "price": 11200,
+     "matched_luminous_id": "yq-1162",
+     "matched_name": "لاروش بوزية ايفاكلار ديو+جل كريم مكافح للشوائب 40 مل",
+     "jaccard": 0.78,
+     "containment": 0.9
+    },
+    {
+     "yaqoot_id": "990",
+     "name_ar": "لاروش بوزيه كريم مرطب مرمم سيكابلاست بوم بي 5 حجم كبير - من لاروش بوزية",
+     "price": 12800,
+     "matched_luminous_id": "yq-84",
+     "matched_name": "لاروش بوزية كريم سيكابلاست ترطيب واصلاح 100 مل",
+     "jaccard": 0.5,
+     "containment": 0.67
+    },
+    {
+     "yaqoot_id": "573",
+     "name_ar": "لاروش بوزيه كريم علاج شوائب البشرة ديو بلس معا 30% حماية من الشمس - من لاروش بوزية",
+     "price": 6000,
+     "matched_luminous_id": "yq-573",
+     "matched_name": "لاروش بوزية كريم علاج شوائب ديو بلس معا 30% حمايه من الشمس 40 مل",
+     "jaccard": 0.85,
+     "containment": 0.93
+    },
+    {
+     "yaqoot_id": "511",
+     "name_ar": "لاروش بوزيه كريم علاج شوائب البشرة ديو بلس - من لاروش بوزية",
+     "price": 13020,
+     "matched_luminous_id": "yq-511",
+     "matched_name": "لاروش بوزية كريم علاج شوائب ديو بلس 40 مل",
+     "jaccard": 0.78,
+     "containment": 0.9
+    },
+    {
+     "yaqoot_id": "505",
+     "name_ar": "لاروش بوزيه كريم علاج شوائب اللبشرة ديو بلس لون فاتح- من لاروش بوزية",
+     "price": 12800,
+     "matched_luminous_id": "yq-505",
+     "matched_name": "لاروش بوزية كريم علاج شوائب اللبشره ديو بلس لون فاتح 40 مل",
+     "jaccard": 0.91,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "499",
+     "name_ar": "لاروش بوزيه كريم علاج شوائب البشرة ديو بلس معا لون وسط- من لاروش بوزية",
+     "price": 12800,
+     "matched_luminous_id": "yq-499",
+     "matched_name": "لاروش بوزية كريم علاج شوائب ديو بلس معا لون وسط 40 مل",
+     "jaccard": 0.83,
+     "containment": 0.92
+    },
+    {
+     "yaqoot_id": "466",
+     "name_ar": "لاروش بوزيه كريم الترطيب ايفاكلار اتش ايزو-بيوم - من لاروش بوزية",
+     "price": null,
+     "matched_luminous_id": "yq-466",
+     "matched_name": "لاروش بوزية كريم الترطيب ايفاكلار اتش ايزو بيوم 40 مل",
+     "jaccard": 0.89,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "460",
+     "name_ar": "لاروش بوزيه كريم مرطب مرمم سيكابلاست بوم بي 5 حجم 40 مل - من لاروش بوزية",
+     "price": 8000,
+     "matched_luminous_id": "yq-99",
+     "matched_name": "لاروش بوزية كريم مرطب مكافح للمعان والمسام 40 مل",
+     "jaccard": 0.62,
+     "containment": 0.7
+    },
+    {
+     "yaqoot_id": "455",
+     "name_ar": "لاروش بوزيه واقي شمس كريم للبشرة الجافة والحساسه - من لاروش بوزية",
+     "price": 12800,
+     "matched_luminous_id": "yq-455",
+     "matched_name": "لاروش بوزية واقي شمس كريم 50 مل",
+     "jaccard": 0.56,
+     "containment": 0.88
+    },
+    {
+     "yaqoot_id": "431",
+     "name_ar": "لاروش بوزيه سييروم فيتامين سي 12 النقي - من لاروش بوزية",
+     "price": 24000,
+     "matched_luminous_id": "yq-431",
+     "matched_name": "لاروش بوزية سييروم فيتامين سي 12 سيروم 30 مل",
+     "jaccard": 0.63,
+     "containment": 0.88
+    },
+    {
+     "yaqoot_id": "426",
+     "name_ar": "لاروش بوزيه غسول الوجه للتخلص من حب الشباب 400 مل - من لاروش بوزية",
+     "price": 12800,
+     "matched_luminous_id": "yq-426",
+     "matched_name": "لاروش بوزية غسول للتخلص من حب الشباب 400 مل",
+     "jaccard": 0.88,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "419",
+     "name_ar": "لاروش بوزيه كريم العين بيجمنتكلار للهالات السوداء - من لاروش بوزية",
+     "price": 19200,
+     "matched_luminous_id": "yq-419",
+     "matched_name": "لاروش بوزية كريم بيجمنتكلار للهالات السوداء 15 مل",
+     "jaccard": 0.75,
+     "containment": 0.89
+    },
+    {
+     "yaqoot_id": "140",
+     "name_ar": "لاروش بوزيه واقي شمس بخاخ - من لاروش بوزية",
+     "price": 9600,
+     "matched_luminous_id": "yq-140",
+     "matched_name": "لاروش بوزية واقي شمس بخاخ مرطب 75 مل",
+     "jaccard": 0.71,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "129",
+     "name_ar": "لاروش بوزيه كريم مرطب مرمم سيكابلاست بوم بي 5 بعامل حماية 50+ - من لاروش بوزية",
+     "price": null,
+     "matched_luminous_id": "yq-129",
+     "matched_name": "La Roche-Posay كريم مرطب مرمم سيكابلاست بوم بي 5 بعامل حمايه 50+",
+     "jaccard": 0.64,
+     "containment": 0.69
+    },
+    {
+     "yaqoot_id": "115",
+     "name_ar": "لاروش بوزيه واقي شمس جل كريم بدون لون بدون ريحه - من لاروش بوزية",
+     "price": 11200,
+     "matched_luminous_id": "yq-115",
+     "matched_name": "لاروش بوزية واقي شمس جل كريم بدون لون بدون ريحه 50 مل",
+     "jaccard": 0.9,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "99",
+     "name_ar": "لاروش بوزيه كريم مرطب مكافح للمعان والمسام للبشرة الدهنية والمختلطة - من لاروش بوزية",
+     "price": 9940,
+     "matched_luminous_id": "yq-99",
+     "matched_name": "لاروش بوزية كريم مرطب مكافح للمعان والمسام 40 مل",
+     "jaccard": 0.64,
+     "containment": 0.9
+    },
+    {
+     "yaqoot_id": "84",
+     "name_ar": "لاروش بوزيه كريم اليدين سيكابلاست ترطيب واصلاح - من لاروش بوزية",
+     "price": null,
+     "matched_luminous_id": "yq-84",
+     "matched_name": "لاروش بوزية كريم سيكابلاست ترطيب واصلاح 100 مل",
+     "jaccard": 0.75,
+     "containment": 0.89
+    },
+    {
+     "yaqoot_id": "72",
+     "name_ar": "لاروش بوزيه واقي شمس جل كريم ملون مقاوم للمعان - من لاروش بوزية",
+     "price": null,
+     "matched_luminous_id": "yq-72",
+     "matched_name": "لاروش بوزية واقي شمس جل كريم ملون مقاوم للمعان 50 مل",
+     "jaccard": 0.9,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "61",
+     "name_ar": "لاروش بوزيه غسول الوجه إيفاكلار للبشرة الدهنية والمختلطة 400 مل - من لاروش بوزية",
+     "price": 12800,
+     "matched_luminous_id": "yq-61",
+     "matched_name": "لاروش بوزية غسول ايفاكلار 400 مل",
+     "jaccard": 0.56,
+     "containment": 1
+    },
+    {
+     "yaqoot_id": "42",
+     "name_ar": "لاروش بوزيه واقي شمس سائل انثيلوس يو في مون 400 بدون لون لكل انواع البشرة - من لاروش بوزية",
+     "price": 12800,
+     "matched_luminous_id": "yq-42",
+     "matched_name": "لاروش بوزية واقي شمس سائل انثيلوس يو في مون 400 بدون لون مرطب 50 مل",
+     "jaccard": 0.67,
+     "containment": 0.86
+    },
+    {
+     "yaqoot_id": "17",
+     "name_ar": "لاروش بوزيه تونر إيفاكلار منقي قابض للمسام للبشرة الدهنية والمختلطة- من لاروش بوزيه",
+     "price": null,
+     "matched_luminous_id": "yq-17",
+     "matched_name": "لاروش بوزيه تونر ايفاكلار منقي قابض للمسام 200 مل",
+     "jaccard": 0.64,
+     "containment": 0.9
+    }
+   ]
+  }
+ }
+}

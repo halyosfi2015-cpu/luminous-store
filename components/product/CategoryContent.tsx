@@ -2,15 +2,12 @@
 
 import { useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import type { Product, FilterState, SortOption, SkinType, SkinConcern } from "@/types/product";
+import type { ProductSummary, FilterState, SortOption, SkinType, SkinConcern } from "@/src/types/product";
 import ProductGrid from "@/components/product/ProductGrid";
 import FilterSidebar, { OTHER_BRAND, getMainBrands } from "@/components/product/FilterSidebar";
-import SortSelect from "@/components/product/SortSelect";
 import ActiveFilters from "@/components/product/ActiveFilters";
-
-type CategoryContentProps = {
-  products: Product[];
-};
+import Link from "next/link";
+import type { CategoryInfo } from "@/types/product";
 
 const defaultFilters: FilterState = {
   brands: [],
@@ -20,14 +17,14 @@ const defaultFilters: FilterState = {
   ratings: [],
 };
 
-export default function CategoryContent({ products }: CategoryContentProps) {
+export default function CategoryContent({ products, subcategories = [] }: { products: ProductSummary[]; subcategories?: CategoryInfo[] }) {
   const searchParams = useSearchParams();
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
   const [manualSort, setManualSort] = useState<SortOption | null>(null);
 
   const sortParam = searchParams.get("sort");
   const sort: SortOption =
-    sortParam === "best" ? "popular" : sortParam === "new" ? "newest" : manualSort ?? "popular";
+    sortParam === "best" ? "popular" : sortParam === "new" ? "newest" : sortParam === "smart" ? "smart" : manualSort ?? "smart";
 
   const handleSortChange = (next: SortOption) => setManualSort(next);
 
@@ -75,6 +72,27 @@ export default function CategoryContent({ products }: CategoryContentProps) {
       case "name_asc":
         result.sort((a, b) => a.name.ar.localeCompare(b.name.ar));
         break;
+      case "smart":
+        result.sort((a, b) => {
+          const aBest = a.isBestSeller ? 1 : 0;
+          const bBest = b.isBestSeller ? 1 : 0;
+          if (aBest !== bBest) return bBest - aBest;
+
+          const aFeat = a.isFeatured ? 1 : 0;
+          const bFeat = b.isFeatured ? 1 : 0;
+          if (aFeat !== bFeat) return bFeat - aFeat;
+
+          const aNew = a.isNew ? 1 : 0;
+          const bNew = b.isNew ? 1 : 0;
+          if (aNew !== bNew) return bNew - aNew;
+
+          const aReviews = a.reviewCount ?? 0;
+          const bReviews = b.reviewCount ?? 0;
+          if (aReviews !== bReviews) return bReviews - aReviews;
+
+          return (b.rating ?? 0) - (a.rating ?? 0);
+        });
+        break;
       default:
         result.sort((a, b) => (b.reviewCount ?? 0) - (a.reviewCount ?? 0));
     }
@@ -98,24 +116,16 @@ export default function CategoryContent({ products }: CategoryContentProps) {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6">
-      <div className="lg:w-64 xl:w-72 shrink-0">
+    <div className="flex flex-col lg:flex-row gap-0">
+      <div className="lg:w-52 xl:w-56 shrink-0">
         <FilterSidebar filters={filters} onChange={handleFilterChange} products={products} />
       </div>
-      <div className="flex-1 flex flex-col gap-4 min-w-0">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <ActiveFilters
-            filters={filters}
-            onRemove={handleRemoveFilter}
-            onClear={handleClearFilters}
-          />
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-muted whitespace-nowrap">
-              {filtered.length} {filtered.length === 1 ? "منتج" : "منتجات"}
-            </span>
-            <SortSelect value={sort} onChange={handleSortChange} />
-          </div>
-        </div>
+      <div className="flex-1 flex flex-col gap-0 min-w-0">
+        <ActiveFilters
+          filters={filters}
+          onRemove={handleRemoveFilter}
+          onClear={handleClearFilters}
+        />
         <ProductGrid products={filtered} />
       </div>
     </div>

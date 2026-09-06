@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import ResourcePage from "@/components/admin/ResourcePage";
+import ProductsPageWithImage from "@/components/admin/ProductsPageWithImage";
 
 export const metadata: Metadata = {
   title: "لوحة التحكم — المنتجات | Luminous Derma",
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function AdminProductsPage() {
-  return <ResourcePage resource="products" />;
+  return <ProductsPageWithImage />;
 }

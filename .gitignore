@@ -1,5 +1,3 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
 # dependencies
 /node_modules
 /.pnp
@@ -16,26 +14,73 @@
 # next.js
 /.next/
 /out/
-
-# production
 /build
 
 # misc
 .DS_Store
 *.pem
 
-# debug
+# debug logs (package-manager)
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# local env files
 .env*
-
-# vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ── Pre-commit cleanup (deployment prep) — root-anchored, audited ──
+# root logs & backups
+/*.log
+/*.backup
+
+# root one-off pipeline/repair scripts (production code lives in src|app|components|lib|scripts)
+/*.py
+/*.ps1
+/*.bat
+/*.mjs
+/*.js
+
+# generated reports/dumps (root only)
+/*.txt
+/*.csv
+/*.html
+/*.md
+!README.md
+
+# root JSON dumps — blanket with explicit production whitelist
+/*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!phase1-products.json
+!improved-matches.json
+!outlet_brands.json
+!beautybox-products.json
+!beautybox-api-products.json
+
+# named junk / temp artifacts (verified in audit)
+/$null
+/{
+/phase1-implementation.ts
+/db/_audit_tmp.mjs
+
+# local logs and temporary artifacts
+*.log
+*.bak
+*.backup
+*-backup.*
+*.tmp
+tmp/
+verified/
+cutout-evidence/
+.backup-outlet-batch1/
+public/uploads/
+
+# local analysis / generated working files
+scripts/_medium20-dump.txt

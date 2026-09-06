@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { ArrowLeft, Sparkles } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
 import ProductImage from "@/components/product/ProductImage";
+import ProductBadges from "@/components/product/ProductBadges";
 import { getNewArrivals } from "@/lib/products";
 
 function formatPrice(amount: number): string {
@@ -55,10 +56,7 @@ export default function RecentlyAdded() {
                     <span className="text-2xl">🧴</span>
                   </div>
                 )}
-                <span className="absolute start-2 top-2 z-10 inline-flex items-center gap-1 rounded-pill bg-success px-2 py-0.5 text-[10px] font-bold text-white shadow-card">
-                  <Sparkles size={10} />
-                  جديد
-                </span>
+                <ProductBadges product={product} position="start-2 top-2" />
               </div>
               <div className="p-3">
                 <p className="truncate text-[11px] font-medium text-primary">{product.brandAr || product.brand}</p>

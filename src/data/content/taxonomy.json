@@ -1,0 +1,18 @@
+{
+  "nodes": [],
+  "hiddenSlugs": [],
+  "categoryProducts": {
+    "skincare": {
+      "pinned": [
+        "yq-2104",
+        "yq-2603",
+        "yq-2340"
+      ],
+      "excluded": [
+        "yq-2685",
+        "yq-2612",
+        "yq-2388"
+      ]
+    }
+  }
+}

@@ -32,7 +32,7 @@ export default function QuickActions({ product }: QuickActionsProps) {
       <div className="flex items-center gap-2 translate-y-4 transition-transform duration-300 group-hover:translate-y-0">
         <button
           type="button"
-          aria-label="أضف إلى السلة"
+          aria-label="إضافة للسلة"
           onClick={handleQuickAdd}
           className="flex h-9 w-9 items-center justify-center rounded-full bg-card text-foreground shadow-card transition-all duration-200 hover:bg-primary hover:text-white active:scale-90"
         >

@@ -1,37 +1,32 @@
-import { routines as DEFAULT_ROUTINES, productSummaries } from "./product-summaries";
-import type { Routine } from "@/types/product";
-
-export const ROUTINES_STORAGE_KEY = "luminous-routines-custom";
+import type { Routine, ProductSummary } from "@/src/types/product";
 
 export type RoutineDraft = Omit<Routine, "steps"> & {
   steps: Routine["steps"];
 };
 
-export function loadCustomRoutines(): Routine[] {
-  if (typeof window === "undefined") return [];
+let cachedAPIRoutines: Routine[] | null = null;
+
+export async function fetchRoutinesFromAPI(): Promise<Routine[]> {
   try {
-    const raw = window.localStorage.getItem(ROUTINES_STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) return parsed as Routine[];
+    const res = await fetch("/api/content/routines", { cache: "no-store" });
+    if (!res.ok) return cachedAPIRoutines ?? [];
+    const data = await res.json();
+    const apiRoutines = (data.routines ?? []) as Routine[];
+    if (apiRoutines.length > 0) {
+      cachedAPIRoutines = apiRoutines;
+      return apiRoutines;
     }
   } catch {}
+  return cachedAPIRoutines ?? [];
+}
+
+export function getRoutinesFromCache(): Routine[] {
+  if (cachedAPIRoutines && cachedAPIRoutines.length > 0) return cachedAPIRoutines;
   return [];
 }
 
-export function saveCustomRoutines(list: Routine[]) {
-  try {
-    window.localStorage.setItem(ROUTINES_STORAGE_KEY, JSON.stringify(list));
-  } catch {}
-}
-
 export function getRoutines(): Routine[] {
-  const custom = loadCustomRoutines();
-  const customIds = new Set(custom.map((r) => r.id));
-  const merged = [...DEFAULT_ROUTINES.filter((r) => !customIds.has(r.id)), ...custom];
-  return merged
-    .filter((r) => r.active)
-    .sort((a, b) => a.displayOrder - b.displayOrder);
+  return cachedAPIRoutines ?? [];
 }
 
 export function getRoutineById(id: string): Routine | undefined {
@@ -50,17 +45,29 @@ export function getRoutineTypes(): { type: string; typeAr: string }[] {
   return Array.from(seen, ([type, typeAr]) => ({ type, typeAr }));
 }
 
-export function resolveRoutineProducts(routine: Routine) {
+/**
+ * Unified product resolution for routine products.
+ * Resolves routine product IDs against the full product catalog,
+ * supporting both Supabase UUID and legacy_id (yq-*) formats.
+ * The /api/content/products endpoint maps id = p.legacy_id ?? p.id,
+ * so the product.id field already contains the legacy ID when available.
+ * 
+ * @param routine - the routine containing product IDs (legacy IDs or UUIDs)
+ * @param apiProducts - the full product catalog from /api/content/products
+ * @returns array of resolved product summaries
+ */
+export function resolveRoutineProducts(routine: Routine, apiProducts: ProductSummary[]) {
+  const productMap = new Map<string, ProductSummary>();
+  // Build map using product.id (which is legacy_id ?? id from the API)
+  for (const p of apiProducts) {
+    if (p.id) productMap.set(p.id, p);
+  }
+
   return routine.products
-    .map((id) => productSummaries.find((p) => p.id === id))
-    .filter((p): p is NonNullable<typeof p> => Boolean(p));
+    .map((id) => productMap.get(id))
+    .filter((p): p is ProductSummary => Boolean(p));
 }
 
-/**
- * getPrimaryImage
- * Central helper to resolve the primary image for a product without modifying product data.
- * Preference: product.gallery[0] -> product.image -> empty string
- */
 type ImageSource = {
   gallery?: string[];
   image?: string;

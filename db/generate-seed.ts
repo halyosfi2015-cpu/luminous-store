@@ -171,8 +171,24 @@ for (const brand of brands) {
   });
 }
 
-// 4. Products (354)
+// Fallback unknown brand for products with unmatched brand names
+emitInsert({
+  table: 'brands',
+  data: {
+    id: slugToUUID('brand:unknown'),
+    slug: 'unknown',
+    name: { ar: 'غير معروف', en: 'Unknown' },
+    description: { ar: 'علامة تجارية غير محددة', en: 'Unidentified brand' },
+    is_verified: false,
+    featured: false,
+    product_count: 0,
+    seo_metadata: { title: { ar: 'غير معروف', en: 'Unknown' }, description: { ar: 'منتج غير مصنف', en: 'Unclassified product' }, keywords: [] },
+  },
+});
+
+// 4. Products
 function normalizeForMatch(s: string): string {
+  if (typeof s !== 'string') return '';
   return s
     .toLowerCase()
     .replace(/[''']/g, '')
@@ -193,7 +209,8 @@ const brandNameToUUID = new Map<string, string>();
 for (const b of brands) {
   const uid = slugToUUID(`brand:${b.slug}`);
   brandSlugToUUID.set(b.slug, uid);
-  brandNameToUUID.set(normalizeForMatch(b.name), uid);
+  const brandNameStr = typeof b.name === 'string' ? b.name : (b.nameEn || b.nameAr || '');
+  brandNameToUUID.set(normalizeForMatch(brandNameStr), uid);
 }
 
 function matchBrand(prodBrand: string): string | null {
@@ -205,14 +222,12 @@ function matchBrand(prodBrand: string): string | null {
   return null;
 }
 
-const unmatchedBrands = new Set<string>();
+  const unmatchedBrands = new Set<string>();
 
 for (const prod of products) {
   const brandUUID = matchBrand(prod.brand || '');
   if (!brandUUID) {
     unmatchedBrands.add(prod.brand || 'UNKNOWN');
-    allLines.push(`-- WARNING: Skipping product ${prod.id} — unmatched brand "${prod.brand}"`);
-    continue;
   }
   const catSlug = prod.categorySlug || prod.category?.toLowerCase()?.replace(/\s+/g, '-') || '';
   const catUUID = slugToUUID(`sub:${catSlug}`);
@@ -226,7 +241,7 @@ for (const prod of products) {
       name: prod.name,
       description: prod.description,
       category_id: catUUID,
-      brand_id: brandUUID,
+      brand_id: brandUUID || slugToUUID('brand:unknown'),
       pricing: prod.pricing,
       discount: prod.discount || 0,
       gallery: prod.gallery || [],

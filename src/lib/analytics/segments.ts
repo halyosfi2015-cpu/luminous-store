@@ -30,28 +30,13 @@ function daysSince(iso: string | null): number {
   return Math.floor((Date.now() - new Date(iso).getTime()) / DAY_MS);
 }
 
-export async function evaluateCustomerSegments(
+type SegmentEvent = { event_type: string; occurred_at: string; entity_id: string | null };
+
+function evaluateSegmentsFromSignals(
   customerId: string,
-): Promise<SegmentEvaluation> {
-  const supabase = createAdminClient();
-  const since = new Date(Date.now() - 30 * DAY_MS).toISOString();
-
-  const [eventsRes, profileRes] = await Promise.all([
-    supabase
-      .from('customer_events')
-      .select('event_type, occurred_at, entity_id')
-      .eq('customer_id', customerId)
-      .gte('occurred_at', since),
-    supabase
-      .from('customer_profiles')
-      .select('*')
-      .eq('customer_id', customerId)
-      .maybeSingle(),
-  ]);
-
-  const events = (eventsRes.data ?? []) as Array<{ event_type: string; occurred_at: string; entity_id: string | null }>;
-  const profile = profileRes.data as Partial<CustomerProfileSummary> | null;
-
+  events: SegmentEvent[],
+  profile: Partial<CustomerProfileSummary> | null,
+): SegmentEvaluation {
   const lastSeenIso = (profile?.last_active_at ?? null) as string | null;
   const profileRow = (profile ?? {}) as Record<string, unknown>;
   const prefs = (profileRow.preferences as Record<string, unknown> | null | undefined) ?? {};
@@ -153,6 +138,87 @@ export async function evaluateCustomerSegments(
   };
 }
 
+const BATCH_SIZE = 50;
+
+export async function evaluateCustomerSegments(
+  customerId: string,
+): Promise<SegmentEvaluation> {
+  const supabase = createAdminClient();
+  const since = new Date(Date.now() - 30 * DAY_MS).toISOString();
+
+  const [eventsRes, profileRes] = await Promise.all([
+    supabase
+      .from('customer_events')
+      .select('event_type, occurred_at, entity_id')
+      .eq('customer_id', customerId)
+      .gte('occurred_at', since),
+    supabase
+      .from('customer_profiles')
+      .select('*')
+      .eq('customer_id', customerId)
+      .maybeSingle(),
+  ]);
+
+  const events = (eventsRes.data ?? []) as SegmentEvent[];
+  const profile = profileRes.data as Partial<CustomerProfileSummary> | null;
+
+  return evaluateSegmentsFromSignals(customerId, events, profile);
+}
+
+function evaluateSegmentsFromData(
+  customerId: string,
+  events: SegmentEvent[],
+  profile: Partial<CustomerProfileSummary> | null,
+): SegmentEvaluation {
+  return evaluateSegmentsFromSignals(customerId, events, profile);
+}
+
+export async function evaluateCustomerSegmentsBatch(
+  customerIds: string[],
+): Promise<Map<string, SegmentEvaluation>> {
+  if (customerIds.length === 0) return new Map();
+
+  const supabase = createAdminClient();
+  const since = new Date(Date.now() - 30 * DAY_MS).toISOString();
+  const result = new Map<string, SegmentEvaluation>();
+
+  const eventsById = new Map<string, Array<{ event_type: string; occurred_at: string; entity_id: string | null }>>();
+  const profilesById = new Map<string, Partial<CustomerProfileSummary>>();
+
+  for (let i = 0; i < customerIds.length; i += BATCH_SIZE) {
+    const batch = customerIds.slice(i, i + BATCH_SIZE);
+    const [eventsRes, profilesRes] = await Promise.all([
+      supabase
+        .from('customer_events')
+        .select('event_type, occurred_at, entity_id, customer_id')
+        .in('customer_id', batch)
+        .gte('occurred_at', since),
+      supabase
+        .from('customer_profiles')
+        .select('*')
+        .in('customer_id', batch),
+    ]);
+
+    const events = (eventsRes.data ?? []) as Array<{ event_type: string; occurred_at: string; entity_id: string | null; customer_id: string }>;
+    for (const cid of batch) {
+      eventsById.set(cid, events.filter((e) => e.customer_id === cid).map(({ customer_id: _unused, ...rest }) => rest));
+    }
+
+    const profiles = (profilesRes.data ?? []) as Array<Record<string, unknown>>;
+    for (const p of profiles) {
+      profilesById.set(p.customer_id as string, p as Partial<CustomerProfileSummary>);
+    }
+  }
+
+  for (const cid of customerIds) {
+    const profile = profilesById.get(cid) ?? null;
+    const events = eventsById.get(cid) ?? [];
+    result.set(cid, evaluateSegmentsFromData(cid, events, profile));
+  }
+
+  return result;
+}
+
 export async function getSegmentDistribution(
   customerIds: string[],
 ): Promise<Record<SegmentKey, number>> {
@@ -166,8 +232,8 @@ export async function getSegmentDistribution(
     at_risk: 0,
     inactive: 0,
   };
-  for (const id of customerIds) {
-    const ev = await evaluateCustomerSegments(id);
+  const batch = await evaluateCustomerSegmentsBatch(customerIds);
+  for (const ev of batch.values()) {
     for (const s of ev.segments) result[s]++;
   }
   return result;

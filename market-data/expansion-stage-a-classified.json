@@ -1,0 +1,57 @@
+[
+ {
+  "brand": "Vichy",
+  "totals": {
+   "yaqoot": 30,
+   "luminous_pool": 30,
+   "duplicates": 29,
+   "equivalents_not_added": 0,
+   "missing": 1
+  },
+  "missing": [
+   {
+    "brand": "Vichy",
+    "yaqoot_id": "802",
+    "name_ar": "فيشي واقي شمس للبشرة الدهنية و المختلطة من فيشي",
+    "price": 9960,
+    "old_price": 12000,
+    "image_url": "https://yaqootstoreye.com/files/items/item_1701673159_1.png?v=1",
+    "url": "https://yaqootstoreye.com/product.php?id=802",
+    "size_variant": "-"
+   }
+  ]
+ },
+ {
+  "brand": "CeraVe",
+  "totals": {
+   "yaqoot": 27,
+   "luminous_pool": 28,
+   "duplicates": 25,
+   "equivalents_not_added": 2,
+   "missing": 0
+  },
+  "missing": []
+ },
+ {
+  "brand": "Cetaphil",
+  "totals": {
+   "yaqoot": 10,
+   "luminous_pool": 10,
+   "duplicates": 8,
+   "equivalents_not_added": 2,
+   "missing": 0
+  },
+  "missing": []
+ },
+ {
+  "brand": "Nivea",
+  "totals": {
+   "yaqoot": 25,
+   "luminous_pool": 25,
+   "duplicates": 24,
+   "equivalents_not_added": 1,
+   "missing": 0
+  },
+  "missing": []
+ }
+]

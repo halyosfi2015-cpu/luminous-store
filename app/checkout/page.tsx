@@ -41,12 +41,14 @@ export default function CheckoutPage() {
     fullName: "", phone: "", city: "", district: "", street: "", building: "", notes: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [currency, setCurrency] = useState<CurrencyCode>("YER");
   const [governorate, setGovernorate] = useState<Governorate | null>(null);
   const [location, setLocation] = useState("");
   const [showLocation, setShowLocation] = useState(false);
   const [currencyOpen, setCurrencyOpen] = useState(false);
   const currencyRef = useRef<HTMLDivElement>(null);
+  const idempotencyKeyRef = useRef<string | null>(null);
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -78,34 +80,46 @@ export default function CheckoutPage() {
       return;
     }
     setIsSubmitting(true);
-    const order = {
-      id: `ORD-${Date.now()}`,
-      items, subtotal, shipping, total,
-      address: {
-        ...address,
-        city: governorate.name,
-        notes: location ? `${location}${address.notes ? ` — ${address.notes}` : ""}` : address.notes,
-      },
-      status: "pending" as const,
-      createdAt: new Date().toISOString(),
+    setSubmitError(null);
+    if (!idempotencyKeyRef.current) {
+      idempotencyKeyRef.current = typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `checkout-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    }
+    const hasBundle = items.some((item) => item.kind === "bundle");
+    const hasRoutine = items.some((item) => item.kind === "routine");
+    const hasGift = (hasBundle || hasRoutine) && items.some((item) => item.bundle?.giftMessage);
+    const source = hasGift ? "هدية" : hasRoutine ? "روتين" : hasBundle ? "باقة" : undefined;
+    const shippingAddress = {
+      ...address,
+      city: governorate.name,
+      notes: location ? `${location}${address.notes ? ` — ${address.notes}` : ""}` : address.notes,
     };
-    const stored = JSON.parse(localStorage.getItem("luminous-orders") || "[]");
-    stored.unshift(order);
-    localStorage.setItem("luminous-orders", JSON.stringify(stored));
-    clearCart();
-    addOrderPoints(total);
-    trackClient({
-      event_type: ANALYTICS_EVENT_TYPES.PURCHASE_COMPLETED,
-      entity_type: "order",
-      entity_id: order.id,
-      properties: { total, items: items.length },
-    });
-    trackClient({
-      event_type: ANALYTICS_EVENT_TYPES.CHECKOUT_COMPLETED,
-      entity_type: "order",
-      entity_id: order.id,
-    });
-    router.push(`/order/confirmation/${order.id}`);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Idempotency-Key": idempotencyKeyRef.current ?? "",
+        },
+        body: JSON.stringify({ items, subtotal, shipping, total, address: shippingAddress, source }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        setSubmitError(data?.error?.message ?? "تعذر إتمام الطلب. تحققي من البيانات وحاولي مرة أخرى.");
+        setIsSubmitting(false);
+        return;
+      }
+      const orderNumber: string = data.orderId;
+      clearCart();
+      await addOrderPoints(total);
+      trackClient({ event_type: ANALYTICS_EVENT_TYPES.PURCHASE_COMPLETED, entity_type: "order", entity_id: orderNumber, properties: { total, items: items.length } });
+      trackClient({ event_type: ANALYTICS_EVENT_TYPES.CHECKOUT_COMPLETED, entity_type: "order", entity_id: orderNumber });
+      router.push(`/order/confirmation/${orderNumber}`);
+    } catch {
+      setSubmitError("تعذر الاتصال بالخادم. تحققي من اتصالك وحاولي مرة أخرى.");
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (field: keyof ShippingAddress, value: string) => {
@@ -290,9 +304,49 @@ export default function CheckoutPage() {
                 <h3 className="text-sm font-semibold text-foreground">ملخص الطلب</h3>
                 <div className="space-y-1.5 text-sm">
                   {items.map((item) => (
-                    <div key={item.productId} className="flex items-center justify-between text-muted">
-                      <span className="truncate ps-2">{item.nameAr} × {item.quantity}</span>
-                      <span className="shrink-0">{formatPrice(item.price * item.quantity, currency)}</span>
+                    <div key={item.productId}>
+                      <div className="flex items-center justify-between text-muted">
+                        <span className="truncate ps-2">
+                          {item.kind === "bundle" ? "🎁 " : item.kind === "routine" ? "💆‍♀️ " : ""}{item.nameAr} × {item.quantity}
+                        </span>
+                        <span className="shrink-0">{formatPrice(item.price * item.quantity, currency)}</span>
+                      </div>
+                      {item.kind !== "product" && item.bundle && (
+                        <div className="mt-1 rounded-input bg-muted-bg/40 px-2.5 py-2 text-[11px] text-muted">
+                          <div className="flex flex-wrap gap-x-3 gap-y-0.5">
+                            {item.bundle.items.map((b) => (
+                              <span key={b.productId}>• {b.nameAr} × {b.quantity}</span>
+                            ))}
+                          </div>
+                          {item.bundle.steps && item.bundle.steps.length > 0 && (
+                            <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 opacity-80">
+                              {item.bundle.steps.map((s) => (
+                                <span key={s.productId}>
+                                  {s.time === "morning" ? "🌅" : s.time === "evening" ? "🌙" : "🕐"}
+                                  {item.bundle?.items.find((b) => b.productId === s.productId)?.nameAr || ""}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          {item.bundle.discount > 0 && (
+                            <div className="mt-1 flex justify-between font-semibold text-success">
+                              <span>خصم ({item.bundle.discountPercent}%)</span>
+                              <span>-{formatPrice(item.bundle.discount, currency)}</span>
+                            </div>
+                          )}
+                          {item.bundle.deliveryFee !== undefined && (
+                            <div className="mt-0.5 flex justify-between">
+                              <span>التوصيل ({item.bundle.deliveryLabel})</span>
+                              <span>{formatPrice(item.bundle.deliveryFee, currency)}</span>
+                            </div>
+                          )}
+                          {item.bundle.giftMessage && (
+                            <div className="mt-1 border-t border-border/60 pt-1">
+                              <span className="font-semibold">💌 رسالة الإهداء:</span> {item.bundle.giftMessage}
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -348,6 +402,11 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
+                {submitError && (
+                  <p role="alert" className="rounded-input border border-error-border bg-error-soft px-3 py-2 text-xs font-semibold text-error-fg">
+                    {submitError}
+                  </p>
+                )}
                 <Button type="submit" className="w-full gap-2" disabled={isSubmitting}>
                   <CreditCard size={14} />
                   {isSubmitting ? "جاري المعالجة..." : "تأكيد الطلب"}

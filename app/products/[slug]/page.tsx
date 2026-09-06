@@ -5,20 +5,31 @@ import ProductGallery from "@/components/product/ProductGallery";
 import ProductInfo from "@/components/product/ProductInfo";
 import ProductPurchase from "@/components/product/ProductPurchase";
 import ProductTabs from "@/components/product/ProductTabs";
-import ProductReviews from "@/components/product/ProductReviews";
+
 import RelatedProducts from "@/components/product/RelatedProducts";
 import ProductAnalytics from "@/components/analytics/ProductAnalytics";
-import { products, getProductBySlug } from "@/src/data/products";
-import { getReviewsForProduct } from "@/src/data/reviews";
+
+import { notFound } from "next/navigation";
+import { isPublished } from "@/src/lib/publication";
+import { getCanonicalProductBySlug } from "@/src/lib/product-dal";
+import { products as staticProducts, getProductBySlug as getStaticProductBySlug } from "@/src/data/products";
+import { getServerProducts } from "@/src/lib/server-products";
 import { safeRatingDisplay, safeReviewCountDisplay } from "@/lib/ratings";
+import type { ProductSummary } from "@/src/types/product";
 
 export async function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+  // Keep product pages on-demand so the build does not materialize thousands
+  // of catalog pages in memory. Deep links are still served by the dynamic
+  // params path and are validated against the canonical DAL at request time.
+  return [];
 }
+
+export const revalidate = 60;
+export const dynamicParams = true;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = (await getCanonicalProductBySlug(slug)) ?? getStaticProductBySlug(slug);
   if (!product) return {};
   return {
     title: `${product.name.ar} - Luminous Derma`,
@@ -28,12 +39,32 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
+/**
+ * Product page component for Luminous Derma storefront.
+ * Displays product details, gallery, purchase info, and cheaper alternatives.
+ */
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
-  if (!product) return null;
+  // Canonical commerce truth (price/stock/active) with static identity fallback.
+  const product = (await getCanonicalProductBySlug(slug)) ?? getStaticProductBySlug(slug);
+  if (!product || !isPublished(product)) notFound();
 
-  const related = products.filter((p) => p.categorySlug === product.categorySlug && p.id !== product.id);
+  // Only fetch related products for this category (faster than all products)
+  let related: ProductSummary[] = [];
+  try {
+    const { getProductsByCategory } = await import("@/src/lib/product-dal");
+    const catProducts = await getProductsByCategory(product.categorySlug ?? "");
+    related = (catProducts as unknown as ProductSummary[]).filter((p) => p.id !== product.id).slice(0, 8);
+    if (related.length === 0) {
+      const liveCatalog = await getServerProducts();
+      const relatedSource = (liveCatalog.products.length > 0 ? liveCatalog.products : staticProducts) as unknown as ProductSummary[];
+      related = relatedSource.filter((p) => p.categorySlug === product.categorySlug && p.id !== product.id).slice(0, 8);
+    }
+  } catch {
+    const liveCatalog = await getServerProducts();
+    const relatedSource = (liveCatalog.products.length > 0 ? liveCatalog.products : staticProducts) as unknown as ProductSummary[];
+    related = relatedSource.filter((p) => p.categorySlug === product.categorySlug && p.id !== product.id).slice(0, 8);
+  }
 
   return (
     <div dir="rtl" className="w-full pb-16">
@@ -72,7 +103,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </div>
         </div>
         <ProductTabs product={product} />
-        <ProductReviews reviews={getReviewsForProduct(product)} />
+
         {related.length > 0 && <RelatedProducts products={related} />}
       </Container>
     </div>

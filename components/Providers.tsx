@@ -9,6 +9,7 @@ import { SearchProvider } from "@/context/SearchContext";
 import { SkinProfileProvider } from "@/context/SkinProfileContext";
 import { LoyaltyProvider } from "@/context/LoyaltyContext";
 import { ConsentProvider } from "@/src/lib/analytics/ConsentProvider";
+import { AdminToastProvider } from "@/components/admin/ui/AdminToast";
 import ConsentBanner from "@/components/analytics/ConsentBanner";
 import PageViewTracker from "@/components/analytics/PageViewTracker";
 
@@ -22,11 +23,13 @@ export default function Providers({ children }: { children: React.ReactNode }) {
               <SkinProfileProvider>
                 <LoyaltyProvider>
                   <ConsentProvider>
-                    <Suspense fallback={null}>
-                      <PageViewTracker />
-                    </Suspense>
-                    {children}
-                    <ConsentBanner />
+                    <AdminToastProvider>
+                      <Suspense fallback={null}>
+                        <PageViewTracker />
+                      </Suspense>
+                      {children}
+                      <ConsentBanner />
+                    </AdminToastProvider>
                   </ConsentProvider>
                 </LoyaltyProvider>
               </SkinProfileProvider>

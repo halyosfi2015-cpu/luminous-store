@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "postinstall": "node scripts/patch-next-runtime.js && node scripts/patch-lucide-client.js",
     "start": "next start",
     "lint": "eslint"
@@ -17,6 +17,7 @@
     "@fontsource/tajawal": "^5.3.0",
     "@supabase/ssr": "^0.12.4",
     "@supabase/supabase-js": "^2.112.2",
+    "html2canvas": "^1.4.1",
     "lucide-react": "^1.27.0",
     "next": "^16.2.12",
     "pg": "^8.23.0",
@@ -33,6 +34,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.12",
     "tailwindcss": "^4",
+    "tsx": "^4.23.12",
     "typescript": "^5"
   }
 }

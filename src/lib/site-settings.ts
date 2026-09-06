@@ -15,7 +15,11 @@ export async function getSetting<T>(key: string, fallback: T): Promise<T> {
       .eq('key', key)
       .maybeSingle()
     if (error || !data) return fallback
-    return (data as { value: T }).value ?? fallback
+    const raw = (data as { value: unknown }).value
+    if (typeof raw === 'string') {
+      try { return JSON.parse(raw) as T } catch { return fallback }
+    }
+    return raw as T ?? fallback
   } catch {
     return fallback
   }

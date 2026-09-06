@@ -2,18 +2,18 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { X, Filter, Star, SlidersHorizontal, RotateCcw } from "lucide-react";
-import type { FilterState, SkinType, SkinConcern, Product } from "@/types/product";
+import type { FilterState, SkinType, SkinConcern, ProductSummary } from "@/src/types/product";
 
 type FilterSidebarProps = {
   filters: FilterState;
   onChange: (filters: FilterState) => void;
-  products?: Product[];
+  products?: ProductSummary[];
 };
 
 export const OTHER_BRAND = "__other__";
 const MAX_LISTED_BRANDS = 10;
 
-export function getMainBrands(products: Product[]): string[] {
+export function getMainBrands(products: ProductSummary[]): string[] {
   const counts = new Map<string, number>();
   products.forEach((p) => {
     const b = p.brand?.trim();
@@ -58,19 +58,22 @@ function FilterGroup({ label, children }: FilterGroupProps) {
   const [open, setOpen] = useState(true);
   return (
     <fieldset>
-      <button
-        type="button"
-        onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between mb-2"
-      >
-        <legend className="text-sm font-semibold text-foreground">{label}</legend>
-        <svg
-          width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-          className={`text-muted transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+      <legend className="w-full">
+        <button
+          type="button"
+          aria-expanded={open}
+          onClick={() => setOpen(!open)}
+          className="mb-2 flex w-full items-center justify-between text-start"
         >
-          <polyline points="6 9 12 15 18 9" />
-        </svg>
-      </button>
+          <span className="text-sm font-semibold text-foreground">{label}</span>
+          <svg
+            width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+            className={`text-muted transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+      </legend>
       <div className={`space-y-1 overflow-hidden transition-all duration-200 ${open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}>
         {children}
       </div>
@@ -88,13 +91,20 @@ function Checkbox({
   onChange: () => void;
 }) {
   return (
-    <label onClick={onChange} className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-muted-bg group">
-      <div className={`flex h-3.5 w-3.5 items-center justify-center rounded border-2 transition-all duration-150 ${
+    <label className="group flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-muted-bg">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={onChange}
+        aria-label={label}
+        className="sr-only"
+      />
+      <div className={`flex h-3.5 w-3.5 items-center justify-center rounded border-2 transition-all duration-150 group-focus-within:ring-2 group-focus-within:ring-primary/30 ${
         checked ? "bg-primary border-primary" : "border-border-strong group-hover:border-primary/50"
       }`}>
         {checked && <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>}
       </div>
-      <span className="text-xs text-muted truncate">{label}</span>
+      <span className="truncate text-xs text-muted">{label}</span>
     </label>
   );
 }
@@ -239,25 +249,28 @@ export default function FilterSidebar({ filters, onChange, products = [] }: Filt
         </div>
       </aside>
 
-      {mobileOpen && (
+{mobileOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-fade-in"
+            className="absolute inset-0 bg-black/80 backdrop-blur-sm animate-fade-in"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="absolute inset-y-0 end-0 w-80 max-w-[85vw] bg-card p-5 shadow-elevated overflow-y-auto animate-slide-in-right">
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-foreground">الفلترز</h3>
+          <div className="absolute inset-y-0 end-0 w-[90%] max-w-[480px] bg-card p-6 shadow-2xl rounded-2xl animate-slide-in-right">
+            <div className="mb-6 flex items-center justify-between">
+              <h3 className="text-xl font-bold text-foreground">الفلترز</h3>
               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}
                 aria-label="إغلاق"
-                className="rounded-lg p-1.5 text-muted transition-colors hover:bg-muted-bg hover:text-foreground"
+                className="rounded-full p-2 text-muted transition-colors hover:bg-muted-bg hover:text-foreground"
               >
-                <X size={20} />
+                <X size={24} className="text-2xl" />
               </button>
             </div>
             {filterContent}
+            <div className="mt-6 pt-6 border-t border-border/20">
+              <p className="text-xs text-muted/60">يمكنك اختيار عدة فلاتر</p>
+            </div>
           </div>
         </div>
       )}

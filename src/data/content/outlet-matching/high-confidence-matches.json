@@ -1,0 +1,938 @@
+{
+  "version": 1,
+  "status": "STAGED-AWAITING-APPROVAL",
+  "count": 32,
+  "matches": [
+    {
+      "luminous_id": "yq-715",
+      "luminous_name_ar": "دوف مزيل عرق رول الاصلي 50 مل",
+      "luminous_brand": "دوف",
+      "luminous_category": "deodorants",
+      "previously_applied": false,
+      "outlet_nameAr": "دوف مزيل عرق الاصلي رول 50مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/دوف-مزيل-عرق-الاصلي-رول-50مل/p895959025",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.71,
+        "containment": 0.83,
+        "composite_score": 101.1
+      },
+      "proposed_content": {
+        "description_ar": "دوف مزيل عرق الاصلي رول 50مل يوفر حماية فعالة ضد الروائح الكريهة طوال اليوم، مناسب للبشرة الحساسة وسهل الاستخدام.",
+        "benefits_ar": [
+          "حماية طويلة الأمد: يوفر حماية فعالة تستمر طوال اليوم ضد الروائح.",
+          "تركيبة لطيفة على البشرة: يحتوي على مكونات مرطبة تحافظ على نعومة البشرة.",
+          "تطبيق سهل: يأتي برأس رول يسهل استخدامه ويوزع المنتج بشكل متساوٍ.",
+          "خالي من الكحول: مناسب للبشرة الحساسة ولا يسبب تهيجاً."
+        ],
+        "usage_ar": "قم بتطبيق دوف مزيل عرق الاصلي رول على البشرة النظيفة والجافة تحت الإبطين.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-721",
+      "luminous_name_ar": "وادي النحل زيت اللوز المر 125 مل",
+      "luminous_brand": "وادي النحل",
+      "luminous_category": "body-oils",
+      "previously_applied": false,
+      "outlet_nameAr": "وادي النحل زيت اللوز المر 125مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/وادي-النحل-زيت-اللوز-المر-125مل/p625940054",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.71,
+        "containment": 0.83,
+        "composite_score": 101.1
+      },
+      "proposed_content": {
+        "description_ar": "زيت اللوز المر من وادي النحل 125مل، زيت طبيعي لترطيب البشرة وتعزيز نمو الشعر. مناسب لجميع أنواع البشرة.",
+        "benefits_ar": [
+          "ترطيب عميق: يساعد زيت اللوز المر في ترطيب البشرة بعمق، مما يمنحها نعومة وإشراق.",
+          "تعزيز نمو الشعر: يستخدم كزيت لنمو الشعر، حيث يعزز من صحة فروة الرأس ويقلل من تساقط الشعر.",
+          "مناسب لجميع أنواع البشرة: يمكن استخدامه على جميع أنواع البشرة، بما في ذلك البشرة الحساسة.",
+          "غني بالفيتامينات: يحتوي على فيتامين E والدهون الصحية التي تدعم صحة البشرة والشعر."
+        ],
+        "usage_ar": "يمكنك استخدام زيت اللوز المر بتدليك كمية مناسبة على البشرة أو فروة الرأس بشكل يومي.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-1741",
+      "luminous_name_ar": "جيليت مزيل عرق ستيك كول ويف 70 مل",
+      "luminous_brand": "جيليت",
+      "luminous_category": "deodorants",
+      "previously_applied": false,
+      "outlet_nameAr": "جيليت كول ويف مزيل عرق جل للرجال 70 مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/جيليت-جل-مزيل-العرق-70مل/p275099959",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.67,
+        "containment": 0.86,
+        "composite_score": 99.5
+      },
+      "proposed_content": {
+        "description_ar": "جيليت كول ويف مزيل عرق جل للرجال 70 مل يوفر حماية فعالة ومنعشة ضد العرق والروائح الكريهة طوال اليوم.",
+        "benefits_ar": [
+          "حماية فعالة: يوفر حماية قوية ضد العرق والروائح الكريهة لفترة طويلة.",
+          "تركيبة جل منعشة: تمنح شعوراً بالانتعاش والراحة على مدار اليوم.",
+          "سهل الاستخدام: يتميز بتطبيق سهل وسلس على البشرة.",
+          "رائحة مميزة: يترك رائحة منعشة تدوم طويلاً، مما يعزز من ثقتك بنفسك."
+        ],
+        "usage_ar": "قم بتطبيق كمية مناسبة من الجل على منطقة الإبطين بعد الاستحمام للحصول على أفضل النتائج.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-1201",
+      "luminous_name_ar": "سنسوداين معجون اسنان عنايه متعدده مع تبييض 1+1 مجانا 75 مل",
+      "luminous_brand": "سنسوداين",
+      "luminous_category": "oral-care",
+      "previously_applied": false,
+      "outlet_nameAr": "سنسوداين معجون أسنان عناية متعددة مع تبييض 75مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/سنسوداين-معجون-العناية-مع-التبييض-75مل/p1644559724",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.6,
+        "containment": 0.86,
+        "composite_score": 96.9
+      },
+      "proposed_content": {
+        "description_ar": "سنسوداين معجون العناية مع التبييض 75مل يساعد في تقليل حساسية الأسنان وتبييضها بلطف للحصول على ابتسامة مشرقة وصحية.",
+        "benefits_ar": [
+          "تقليل حساسية الأسنان: يساعد في تخفيف الشعور بالألم عند تناول الأطعمة والمشروبات الساخنة أو الباردة.",
+          "تبييض فعال: يعمل على إزالة البقع السطحية ليمنحك أسنانًا أكثر بياضًا.",
+          "حماية من التسوس: يحتوي على مكونات تساهم في حماية الأسنان من التسوس وتعزيز صحة الفم.",
+          "تحسين صحة اللثة: يساهم في الحفاظ على صحة اللثة ومنع الالتهابات."
+        ],
+        "usage_ar": "استخدم المعجون مرتين يوميًا كجزء من روتين العناية بالفم، ويفضل استخدامه بعد الوجبات.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-695",
+      "luminous_name_ar": "كاميل كريم والبشره 30 مل",
+      "luminous_brand": "كاميل",
+      "luminous_category": "hand-care",
+      "previously_applied": false,
+      "outlet_nameAr": "كاميل كريم للبشرة 30 مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/كاميل-كريم-للبشرة-30-مل/p413167002",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.6,
+        "containment": 0.75,
+        "composite_score": 95.3
+      },
+      "proposed_content": {
+        "description_ar": "كاميل كريم للبشرة 30 مل لترطيب وتغذية البشرة الجافة، مناسب لجميع أنواع البشرة، يمنحك نعومة وإشراقة طبيعية.",
+        "benefits_ar": [
+          "ترطيب عميق: يوفر ترطيبًا مكثفًا للبشرة، مما يساعد على منع جفافها.",
+          "تغذية فعالة: يحتوي على مكونات طبيعية تعزز من صحة البشرة وتغذيها.",
+          "تهدئة البشرة: يساعد في تخفيف تهيج البشرة والاحمرار، مما يجعله مثاليًا للبشرة الحساسة.",
+          "ملمس ناعم: يمنح البشرة ملمسًا ناعمًا ومشرقًا، مما يعزز من جاذبيتها."
+        ],
+        "usage_ar": "قم بتطبيق كمية مناسبة من كريم كاميل على البشرة النظيفة، ودلك بلطف حتى يتم امتصاصه بالكامل.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-244",
+      "luminous_name_ar": "ناو زيت اكليل الجبل 30 مل",
+      "luminous_brand": "ناو",
+      "luminous_category": "hair-oils",
+      "previously_applied": false,
+      "outlet_nameAr": "ناو زيت اكليل الجبل النقي 30مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/ناو-زيت-اكليل-الجبل-النقي-30مل/p1786811298",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.57,
+        "containment": 0.8,
+        "composite_score": 94.9
+      },
+      "proposed_content": {
+        "description_ar": "زيت اكليل الجبل النقي 30مل لتحسين صحة الشعر وتعزيز نموه. مثالي لتقليل تساقط الشعر وتحفيز الدورة الدموية. - زيت للشعر",
+        "benefits_ar": [
+          "تحفيز نمو الشعر: يحتوي زيت اكليل الجبل على مكونات تعزز من نمو الشعر وتقلل من تساقطه.",
+          "تحسين صحة فروة الرأس: يساعد في تنشيط الدورة الدموية مما يساهم في صحة فروة الرأس.",
+          "ترطيب الشعر: يعمل على ترطيب الشعر ومنحه لمعاناً طبيعياً.",
+          "مناسب لجميع أنواع الشعر: يمكن استخدامه على جميع أنواع الشعر بما في ذلك الشعر الجاف والدهني."
+        ],
+        "usage_ar": "يمكنك تدليك بضع قطرات من زيت اكليل الجبل على فروة الرأس والشعر، وتركه لمدة ساعة قبل الغسل.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-1200",
+      "luminous_name_ar": "سنسوداين معجون اسنان عادي 75مل 75 مل",
+      "luminous_brand": "سنسوداين",
+      "luminous_category": "oral-care",
+      "previously_applied": false,
+      "outlet_nameAr": "سنسوداين معجون اسنان اورجينال 75مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/سنسوداين-معجون-الاصلي-75مل/p1071783021",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.57,
+        "containment": 0.8,
+        "composite_score": 94.9
+      },
+      "proposed_content": {
+        "description_ar": "سنسوداين معجون الاصلي 75مل يوفر حماية فعالة للأسنان الحساسة ويقوي المينا، مما يمنحك انتعاشاً طويلاً وصحة فموية مثالية. - معجون أسنان",
+        "benefits_ar": [
+          "حماية فعالة من الحساسية: يساعد على تخفيف الألم الناتج عن الأطعمة الساخنة أو الباردة.",
+          "تقوية مينا الأسنان: يحتوي على مكونات تعمل على تعزيز صحة الأسنان وحمايتها من التسوس.",
+          "انتعاش طويل الأمد: يمنحك شعوراً بالانتعاش والنظافة لفترة طويلة بعد الاستخدام.",
+          "تركيبة لطيفة: مناسب للاستخدام اليومي ولا يسبب أي تهيج للثة."
+        ],
+        "usage_ar": "استخدم سنسوداين معجون الاصلي مرتين يومياً، صباحاً ومساءً، مع فرشاة الأسنان للحصول على أفضل النتائج.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-714",
+      "luminous_name_ar": "دوف مزيل عرق رول بالخيار 50 مل",
+      "luminous_brand": "دوف",
+      "luminous_category": "deodorants",
+      "previously_applied": false,
+      "outlet_nameAr": "دوف مزيل عرق بالخيار والشاي الاخضر رول 50مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/دوف-مزيل-عرق-بالشاي-الاخضر-رول-50مل/p1644934133",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.56,
+        "containment": 0.83,
+        "composite_score": 94.7
+      },
+      "proposed_content": {
+        "description_ar": "دوف مزيل عرق بالشاي الاخضر رول 50مل يوفر حماية فعالة ضد الروائح الكريهة مع نعومة للبشرة الحساسة. جفاف سريع وراحة طوال اليوم.",
+        "benefits_ar": [
+          "حماية طويلة الأمد: يوفر حماية فعالة ضد الروائح لمدة تصل إلى 48 ساعة.",
+          "تركيبة لطيفة: يحتوي على مكونات طبيعية مثل الشاي الأخضر، مما يجعله مناسباً للبشرة الحساسة.",
+          "جفاف سريع: يترك البشرة جافة ومنتعشة دون أي شعور باللزوجة.",
+          "سهولة الاستخدام: يأتي في شكل رول يسهل تطبيقه على المناطق المستهدفة."
+        ],
+        "usage_ar": "قم بتطبيق دوف مزيل عرق بالشاي الاخضر رول على البشرة النظيفة والجافة تحت الإبطين.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-1269",
+      "luminous_name_ar": "فيم فريش غسول يومي للمناطق 250 مل",
+      "luminous_brand": "فيم فريش",
+      "luminous_category": "women-care",
+      "previously_applied": false,
+      "outlet_nameAr": "فيم فريش غسول يومي للمناطق الحميمية مع الصبار 250مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/فيم-فريش-غسول-يومي-للمناطق-الحميمية-مع-الصبار-250مل/p1274549093",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.56,
+        "containment": 0.83,
+        "composite_score": 94.7
+      },
+      "proposed_content": {
+        "description_ar": "فيم فريش غسول يومي للمناطق الحميمية مع الصبار، يحافظ على النظافة والانتعاش، مناسب للاستخدام اليومي.",
+        "benefits_ar": [
+          "تركيبة لطيفة: تحتوي على مكونات طبيعية تساعد في الحفاظ على توازن البشرة.",
+          "تهدئة البشرة: الصبار يعمل على تهدئة البشرة الحساسة وتقليل التهيج.",
+          "انتعاش مستمر: يمنح شعورًا بالانتعاش والنظافة طوال اليوم.",
+          "مثالي للاستخدام اليومي: يمكن استخدامه بشكل آمن يوميًا دون القلق من أي آثار جانبية."
+        ],
+        "usage_ar": "استخدم الغسول يوميًا أثناء الاستحمام، وضع كمية مناسبة على المناطق المطلوبة ثم اشطف جيدًا.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-1371",
+      "luminous_name_ar": "فيم فريش غسول نسائي للمناطق الحميميه العنايه القصوي 250 مل",
+      "luminous_brand": "فيم فريش",
+      "luminous_category": "women-care",
+      "previously_applied": false,
+      "outlet_nameAr": "فيم فريش غسول نسائي اكتيف عناية قصوى 250مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/فيم-فريش-غسول-نسائي-اكتيف-عناية-قصوى-250مل/p1382659610",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.55,
+        "containment": 0.75,
+        "composite_score": 93.1
+      },
+      "proposed_content": {
+        "description_ar": "فيم فريش غسول نسائي اكتيف 250مل، يوفر عناية قصوى للمنطقة الحساسة، يوازن درجة الحموضة، ويمنح شعوراً بالانتعاش طوال اليوم.",
+        "benefits_ar": [
+          "عناية قصوى: تركيبة مصممة خصيصاً لتلبية احتياجات المنطقة الحساسة.",
+          "توازن درجة الحموضة: يساعد في الحفاظ على توازن البشرة ومنع التهيجات.",
+          "تركيبة طبيعية: مكونات لطيفة على البشرة، مما يجعلها مناسبة للاستخدام اليومي.",
+          "انتعاش طويل الأمد: يمنح شعوراً بالانتعاش والنظافة طوال اليوم."
+        ],
+        "usage_ar": "استخدمي الغسول يومياً أثناء الاستحمام، ثم اشطفي جيداً بالماء.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-1196",
+      "luminous_name_ar": "سنسوداين معجون اسنان عنايه متعدده وتبيض 50 مل",
+      "luminous_brand": "سنسوداين",
+      "luminous_category": "oral-care",
+      "previously_applied": false,
+      "outlet_nameAr": "سنسوداين معجون أسنان عناية متعددة مع تبييض 50مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/سنسوداين-معجون-عناية-متعدده-50مل/p1461938552",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.56,
+        "containment": 0.71,
+        "composite_score": 92.9
+      },
+      "proposed_content": {
+        "description_ar": "سنسوداين معجون عناية متعدده 50مل يوفر حماية فعالة من حساسية الأسنان ويقوي المينا للحفاظ على صحة الفم.",
+        "benefits_ar": [
+          "حماية فعالة من الحساسية: يخفف من آلام الأسنان الحساسة ويساعد في تقليل الانزعاج.",
+          "تقوية المينا: يحتوي على مكونات تعمل على تعزيز طبقة المينا، مما يحمي الأسنان من التسوس.",
+          "عناية شاملة: يوفر حماية ضد البكتيريا ويعزز صحة اللثة.",
+          "طعم منعش: يمنحك شعوراً بالانتعاش والنظافة بعد كل استخدام."
+        ],
+        "usage_ar": "استخدم سنسوداين معجون عناية متعدده مرتين يومياً كجزء من روتين العناية بالفم.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-1530",
+      "luminous_name_ar": "كولجيت معجون الاسنان اوبتيك وايت اللامع 75 مل",
+      "luminous_brand": "كولجيت",
+      "luminous_category": "oral-care",
+      "previously_applied": false,
+      "outlet_nameAr": "كولجيت معجون اسنان اوبتيك وايت بالفحم 75مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/كولجيت-معجون-اسنان-اوبتيك-وايت-بالفحم-75مل/p1434342943",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.56,
+        "containment": 0.71,
+        "composite_score": 92.9
+      },
+      "proposed_content": {
+        "description_ar": "كولجيت معجون اسنان اوبتيك وايت بالفحم 75مل يمنحك ابتسامة مشرقة وصحة فموية مثالية بفضل تركيبته الفعالة.",
+        "benefits_ar": [
+          "تبييض فعال: يزيل البقع والتصبغات ليمنحك أسناناً أكثر بياضاً.",
+          "تركيبة الفحم: تعمل على امتصاص الشوائب وتحسين صحة الفم.",
+          "انتعاش طويل الأمد: يمنحك شعوراً بالانتعاش يدوم طوال اليوم.",
+          "صحة اللثة: يساعد في تقليل مشاكل اللثة ويعزز صحتها."
+        ],
+        "usage_ar": "قم بوضع كمية مناسبة من المعجون على فرشاة الأسنان واستخدمها لتنظيف الأسنان مرتين يومياً.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-445",
+      "luminous_name_ar": "كولجيت معجون اسنان فريش كونفيدنس الاخضر جل بالنعناع 125 مل",
+      "luminous_brand": "كولجيت",
+      "luminous_category": "oral-care",
+      "previously_applied": false,
+      "outlet_nameAr": "كولجيت معجون مع الفلورايد جل بالنعناع 125 مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/كولجيت-معجون-مع-الفلورايد-جل-بالنعناع-125-مل/p2108761206",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.5,
+        "containment": 0.83,
+        "composite_score": 92.5
+      },
+      "proposed_content": {
+        "description_ar": "كولجيت معجون مع الفلورايد جل بالنعناع 125 مل يحافظ على صحة فمك ويمنحك انتعاشًا يدوم طوال اليوم.",
+        "benefits_ar": [
+          "حماية فعالة ضد التسوس: يحتوي على الفلورايد الذي يقوي مينا الأسنان ويقلل من خطر التسوس.",
+          "انتعاش طويل الأمد: نكهة النعناع تمنحك شعورًا بالانتعاش يدوم طوال اليوم.",
+          "تركيبة لطيفة: مصمم ليكون لطيفًا على الأسنان واللثة، مما يجعله مناسبًا للاستخدام اليومي.",
+          "سهل الاستخدام: يأتي في شكل جل يسهل توزيعه على فرشاة الأسنان."
+        ],
+        "usage_ar": "قم بوضع كمية مناسبة من المعجون على فرشاة الأسنان، ثم اغسل أسنانك بلطف لمدة دقيقتين.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-386",
+      "luminous_name_ar": "ليسترين غسول الفم بالنعناع توتال كير ذو المذاق المعتدل 500 مل",
+      "luminous_brand": "ليسترين",
+      "luminous_category": "oral-care",
+      "previously_applied": false,
+      "outlet_nameAr": "ليسترين توتال كير غسول فم بخلاصة المسواك معتدل المذاق 500مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/ليسترين-غسول-للفم-بخلاصة-المسواك-500مل/p1175413841",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.54,
+        "containment": 0.7,
+        "composite_score": 92
+      },
+      "proposed_content": {
+        "description_ar": "غسول فم بخلاصة المسواك الطبيعي بمذاق معتدل، حماية شاملة للفم واللثة. متوفر الآن من صيدلية اوتلت.",
+        "benefits_ar": [
+          "يحتوي على خلاصة المسواك لدعم نظافة الفم بطريقة طبيعية",
+          "يقتل 99% من الجراثيم المسببة لرائحة الفم والتهاب اللثة",
+          "يقلل من تكوّن البلاك ويقوي مينا الأسنان",
+          "يمنح نفسًا منعشًا يدوم طويلاً",
+          "مذاق معتدل يناسب جميع أفراد الأسرة",
+          "حجم مثالي للاستخدام العائلي (500 مل)"
+        ],
+        "usage_ar": ": يُستخدم بعد تفريش الأسنان، يُتمضمض بـ 20 مل من الغسول لمدة 30 ثانية ثم يُبصق، دون الحاجة لغسل الفم بالماء.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-1197",
+      "luminous_name_ar": "سنسوداين معجون اسنان تبييض 75 مل",
+      "luminous_brand": "سنسوداين",
+      "luminous_category": "oral-care",
+      "previously_applied": false,
+      "outlet_nameAr": "سنسوداين معجون أسنان عناية متعددة مع تبييض 75مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/سنسوداين-معجون-العناية-مع-التبييض-75مل/p1644559724",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.5,
+        "containment": 0.8,
+        "composite_score": 92
+      },
+      "proposed_content": {
+        "description_ar": "سنسوداين معجون العناية مع التبييض 75مل يساعد في تقليل حساسية الأسنان وتبييضها بلطف للحصول على ابتسامة مشرقة وصحية.",
+        "benefits_ar": [
+          "تقليل حساسية الأسنان: يساعد في تخفيف الشعور بالألم عند تناول الأطعمة والمشروبات الساخنة أو الباردة.",
+          "تبييض فعال: يعمل على إزالة البقع السطحية ليمنحك أسنانًا أكثر بياضًا.",
+          "حماية من التسوس: يحتوي على مكونات تساهم في حماية الأسنان من التسوس وتعزيز صحة الفم.",
+          "تحسين صحة اللثة: يساهم في الحفاظ على صحة اللثة ومنع الالتهابات."
+        ],
+        "usage_ar": "استخدم المعجون مرتين يوميًا كجزء من روتين العناية بالفم، ويفضل استخدامه بعد الوجبات.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-1199",
+      "luminous_name_ar": "سنسوداين معجون اسنان النعناع المنعش 75مل 75 مل",
+      "luminous_brand": "سنسوداين",
+      "luminous_category": "oral-care",
+      "previously_applied": false,
+      "outlet_nameAr": "سنسوداين معجون اسنان اورجينال 75مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/سنسوداين-معجون-الاصلي-75مل/p1071783021",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.5,
+        "containment": 0.8,
+        "composite_score": 92
+      },
+      "proposed_content": {
+        "description_ar": "سنسوداين معجون الاصلي 75مل يوفر حماية فعالة للأسنان الحساسة ويقوي المينا، مما يمنحك انتعاشاً طويلاً وصحة فموية مثالية. - معجون أسنان",
+        "benefits_ar": [
+          "حماية فعالة من الحساسية: يساعد على تخفيف الألم الناتج عن الأطعمة الساخنة أو الباردة.",
+          "تقوية مينا الأسنان: يحتوي على مكونات تعمل على تعزيز صحة الأسنان وحمايتها من التسوس.",
+          "انتعاش طويل الأمد: يمنحك شعوراً بالانتعاش والنظافة لفترة طويلة بعد الاستخدام.",
+          "تركيبة لطيفة: مناسب للاستخدام اليومي ولا يسبب أي تهيج للثة."
+        ],
+        "usage_ar": "استخدم سنسوداين معجون الاصلي مرتين يومياً، صباحاً ومساءً، مع فرشاة الأسنان للحصول على أفضل النتائج.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-179",
+      "luminous_name_ar": "ناو زيت لافندر 30 مل",
+      "luminous_brand": "ناو",
+      "luminous_category": "body-oils",
+      "previously_applied": false,
+      "outlet_nameAr": "ناو زيت اللافندر النقي 30مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/ناو-زيت-اللافندر-النقي-30مل/p123857316",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.5,
+        "containment": 0.75,
+        "composite_score": 91.3
+      },
+      "proposed_content": {
+        "description_ar": "زيت اللافندر النقي 30مل من ناو يساعد في تهدئة الأعصاب وتحسين جودة النوم. زيت طبيعي مثالي للاستخدام اليومي.",
+        "benefits_ar": [
+          "تهدئة الأعصاب: يساعد زيت اللافندر في تقليل مستويات التوتر والقلق، مما يجعله مثاليًا للاستخدام بعد يوم طويل.",
+          "تحسين جودة النوم: يُستخدم زيت اللافندر لتعزيز الاسترخاء والمساعدة في النوم العميق، مما يجعله خيارًا ممتازًا قبل النوم.",
+          "عناية بالبشرة: يمكن استخدامه كزيت مرطب للبشرة، حيث يساعد في تهدئة الالتهابات وتهيج الجلد.",
+          "رائحة عطرية مميزة: يمنح المكان رائحة عطرة ومهدئة، مما يجعله مثاليًا للاستخدام في المنزل أو في مراكز الاسترخاء."
+        ],
+        "usage_ar": "يمكنك استخدام زيت اللافندر عن طريق إضافة بضع قطرات إلى ماء الاستحمام أو استخدامه في التدليك مع زيت ناقل.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-1672",
+      "luminous_name_ar": "جيليت مزيل عرق ستيك اركتيك ايس 70 مل",
+      "luminous_brand": "جيليت",
+      "luminous_category": "deodorants",
+      "previously_applied": true,
+      "previously_applied_label_ar": "معالج سابقًا",
+      "outlet_nameAr": "جيليت ارتيك ايس مزيل عرق جل للرجال 70 مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/جيليت-جل-مزيل-العرق-70مل/p2133005866",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.5,
+        "containment": 0.71,
+        "composite_score": 90.7
+      },
+      "proposed_content": {
+        "description_ar": "جيليت ارتيك ايس مزيل عرق جل للرجال 70 مل يوفر حماية فعالة وانتعاش يدوم طويلاً، مناسب لجميع أنواع البشرة.",
+        "benefits_ar": [
+          "حماية فعالة: يوفر حماية طويلة الأمد ضد العرق ورائحة الجسم.",
+          "تركيبة جل خفيفة: سهلة الاستخدام وسريعة الامتصاص، مما يمنحك شعوراً بالانتعاش.",
+          "رائحة منعشة: يترك لك رائحة جذابة تدوم طوال اليوم.",
+          "مناسب لجميع أنواع البشرة: لا يسبب تهيجاً للبشرة، مما يجعله مثالياً للاستخدام اليومي."
+        ],
+        "usage_ar": "قم بتطبيق كمية مناسبة من الجل على منطقة الإبطين بعد الاستحمام للحصول على أفضل النتائج.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-1866",
+      "luminous_name_ar": "يورياج غسول نسائي للمناطق الحميميه جين 8 يحافظ التوازن الطبيعي 200 مل",
+      "luminous_brand": "Uriage",
+      "luminous_category": "women-care",
+      "previously_applied": false,
+      "outlet_nameAr": "يورياج جين في غسول للمنطقة الحميمية 200 مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/يورياج-جين-في-غسول-للمنطقة-الحميمية-200-مل/p1782813472",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.45,
+        "containment": 0.83,
+        "composite_score": 90.7
+      },
+      "proposed_content": {
+        "description_ar": "غسول يورياج جين للمنطقة الحميمية 200 مل يوفر نظافة وانتعاشاً، مع تركيبة مهدئة وآمنة للاستخدام اليومي.",
+        "benefits_ar": [
+          "تركيبة مهدئة: تحتوي على مكونات طبيعية تساعد في تهدئة البشرة وتقليل التهيج.",
+          "توازن درجة الحموضة: يحافظ على توازن درجة الحموضة الطبيعية للمنطقة الحساسة.",
+          "نظافة وانتعاش: يوفر شعوراً بالانتعاش والنظافة طوال اليوم.",
+          "آمن للاستخدام اليومي: مناسب للاستخدام اليومي دون القلق من أي آثار جانبية."
+        ],
+        "usage_ar": "يستخدم الغسول عن طريق وضع كمية مناسبة على اليدين، ثم تدليك المنطقة بلطف ثم الشطف بالماء.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-181",
+      "luminous_name_ar": "نيزورال شامبو مضاد للقشره والتهاب الجلد الدهني 100 مل",
+      "luminous_brand": "نيزورال",
+      "luminous_category": "shampoo",
+      "previously_applied": false,
+      "outlet_nameAr": "نيزورال شامبو 100 مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/نيزورال-شامبو-100-مل/p1332252182",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.38,
+        "containment": 1,
+        "composite_score": 90
+      },
+      "proposed_content": {
+        "description_ar": "نيزورال شامبو 100 مل يعالج القشرة والحكة، ويضمن فروة رأس صحية ونظيفة بتركيبة لطيفة تناسب جميع أنواع الشعر.",
+        "benefits_ar": [
+          "فعالية عالية ضد القشرة: يعمل على تقليل ظهور القشرة بشكل ملحوظ.",
+          "ترطيب عميق: يساعد في الحفاظ على رطوبة فروة الرأس ويقلل من الحكة.",
+          "مناسب لجميع أنواع الشعر: يمكن استخدامه بأمان على الشعر الدهني والجاف.",
+          "تركيبة لطيفة: خالية من المواد الكيميائية القاسية، مما يجعله مناسبًا للاستخدام اليومي."
+        ],
+        "usage_ar": "يتم وضع كمية مناسبة من الشامبو على الشعر المبلل، ثم تدليك فروة الرأس بلطف، ثم شطفه جيدًا.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-1480",
+      "luminous_name_ar": "سنسوداين معجون اسنان واقي المينا للاطفال رعاية أطفال 50 مل",
+      "luminous_brand": "سنسوداين",
+      "luminous_category": "baby-care",
+      "previously_applied": false,
+      "outlet_nameAr": "سنسوداين  واقي المينا معجون أسنان للأطفال ٦+ سنوات 50مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/سنسوداين-معجون-منعش-للاطفال-50مل/p830604564",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.5,
+        "containment": 0.67,
+        "composite_score": 90
+      },
+      "proposed_content": {
+        "description_ar": "سنسوداين معجون منعش للاطفال 50مل يوفر حماية فموية فعالة للأطفال ويقلل حساسية الأسنان مع شعور بالانتعاش.",
+        "benefits_ar": [
+          "حماية من الحساسية: يساعد في تقليل حساسية الأسنان لدى الأطفال.",
+          "انتعاش طويل الأمد: يمنح شعورًا بالانتعاش يدوم طويلاً بعد الاستخدام.",
+          "تركيبة لطيفة: مصمم خصيصًا ليناسب احتياجات الأطفال دون أي مكونات ضارة.",
+          "دعم صحة الفم: يعزز صحة الفم بشكل عام ويقي من التسوس."
+        ],
+        "usage_ar": "يستخدم المعجون مرتين يوميًا، حيث يتم وضع كمية مناسبة على فرشاة الأسنان وتنظيف الأسنان بلطف.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-958",
+      "luminous_name_ar": "غارنييه مزيل المكياج ماء ميسلار منظف غني بالزيت لمكياج مقاوم للماء 400 مل",
+      "luminous_brand": "غارنييه",
+      "luminous_category": "cleansers",
+      "previously_applied": false,
+      "outlet_nameAr": "غارنييه سكين اكتيف ماء ميسيلار غني بالزيت منظف و مزيل للمكياج المقاوم للماء 400مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/غارنييه-سكين-اكتيف-ماء-ميسيلار-غني-بالزيت-منظف-و-مزيل-للمكياج-المقاوم-للماء-400مل/p328017641",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.47,
+        "containment": 0.67,
+        "composite_score": 88.8
+      },
+      "proposed_content": {
+        "description_ar": "اكتشف غارنييه سكين اكتيف ماء ميسيلار غني بالزيت منظف و مزيل للمكياج المقاوم للماء 400مل من  ضمن فئة  لدى صيدلية أوتلت. نوفر منتجات أصلية ومضمونة 100% بأسعار منا...",
+        "benefits_ar": [
+          "تنظيف فعال: يزيل المكياج والملوثات بفعالية عالية دون الحاجة للفرك.",
+          "ترطيب عميق: يحتوي على مكونات غنية بالزيوت التي تساعد على ترطيب البشرة ومنع جفافها.",
+          "مناسب لجميع أنواع البشرة: يمكن استخدامه بأمان على البشرة الحساسة، مما يجعله خياراً مثالياً للجميع.",
+          "سهولة الاستخدام: يأتي في عبوة بحجم مناسب، مما يسهل حمله واستخدامه في أي وقت."
+        ],
+        "usage_ar": "قم بوضع كمية مناسبة على قطعة قطن، ثم امسح بها الوجه بلطف لإزالة المكياج.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-2077",
+      "luminous_name_ar": "اس في ار مزيل عرق رول رائحه منعشه للجنسين ولطيف 50 مل",
+      "luminous_brand": "اس في ار",
+      "luminous_category": "deodorants",
+      "previously_applied": false,
+      "outlet_nameAr": "اس في ار مزيل عرق رول اون بدون عطر50 مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/اس-في-ار-مزيل-عرق-بدون-عطر-50مل/p591446214",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.46,
+        "containment": 0.67,
+        "composite_score": 88.5
+      },
+      "proposed_content": {
+        "description_ar": "اس في ار مزيل عرق بدون عطر 50مل يوفر حماية فعالة طوال اليوم للبشرة الحساسة دون أي رائحة مزعجة.",
+        "benefits_ar": [
+          "حماية طويلة الأمد: يوفر لك حماية فعالة تدوم طوال اليوم ضد الروائح.",
+          "تركيبة خفيفة: لا يسبب تهيج البشرة، مما يجعله مثاليًا للبشرة الحساسة.",
+          "بدون رائحة: يضمن لك شعورًا بالانتعاش دون أي عطر مزعج.",
+          "سهل الاستخدام: يأتي في عبوة مريحة تسهل عليك الاستخدام اليومي."
+        ],
+        "usage_ar": "قم برش المنتج على منطقة الإبطين بعد الاستحمام للحصول على أفضل النتائج.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-1729",
+      "luminous_name_ar": "هيربال بلسم ترطيب بجوز الهند بيو رينيو شامبو 400 مل",
+      "luminous_brand": "هيربال",
+      "luminous_category": "shampoo",
+      "previously_applied": false,
+      "outlet_nameAr": "هيربال شامبو بجوز الهند 400مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/هيربال-شامبو-بجوز-الهند-400مل/p1324540170",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.4,
+        "containment": 0.8,
+        "composite_score": 88
+      },
+      "proposed_content": {
+        "description_ar": "هيربال شامبو بجوز الهند 400مل ينظف فروة الرأس بعمق، يرطب الشعر الجاف، ويقلل تساقط الشعر ليمنحك شعراً صحياً ولامعاً.",
+        "benefits_ar": [
+          "تنظيف عميق: يزيل الأوساخ والشوائب من فروة الرأس دون تجفيف الشعر.",
+          "ترطيب فعال: يحتوي على مكونات طبيعية تعمل على ترطيب الشعر الجاف وتغذيته.",
+          "تقليل تساقط الشعر: يساعد في تعزيز نمو الشعر وتقليل التساقط بفضل تركيبته الفريدة.",
+          "لمعان طبيعي: يمنح الشعر مظهراً صحياً ولامعاً، مما يجعله يبدو أكثر حيوية."
+        ],
+        "usage_ar": "قم بتدليك كمية مناسبة من الشامبو على شعر مبلل، ثم اشطفه جيداً بالماء.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-2599",
+      "luminous_name_ar": "كولجيت معجون اسنان مبيض اوبتيك وايت بيربل ريفيل 75 مل",
+      "luminous_brand": "كولجيت",
+      "luminous_category": "oral-care",
+      "previously_applied": false,
+      "outlet_nameAr": "كولجيت معجون اوبتيك وايت 75مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/كولجيت-معجون-اوبتيك-وايت-75مل/p1659386990",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.4,
+        "containment": 0.8,
+        "composite_score": 88
+      },
+      "proposed_content": {
+        "description_ar": "كولجيت معجون اوبتيك وايت 75مل يوفر تبييض فعال وحماية من التسوس، مثالي لابتسامة صحية وإشراقة مميزة.",
+        "benefits_ar": [
+          "تبييض فعال: يساعد في إزالة البقع السطحية الناتجة عن الأطعمة والمشروبات.",
+          "حماية من التسوس: يحتوي على مكونات تعزز صحة الأسنان وتحميها من التسوس.",
+          "عناية باللثة: يساهم في الحفاظ على صحة اللثة ويقلل من الالتهابات.",
+          "طعم منعش: يوفر شعورًا بالانتعاش يدوم طويلاً بعد الاستخدام."
+        ],
+        "usage_ar": "استخدم كولجيت معجون اوبتيك وايت مرتين يوميًا، ضع كمية مناسبة على فرشاة الأسنان واغسل الأسنان لمدة دقيقتين.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-1500",
+      "luminous_name_ar": "بيزلين مزيل عرق رول 48 ساعه برائحه تالق اللؤلؤ مفتح 50 مل",
+      "luminous_brand": "بيزلين",
+      "luminous_category": "deodorants",
+      "previously_applied": false,
+      "outlet_nameAr": "بيزلين مزيل عرق رول و مفتح للبشرة برائحة عطر الورد 50مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/بيزلين-مزيل-عرق-رول-و-مفتح-للبشرة-برائحة-عطر-الورد-50مل/p1774990166",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.43,
+        "containment": 0.6,
+        "composite_score": 86.1
+      },
+      "proposed_content": {
+        "description_ar": "بيزلين مزيل عرق رول برائحة الورد يحمي من التعرق ويعمل على تفتيح البشرة. تركيبة لطيفة تناسب جميع أنواع البشرة.",
+        "benefits_ar": [
+          "حماية فعالة: يوفر حماية من العرق لمدة طويلة، مما يجعلك تشعرين بالثقة طوال اليوم.",
+          "تفتيح البشرة: يحتوي على مكونات طبيعية تعمل على تفتيح المناطق الداكنة وتوحيد لون البشرة.",
+          "رائحة عطر الورد: يمنحك رائحة منعشة تدوم طويلاً، مما يجعلك تشعرين بالانتعاش.",
+          "تركيبة لطيفة: مناسب للبشرة الحساسة، حيث لا يحتوي على مواد كيميائية قاسية."
+        ],
+        "usage_ar": "يتم تطبيقه على البشرة النظيفة والجافة، مع تدليك خفيف حتى يتم امتصاصه بالكامل.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-1771",
+      "luminous_name_ar": "فازلين لوشن انتعاش الصبار 200 مل",
+      "luminous_brand": "فازلين",
+      "luminous_category": "body-lotion",
+      "previously_applied": false,
+      "outlet_nameAr": "فازلين لوشن الصبار الملطف 200مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/فازلين-لوشن-الصبار-الملطف-200مل/p1580566326",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.43,
+        "containment": 0.6,
+        "composite_score": 86.1
+      },
+      "proposed_content": {
+        "description_ar": "فازلين لوشن الصبار الملطف 200مل يوفر ترطيباً عميقاً وتهدئة للبشرة الجافة والحساسة بفضل مكوناته الطبيعية.",
+        "benefits_ar": [
+          "ترطيب عميق: يوفر ترطيباً فعالاً للبشرة، مما يساعد على استعادة نعومتها.",
+          "تهدئة البشرة: يعمل على تقليل الاحمرار والتهيج، مما يجعله مناسباً للبشرة الحساسة.",
+          "مكونات طبيعية: يحتوي على خلاصة الصبار التي تعزز من صحة البشرة وتساعد في تجديد خلاياها.",
+          "سهل الاستخدام: يمتاز بقوام خفيف وسهل الامتصاص، مما يجعله مثالياً للاستخدام اليومي."
+        ],
+        "usage_ar": "قم بتطبيق اللوشن على البشرة النظيفة والمبللة ووزعه بلطف حتى يتم امتصاصه بالكامل.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-1472",
+      "luminous_name_ar": "كولجيت معجون اسنان مبيض اوبتك وايت بالفحم 75 مل",
+      "luminous_brand": "كولجيت",
+      "luminous_category": "oral-care",
+      "previously_applied": false,
+      "outlet_nameAr": "كولجيت معجون اسنان بالفحم و النعناع 75مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/كولجيت-معجون-اسنان-بالفحم-و-النعناع-75مل/p2042806290",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.4,
+        "containment": 0.67,
+        "composite_score": 86
+      },
+      "proposed_content": {
+        "description_ar": "كولجيت معجون اسنان بالفحم و النعناع 75مل يمنحك ابتسامة مشرقة وانتعاش يدوم طويلاً. مثالي لتنظيف عميق وحماية الأسنان.",
+        "benefits_ar": [
+          "تنظيف عميق: يساعد الفحم في إزالة البقع والتصبغات، مما يجعل أسنانك أكثر بياضاً.",
+          "انتعاش فوري: يوفر النعناع شعوراً منعشاً يدوم طويلاً، مما يحسن من رائحة الفم.",
+          "حماية من التسوس: يحتوي على مكونات تساهم في حماية الأسنان من التسوس وتقلل من مشاكل اللثة.",
+          "تركيبة لطيفة: مناسب للاستخدام اليومي ولا يسبب حساسية للثة، مما يجعله آمناً لجميع أفراد الأسرة."
+        ],
+        "usage_ar": "قم بوضع كمية مناسبة من المعجون على فرشاة الأسنان، ثم اغسل أسنانك لمدة دقيقتين مرتين يومياً.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-428",
+      "luminous_name_ar": "كولجيت معجون فريش ثقه الانتعاش جل الاحمر 125 مل",
+      "luminous_brand": "كولجيت",
+      "luminous_category": "oral-care",
+      "previously_applied": false,
+      "outlet_nameAr": "كولجيت معجون مع الفلورايد جل بالنعناع 125 مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/كولجيت-معجون-مع-الفلورايد-جل-بالنعناع-125-مل/p2108761206",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.4,
+        "containment": 0.67,
+        "composite_score": 86
+      },
+      "proposed_content": {
+        "description_ar": "كولجيت معجون مع الفلورايد جل بالنعناع 125 مل يحافظ على صحة فمك ويمنحك انتعاشًا يدوم طوال اليوم.",
+        "benefits_ar": [
+          "حماية فعالة ضد التسوس: يحتوي على الفلورايد الذي يقوي مينا الأسنان ويقلل من خطر التسوس.",
+          "انتعاش طويل الأمد: نكهة النعناع تمنحك شعورًا بالانتعاش يدوم طوال اليوم.",
+          "تركيبة لطيفة: مصمم ليكون لطيفًا على الأسنان واللثة، مما يجعله مناسبًا للاستخدام اليومي.",
+          "سهل الاستخدام: يأتي في شكل جل يسهل توزيعه على فرشاة الأسنان."
+        ],
+        "usage_ar": "قم بوضع كمية مناسبة من المعجون على فرشاة الأسنان، ثم اغسل أسنانك بلطف لمدة دقيقتين.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-2613",
+      "luminous_name_ar": "فيم فريش غسول نسائي منعش للمناطق الحميميه بالعنايه القصوي 250 مل",
+      "luminous_brand": "فيم فريش",
+      "luminous_category": "women-care",
+      "previously_applied": false,
+      "outlet_nameAr": "فيم فريش غسول نسائي اكتيف عناية قصوى 250مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/فيم-فريش-غسول-نسائي-اكتيف-عناية-قصوى-250مل/p1382659610",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.38,
+        "containment": 0.63,
+        "composite_score": 84.8
+      },
+      "proposed_content": {
+        "description_ar": "فيم فريش غسول نسائي اكتيف 250مل، يوفر عناية قصوى للمنطقة الحساسة، يوازن درجة الحموضة، ويمنح شعوراً بالانتعاش طوال اليوم.",
+        "benefits_ar": [
+          "عناية قصوى: تركيبة مصممة خصيصاً لتلبية احتياجات المنطقة الحساسة.",
+          "توازن درجة الحموضة: يساعد في الحفاظ على توازن البشرة ومنع التهيجات.",
+          "تركيبة طبيعية: مكونات لطيفة على البشرة، مما يجعلها مناسبة للاستخدام اليومي.",
+          "انتعاش طويل الأمد: يمنح شعوراً بالانتعاش والنظافة طوال اليوم."
+        ],
+        "usage_ar": "استخدمي الغسول يومياً أثناء الاستحمام، ثم اشطفي جيداً بالماء.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-787",
+      "luminous_name_ar": "كيوفي لوشن مرطب للاطفال رعاية أطفال 250 مل",
+      "luminous_brand": "كيوفي",
+      "luminous_category": "baby-care",
+      "previously_applied": false,
+      "outlet_nameAr": "كيوفي بيبي لوشن مرطب لبشرة الاطفال 250مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/كيوفي-بيبي-لوشن-مرطب-لبشرة-الاطفال-250مل/p1489494232",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.4,
+        "containment": 0.57,
+        "composite_score": 84.6
+      },
+      "proposed_content": {
+        "description_ar": "كيوفي بيبي لوشن مرطب لبشرة الاطفال 250مل، يوفر ترطيباً عميقاً وحماية للبشرة الحساسة. مناسب للاستخدام اليومي.",
+        "benefits_ar": [
+          "ترطيب عميق: يحتوي على مكونات طبيعية تعمل على ترطيب البشرة بعمق وتوفير حماية طويلة الأمد.",
+          "مثالي للبشرة الحساسة: تركيبته اللطيفة تجعل منه مناسباً حتى للبشرة الأكثر حساسية.",
+          "سهولة الاستخدام: يمتصه الجلد بسرعة، مما يجعله مثالياً للاستخدام اليومي.",
+          "خالي من المواد الضارة: لا يحتوي على عطور أو مواد كيميائية قاسية، مما يجعله آمناً للاستخدام على بشرة الأطفال."
+        ],
+        "usage_ar": "قم بوضع كمية مناسبة من اللوشن على بشرة الطفل بعد الاستحمام أو عند الحاجة، وافركه بلطف حتى يتم امتصاصه بالكامل.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    },
+    {
+      "luminous_id": "yq-2412",
+      "luminous_name_ar": "كرست معجون اسنان منعش للحمايه من التسوس 125 مل",
+      "luminous_brand": "كرست",
+      "luminous_category": "oral-care",
+      "previously_applied": false,
+      "outlet_nameAr": "كرست معجون منعش وحمايه ضد التسوس 125مل",
+      "outlet_url": "https://outletpharmacyonline.sa/ar/كرست-معجون-منعش-وحمايه-ضد-التسوس-125مل/p574324642",
+      "confidence": "high",
+      "signals": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.4,
+        "containment": 0.57,
+        "composite_score": 84.6
+      },
+      "proposed_content": {
+        "description_ar": "كرست معجون منعش وحماية ضد التسوس 125مل يحافظ على صحة فمك ويمنحك انتعاشاً طويلاً. مثالي للعناية اليومية بالأسنان.",
+        "benefits_ar": [
+          "حماية فعالة ضد التسوس: يساعد في تقليل خطر تسوس الأسنان بفضل تركيبته المخصصة.",
+          "انتعاش طويل الأمد: يمنحك شعورًا بالانتعاش يدوم طوال اليوم.",
+          "صحة اللثة: يعزز من صحة اللثة ويقلل من الالتهابات.",
+          "استخدام سهل: مناسب للاستخدام اليومي لجميع أفراد العائلة."
+        ],
+        "usage_ar": "قم بوضع كمية مناسبة من المعجون على فرشاة الأسنان واغسل أسنانك لمدة دقيقتين مرتين يوميًا.",
+        "source_note": "outlet-scraped-arabic-content"
+      }
+    }
+  ]
+}

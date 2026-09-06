@@ -9,7 +9,7 @@ type ProductGridProps = {
 export default function ProductGrid({ products }: ProductGridProps) {
   if (products.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in">
+      <div role="status" className="flex flex-col items-center justify-center py-20 text-center animate-fade-in">
         <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-muted-bg mb-4">
           <PackageOpen size={40} className="text-border-strong" />
         </div>
@@ -20,7 +20,7 @@ export default function ProductGrid({ products }: ProductGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div aria-label="قائمة المنتجات" className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {products.map((product) => (
         <div key={product.id}>
           <ProductCard product={product} />

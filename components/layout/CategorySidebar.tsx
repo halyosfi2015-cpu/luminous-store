@@ -4,20 +4,10 @@ import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronRight, ChevronDown, LayoutGrid, Search, Sparkles } from "lucide-react";
 import { useLang } from "@/lib/use-lang";
-import { sectionCategoriesMap, categories as subCategories } from "@/src/data/product-summaries";
-import CategoryImageIcon from "@/components/layout/CategoryImageIcon";
+import { getTaxonomyCategoryCards, type TaxonomyCategoryCard } from "@/src/lib/taxonomy";
+import { taxonomyCategoryIcons, taxonomyCategoryColors, resolveTaxonomyIcon } from "@/components/layout/taxonomyCategoryUi";
 
-const sectionGradients: Record<string, string> = {
-  skincare: "from-rose-500 via-pink-500 to-fuchsia-500",
-  haircare: "from-violet-500 via-purple-500 to-indigo-500",
-  bodycare: "from-amber-400 via-orange-400 to-red-400",
-  makeup: "from-fuchsia-500 via-pink-500 to-rose-500",
-  perfume: "from-teal-500 via-emerald-500 to-cyan-500",
-  bakhoor: "from-amber-600 via-orange-600 to-red-600",
-  baby: "from-sky-400 via-blue-400 to-indigo-400",
-  supplements: "from-emerald-500 via-green-500 to-teal-500",
-  tools: "from-slate-500 via-gray-500 to-zinc-500",
-};
+const sectionGradients: Record<string, string> = taxonomyCategoryColors;
 
 interface CategorySidebarProps {
   className?: string;
@@ -37,24 +27,31 @@ export default function CategorySidebar({ className = "" }: CategorySidebarProps
   });
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-
-  const sections = useMemo(
-    () => sectionCategoriesMap.filter((s) => s.children.length > 0),
-    []
+  const [sections, setSections] = useState<TaxonomyCategoryCard[]>(() =>
+    getTaxonomyCategoryCards().filter((s) => s.children.length > 0)
   );
+
+  useEffect(() => {
+    fetch("/api/content/taxonomy", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data.categoryCards) && data.categoryCards.length > 0) {
+          setSections(data.categoryCards.filter((s: TaxonomyCategoryCard) => s.children.length > 0));
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const filteredSections = useMemo(() => {
     if (!searchQuery) return sections;
+    const q = searchQuery.toLowerCase();
     return sections.filter((section) =>
-      section.nameAr.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      section.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      section.children.some((childSlug) => {
-        const child = subCategories.find((c) => c.slug === childSlug);
-        return child && (
-          child.nameAr.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          child.name.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-      })
+      section.nameAr.toLowerCase().includes(q) ||
+      section.name.toLowerCase().includes(q) ||
+      section.children.some((child) =>
+        child.nameAr.toLowerCase().includes(q) ||
+        child.name.toLowerCase().includes(q)
+      )
     );
   }, [sections, searchQuery]);
 
@@ -128,12 +125,10 @@ export default function CategorySidebar({ className = "" }: CategorySidebarProps
               const expanded = activeSection === section.slug;
 
               const matchingChildren = section.children
-                .map((childSlug) => subCategories.find((c) => c.slug === childSlug))
-                .filter(Boolean)
                 .filter((child) => {
                   if (!searchQuery) return true;
-                  return child?.nameAr.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    child?.name.toLowerCase().includes(searchQuery.toLowerCase());
+                  return child.nameAr.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    child.name.toLowerCase().includes(searchQuery.toLowerCase());
                 });
 
               return (
@@ -155,12 +150,10 @@ export default function CategorySidebar({ className = "" }: CategorySidebarProps
                         <span className="absolute inset-0 flex items-center justify-center opacity-40">
                           <Sparkles size={16} className="text-white" />
                         </span>
-                        <CategoryImageIcon
-                          slug={section.slug}
-                          size={30}
-                          rounded="rounded-lg"
-                          className="relative z-10 bg-transparent"
-                        />
+                        {(() => {
+                          const SectionIcon = taxonomyCategoryIcons[section.slug] ?? resolveTaxonomyIcon(section.icon) ?? Sparkles;
+                          return <SectionIcon size={24} className="relative z-10 text-white" />;
+                        })()}
                       </span>
                       <div className="flex min-w-0 flex-col">
                         <span className="truncate text-sm font-bold text-foreground transition-colors group-hover:text-primary">
@@ -194,21 +187,22 @@ export default function CategorySidebar({ className = "" }: CategorySidebarProps
                     <div className="overflow-hidden">
                       <ul className="flex flex-col gap-0.5 py-2 ps-4 pe-2">
                         {matchingChildren.map((child) => {
-                          const childGradient = sectionGradients[child?.slug ?? ""] || color;
+                          const childGradient = sectionGradients[child.slug] || color;
+                          const ChildIcon = taxonomyCategoryIcons[child.slug] ?? Sparkles;
                           return (
-                            <li key={child?.slug}>
+                            <li key={child.slug}>
                               <Link
-                                href={`/categories/${child?.slug}`}
+                                href={`/categories/${child.slug}`}
                                 className="group/child flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-muted transition-all duration-200 hover:bg-accent/60 hover:text-primary"
                               >
                                 <span className={`flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br ${childGradient} shadow-sm transition-transform duration-200 group-hover/child:scale-110`}>
-                                  <CategoryImageIcon slug={child?.slug ?? ""} size={22} rounded="rounded-md" />
+                                  <ChildIcon size={16} className="text-white" />
                                 </span>
                                 <span className="truncate font-semibold">
-                                  {isAr ? child?.nameAr : child?.name}
+                                  {isAr ? child.nameAr : child.name}
                                 </span>
                                 <span className="ms-auto rounded-full bg-primary/5 px-2 py-0.5 text-[10px] font-bold text-muted transition-colors group-hover/child:bg-primary/10 group-hover/child:text-primary">
-                                  {child?.productCount ?? 0}
+                                  {child.productCount}
                                 </span>
                                 <ChevronRight
                                   size={12}

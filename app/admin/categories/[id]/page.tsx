@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { notFound } from "next/navigation";
 import { LoadingState } from "@/components/admin/ui/States";
 import CategoryForm from "@/components/admin/CategoryForm";
-import { applyCategoryOverrides } from "@/src/admin/adapters/local/categories";
 import type { CategoryInfo } from "@/src/types/product";
 
 export default function AdminEditCategoryPage({
@@ -22,7 +21,7 @@ export default function AdminEditCategoryPage({
       try {
         const res = await fetch("/api/admin/categories");
         const base = (res.ok ? await res.json() : []) as CategoryInfo[];
-        const merged = applyCategoryOverrides(base);
+        const merged = base;
         const found = merged.find((c) => c.slug === id) ?? null;
         if (!cancelled) setCategory(found);
       } catch {

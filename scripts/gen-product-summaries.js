@@ -14,18 +14,51 @@ const P = "C:/Users/user/Desktop/Luminous-Final Project Hamed final";
 const PRODUCTS_PATH = path.join(P, "src/data/products.ts");
 const OUT_SUMMARIES = path.join(P, "src/data/product-summaries.ts");
 const OUT_COMPARE = path.join(P, "src/data/product-compare-details.ts");
+const OVERRIDES_PATH = path.join(P, "src/data/content/image-source-overrides.json");
 
 const src = fs.readFileSync(PRODUCTS_PATH, "utf8");
-const js = ts.transpileModule(src, {
-  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020 },
-}).outputText;
-const m = { exports: {} };
-const fn = new Function("exports", "module", "require", js);
-fn(m.exports, m, () => {
-  throw new Error("require not expected");
-});
+const overrides = JSON.parse(fs.readFileSync(OVERRIDES_PATH, "utf8")) || {};
 
-const { products, categories, sectionCategoriesMap, sectionCategories, routines } = m.exports;
+/* The split pipeline emits src/data/products.ts as an aggregator that imports
+   products-part-XX.ts modules. Transpile each part on demand and load via a
+   mini require shim so this generator works against both the single-file
+   (pre-split) and split forms. */
+const moduleCache = new Map();
+function loadTS(filePath) {
+  if (moduleCache.has(filePath)) return moduleCache.get(filePath);
+  const s = fs.readFileSync(filePath, "utf8");
+  const js = ts.transpileModule(s, {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, esModuleInterop: true },
+  }).outputText;
+  const m = { exports: {} };
+  const fn = new Function("exports", "module", "require", js);
+  fn(m.exports, m, (req) => {
+    if (req.startsWith("./") || req.startsWith("../")) {
+      const base = path.resolve(path.dirname(filePath), req);
+      for (const ext of [".ts", ".tsx", ".js", ".jsx", ".json"]) {
+        if (fs.existsSync(base + ext)) return loadTS(base + ext).exports;
+      }
+      throw new Error("Cannot resolve " + req + " from " + filePath);
+    }
+    if (req.startsWith("@/")) {
+      const resolved = path.join(P, req.replace("@/", "src/"));
+      for (const ext of [".ts", ".tsx", ".js", ".jsx", ".json"]) {
+        if (fs.existsSync(resolved + ext)) return loadTS(resolved + ext).exports;
+      }
+    }
+    // Handle specific heavy imports that the generator doesn't need at runtime
+    if (req === "@/src/lib/taxonomy/product-mappings") {
+      return { productMappings: {} };
+    }
+    // Type-only imports — nothing needed at runtime.
+    return {};
+  });
+  moduleCache.set(filePath, m);
+  return m;
+}
+
+const productsMod = loadTS(PRODUCTS_PATH);
+const { products, categories, sectionCategoriesMap, sectionCategories, routines } = productsMod.exports;
 
 if (!Array.isArray(products)) throw new Error("products not exported");
 if (!Array.isArray(routines)) throw new Error("routines not exported");
@@ -39,8 +72,15 @@ function toSummary(p) {
     "pricing", "discount", "gallery", "skinTypes", "suitableFor", "skinConcerns",
     "stock", "inStock", "rating", "reviewCount",
     "featured", "isFeatured", "new", "isNew", "isBestSeller", "isDoctorRecommended", "tags",
+    "status",
   ]) {
     if (p[k] !== undefined) out[k] = p[k];
+  }
+  // Replace gallery with Beauty Box image if override exists
+  const override = overrides[p.id];
+  if (override && override.image) {
+    out.gallery = [override.image];
+    out.heroImage = override.image;
   }
   return out;
 }
@@ -56,14 +96,24 @@ const summaries = products.map(toSummary);
 const compareDetails = {};
 for (const p of products) compareDetails[p.id] = toCompareDetail(p);
 
-/* Compact serializer: one literal per line, JSON-ish (valid TS). */
+/* Compact serializer: one literal per line, JSON-ish (valid TS).
+   Adds cosmetic spaces only at JSON delimiters (after a comma that precedes a
+   string value, and after a key's closing quote), NEVER inside string content.
+   URL protocols like https:// are left byte-identical. */
 function lit(obj) {
-  return JSON.stringify(obj).replace(/,/g, ", ").replace(/:/g, ": ");
+  const PROTO = "\uE000PROTO\uE001";
+  return JSON.stringify(obj)
+    .replace(/:\/\//g, PROTO)
+    .replace(/,"/g, ', "')
+    .replace(/":/g, '": ')
+    .replaceAll(PROTO, "://");
 }
 
 function block(name, type, items) {
-  const body = items.map((it) => `  ${lit(it)}`).join(",\n");
-  return `export const ${name}: ${type} = [\n${body},\n];\n`;
+  // JSON.parse instead of a giant array literal: avoids TS2590
+  // ("union type too complex") when tsc infers literal types for 2700+ objects.
+  const json = JSON.stringify(items).replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/\n/g, "\\n");
+  return `export const ${name}: ${type} = JSON.parse('${json}') as ${type};\n`;
 }
 
 let summariesFile = `/* GENERATED — do not edit by hand.
@@ -74,6 +124,9 @@ let summariesFile = `/* GENERATED — do not edit by hand.
 import type { ProductSummary, CategoryInfo, Routine } from "@/src/types/product";
 
 ${block("productSummaries", "ProductSummary[]", summaries)}
+export const publishedProductSummaries: ProductSummary[] = productSummaries.filter(
+  (p) => (p.status ?? "published") === "published",
+);
 ${block("categories", "CategoryInfo[]", categories)}
 ${block("sectionCategoriesMap", "{ slug: string; name: string; nameAr: string; description: string; descriptionAr: string; children: string[]; icon: string }[]", sectionCategoriesMap)}
 ${block("sectionCategories", "CategoryInfo[]", sectionCategories)}

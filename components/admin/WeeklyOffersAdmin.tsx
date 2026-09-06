@@ -165,10 +165,20 @@ export default function WeeklyOffersAdmin() {
     apply();
   }, []);
 
-  const handleSave = () => {
-    saveConfig(config);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+  const [saving, setSaving] = useState(false);
+
+  const handleSave = async () => {
+    if (saving) return;
+    setSaving(true);
+    try {
+      await saveConfig(config);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      toast((err as Error).message || "فشل حفظ إعدادات العروض", "error");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleRegenerate = () => {

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 210" fill="none" role="img" aria-label="Luminous Derma">
+  <defs>
+    <linearGradient id="hairGradV" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#322144"/>
+      <stop offset="50%" stop-color="#4A306F"/>
+      <stop offset="100%" stop-color="#6B3FA0"/>
+    </linearGradient>
+    <linearGradient id="ringGradV" x1="0" y1="0" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#F7D98C"/>
+    </linearGradient>
+    <linearGradient id="dropGradV" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#F7D98C"/>
+      <stop offset="100%" stop-color="#D4AF37"/>
+    </linearGradient>
+    <linearGradient id="leafGradV" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#F7D98C"/>
+    </linearGradient>
+    <linearGradient id="sparkleGradV" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#F7D98C"/>
+      <stop offset="100%" stop-color="#D4AF37"/>
+    </linearGradient>
+    <linearGradient id="wordGradV" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#322144"/>
+      <stop offset="35%" stop-color="#4A306F"/>
+      <stop offset="60%" stop-color="#B87FB0"/>
+      <stop offset="100%" stop-color="#D4AF37"/>
+    </linearGradient>
+    <linearGradient id="dermaGradV" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#F7D98C"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ICON — centered top (80x80, centered at x=56) -->
+  <g transform="translate(56, 8) scale(0.85)">
+    <path d="M64 12 C86 12 104 28 104 48 C104 68 86 84 64 84 C42 84 24 68 24 48 C24 28 42 12 64 12" stroke="url(#ringGradV)" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <path d="M24 48 C24 28 42 12 64 12" stroke="url(#ringGradV)" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.25"/>
+    <path d="M54 28 C60 28 66 31 68 37 C72 46 72 56 66 62 C59 69 48 72 40 70 C34 68 30 62 28 54 C26 46 28 36 34 30 C40 24 48 24 54 28 Z" fill="url(#hairGradV)"/>
+    <path d="M60 30 C68 28 76 30 80 36 C86 44 88 54 84 62 C80 70 72 74 62 72 C54 70 48 64 44 56 C40 48 40 38 46 32 C52 26 56 24 60 30 Z" fill="url(#hairGradV)" opacity="0.7"/>
+    <path d="M38 70 C36 76 32 82 28 86 C24 90 18 92 14 90 C10 88 8 82 10 76 C12 70 16 66 22 64 C28 62 34 64 38 70 Z" fill="url(#hairGradV)" opacity="0.85"/>
+    <ellipse cx="12" cy="78" rx="4.5" ry="5.5" fill="url(#dropGradV)"/>
+    <ellipse cx="11" cy="76" rx="1.5" ry="2" fill="#FFF7F2" opacity="0.6"/>
+    <g fill="url(#sparkleGradV)"><path d="M70 18 L71 21 L74 21 L71.5 23 L72.5 26 L70 24 L67.5 26 L68.5 23 L66 21 L69 21 Z"/></g>
+    <g fill="url(#sparkleGradV)" transform="translate(18,90)"><path d="M0 0 Q-4 -8 -2 -14 Q0 -18 2 -14 Q6 -8 0 0 Z"/><path d="M0 0 Q3 -6 1 -10 Q-1 -14 -3 -10 Q-5 -6 0 0 Z" transform="translate(4,-2) scale(0.7) rotate(-20)"/><path d="M0 0 Q3 -6 1 -10 Q-1 -14 -3 -10 Q-5 -6 0 0 Z" transform="translate(-2,-6) scale(0.55) rotate(25)"/></g>
+  </g>
+
+  <!-- WORDMARK — centered below icon -->
+  <text x="120" y="145" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-weight="700" font-size="42" fill="url(#wordGradV)" letter-spacing="-0.02em">Luminous</text>
+  <g>
+    <line x1="58" y1="158" x2="88" y2="158" stroke="#D4AF37" stroke-width="1.2" stroke-linecap="round"/>
+    <text x="120" y="172" text-anchor="middle" font-family="'Montserrat', Arial, sans-serif" font-weight="600" font-size="16" fill="url(#dermaGradV)" letter-spacing="0.32em">DERMA</text>
+    <line x1="152" y1="158" x2="182" y2="158" stroke="#D4AF37" stroke-width="1.2" stroke-linecap="round"/>
+  </g>
+</svg>

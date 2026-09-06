@@ -1,3 +1,7 @@
+export const WHATSAPP_NUMBER = "967780015305";
+export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
+export const WHATSAPP_PHONE_DISPLAY = "+967 780 015 305";
+
 export const siteConfig = {
   name: {
     ar: "لومينوس ديرما",
@@ -14,7 +18,7 @@ export const siteConfig = {
   logo: "/images/logo/luminous-derma-full-logo.svg",
   favicon: "/favicon.ico",
   contact: {
-    phone: "+967 771 234 567",
+    phone: WHATSAPP_PHONE_DISPLAY,
     email: "hello@luminousderma.com",
     address: {
       ar: "صنعاء، اليمن",
@@ -22,11 +26,11 @@ export const siteConfig = {
     },
   },
   socialLinks: [
-    { platform: "instagram", url: "https://instagram.com/luminousderma", icon: "instagram" },
+    { platform: "instagram", url: "https://www.instagram.com/luminousderma.ye/", icon: "instagram" },
+    { platform: "facebook", url: "https://www.facebook.com/luminousderma.ye", icon: "facebook" },
     { platform: "tiktok", url: "https://tiktok.com/@luminousderma", icon: "tiktok" },
-    { platform: "snapchat", url: "https://snapchat.com/add/luminousderma", icon: "snapchat" },
     { platform: "youtube", url: "https://youtube.com/@luminousderma", icon: "youtube" },
-    { platform: "whatsapp", url: "https://wa.me/967771234567", icon: "whatsapp" },
+    { platform: "whatsapp", url: WHATSAPP_URL, icon: "whatsapp" },
   ],
   businessHours: {
     ar: "الأحد - الخميس: 9 صباحاً - 10 مساءً",

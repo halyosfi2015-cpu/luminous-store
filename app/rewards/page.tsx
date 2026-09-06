@@ -18,10 +18,10 @@ export default function RewardsPage() {
 
   const currentTier = tierConfig.find((t) => t.key === tier);
 
-  const handleRedeem = (rewardId: string) => {
+  const handleRedeem = async (rewardId: string) => {
     const reward = rewards.find((r) => r.id === rewardId);
     if (!reward) return;
-    const ok = redeemReward(reward);
+    const ok = await redeemReward(reward);
     if (ok) {
       const code = `LD-${rewardId.toUpperCase()}-${(Object.keys(claimed).length + 1).toString().padStart(4, "0")}`;
       setClaimed((prev) => ({ ...prev, [rewardId]: code }));

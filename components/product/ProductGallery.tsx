@@ -54,6 +54,7 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
             src={images[selected]}
             alt={`${name} - ${selected + 1}`}
             productId={name}
+            variant="clean"
             hoverZoom={false}
             pedestal
             className="absolute inset-0 h-full w-full"
@@ -101,15 +102,15 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
               }`}
             >
                 <div className="relative h-16 w-16 sm:h-20 sm:w-20">
-                  <ProductImage
-                    src={src}
-                    alt=""
-                    productId={`thumb-${i}`}
-                    variant="soft"
-                    hoverZoom={false}
-                    pedestal={false}
-                    className="absolute inset-0 h-full w-full"
-                  />
+<ProductImage
+                      src={src}
+                      alt=""
+                      productId={`thumb-${i}`}
+                      variant="clean"
+                      hoverZoom={false}
+                      pedestal={false}
+                      className="absolute inset-0 h-full w-full"
+                    />
                 </div>
             </button>
           ))}

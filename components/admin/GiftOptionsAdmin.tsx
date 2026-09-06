@@ -12,11 +12,7 @@ import {
 } from "@/components/admin/ui/States";
 import ConfirmDialog from "@/components/admin/ui/ConfirmDialog";
 import { useAdminToast } from "@/components/admin/ui/AdminToast";
-import { saveGiftOptions, type GiftOption } from "@/src/data/bundles-admin";
-import {
-  listGiftOptions,
-  removeGiftOptionLocal,
-} from "@/src/admin/adapters/local/bundles";
+import type { GiftOption } from "@/src/data/bundles-admin";
 
 const emptyForm = {
   labelAr: "",
@@ -51,15 +47,16 @@ export default function GiftOptionsAdmin() {
     (async () => {
       try {
         const res = await fetch("/api/admin/gift-options");
-        const list = res.ok ? await res.json() : listGiftOptions();
+        if (!res.ok) throw new Error(String(res.status));
+        const list = await res.json();
         if (!cancelled) {
           setOptions(Array.isArray(list) ? list : []);
           setError(false);
         }
       } catch {
         if (!cancelled) {
-          setOptions(listGiftOptions());
-          setError(false);
+          setOptions([]);
+          setError(true);
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -78,7 +75,6 @@ export default function GiftOptionsAdmin() {
 
   const persist = (next: GiftOption[]) => {
     setOptions(next);
-    saveGiftOptions(next);
     fetch("/api/admin/gift-options", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -160,7 +156,6 @@ export default function GiftOptionsAdmin() {
     if (deleting || !deleteId) return;
     setDeleting(true);
     setOptions((prev) => prev.filter((o) => o.id !== deleteId));
-    removeGiftOptionLocal(deleteId);
     fetch(`/api/admin/gift-options/${encodeURIComponent(deleteId)}`, {
       method: "DELETE",
     })

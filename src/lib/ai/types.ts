@@ -1,6 +1,6 @@
 import type { AnalyticsRange } from '@/src/lib/analytics/types'
 
-export type AIScope = 'commerce' | 'customer' | 'product'
+export type AIScope = 'commerce' | 'customer' | 'product' | 'content' | 'merchandising'
 
 export type AIProviderName = 'openai' | 'openai-compatible'
 
@@ -86,6 +86,8 @@ export interface AIRequestInput {
   range: AnalyticsRange
   customerId?: string | null
   productId?: string | null
+  contentType?: 'description' | 'title' | 'tag' | 'feature'
+  targetId?: string | null
 }
 
 export interface AIAskResult {

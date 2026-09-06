@@ -1,12 +1,12 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import ProductImage from "@/components/product/ProductImage";
 import { useParams } from "next/navigation";
 import { Sparkles, CheckCircle, Star, ArrowLeft } from "lucide-react";
 import Container from "@/components/ui/Container";
-import { productSummaries as products } from "@/src/data/product-summaries";
+import { publishedProductSummaries as products } from "@/src/data/product-summaries";
 import { useLang } from "@/lib/use-lang";
 import type { SkinConcern } from "@/types/product";
 
@@ -93,14 +93,66 @@ export default function ProblemPage() {
   const { lang } = useLang();
   const isAr = lang === "ar";
   const concern = (params?.concern || "acne") as SkinConcern;
-  const info = PROBLEM_INFO[concern] || PROBLEM_INFO.acne;
+  const defaultInfo = PROBLEM_INFO[concern] || PROBLEM_INFO.acne;
+
+  const [adminInfo, setAdminInfo] = useState<typeof defaultInfo | null>(null);
+  const [adminImage, setAdminImage] = useState<string | null>(null);
 
   const recommended = useMemo(() => {
     return products
-      .filter((p) => p.skinConcerns?.includes(concern))
+      .filter((p) => p.skinConcerns?.includes(concern) && p.gallery?.[0])
       .sort((a, b) => (b.isBestSeller ? 1 : 0) - (a.isBestSeller ? 1 : 0))
       .slice(0, 8);
   }, [concern]);
+  const [productOverride, setProductOverride] = useState<{ pinned?: string[]; excluded?: string[] } | undefined>();
+
+  // Fetch admin overrides: productOverrides + concern info
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/content/problemSolutions", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+      .then((d) => {
+        if (cancelled) return;
+        if (d.productOverrides && typeof d.productOverrides === "object") {
+          setProductOverride(d.productOverrides[concern]);
+        }
+        if (Array.isArray(d.items)) {
+          const item = d.items.find((it: any) => it.id === concern);
+          if (item) {
+            setAdminInfo({
+              labelAr: item.labelAr || item.id,
+              labelEn: item.labelEn || item.id,
+              emoji: item.emoji || "🔍",
+              descAr: item.descAr || "",
+              descEn: item.descEn || "",
+              routineAr: item.routineAr ?? [],
+              routineEn: item.routineEn ?? [],
+            });
+            if (item.image) setAdminImage(item.image);
+          }
+        }
+      })
+      .catch(() => {});
+    return () => { cancelled = true };
+  }, [concern]);
+
+  const info = adminInfo || defaultInfo;
+  const heroImage = adminImage || PROBLEM_IMAGES[concern] || PROBLEM_IMAGES.acne;
+
+  const finalProducts = useMemo(() => {
+    const base = recommended;
+    const ov = productOverride;
+    if (!ov || (!ov.pinned?.length && !ov.excluded?.length)) return base;
+    const excluded = new Set(ov.excluded ?? []);
+    const filtered = base.filter((p) => !excluded.has(p.slug));
+    const pinnedSet = new Set(ov.pinned ?? []);
+    const rest = filtered.filter((p) => !pinnedSet.has(p.slug));
+    // Pinned products may come from outside the automatic skinConcerns top-8.
+    const pinned = (ov.pinned ?? [])
+      .map((slug) => products.find((p) => p.slug === slug))
+      .filter((p): p is (typeof products)[0] => Boolean(p));
+    return [...pinned, ...rest].slice(0, 8);
+  }, [recommended, productOverride, products]);
 
   return (
     <div dir="rtl" className="w-full pb-16">
@@ -109,18 +161,17 @@ export default function ProblemPage() {
         <div className="relative mt-4 h-44 overflow-hidden rounded-2xl sm:h-52">
           {/* Real condition image */}
           <ProductImage
-            src={PROBLEM_IMAGES[concern] || PROBLEM_IMAGES.acne}
+            src={heroImage}
             alt={info.labelAr}
             productId={concern}
-            variant="soft"
+            variant="clean"
             hoverZoom={false}
             pedestal={false}
             className="absolute inset-0"
             sizes="(max-width: 768px) 100vw, 60vw"
             objectPosition="center 70%"
           />
-          {/* Brand color overlay */}
-          <div className="absolute inset-0 bg-gradient-to-l from-primary/90 via-primary/60 to-primary-light/40" />
+          {/* Brand color overlay removed for clear product visibility */}
 
           {/* Decorative */}
           <div className="pointer-events-none absolute -end-10 -top-10 h-32 w-32 rounded-full bg-white/10 blur-xl" />
@@ -139,7 +190,7 @@ export default function ProblemPage() {
             </div>
             <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-[11px] font-bold text-white backdrop-blur-sm">
               <Sparkles size={11} className="text-amber-200" />
-              {isAr ? `${recommended.length} منتج لكِ` : `${recommended.length} picks`}
+              {isAr ? `${finalProducts.length} منتج لكِ` : `${finalProducts.length} picks`}
             </span>
           </div>
         </div>
@@ -187,24 +238,25 @@ export default function ProblemPage() {
           </div>
 
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {recommended.map((product) => (
+            {finalProducts.map((product) => (
               <Link
                 key={product.id}
                 href={`/products/${product.slug}`}
                 className="group overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:border-primary/30"
               >
                 <div className="relative aspect-square overflow-hidden bg-gray-50">
-                  {product.gallery[0] && (
-                    <ProductImage
-                      src={product.gallery[0]}
-                      alt={product.name.ar}
-                      productId={product.id}
-                      hoverZoom
-                      pedestal
-                      className="absolute inset-0"
-                      sizes="(max-width: 640px) 50vw, 25vw"
-                    />
-                  )}
+{product.gallery[0] && (
+                      <ProductImage
+                        src={product.gallery[0]}
+                        alt={product.name.ar}
+                        productId={product.id}
+                        variant="clean"
+                        hoverZoom
+                        pedestal
+                        className="absolute inset-0"
+                        sizes="(max-width: 640px) 50vw, 25vw"
+                      />
+                    )}
                   {product.isBestSeller && (
                     <span className="absolute top-2.5 start-2.5 inline-flex items-center gap-1 rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm">
                       <Star size={9} className="fill-current" />

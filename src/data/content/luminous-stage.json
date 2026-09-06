@@ -1,0 +1,401 @@
+{
+  "slides": [
+    {
+      "id": "luminous-bestsellers",
+      "kind": "best-sellers",
+      "eyebrowAr": "اختيارات النساء",
+      "eyebrowEn": "Most Wanted",
+      "headlineAr": "الأكثر مبيعًا",
+      "headlineEn": "Best Sellers",
+      "subAr": "منتجات أثبتت نفسها بين عملائنا",
+      "subEn": "Proven favorites our customers keep coming back to",
+      "ctaAr": "تسوقي الأكثر مبيعًا",
+      "ctaEn": "Shop Best Sellers",
+      "ctaHref": "/products",
+      "accent": "#b06a3b",
+      "bg": "linear-gradient(165deg,#fdf6f0 0%,#f7e6da 55%,#eed3c0 100%)",
+      "products": [
+        {
+          "id": "yq-2781"
+        },
+        {
+          "id": "yq-2485"
+        },
+        {
+          "id": "yq-1680"
+        }
+      ],
+      "hidden": false,
+      "slideType": "template"
+    },
+    {
+      "id": "luminous-routine",
+      "kind": "routine",
+      "eyebrowAr": "باقات وروتينات",
+      "eyebrowEn": "Routines & Bundles",
+      "headlineAr": "روتينكِ المتكامل",
+      "headlineEn": "Your Complete Routine",
+      "subAr": "خطوات مختارة تكمل بعضها لنتيجة أفضل",
+      "subEn": "Complementary steps designed to work together",
+      "ctaAr": "اكتشفي الروتين",
+      "ctaEn": "View Routine",
+      "ctaHref": "/routines",
+      "accent": "#33705e",
+      "bg": "linear-gradient(165deg,#f5faf7 0%,#e9f2ec 55%,#dbeae0 100%)",
+      "products": [
+        {
+          "id": "yq-754"
+        },
+        {
+          "id": "yq-1660"
+        },
+        {
+          "id": "yq-129"
+        }
+      ],
+      "hidden": false,
+      "slideType": "custom-image",
+      "customImage": "/images/hero/slide-15-custom.jpeg"
+    },
+    {
+      "id": "luminous-serums",
+      "kind": "collection",
+      "eyebrowAr": "تركيز عالي",
+      "eyebrowEn": "High Potency",
+      "headlineAr": "قوة السيروم",
+      "headlineEn": "The Power of Serums",
+      "subAr": "تركيبات فعّالة تستهدف بشرتك بدقة",
+      "subEn": "Targeted actives that speak to your skin",
+      "ctaAr": "تسوقي السيروم",
+      "ctaEn": "Shop Serums",
+      "ctaHref": "/categories/serums",
+      "accent": "#6d5aa8",
+      "bg": "linear-gradient(165deg,#f6f4fc 0%,#ebe6f6 55%,#ddd3ee 100%)",
+      "products": [
+        {
+          "id": "yq-2788"
+        },
+        {
+          "id": "yq-2707"
+        },
+        {
+          "id": "yq-1655"
+        }
+      ],
+      "hidden": false,
+      "slideType": "template"
+    },
+    {
+      "id": "luminous-brands",
+      "kind": "brand",
+      "eyebrowAr": "من العلامات العالمية",
+      "eyebrowEn": "Global Icons",
+      "headlineAr": "علامات عالمية موثوقة",
+      "headlineEn": "Trusted Global Brands",
+      "subAr": "الأكثر طلبًا من ماركات عالمية أصلية",
+      "subEn": "Best-loved essentials from authentic international brands",
+      "ctaAr": "تصفحي الماركات",
+      "ctaEn": "Browse Brands",
+      "ctaHref": "/brands",
+      "accent": "#3b5b86",
+      "bg": "linear-gradient(165deg,#f3f6fb 0%,#e7edf6 55%,#dae4f0 100%)",
+      "products": [
+        {
+          "id": "yq-2707"
+        },
+        {
+          "id": "yq-2380"
+        },
+        {
+          "id": "yq-1012"
+        }
+      ],
+      "hidden": false,
+      "slideType": "custom-image",
+      "customImage": "/images/hero/slide-16-custom.jpeg"
+    },
+    {
+      "id": "luminous-hair",
+      "kind": "category",
+      "eyebrowAr": "مجموعة كاملة",
+      "eyebrowEn": "Full Collection",
+      "headlineAr": "عناية الشعر",
+      "headlineEn": "Hair Care Collection",
+      "subAr": "من الغسول إلى العلاجات — كل ما يحتاجه شعرك",
+      "subEn": "From cleanse to treatment — everything your hair needs",
+      "ctaAr": "تسوقي المجموعة",
+      "ctaEn": "Shop Collection",
+      "ctaHref": "/categories/haircare",
+      "accent": "#8a5f33",
+      "bg": "linear-gradient(165deg,#fdfaf3 0%,#f6ecd8 55%,#eedfc0 100%)",
+      "products": [
+        {
+          "id": "yq-2556"
+        },
+        {
+          "id": "yq-2759"
+        },
+        {
+          "id": "yq-2605"
+        }
+      ],
+      "hidden": false,
+      "slideType": "template"
+    },
+    {
+      "id": "luminous-body",
+      "kind": "category",
+      "eyebrowAr": "مجموعة كاملة",
+      "eyebrowEn": "Full Collection",
+      "headlineAr": "عناية الجسم",
+      "headlineEn": "Body Care Collection",
+      "subAr": "ترطيب وتنظيف ولمسة فاخرة من الرأس للقدم",
+      "subEn": "Hydration and care — head to toe",
+      "ctaAr": "تسوقي المجموعة",
+      "ctaEn": "Shop Collection",
+      "ctaHref": "/categories/body-care",
+      "accent": "#a06a4f",
+      "bg": "linear-gradient(165deg,#faf5f0 0%,#f2e5da 55%,#e9d6c6 100%)",
+      "products": [
+        {
+          "id": "yq-2688"
+        },
+        {
+          "id": "yq-2215"
+        },
+        {
+          "id": "yq-2767"
+        }
+      ],
+      "hidden": false,
+      "slideType": "template"
+    },
+    {
+      "id": "luminous-perfume",
+      "kind": "category",
+      "eyebrowAr": "عالم العطور",
+      "eyebrowEn": "Fragrance World",
+      "headlineAr": "عطور تُروى كالحكايات",
+      "headlineEn": "Fragrances That Tell Stories",
+      "subAr": "عطور نسائية ورجالية من دور عطور عالمية",
+      "subEn": "Women's and men's fragrances from world houses",
+      "ctaAr": "اكتشفي العطور",
+      "ctaEn": "Discover Scents",
+      "ctaHref": "/categories/perfume",
+      "accent": "#8d5b9e",
+      "bg": "linear-gradient(165deg,#fbf5fb 0%,#f3e6f3 55%,#ead4ea 100%)",
+      "products": [
+        {
+          "id": "yq-1755"
+        },
+        {
+          "id": "yq-1386"
+        },
+        {
+          "id": "yq-1047"
+        }
+      ],
+      "hidden": false,
+      "slideType": "template"
+    },
+    {
+      "id": "luminous-bakhoor",
+      "kind": "campaign",
+      "eyebrowAr": "بخور وعود",
+      "eyebrowEn": "Bakhoor & Oud",
+      "headlineAr": "دفء البخور وفخامة العود",
+      "headlineEn": "Warm Bakhoor, Luxurious Oud",
+      "subAr": "تشكيلة شرقية أصيلة تدوم طويلًا",
+      "subEn": "An authentic oriental selection that lasts",
+      "ctaAr": "تسوقي البخور",
+      "ctaEn": "Shop Bakhoor",
+      "ctaHref": "/categories/bakhoor-oud",
+      "accent": "#96652f",
+      "bg": "linear-gradient(165deg,#faf3ec 0%,#f0dfc9 55%,#e4cba6 100%)",
+      "products": [
+        {
+          "id": "yq-2774"
+        },
+        {
+          "id": "yq-2773"
+        },
+        {
+          "id": "yq-1968"
+        }
+      ],
+      "hidden": false,
+      "slideType": "template"
+    },
+    {
+      "id": "luminous-makeup",
+      "kind": "category",
+      "eyebrowAr": "جمالكِ يبدأ هنا",
+      "eyebrowEn": "Beauty Starts Here",
+      "headlineAr": "مكياج بإطلالة احترافية",
+      "headlineEn": "Professional Makeup Looks",
+      "subAr": "أساس وأحمر شفاه ومكياج عيون بألوان ثابتة",
+      "subEn": "Foundation, lipstick and eye makeup in lasting shades",
+      "ctaAr": "تسوقي المكياج",
+      "ctaEn": "Shop Makeup",
+      "ctaHref": "/categories/makeup",
+      "accent": "#b04a68",
+      "bg": "linear-gradient(165deg,#fef2f5 0%,#fadfe7 55%,#f3cbd8 100%)",
+      "products": [
+        {
+          "id": "yq-2772"
+        },
+        {
+          "id": "yq-1524"
+        },
+        {
+          "id": "yq-2756"
+        }
+      ],
+      "hidden": false,
+      "slideType": "template",
+      "showBrandMark": true
+    },
+    {
+      "id": "luminous-eye",
+      "kind": "category",
+      "eyebrowAr": "نظرة تأسر",
+      "eyebrowEn": "Eye Care",
+      "headlineAr": "عناية محيط العين",
+      "headlineEn": "Eye Area Essentials",
+      "subAr": "كريمات وسيروم لتفتيح وانتعاش محيط العين",
+      "subEn": "Creams and serums for brighter, rested eyes",
+      "ctaAr": "تسوقي العناية",
+      "ctaEn": "Shop Eye Care",
+      "ctaHref": "/categories/eye-care",
+      "accent": "#3d7c8c",
+      "bg": "linear-gradient(165deg,#f4f9fa 0%,#e4f0f2 55%,#d3e5ea 100%)",
+      "products": [
+        {
+          "id": "yq-2358"
+        },
+        {
+          "id": "yq-1217"
+        },
+        {
+          "id": "yq-2351"
+        }
+      ],
+      "hidden": true,
+      "slideType": "template",
+      "stageMood": "clinical-lavender"
+    },
+    {
+      "id": "luminous-nail",
+      "kind": "category",
+      "eyebrowAr": "تفاصيل أنيقة",
+      "eyebrowEn": "Fine Details",
+      "headlineAr": "عناية الأظافر",
+      "headlineEn": "Nail Care Rituals",
+      "subAr": "زيوت وأدوات تقوّي وتجمّل أظافركِ",
+      "subEn": "Oils and tools that strengthen and beautify",
+      "ctaAr": "تسوقي العناية",
+      "ctaEn": "Shop Nail Care",
+      "ctaHref": "/categories/nail-care",
+      "accent": "#c26a52",
+      "bg": "linear-gradient(165deg,#fdf4f0 0%,#f8e3da 55%,#f0cec0 100%)",
+      "products": [
+        {
+          "id": "yq-1000"
+        },
+        {
+          "id": "yq-2700"
+        },
+        {
+          "id": "yq-1001"
+        }
+      ],
+      "hidden": false,
+      "slideType": "template"
+    },
+    {
+      "id": "luminous-supplements",
+      "kind": "collection",
+      "eyebrowAr": "جمال من الداخل",
+      "eyebrowEn": "Beauty From Within",
+      "headlineAr": "الفيتامينات والمكملات",
+      "headlineEn": "Vitamins & Supplements",
+      "subAr": "دعم يومي لبشرتك وشعرك وصحتك العامة",
+      "subEn": "Daily support for skin, hair and wellbeing",
+      "ctaAr": "تسوقي المكملات",
+      "ctaEn": "Shop Supplements",
+      "ctaHref": "/categories/vitamins",
+      "accent": "#57804a",
+      "bg": "linear-gradient(165deg,#f4faf4 0%,#e5f1e3 55%,#d3e6cf 100%)",
+      "products": [
+        {
+          "id": "yq-2713"
+        },
+        {
+          "id": "yq-2768"
+        },
+        {
+          "id": "yq-2766"
+        }
+      ],
+      "hidden": false,
+      "slideType": "template"
+    },
+    {
+      "id": "luminous-oral",
+      "kind": "category",
+      "eyebrowAr": "ابتسامتكِ أهم",
+      "eyebrowEn": "Your Smile Matters",
+      "headlineAr": "عناية الفم والأسنان",
+      "headlineEn": "Oral & Dental Care",
+      "subAr": "معجون وغسول ومنتجات تبييض موثوقة",
+      "subEn": "Trusted toothpaste, rinses and whitening care",
+      "ctaAr": "تسوقي العناية",
+      "ctaEn": "Shop Oral Care",
+      "ctaHref": "/categories/oral-care",
+      "accent": "#2e7d95",
+      "bg": "linear-gradient(165deg,#f2fafc 0%,#e2f1f6 55%,#d2e7ef 100%)",
+      "products": [
+        {
+          "id": "yq-2008"
+        },
+        {
+          "id": "yq-1029"
+        },
+        {
+          "id": "yq-122",
+          "rotate": 0
+        }
+      ],
+      "hidden": false,
+      "slideType": "template"
+    },
+    {
+      "id": "luminous-trending",
+      "kind": "new-arrivals",
+      "eyebrowAr": "جديد ورائج",
+      "eyebrowEn": "New & Trending",
+      "headlineAr": "وصل حديثًا",
+      "headlineEn": "Just Arrived",
+      "subAr": "أحدث الإضافات والأكثر رواجًا الآن",
+      "subEn": "The latest arrivals everyone is talking about",
+      "ctaAr": "اكتشفي الجديد",
+      "ctaEn": "Discover New",
+      "ctaHref": "/new-arrivals",
+      "accent": "#ad4d68",
+      "bg": "linear-gradient(165deg,#fdf3f5 0%,#f8e2e8 55%,#f1d2db 100%)",
+      "products": [
+        {
+          "id": "yq-2208"
+        },
+        {
+          "id": "yq-2558"
+        },
+        {
+          "id": "yq-59"
+        }
+      ],
+      "hidden": true,
+      "slideType": "template"
+    }
+  ]
+}

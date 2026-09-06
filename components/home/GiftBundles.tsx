@@ -6,7 +6,8 @@ import { Gift, Package, ArrowLeft, Sparkles } from "lucide-react";
 import AutoProductStrip from "@/components/home/AutoProductStrip";
 import Container from "@/components/ui/Container";
 import { getBundleProducts } from "@/src/data/bundles";
-import { listBundles } from "@/src/admin/adapters/local/bundles";
+import { useEffect } from "react";
+import { fetchCanonicalBundles } from "@/src/lib/canonical-bundles";
 import type { Bundle, BundleOccasion } from "@/src/types/bundle";
 import { useLang } from "@/lib/use-lang";
 
@@ -124,7 +125,12 @@ export default function GiftBundles() {
   const isAr = lang === "ar";
   const [activeTab, setActiveTab] = useState<string>("all");
   const [activeSubTab, setActiveSubTab] = useState<string>("all");
-  const [allBundles] = useState<Bundle[]>(() => listBundles());
+  const [allBundles, setAllBundles] = useState<Bundle[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    fetchCanonicalBundles().then((d) => { if (!cancelled) setAllBundles(d.bundles); });
+    return () => { cancelled = true; };
+  }, []);
 
   const filteredBundles = useMemo(() => {
     if (activeTab === "all") return allBundles;

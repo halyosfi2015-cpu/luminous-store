@@ -5,7 +5,7 @@ import { Package, X, Search, CheckCircle, Truck, Clock, XCircle } from "lucide-r
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { useLang } from "@/lib/use-lang";
-import type { Order } from "@/types/cart";
+import { createBrowserSupabaseClient } from "@/src/lib/supabase";
 
 function formatPrice(amount: number): string {
   return amount.toLocaleString("ar-YE");
@@ -43,34 +43,42 @@ const statusDescriptions: Record<string, string> = {
   cancelled: "تم إلغاء طلبك.",
 };
 
-function normalizeDigits(value: string): string {
-  return value.replace(/\D/g, "");
-}
+type OrderRow = { id: string; order_number: string; status: string; total: number; created_at: string };
+type OrderItemRow = { product_name_ar: string; quantity: number; unit_price: number; total_price: number };
 
 export default function TrackOrderModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { lang } = useLang();
   const isAr = lang === "ar";
   const [orderId, setOrderId] = useState("");
-  const [phone, setPhone] = useState("");
-  const [result, setResult] = useState<Order | null>(null);
+  const [result, setResult] = useState<{ order: OrderRow; items: OrderItemRow[] } | null>(null);
   const [searched, setSearched] = useState(false);
 
   if (!open) return null;
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     setSearched(false);
     const id = orderId.trim().toUpperCase();
-    const phoneDigits = normalizeDigits(phone);
     try {
-      const stored = localStorage.getItem("luminous-orders");
-      const orders: Order[] = stored ? JSON.parse(stored) : [];
-      const found = orders.find(
-        (o) =>
-          o.id.toUpperCase() === id &&
-          normalizeDigits(o.address?.phone ?? "") === phoneDigits
-      );
-      setResult(found || null);
+      const supabase = createBrowserSupabaseClient();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) { setResult(null); setSearched(true); return; }
+      const { data: customer } = await supabase.from("customers" as never).select("id").eq("auth_id", session.user.id).single();
+      if (!customer) { setResult(null); setSearched(true); return; }
+      const customerId = (customer as { id: string }).id;
+      const { data: orderData } = await supabase
+        .from("orders" as never)
+        .select("id, order_number, status, total, created_at")
+        .eq("order_number", id)
+        .eq("customer_id", customerId)
+        .single();
+      if (!orderData) { setResult(null); setSearched(true); return; }
+      const orderRow = orderData as OrderRow;
+      const { data: itemRows } = await supabase
+        .from("order_items" as never)
+        .select("product_name_ar, quantity, unit_price, total_price")
+        .eq("order_id", orderRow.id);
+      setResult({ order: orderRow, items: (itemRows ?? []) as OrderItemRow[] });
       setSearched(true);
     } catch {
       setResult(null);
@@ -116,15 +124,6 @@ export default function TrackOrderModal({ open, onClose }: { open: boolean; onCl
               </p>
               <form onSubmit={handleSearch} className="flex flex-col gap-3">
                 <Input
-                  label={isAr ? "رقم الهاتف" : "Phone number"}
-                  type="tel"
-                  dir="ltr"
-                  required
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder={isAr ? "مثال: 0777123456" : "e.g. 0777123456"}
-                />
-                <Input
                   label={isAr ? "رقم الطلب" : "Order number"}
                   dir="ltr"
                   required
@@ -143,8 +142,8 @@ export default function TrackOrderModal({ open, onClose }: { open: boolean; onCl
                   <X size={16} className="mt-0.5 shrink-0" />
                   <span>
                     {isAr
-                      ? "لم نعثر على طلب مطابق. تحقق من رقم الهاتف ورقم الطلب وحاول مجدداً."
-                      : "No matching order found. Please check your phone and order number and try again."}
+                      ? "لم نعثر على طلب مطابق. تحقق من رقم الطلب وحاول مجدداً."
+                      : "No matching order found. Please check your order number and try again."}
                   </span>
                 </div>
               )}
@@ -153,27 +152,27 @@ export default function TrackOrderModal({ open, onClose }: { open: boolean; onCl
             <div className="rounded-card border border-border bg-background p-4">
               {/* Status */}
               <div className="mb-4 flex flex-col items-center gap-2 border-b border-border pb-4 text-center">
-                <span className={`flex h-10 w-10 items-center justify-center rounded-full ${statusColors[result.status] || statusColors.pending}`}>
-                  {statusIcons[result.status] || statusIcons.pending}
+                <span className={`flex h-10 w-10 items-center justify-center rounded-full ${statusColors[result.order.status] || statusColors.pending}`}>
+                  {statusIcons[result.order.status] || statusIcons.pending}
                 </span>
-                <span className={`rounded-full px-3 py-1 text-xs font-bold ${statusColors[result.status] || statusColors.pending}`}>
-                  {statusLabels[result.status] || result.status}
+                <span className={`rounded-full px-3 py-1 text-xs font-bold ${statusColors[result.order.status] || statusColors.pending}`}>
+                  {statusLabels[result.order.status] || result.order.status}
                 </span>
                 <p className="text-xs leading-relaxed text-muted">
-                  {statusDescriptions[result.status] || statusDescriptions.pending}
+                  {statusDescriptions[result.order.status] || statusDescriptions.pending}
                 </p>
                 <span className="text-[11px] font-semibold text-muted/80">
-                  {result.id}
+                  {result.order.order_number}
                 </span>
               </div>
 
               {/* Items */}
               <div className="mb-3 space-y-2">
                 <p className="text-xs font-semibold text-foreground">{isAr ? "المنتجات" : "Items"}</p>
-                {result.items.map((item) => (
-                  <div key={item.productId} className="flex items-center justify-between text-sm">
-                    <span className="truncate ps-1 text-foreground">{item.nameAr} × {item.quantity}</span>
-                    <span className="shrink-0 font-medium text-foreground">{formatPrice(item.price * item.quantity)} {isAr ? "ر.ي" : "YER"}</span>
+                {result.items.map((item, idx) => (
+                  <div key={idx} className="flex items-center justify-between text-sm">
+                    <span className="truncate ps-1 text-foreground">{item.product_name_ar} × {item.quantity}</span>
+                    <span className="shrink-0 font-medium text-foreground">{formatPrice(item.total_price)} {isAr ? "ر.ي" : "YER"}</span>
                   </div>
                 ))}
               </div>
@@ -182,10 +181,10 @@ export default function TrackOrderModal({ open, onClose }: { open: boolean; onCl
               <div className="border-t border-border pt-3 text-sm">
                 <div className="flex justify-between font-semibold text-foreground">
                   <span>{isAr ? "الإجمالي" : "Total"}</span>
-                  <span>{formatPrice(result.total)} {isAr ? "ر.ي" : "YER"}</span>
+                  <span>{formatPrice(result.order.total)} {isAr ? "ر.ي" : "YER"}</span>
                 </div>
                 <p className="mt-2 text-xs text-muted/70">
-                  {new Date(result.createdAt).toLocaleDateString("ar-YE")}
+                  {new Date(result.order.created_at).toLocaleDateString("ar-YE")}
                 </p>
               </div>
 
@@ -195,7 +194,6 @@ export default function TrackOrderModal({ open, onClose }: { open: boolean; onCl
                   setResult(null);
                   setSearched(false);
                   setOrderId("");
-                  setPhone("");
                 }}
                 className="mt-4 w-full rounded-input border border-border py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/40 hover:bg-primary/5"
               >

@@ -1,0 +1,13 @@
+const fs = require('fs');
+const classified = JSON.parse(fs.readFileSync('scripts/catalog/data/classified.json', 'utf8'));
+const src = fs.readFileSync('src/data/products.ts', 'utf8');
+const m = src.match(/id: "yq-\d+"/g);
+const existingIds = new Set(m.map(x => x.match(/yq-(\d+)/)[1]));
+const newCandidates = classified.filter(c => !existingIds.has(c.id.toString()) && c.category !== 'uncategorized');
+console.log('New candidates (excl uncategorized):', newCandidates.length);
+const uncategorized = classified.filter(c => c.category === 'uncategorized');
+console.log('Uncategorized:', uncategorized.length);
+console.log('Categories of new candidates:');
+const cats = {};
+newCandidates.forEach(c => { cats[c.category] = (cats[c.category] || 0) + 1; });
+console.log(Object.entries(cats).sort((a,b) => b[1]-a[1]));

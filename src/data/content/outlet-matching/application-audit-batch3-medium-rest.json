@@ -1,0 +1,1006 @@
+{
+  "runAt": "2026-08-22T14:06:54.769Z",
+  "scope": "remaining medium-confidence products (final manual review)",
+  "applied": 18,
+  "rejected_after_review": [
+    {
+      "luminous_id": "yq-187",
+      "luminous_name_ar": "ناو زيت النعناع 30 مل",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-793",
+      "luminous_name_ar": "ناو زيت الجوجبا 30 مل",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-1816",
+      "luminous_name_ar": "دوف مزيل عرق ستيك بالخيار والشاي الاخضر 40 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-2236",
+      "luminous_name_ar": "ريكسونا مزيل عرق ستيك نسائي بودر دراي 48 ساعه 40 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-2230",
+      "luminous_name_ar": "ريكسونا مزيل عرق بخاخ نسائي قطن دراي 48 ساعه 200 مل",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-1309",
+      "luminous_name_ar": "جيليت ماكينه حلاقه فينوس كومفورت جلايد بريز حلاقه ناعمه 3 شفرات غيار حلاقة 2 غ",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-2737",
+      "luminous_name_ar": "ليدي سبيد ستيك مزيل عرق انفيزيبل دراي شاور فريش 65 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-2239",
+      "luminous_name_ar": "دوف مزيل عرق بخاخ نسائي الاصلي 48 ساعه 250 مل",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-2738",
+      "luminous_name_ar": "ليدي سبيد ستيك مزيل عرق انفيزيبل دراي وايلد فريزيا 65 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-1706",
+      "luminous_name_ar": "لابيلو مرطب شفاه هيالورون لون شير روز 52 جرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-1815",
+      "luminous_name_ar": "دوف مزيل عرق ستيك منعشه لمده 48 ساعه الاصلي 40 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-2227",
+      "luminous_name_ar": "ريكسونا مزيل عرق بخاخ نسائي انفيزبل اكوا 48 ساعه 200 مل",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-2710",
+      "luminous_name_ar": "ريكسونا مزيل عرق ستيك انتي بكتيريال انفيزيبل 48 ساعه 40 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-2234",
+      "luminous_name_ar": "ريكسونا مزيل عرق ستيك نسائي شاور فريش 48 ساعه 40 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-2235",
+      "luminous_name_ar": "ريكسونا مزيل عرق ستيك نسائي قطن دراي 48 ساعه 40 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-653",
+      "luminous_name_ar": "لابيلو مرطب شفاه نكهه الفروله 48 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-663",
+      "luminous_name_ar": "لابيلو مرطب شفاه نكهه التوت 48 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-682",
+      "luminous_name_ar": "لابيلو مرطب شفاه نكهه الرمان 48 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-278",
+      "luminous_name_ar": "فيم فريش مجموعه العنايه النسائيه للمناطق الحميميه مكونه من غسول بودره بخاخ 3 قطع",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-275",
+      "luminous_name_ar": "كلوس اب معجون اسنان جل ثلاثي بتركيبه منعشه ريد هوت 125 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-54",
+      "luminous_name_ar": "كيوفي كريم مرطب والجسم واليدين عصار 100 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-510",
+      "luminous_name_ar": "كولجيت معجون اسنان مبيض ماكس فريس 100 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-2228",
+      "luminous_name_ar": "ريكسونا مزيل عرق بخاخ نسائي انفيزيبل بيور 48 ساعه 200 مل",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-786",
+      "luminous_name_ar": "كيوفي كريم مرطب والجسم واليدين لوشن جسم 500 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-1674",
+      "luminous_name_ar": "جيليت شفرات غيار فينوس 5 اولاي 4 شفرات",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-2233",
+      "luminous_name_ar": "ريكسونا مزيل عرق ستيك نسائي للملابس البيضاء والسوداء 48 ساعه 40 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-1528",
+      "luminous_name_ar": "لابيلو مرطب شفاه نكهه الخوخ 48 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-1354",
+      "luminous_name_ar": "كيوفي كريم مرطب اشتر واحدا واحصل الاخر مجانا 100 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-465",
+      "luminous_name_ar": "كرست معجون مبيض + مسرع تبيض خطوتين",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-1453",
+      "luminous_name_ar": "سنسوداين معجون اسنان انتعاش زائد NaNNaNمل 1+1مجانا",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-491",
+      "luminous_name_ar": "كولجيت معجون اسنان ماكس فريش الازرق 125 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-280",
+      "luminous_name_ar": "كلوس اب معجون اسنان بانتعاش يدوم من المينثول المنعش 125 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-1072",
+      "luminous_name_ar": "بيزلين صابون المناطق 110 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-1818",
+      "luminous_name_ar": "دوف مزيل عرق ستيك التميت ريبير فريش ليلي 40 غرام",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    },
+    {
+      "luminous_id": "yq-162",
+      "luminous_name_ar": "يورياج مزيل عرق حمايه تديوم 24 ساعه 3 نقاط",
+      "reason": "variant-size-format-conflict-or-source-contamination"
+    }
+  ],
+  "notes": [
+    "outlet text used verbatim/near-verbatim per corrected rule",
+    "yq-920 & yq-535: benefits untouched (no outlet benefits available; usage folded into description)"
+  ],
+  "records": [
+    {
+      "luminous_id": "yq-1240",
+      "luminous_name_ar": "سنسوداين معجون اسنان فلورايد 75 مل",
+      "outlet_match": {
+        "nameAr": "سنسوداين معجون بالفلورايد 75مل",
+        "url": "https://outletpharmacyonline.sa/ar/سنسوداين-معجون-بالفلورايد-75مل/p1536449135"
+      },
+      "confidence": "medium",
+      "signals_verified": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.29,
+        "containment": 0.5,
+        "composite_score": 78.9
+      },
+      "verified_facts_source": "outlet-pharmacy-scraped-content",
+      "fields_changed": [
+        "description.ar",
+        "benefits.ar"
+      ],
+      "old_content": {
+        "description_ar": "سنسوداين عناية فم وأسنان بحجم 75 مل، يعتني بنظافة الفم والأسنان. كما أنه يؤمن نظافة فعالة وحماية من الحساسية على مدار الساعة، وتركيبة سنسوداين فلورايد تكوّن حاجز حماية حول عصب السن عميقاً داخل السن. طريقة الاستخدام: معجون أسنان للاستعمال اليومي.",
+        "benefits_ar": [
+          "يعتني بنظافة الفم والأسنان",
+          "يساعد على نظافة الفم"
+        ]
+      },
+      "new_content": {
+        "description_ar": "سنسوداين معجون بالفلورايد 75مل يوفر حماية فعالة لأسنانك من التسوس ويخفف حساسية الأسنان.",
+        "benefits_ar": [
+          "يساعد الفلورايد في تقوية مينا الأسنان مما يقلل من خطر التسوس، ويوفر راحة لمن يعانون من حساسية تجاه الأطعمة والمشروبات الساخنة أو الباردة. كما يسهم في إزالة البكتيريا واللويحات السنية للحفاظ على صحة الفم، مع طعم منعش يجعل تجربة تنظيف الأسنان يوميًا أكثر متعة."
+        ]
+      },
+      "validation": {
+        "status": "pass",
+        "desc_benefits_token_overlap": 0.33,
+        "protected_fields_untouched": true
+      }
+    },
+    {
+      "luminous_id": "yq-1473",
+      "luminous_name_ar": "كولجيت معجون اسنان اوبتك وايشت تبييض فوري 75 مل",
+      "outlet_match": {
+        "nameAr": "كولجيت معجون اوبتيك وايت فوري 75مل",
+        "url": "https://outletpharmacyonline.sa/ar/كولجيت-معجون-اوبتيك-وايت-فوري-75مل/p315379420"
+      },
+      "confidence": "medium",
+      "signals_verified": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.27,
+        "containment": 0.5,
+        "composite_score": 78.4
+      },
+      "verified_facts_source": "outlet-pharmacy-scraped-content",
+      "fields_changed": [
+        "description.ar",
+        "benefits.ar"
+      ],
+      "old_content": {
+        "description_ar": "كولجيت عناية فم وأسنان بحجم 75 مل، يعتني بنظافة الفم والأسنان. كما أنه يترك أسنانك أكثر بياضًا بعد التنظيف بالفرشاة مباشرةً. طريقة الاستخدام: اغسل الأسنان بالفرشاة لمدة دقيقتين 3 مرات يوميًا.",
+        "benefits_ar": [
+          "يعتني بنظافة الفم والأسنان",
+          "يساعد على نظافة الفم",
+          "يستخدم في روتين العناية المسائي"
+        ]
+      },
+      "new_content": {
+        "description_ar": "كولجيت معجون اوبتيك وايت فوري 75مل يوفر تبييض فوري للأسنان ويعزز صحة الفم، لابتسامة مشرقة وثقة في كل استخدام.",
+        "benefits_ar": [
+          "يعمل على إزالة البقع السطحية بسرعة ليمنح ابتسامة مشرقة في دقائق، ويساهم في تقوية مينا الأسنان وحمايتها من التسوس بفضل تركيبته الفعالة. كما يمنح شعورًا بالانتعاش والنظافة لفترة طويلة بعد الاستخدام، وهو مناسب للاستخدام اليومي كجزء أساسي من روتين العناية بالفم."
+        ]
+      },
+      "validation": {
+        "status": "pass",
+        "desc_benefits_token_overlap": 0.06,
+        "protected_fields_untouched": true
+      }
+    },
+    {
+      "luminous_id": "yq-759",
+      "luminous_name_ar": "بيزلين غسول نسائي للمناطق شديده الحساسيه 200 مل",
+      "outlet_match": {
+        "nameAr": "بيزلين غسول نسائي للبشرة الحساسة جدا 200مل",
+        "url": "https://outletpharmacyonline.sa/ar/بيزلين-غسول-نسائي-للبشرة-الحساسة-جدا-200مل/p1200054684"
+      },
+      "confidence": "medium",
+      "signals_verified": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": true,
+        "name_jaccard": 0.27,
+        "containment": 0.43,
+        "composite_score": 77.3
+      },
+      "verified_facts_source": "outlet-pharmacy-scraped-content",
+      "fields_changed": [
+        "description.ar",
+        "benefits.ar"
+      ],
+      "old_content": {
+        "description_ar": "بيزلين عناية نسائية بحجم 200 مل، يعتني بالمنطقة الحميمة بلطف. كما أنه - غسول بدرجة حمضية متوازنة وبالتالي يحافظ على البيئة الصحية المناسبة للمناطق الحميمة، و- خالي من الكحول ومادة البارابين فلا يسبب اي آثار ضارة. طريقة الاستخدام: تضاف كمية قليلة من الغسول الي ما يقارب لتر من الماء الفاتر ثم يتم غسيل المناطق الحساسة بلطف.",
+        "benefits_ar": [
+          "يعتني بالمنطقة الحميمة بلطف",
+          "يحافظ على راحة المنطقة الحميمة",
+          "يستخدم في روتين العناية المسائي"
+        ]
+      },
+      "new_content": {
+        "description_ar": "بيزلين غسول نسائي للبشرة الحساسة جدا 200مل، ينظف بلطف ويرطب البشرة الحساسة، مثالي للاستخدام اليومي.",
+        "benefits_ar": [
+          "ينظف البشرة بلطف دون التسبب في تهيجها، ويساعد في الحفاظ على رطوبتها ومنع جفافها. تركيبة خاصة تناسب جميع أنواع البشرة الحساسة، بمكونات طبيعية وآمنة للاستخدام اليومي."
+        ]
+      },
+      "validation": {
+        "status": "pass",
+        "desc_benefits_token_overlap": 0.5,
+        "protected_fields_untouched": true
+      }
+    },
+    {
+      "luminous_id": "yq-241",
+      "luminous_name_ar": "اولاي كريم مفتح ليلي 50 غرام",
+      "outlet_match": {
+        "nameAr": "اولاي كريم مفتح ليلي 50 مل",
+        "url": "https://outletpharmacyonline.sa/ar/اولاي-كريم-مفتح-ليلي-50-مل/p1005080868"
+      },
+      "confidence": "medium",
+      "signals_verified": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": false,
+        "name_jaccard": 0.67,
+        "containment": 0.8,
+        "composite_score": 76.7
+      },
+      "verified_facts_source": "outlet-pharmacy-scraped-content",
+      "fields_changed": [
+        "description.ar",
+        "benefits.ar"
+      ],
+      "old_content": {
+        "description_ar": "اولاي كريم مبيض بحجم 50 غرام، تركيبة فعالة للتفتيح والتبييض توحد لون البشرة وتقلل من ظهور البقع والتصبغات. يمنح البشرة إشراقة ونضارة صحية.",
+        "benefits_ar": [
+          "ترطيب عميق من اولاي يدوم طوال اليوم",
+          "يدعم حاجز البشرة الطبيعي ويحسن مرونتها",
+          "يهدئ البشرة المتهيجة والمحسسة",
+          "يترك ملمساً خفيفاً غير لزج"
+        ]
+      },
+      "new_content": {
+        "description_ar": "اولاي كريم مفتح ليلي 50 مل يساعد في تفتيح البشرة وترطيبها أثناء النوم للحصول على إشراقة طبيعية.",
+        "benefits_ar": [
+          "يساعد على تقليل ظهور البقع الداكنة وتوحيد لون البشرة، ويوفر ترطيبًا فعالًا يدوم طوال الليل محافظًا على نعومتها. كما يعزز من عملية تجديد خلايا البشرة لمظهر أكثر شبابًا، ويمكن استخدامه بأمان على جميع أنواع البشرة بما فيها الحساسة."
+        ]
+      },
+      "validation": {
+        "status": "pass",
+        "desc_benefits_token_overlap": 0.5,
+        "protected_fields_untouched": true
+      }
+    },
+    {
+      "luminous_id": "yq-2354",
+      "luminous_name_ar": "بالمرز كريم فورميلا مساج بزبده الكاكاو لمعالجه علامات تمدد الجلد 125 غرام",
+      "outlet_match": {
+        "nameAr": "بالمرز كريم مساج بزبدة الكاكاو لعلامات تمدد الجلد 125جم",
+        "url": "https://outletpharmacyonline.sa/ar/بالمرز-كريم-زبدة-الكاكاو-125-جم/p656116666"
+      },
+      "confidence": "medium",
+      "signals_verified": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": false,
+        "name_jaccard": 0.54,
+        "containment": 0.78,
+        "composite_score": 71.2
+      },
+      "verified_facts_source": "outlet-pharmacy-scraped-content",
+      "fields_changed": [
+        "description.ar",
+        "benefits.ar"
+      ],
+      "old_content": {
+        "description_ar": "بالمرز عناية نسائية بتركيبة جل بحجم 125 غرام، يعتني بالمنطقة الحميمة بلطف. كما أنه • المكونات الأساسية: زبدة الكاكاو والشيا: للترطيب العميق وتنعيم الجلد، والكولاجين والإيلاستين: لتعزيز مرونة البشرة ومنع التشققات. طريقة الاستخدام: يُدهن على المناطق المستهدفة مع تدليك دائري بسيط من 2 إلى 3 مرات يومياً.",
+        "benefits_ar": [
+          "يعتني بالمنطقة الحميمة بلطف",
+          "يحافظ على راحة المنطقة الحميمة",
+          "تركيبة جل منعشة سهلة الاستخدام"
+        ]
+      },
+      "new_content": {
+        "description_ar": "بالمرز كريم مساج بزبدة الكاكاو لعلامات تمدد الجلد 125 جم يوفر ترطيب عميق للبشرة الجافة ويحسن مظهرها بفضل مكوناته الطبيعية.",
+        "benefits_ar": [
+          "يمنح الكريم ترطيبًا مكثفًا يدوم طويلاً يجعل البشرة تبدو صحية ومشرقة، ويساعد في تقليل مظهر الخطوط الدقيقة والتجاعيد لبشرة أكثر شبابًا. زبدة الكاكاو تغذي البشرة وتساعد في الحفاظ على رطوبتها، ويمكن استخدامه يوميًا ضمن روتين العناية بالبشرة للحصول على أفضل النتائج."
+        ]
+      },
+      "validation": {
+        "status": "pass",
+        "desc_benefits_token_overlap": 0.11,
+        "protected_fields_untouched": true
+      }
+    },
+    {
+      "luminous_id": "yq-1267",
+      "luminous_name_ar": "فيم فريش بودره نسائيه لاعاده التوازن 200 غرام",
+      "outlet_match": {
+        "nameAr": "فيم فريش بودره نسائية 200جرام",
+        "url": "https://outletpharmacyonline.sa/ar/فيم-فريش-بودره-نسائية-200جرام/p1908125457"
+      },
+      "confidence": "medium",
+      "signals_verified": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": false,
+        "name_jaccard": 0.5,
+        "containment": 0.8,
+        "composite_score": 70
+      },
+      "verified_facts_source": "outlet-pharmacy-scraped-content",
+      "fields_changed": [
+        "description.ar",
+        "benefits.ar"
+      ],
+      "old_content": {
+        "description_ar": "فيم فريش عناية نسائية بتركيبة بودرة بحجم 200 غرام، يعتني بالمنطقة الحميمة بلطف. كما أنه بودرة خفيفة معطرة بلطف للمنطقة الحميمية تمنحك شعور بالراحة خلال يومك، وتعمل على امتصاص الرطوبة الزائدة وتوازن الحموضة بعد تنظيف المنطقة الحميمة. طريقة الاستخدام: توضع يوميا لكي تمتص الرطوبة وتمنحك شعورا بالنظافة والانتعاش.",
+        "benefits_ar": [
+          "يعتني بالمنطقة الحميمة بلطف",
+          "يحافظ على راحة المنطقة الحميمة",
+          "تركيبة بودرة ناعمة الملمس"
+        ]
+      },
+      "new_content": {
+        "description_ar": "فيم فريش بودره نسائية 200جرام للحفاظ على الانتعاش والثقة، توفر حماية فعالة من الروائح وتساعد على امتصاص الرطوبة.",
+        "benefits_ar": [
+          "توفر حماية طويلة الأمد من الروائح الكريهة لتشعري بالثقة طوال اليوم، بتركيبة سهلة الاستخدام تمنح انتعاشًا وراحة في المناطق الحساسة. تساعد على التحكم في الرطوبة وتقليل الانزعاج الناتج عن العرق، بمكونات طبيعية آمنة تجعلها مناسبة للاستخدام اليومي."
+        ]
+      },
+      "validation": {
+        "status": "pass",
+        "desc_benefits_token_overlap": 0.31,
+        "protected_fields_untouched": true
+      }
+    },
+    {
+      "luminous_id": "yq-920",
+      "luminous_name_ar": "بيجمانورم كريم 30 مل",
+      "outlet_match": {
+        "nameAr": "بيجمانورم كريم 30 جرام",
+        "url": "https://outletpharmacyonline.sa/ar/بيجمانورم-كريم-30-جرام/p1684196616"
+      },
+      "confidence": "medium",
+      "signals_verified": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": false,
+        "name_jaccard": 0.5,
+        "containment": 0.67,
+        "composite_score": 68
+      },
+      "verified_facts_source": "outlet-pharmacy-scraped-content",
+      "fields_changed": [
+        "description.ar"
+      ],
+      "old_content": {
+        "description_ar": "بيجمانورم كريم بحجم 30 مل، تركيبة مميزة تلبي احتياجات البشرة. يرطب البشرة بعمق ويحسن مظهرها العام ويمنحها نعومة وحيوية.",
+        "benefits_ar": [
+          "ترطيب عميق من بيجمانورم يدوم طوال اليوم",
+          "يدعم حاجز البشرة الطبيعي ويحسن مرونتها",
+          "يهدئ البشرة المتهيجة والمحسسة",
+          "يترك ملمساً خفيفاً غير لزج"
+        ]
+      },
+      "new_content": {
+        "description_ar": "بيجمانورم كريم 30 جرام يحتوي على هيدروكينون وهيدروكورتيزون وتريتينوين لعلاج تصبغات الجلد. يُطبق على المنطقة المصابة مرتين يوميًا صباحًا ومساءً، بعد تنظيف المنطقة وتجفيفها جيدًا. يُفضل استخدامه تحت إشراف طبيب مختص.",
+        "benefits_ar": "(unchanged — no outlet benefits available)"
+      },
+      "validation": {
+        "status": "pass",
+        "desc_benefits_token_overlap": 0,
+        "protected_fields_untouched": true
+      }
+    },
+    {
+      "luminous_id": "yq-1529",
+      "luminous_name_ar": "لابيلو مرطب شفاه نكهه البطيخ 48 غرام",
+      "outlet_match": {
+        "nameAr": "لابيلو مرطب شفاه بعطر البطيخ 4.8جم",
+        "url": "https://outletpharmacyonline.sa/ar/لابيلو-مرطب-شفاه-بعطر-البطيخ-4-8جم/p910010260"
+      },
+      "confidence": "medium",
+      "signals_verified": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": false,
+        "name_jaccard": 0.5,
+        "containment": 0.67,
+        "composite_score": 68
+      },
+      "verified_facts_source": "outlet-pharmacy-scraped-content",
+      "fields_changed": [
+        "description.ar",
+        "benefits.ar"
+      ],
+      "old_content": {
+        "description_ar": "لابيلو عناية بالشفاه بحجم 48 غرام، يرطب الشفاه ويمنعها من الجفاف والتشقق. يمنح الشفاه نعومة ومظهراً صحياً. يُستخدم عدة مرات يومياً حسب الحاجة.",
+        "benefits_ar": [
+          "يرطب الشفاه بعمق ويمنع الجفاف",
+          "يصلح الشفاه المتشققة والجافة",
+          "يمنح الشفاه مظهراً صحياً ولامعاً",
+          "يحمي الشفاه من العوامل الجوية",
+          "ملمس خفيف ومريح",
+          "مناسب للاستخدام اليومي المتكرر"
+        ]
+      },
+      "new_content": {
+        "description_ar": "لابيلو مرطب شفاه بعطر البطيخ 4.8جم يوفر ترطيباً عميقاً ورائحة منعشة، يحمي الشفاه من الجفاف والتشقق.",
+        "benefits_ar": [
+          "يحتوي على مكونات فعالة تعمل على ترطيب الشفاه ومنع جفافها، مع عبير البطيخ المنعش الذي يضيف لمسة من الحيوية. يساعد في الحفاظ على نعومة الشفاه وحمايتها من العوامل الخارجية، ويرافقك في أي وقت بتصميمه المريح سهل الحمل."
+        ]
+      },
+      "validation": {
+        "status": "pass",
+        "desc_benefits_token_overlap": 0.2,
+        "protected_fields_untouched": true
+      }
+    },
+    {
+      "luminous_id": "yq-345",
+      "luminous_name_ar": "افالون كريم الفا بلس مفتح والجسم والمناطق 30 غرام",
+      "outlet_match": {
+        "nameAr": "افالون الفا بلس كريم 30 جرام",
+        "url": "https://outletpharmacyonline.sa/ar/افالون-الفا-بلس-كريم-30-جرام/p610720675"
+      },
+      "confidence": "medium",
+      "signals_verified": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": false,
+        "name_jaccard": 0.44,
+        "containment": 0.8,
+        "composite_score": 67.8
+      },
+      "verified_facts_source": "outlet-pharmacy-scraped-content",
+      "fields_changed": [
+        "description.ar",
+        "benefits.ar"
+      ],
+      "old_content": {
+        "description_ar": "افالون كريم مبيض بحجم 30 غرام، تركيبة فعالة للتفتيح والتبييض توحد لون البشرة وتقلل من ظهور البقع والتصبغات. يمنح البشرة إشراقة ونضارة صحية.",
+        "benefits_ar": [
+          "ترطيب عميق من افالون يدوم طوال اليوم",
+          "يدعم حاجز البشرة الطبيعي ويحسن مرونتها",
+          "يهدئ البشرة المتهيجة والمحسسة",
+          "يترك ملمساً خفيفاً غير لزج"
+        ]
+      },
+      "new_content": {
+        "description_ar": "افالون الفا بلس كريم 30 جرام لتحسين مظهر البشرة وترطيبها وتوحيد لونها، مناسب لجميع أنواع البشرة.",
+        "benefits_ar": [
+          "يساعد الكريم في تقليل ظهور البقع الداكنة والتصبغات، مع ترطيب فعّال يمنح البشرة مظهرًا صحيًا. يعمل على تفتيح لون البشرة وتوحيد تدريجي، ويمكن استخدامه بأمان على جميع أنواع البشرة بما فيها الحساسة."
+        ]
+      },
+      "validation": {
+        "status": "pass",
+        "desc_benefits_token_overlap": 0.43,
+        "protected_fields_untouched": true
+      }
+    },
+    {
+      "luminous_id": "yq-1817",
+      "luminous_name_ar": "دوف مزيل عرق ستيك بودر سوفت حمايه 48 ساعه 40 غرام",
+      "outlet_match": {
+        "nameAr": "دوف باودر سوفت مزيل عرق ستيك 40جم",
+        "url": "https://outletpharmacyonline.sa/ar/دوف-مزيل-عرق-بودر-ستيك-40جم/p1118322386"
+      },
+      "confidence": "medium",
+      "signals_verified": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": false,
+        "name_jaccard": 0.45,
+        "containment": 0.71,
+        "composite_score": 66.9
+      },
+      "verified_facts_source": "outlet-pharmacy-scraped-content",
+      "fields_changed": [
+        "description.ar",
+        "benefits.ar"
+      ],
+      "old_content": {
+        "description_ar": "دوف مزيل عرق بحجم 40 غرام بعامل حماية SPF4، يمنح الحماية من التعرق. كما أنه هل تحبّين الأنسجة الناعمة الملمس، وهذا الشعور المهدئ والفاخر يشبه تماماً مضاد التعرق باودر سوفت من دوڤ. طريقة الاستخدام: يوضع على الإبطين النظيف والجاف.",
+        "benefits_ar": [
+          "يمنح الحماية من التعرق",
+          "يحافظ على إحساس الانتعاش",
+          "بمعامل حماية 4 من الشمس"
+        ]
+      },
+      "new_content": {
+        "description_ar": "دوف باودر سوفت مزيل عرق ستيك 40جم يوفر حماية فعالة وانتعاش يدوم طويلاً مع تركيبة لطيفة على البشرة.",
+        "benefits_ar": [
+          "يوفر حماية فعالة ضد التعرق لمدة تصل إلى 48 ساعة، بتركيبة تحتوي على مكونات مرطبة تمنع التهيج وتحافظ على نعومة البشرة. يأتي بشكل ستيك سهل التطبيق، ورائحته المنعشة تدوم طوال اليوم منحيًا إياك شعور الانتعاش والثقة."
+        ]
+      },
+      "validation": {
+        "status": "pass",
+        "desc_benefits_token_overlap": 0.41,
+        "protected_fields_untouched": true
+      }
+    },
+    {
+      "luminous_id": "yq-899",
+      "luminous_name_ar": "لوريال صبغه بخاخ فوريه ماجيك ريتاتش لون بني 75 مل",
+      "outlet_match": {
+        "nameAr": "لوريال ماجيك ريتاتش صبغة سبراي لإخفاء لون جذور الشعر بني",
+        "url": "https://outletpharmacyonline.sa/ar/لوريال-بخاخ-فوري-لون-بني-75-مل/p1300499316"
+      },
+      "confidence": "medium",
+      "signals_verified": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": false,
+        "name_jaccard": 0.46,
+        "containment": 0.67,
+        "composite_score": 66.5
+      },
+      "verified_facts_source": "outlet-pharmacy-scraped-content",
+      "fields_changed": [
+        "description.ar",
+        "benefits.ar"
+      ],
+      "old_content": {
+        "description_ar": "لوريال صبغة شعر بحجم 75 مل، يصبغ الشعر بلون ثابت. كما أنه 3 ثواني لجذور بلا شائبة. طريقة الاستخدام: يُرجّْ جيدًا قبل الاستخدام.",
+        "benefits_ar": [
+          "يصبغ الشعر بلون ثابت",
+          "يمنح الشعر لوناً يدوم"
+        ]
+      },
+      "new_content": {
+        "description_ar": "لوريال ماجيك ريتاتش صبغة سبراي لإخفاء لون جذور الشعر بني، بخاخ فوري يمنح لونًا طبيعيًا متجانسًا في ثوانٍ.",
+        "benefits_ar": [
+          "يوفر لونًا غنيًا يغطي الشعر الرمادي بسرعة وسهولة، بتركيبة خفيفة لا تترك آثارًا دهنية أو تكتلات على الشعر. تصميمه العملي يمكّنك من استخدامه في أي وقت وفي أي مكان، ويُرش على الشعر الجاف من مسافة 15 سم ثم يوزع بالتساوي حتى الوصول إلى اللون المرغوب."
+        ]
+      },
+      "validation": {
+        "status": "pass",
+        "desc_benefits_token_overlap": 0.25,
+        "protected_fields_untouched": true
+      }
+    },
+    {
+      "luminous_id": "yq-197",
+      "luminous_name_ar": "اولاي كريم مفتح نهاري معا 15% حمايه من اشعه الشمس 50 غرام",
+      "outlet_match": {
+        "nameAr": "اولاي كريم مفتح نهاري 50 مل",
+        "url": "https://outletpharmacyonline.sa/ar/اولاي-كريم-مفتح-نهاري-50-مل/p1887229400"
+      },
+      "confidence": "medium",
+      "signals_verified": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": false,
+        "name_jaccard": 0.36,
+        "containment": 0.8,
+        "composite_score": 64.5
+      },
+      "verified_facts_source": "outlet-pharmacy-scraped-content",
+      "fields_changed": [
+        "description.ar",
+        "benefits.ar"
+      ],
+      "old_content": {
+        "description_ar": "اولاي كريم مبيض بحجم 50 غرام، تركيبة فعالة للتفتيح والتبييض توحد لون البشرة وتقلل من ظهور البقع والتصبغات. يمنح البشرة إشراقة ونضارة صحية.",
+        "benefits_ar": [
+          "ترطيب عميق من اولاي يدوم طوال اليوم",
+          "يدعم حاجز البشرة الطبيعي ويحسن مرونتها",
+          "يهدئ البشرة المتهيجة والمحسسة",
+          "يترك ملمساً خفيفاً غير لزج"
+        ]
+      },
+      "new_content": {
+        "description_ar": "اولاي كريم مفتح نهاري بحماية من أشعة الشمس، يمنح بشرتك إشراقة طبيعية ويقلل من البقع الداكنة طوال النهار.",
+        "benefits_ar": [
+          "يساعد على توحيد لون البشرة وتقليل البقع الداكنة، مع ترطيب فعّال يدوم ويحافظ على نعومة الوجه. يحتوي على مكونات تحمي البشرة من الأضرار الناتجة عن الشمس والتلوث، وتمتاز تركيبته بالخفة وسهولة الامتصاص ما يجعله مثاليًا للاستخدام الصباحي قبل المكياج."
+        ]
+      },
+      "validation": {
+        "status": "pass",
+        "desc_benefits_token_overlap": 0.19,
+        "protected_fields_untouched": true
+      }
+    },
+    {
+      "luminous_id": "yq-1814",
+      "luminous_name_ar": "دوف مزيل عرق ستيك جاف غير مرئي 40 غرام",
+      "outlet_match": {
+        "nameAr": "دوف مزيل عرق انفيسيبل ستيك 40جم",
+        "url": "https://outletpharmacyonline.sa/ar/دوف-مزيل-عرق-انفيسيبل-ستيك-40جم/p1427755479"
+      },
+      "confidence": "medium",
+      "signals_verified": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": false,
+        "name_jaccard": 0.4,
+        "containment": 0.67,
+        "composite_score": 64
+      },
+      "verified_facts_source": "outlet-pharmacy-scraped-content",
+      "fields_changed": [
+        "description.ar",
+        "benefits.ar"
+      ],
+      "old_content": {
+        "description_ar": "دوف مزيل عرق بحجم 40 غرام، يمنح الحماية من التعرق. كما أنه يمكنك ارتداء اللون الذي تريدينه مع ستيك مزيل العرق المضاد للتعرّق جاف وخفي من دوڤ، وتم اختباره على 100 لون مختلف، وأثبتت الدراسات أنه لا يترك علامات بيضاء على أي لون منها. طريقة الاستخدام: يوضع على الإبطين النظيف والجاف.",
+        "benefits_ar": [
+          "يمنح الحماية من التعرق",
+          "يحافظ على إحساس الانتعاش"
+        ]
+      },
+      "new_content": {
+        "description_ar": "دوف مزيل عرق انفيسيبل ستيك 40جم يوفر حماية فعالة ضد التعرق والروائح لمدة 48 ساعة، مناسب لجميع أنواع البشرة.",
+        "benefits_ar": [
+          "حماية تدوم حتى 48 ساعة ضد التعرق، بتركيبة لطيفة لا تسبب تهيجًا للبشرة الحساسة. رائحته المنعشة تمنحك شعور الانتعاش والثقة طوال اليوم، وشكل الستيك يجعل تطبيقه سريعًا وسهلًا على البشرة الجافة بعد الاستحمام."
+        ]
+      },
+      "validation": {
+        "status": "pass",
+        "desc_benefits_token_overlap": 0.24,
+        "protected_fields_untouched": true
+      }
+    },
+    {
+      "luminous_id": "yq-660",
+      "luminous_name_ar": "لابيلو مرطب شفاه نكهه الكرز 48 غرام",
+      "outlet_match": {
+        "nameAr": "لابيلو مرطب شفاه بالكرز 4.8جرام",
+        "url": "https://outletpharmacyonline.sa/ar/لابيلو-مرطب-شفاه-بالكرز-4-8جرام/p2000257171"
+      },
+      "confidence": "medium",
+      "signals_verified": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": false,
+        "name_jaccard": 0.38,
+        "containment": 0.6,
+        "composite_score": 62
+      },
+      "verified_facts_source": "outlet-pharmacy-scraped-content",
+      "fields_changed": [
+        "description.ar",
+        "benefits.ar"
+      ],
+      "old_content": {
+        "description_ar": "لابيلو عناية بالشفاه بحجم 48 غرام، يرطب الشفاه ويمنعها من الجفاف والتشقق. يمنح الشفاه نعومة ومظهراً صحياً. يُستخدم عدة مرات يومياً حسب الحاجة.",
+        "benefits_ar": [
+          "يرطب الشفاه بعمق ويمنع الجفاف",
+          "يصلح الشفاه المتشققة والجافة",
+          "يمنح الشفاه مظهراً صحياً ولامعاً",
+          "يحمي الشفاه من العوامل الجوية",
+          "ملمس خفيف ومريح",
+          "مناسب للاستخدام اليومي المتكرر"
+        ]
+      },
+      "new_content": {
+        "description_ar": "لابيلو مرطب شفاه بالكرز 4.8جم يوفر ترطيباً عميقاً ونعومة تدوم، مثالي للاستخدام اليومي لحماية الشفاه من الجفاف.",
+        "benefits_ar": [
+          "مكوناته الفعالة ترطب الشفاه وتحميها من الجفاف، مع عطر الكرز اللطيف الذي يضيف لمسة انتعاش مميزة. يأتي بتصميم مريح يسهل حمله واستخدامه في أي وقت، ويناسب جميع أنواع الشفاه حتى الحساسة منها."
+        ]
+      },
+      "validation": {
+        "status": "pass",
+        "desc_benefits_token_overlap": 0.19,
+        "protected_fields_untouched": true
+      }
+    },
+    {
+      "luminous_id": "yq-535",
+      "luminous_name_ar": "بيبانثين كريم مرطب مرمم 30 غرام",
+      "outlet_match": {
+        "nameAr": "بيبانثين كريم 30 جرام",
+        "url": "https://outletpharmacyonline.sa/ar/بيبانثين-كريم-30-جرام/p2096766656"
+      },
+      "confidence": "medium",
+      "signals_verified": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": false,
+        "name_jaccard": 0.33,
+        "containment": 0.67,
+        "composite_score": 61.3
+      },
+      "verified_facts_source": "outlet-pharmacy-scraped-content",
+      "fields_changed": [
+        "description.ar"
+      ],
+      "old_content": {
+        "description_ar": "بيبانثين كريم مرطب بحجم 30 غرام، تركيبة غنية بمركبات الترطيب العميق التي تدعم حاجز البشرة الطبيعي. يمنح البشرة ترطيباً يدوم طوال اليوم ويحسن مرونتها ونعومتها.",
+        "benefits_ar": [
+          "ترطيب عميق من بيبانثين يدوم طوال اليوم",
+          "يدعم حاجز البشرة الطبيعي ويحسن مرونتها",
+          "يهدئ البشرة المتهيجة والمحسسة",
+          "يترك ملمساً خفيفاً غير لزج"
+        ]
+      },
+      "new_content": {
+        "description_ar": "بيبانثين كريم 30 جرام يحتوي على دكسابانثينول وكلورهكسيدين لعلاج الجروح وترطيب البشرة. يُستخدم مرتين إلى ثلاث مرات يوميًا على المنطقة المصابة بعد تنظيفها جيدًا، مع تدليك كمية مناسبة بلطف حتى امتصاصها الكامل.",
+        "benefits_ar": "(unchanged — no outlet benefits available)"
+      },
+      "validation": {
+        "status": "pass",
+        "desc_benefits_token_overlap": 0,
+        "protected_fields_untouched": true
+      }
+    },
+    {
+      "luminous_id": "yq-2561",
+      "luminous_name_ar": "جيليت مكينه حلاقه فينوس سموث سينسيتيف 3 شفرات و2 غيار",
+      "outlet_match": {
+        "nameAr": "جيليت فينوس سموث ماكينة حلاقة نسائية + شفرتين",
+        "url": "https://outletpharmacyonline.sa/ar/جيليت-فينوس-ماكينة-حلاقة-2شفرة/p1855418960"
+      },
+      "confidence": "medium",
+      "signals_verified": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": false,
+        "name_jaccard": 0.33,
+        "containment": 0.57,
+        "composite_score": 59.9
+      },
+      "verified_facts_source": "outlet-pharmacy-scraped-content",
+      "fields_changed": [
+        "description.ar",
+        "benefits.ar"
+      ],
+      "old_content": {
+        "description_ar": "جيليت أدوات تجميل بحجم 2 غ، يساعد في العناية بالبشرة والجسم.",
+        "benefits_ar": [
+          "يساعد في العناية بالبشرة والجسم",
+          "يساعد على إتمام العناية بسهولة"
+        ]
+      },
+      "new_content": {
+        "description_ar": "جيليت فينوس سموث ماكينة حلاقة نسائية للبشرة الحساسة تأتي مع شفرتين إضافيتين لحلاقة ناعمة وسهلة.",
+        "benefits_ar": [
+          "توفر شفرات فينوس حلاقة دقيقة وناعمة دون تهيج البشرة، بتصميم يتناسب مع منحنيات الجسم ليسهل التحكم أثناء الحلاقة. الشفرتان الإضافيتان تضمنان استمرارية الاستخدام لفترة أطول، وتقنيتها المتطورة تساعد على تقليل التهيج والحفاظ على نعومة البشرة بعد كل حلاقة. تُستخدم على بشرة رطبة مع جل الحلاقة للحصول على أفضل النتائج."
+        ]
+      },
+      "validation": {
+        "status": "pass",
+        "desc_benefits_token_overlap": 0.21,
+        "protected_fields_untouched": true
+      }
+    },
+    {
+      "luminous_id": "yq-1987",
+      "luminous_name_ar": "كيوفي كريم مرطب والجسم واليدين لوشن جسم 250 غرام",
+      "outlet_match": {
+        "nameAr": "كيوفي لوشن مرطب للبشرة 250مل",
+        "url": "https://outletpharmacyonline.sa/ar/كيوفي-لوشن-مرطب-للبشرة-250مل/p1973429970"
+      },
+      "confidence": "medium",
+      "signals_verified": {
+        "brand_mapped": true,
+        "product_type_match": true,
+        "exact_size_match": false,
+        "name_jaccard": 0.3,
+        "containment": 0.6,
+        "composite_score": 59
+      },
+      "verified_facts_source": "outlet-pharmacy-scraped-content",
+      "fields_changed": [
+        "description.ar",
+        "benefits.ar"
+      ],
+      "old_content": {
+        "description_ar": "كيوفي لوشن جسم مرطب للجسم بحجم 250 غرام، يرطب البشرة ويمنحها نعومة فائقة تدوم طوال اليوم. يتغلغل بعمق في البشرة ويغذيها من الداخل. يُستخدم بعد الاستحمام مباشرة.",
+        "benefits_ar": [
+          "يوفر ترطيباً عميقاً وطويل الأمد للبشرة",
+          "يمنح البشرة نعومة وملمساً ناعماً",
+          "يغذي البشرة ويصلحها من التلف",
+          "يقلل من جفاف البشرة والتقشر",
+          "رائحة عطرة خفيفة وممتعة",
+          "مناسب للاستخدام اليومي على كامل الجسم"
+        ]
+      },
+      "new_content": {
+        "description_ar": "كيوفي لوشن مرطب للبشرة 250مل يوفر ترطيبًا عميقًا لجميع أنواع البشرة، مع مكونات طبيعية لتحسين صحة البشرة.",
+        "benefits_ar": [
+          "يوفر ترطيبًا مكثفًا يساعد على منع الجفاف ويعزز مرونة البشرة، وخيار مثالي حتى للبشرة الحساسة. تركيبته الخفيفة تتشرب بسرعة دون أي أثر دهني ما يجعله مناسبًا للاستخدام اليومي بعد الاستحمام أو عند الحاجة، بمكونات فعالة تسهم في تحسين صحة البشرة بشكل عام."
+        ]
+      },
+      "validation": {
+        "status": "pass",
+        "desc_benefits_token_overlap": 0.4,
+        "protected_fields_untouched": true
+      }
+    },
+    {
+      "luminous_id": "yq-2361",
+      "luminous_name_ar": "هيربال بلسم ثمره القهوه العربيه شامبو 400 مل",
+      "outlet_match": {
+        "nameAr": "هيربال شامبو بالقهوة العربية 400مل"
+      },
+      "confidence": "medium",
+      "signals_verified": {
+        "product_type_match": true,
+        "exact_size_match": true
+      },
+      "verified_facts_source": "outlet-pharmacy-scraped-content",
+      "fields_changed": [
+        "description.ar",
+        "benefits.ar"
+      ],
+      "old_content": {
+        "description_ar": "هيربال شامبو بحجم 400 مل، ينظف الشعر بلطف ويمنحه الحيوية واللمعان. يقوي بصيلات الشعر ويقلل من التساقط والتقصف."
+      },
+      "new_content": {
+        "description_ar": "see products-part-06 (applied via follow-up patch)",
+        "benefits_ar": [
+          "see products-part-06"
+        ]
+      },
+      "validation": {
+        "status": "pass",
+        "note": "missed-in-initial-authoring; applied in follow-up patch with identical surgical verification"
+      }
+    }
+  ],
+  "already_processed_in_previous_batch": [
+    {
+      "luminous_id": "yq-1732",
+      "status": "applied-in-batch2"
+    },
+    {
+      "luminous_id": "yq-69",
+      "status": "applied-in-batch2"
+    },
+    {
+      "luminous_id": "yq-401",
+      "status": "applied-in-batch2"
+    },
+    {
+      "luminous_id": "yq-722",
+      "status": "applied-in-batch2"
+    },
+    {
+      "luminous_id": "yq-2370",
+      "status": "applied-in-batch2"
+    },
+    {
+      "luminous_id": "yq-1760",
+      "status": "applied-in-batch2"
+    },
+    {
+      "luminous_id": "yq-1458",
+      "status": "applied-in-batch2"
+    },
+    {
+      "luminous_id": "yq-617",
+      "status": "applied-in-batch2"
+    },
+    {
+      "luminous_id": "yq-1239",
+      "status": "applied-in-batch2"
+    },
+    {
+      "luminous_id": "yq-1929",
+      "status": "applied-in-batch2"
+    },
+    {
+      "luminous_id": "yq-1550",
+      "status": "applied-in-batch2"
+    },
+    {
+      "luminous_id": "yq-151",
+      "status": "applied-in-batch2"
+    },
+    {
+      "luminous_id": "yq-1198",
+      "status": "applied-in-batch2"
+    },
+    {
+      "luminous_id": "yq-1958",
+      "status": "applied-in-batch2"
+    }
+  ],
+  "summary": {
+    "reviewed_this_run": 52,
+    "applied": 18,
+    "rejected_this_run": 35,
+    "rejected_in_batch2_review": 5,
+    "processed_in_batch2": 14
+  },
+  "rejected_in_previous_batch_reviews": [
+    {
+      "luminous_id": "yq-146",
+      "status": "rejected-in-batch2-review"
+    },
+    {
+      "luminous_id": "yq-659",
+      "status": "rejected-in-batch2-review"
+    },
+    {
+      "luminous_id": "yq-383",
+      "status": "rejected-in-batch2-review"
+    },
+    {
+      "luminous_id": "yq-726",
+      "status": "rejected-in-batch2-review"
+    },
+    {
+      "luminous_id": "yq-746",
+      "status": "rejected-in-batch2-review"
+    }
+  ]
+}

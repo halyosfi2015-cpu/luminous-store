@@ -11,7 +11,6 @@ import {
 } from "react";
 import type { AdminPermission, AdminResource, AdminRole, AdminSession } from "./types";
 import { can as hasRolePermission } from "./permissions";
-import { localAdapters } from "./adapters/local";
 import * as services from "./services";
 import { createBrowserSupabaseClient } from "@/src/lib/supabase";
 
@@ -31,7 +30,6 @@ type AdminDataContextValue = {
   previewRole: (role: AdminRole, name?: string, email?: string) => void;
   can: (resource: AdminResource, permission: AdminPermission) => boolean;
   services: typeof services;
-  adapters: typeof localAdapters;
 };
 
 const AdminDataContext = createContext<AdminDataContextValue | null>(null);
@@ -44,17 +42,21 @@ const AdminDataContext = createContext<AdminDataContextValue | null>(null);
  * client never reads admin_users directly and RLS stays intact.
  */
 async function resolveAdminSession(authEmail: string | undefined) {
-  const res = await fetch("/api/admin/me", { cache: "no-store" });
-  if (!res.ok) return null;
-  const json = await res.json().catch(() => null);
-  const admin: AdminUserRecord | undefined = json?.admin;
-  if (!admin || !admin.isActive) return null;
-  return {
-    role: admin.role,
-    name: admin.name,
-    email: authEmail ?? "",
-    loggedInAt: new Date().toISOString(),
-  } as AdminSession;
+  try {
+    const res = await fetch("/api/admin/me", { cache: "no-store" });
+    if (!res.ok) return null;
+    const json = await res.json().catch(() => null);
+    const admin: AdminUserRecord | undefined = json?.admin;
+    if (!admin || !admin.isActive) return null;
+    return {
+      role: admin.role,
+      name: admin.name,
+      email: authEmail ?? "",
+      loggedInAt: new Date().toISOString(),
+    } as AdminSession;
+  } catch {
+    return null;
+  }
 }
 
 export function AdminDataProvider({ children }: { children: ReactNode }) {
@@ -91,9 +93,14 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
         setSession(null);
         return;
       }
-      void resolveAdminSession(authSession.user.email).then((resolved) => {
-        if (!disposed) setSession(resolved);
-      });
+            void resolveAdminSession(authSession.user.email)
+        .then((resolved) => {
+          if (!disposed) setSession(resolved);
+        })
+        .catch(() => {
+          if (!disposed) setSession(null);
+        });
+
     });
 
     return () => {
@@ -148,7 +155,7 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
   );
 
   const value = useMemo<AdminDataContextValue>(
-    () => ({ session, loading, login, logout, previewRole, can, services, adapters: localAdapters }),
+    () => ({ session, loading, login, logout, previewRole, can, services }),
     [session, loading, login, logout, previewRole, can],
   );
 

@@ -35,6 +35,16 @@ import type { Order } from "@/types/cart";
 const qtyOf = (product: { stock: number; stockQuantity?: number }) =>
   product.stockQuantity ?? product.stock;
 
+function asArray<T>(value: unknown): T[] {
+  if (Array.isArray(value)) return value as T[];
+  if (value && typeof value === "object") {
+    const record = value as { data?: unknown; items?: unknown };
+    if (Array.isArray(record.data)) return record.data as T[];
+    if (Array.isArray(record.items)) return record.items as T[];
+  }
+  return [];
+}
+
 const iconTone: Record<string, string> = {
   primary: "bg-primary/10 text-primary",
   secondary: "bg-secondary/10 text-secondary-600",
@@ -61,7 +71,6 @@ const quickActions = [
 ];
 
 export default function AdminDashboard() {
-  const { services } = useAdminData();
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
@@ -70,6 +79,7 @@ export default function AdminDashboard() {
   const [reviews, setReviews] = useState<AdminReview[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
@@ -84,12 +94,16 @@ export default function AdminDashboard() {
           fetch("/api/admin/coupons"),
           fetch("/api/admin/reviews"),
         ]);
-        const nextStats = statsRes.ok ? await statsRes.json() : await services.getStats();
-        const nextProducts = prodsRes.ok ? await prodsRes.json() : await services.getProducts();
-        const nextOrders = ordersRes.ok ? await ordersRes.json() : await services.getOrders();
-        const nextCustomers = custRes.ok ? await custRes.json() : await services.getCustomers();
-        const nextCoupons = coupRes.ok ? await coupRes.json() : await services.getCoupons();
-        const nextReviews = revRes.ok ? await revRes.json() : await services.getReviews();
+        if (![statsRes, prodsRes, ordersRes, custRes, coupRes, revRes].every((response) => response.ok)) {
+          throw new Error("Admin data request failed");
+        }
+        const nextStats = await statsRes.json();
+        const nextProducts = asArray<Product>(await prodsRes.json());
+        const nextOrders = asArray<Order>(await ordersRes.json());
+        const nextCustomers = asArray<AdminCustomer>(await custRes.json());
+        const nextCoupons = asArray<AdminCoupon>(await coupRes.json());
+        const nextReviews = asArray<AdminReview>(await revRes.json());
+
         if (cancelled) return;
         setStats(nextStats);
         setProducts(nextProducts);
@@ -98,8 +112,12 @@ export default function AdminDashboard() {
         setCoupons(nextCoupons);
         setReviews(nextReviews);
         setError(false);
-      } catch {
-        if (!cancelled) setError(true);
+        setErrorMessage(null);
+      } catch (caught) {
+        if (!cancelled) {
+          setError(true);
+          setErrorMessage(caught instanceof Error ? caught.message : "Unknown dashboard loading error");
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -107,11 +125,13 @@ export default function AdminDashboard() {
     return () => {
       cancelled = true;
     };
-  }, [services, reloadKey]);
+  }, [reloadKey]);
 
   const load = useCallback(() => {
     setError(false);
+    setErrorMessage(null);
     setLoading(true);
+
     setReloadKey((key) => key + 1);
   }, []);
 
@@ -120,7 +140,7 @@ export default function AdminDashboard() {
     return (
       <ErrorState
         title="تعذر تحميل بيانات لوحة التحكم"
-        description="حدث خطأ أثناء جلب البيانات المحلية."
+        description={errorMessage ?? "حدث خطأ أثناء جلب البيانات المحلية."}
         onRetry={load}
       />
     );

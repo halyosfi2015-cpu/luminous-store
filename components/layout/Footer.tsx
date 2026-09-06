@@ -1,24 +1,27 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Mail, Phone, MapPin, Send, ShieldCheck, Check } from "lucide-react";
-import { FaInstagram, FaWhatsapp, FaFacebook, FaYoutube } from "react-icons/fa";
+import { FaInstagram, FaTiktok, FaWhatsapp, FaFacebook, FaYoutube } from "react-icons/fa";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
 import Logo from "@/components/layout/Logo";
 import { useLang } from "@/lib/use-lang";
 import { siteConfig } from "@/src/data/siteConfig";
+import { getTaxonomyCategoryCards, type TaxonomyCategoryCard } from "@/src/lib/taxonomy";
 
-const categories = [
-  { href: "/categories/skincare", label: "العناية بالبشرة", labelEn: "Skincare" },
-  { href: "/categories/haircare", label: "العناية بالشعر", labelEn: "Haircare" },
-  { href: "/categories/bodycare", label: "العناية بالجسم", labelEn: "Bodycare" },
-  { href: "/categories/makeup", label: "المكياج", labelEn: "Makeup" },
-  { href: "/categories/perfume", label: "العطور", labelEn: "Perfume" },
-  { href: "/categories/baby", label: "الأم والطفل", labelEn: "Baby & Mom" },
-  { href: "/categories/tools", label: "الأدوات والإكسسوارات", labelEn: "Tools & Accessories" },
-];
+interface FooterCategory {
+  href: string;
+  label: string;
+  labelEn: string;
+}
+
+const defaultCategories: FooterCategory[] = getTaxonomyCategoryCards().map((c) => ({
+  href: `/categories/${c.slug}`,
+  label: c.nameAr,
+  labelEn: c.name,
+}));
 
 const services = [
   { href: "/about", label: "من نحن", labelEn: "About Us" },
@@ -36,7 +39,7 @@ const policies = [
 
   const socialLinkMap = {
     instagram: FaInstagram,
-    tiktok: FaInstagram,
+    tiktok: FaTiktok,
     snapchat: FaInstagram,
     youtube: FaYoutube,
     facebook: FaFacebook,
@@ -44,16 +47,17 @@ const policies = [
   } as const;
 
   const UNVERIFIED_SOCIAL_DOMAINS = [
-    "instagram.com/luminousderma",
     "tiktok.com/@luminousderma",
     "snapchat.com/add/luminousderma",
     "youtube.com/@luminousderma",
   ];
 
+  function isVerifiedUrl(url: string): boolean {
+    return !UNVERIFIED_SOCIAL_DOMAINS.some((domain) => url.includes(domain));
+  }
+
   const socialLinks = siteConfig.socialLinks.map((link) => {
-    const isUnverified = UNVERIFIED_SOCIAL_DOMAINS.some((domain) =>
-      link.url.includes(domain)
-    );
+    const isUnverified = !isVerifiedUrl(link.url);
     return {
       href: isUnverified ? "#" : link.url,
       icon: socialLinkMap[link.icon as keyof typeof socialLinkMap] || FaInstagram,
@@ -72,7 +76,56 @@ export default function Footer() {
   const { lang } = useLang();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [categories, setCategories] = useState(defaultCategories);
+  const [socialLinks, setSocialLinks] = useState<Array<{ href: string; icon: typeof FaInstagram; label: string }>>([]);
   const isAr = lang === "ar";
+
+  useEffect(() => {
+    fetch("/api/content/taxonomy", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data.categoryCards) && data.categoryCards.length > 0) {
+          setCategories(data.categoryCards.map((c: TaxonomyCategoryCard) => ({
+            href: `/categories/${c.slug}`,
+            label: c.nameAr,
+            labelEn: c.name,
+          })));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    // Fetch social links from persisted settings
+    fetch("/api/social-links", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.socialLinks) {
+          const mapped = data.socialLinks.map((link: { platform: string; url: string; label: string }) => {
+            const isUnverified = !isVerifiedUrl(link.url);
+            return {
+              href: isUnverified ? "#" : link.url,
+              icon: socialLinkMap[link.platform as keyof typeof socialLinkMap] || FaInstagram,
+              label: link.label,
+            };
+          });
+          setSocialLinks(mapped);
+        }
+      })
+      .catch(() => {
+        // Fallback to siteConfig if API fails
+        const fallback = siteConfig.socialLinks.map((link) => {
+          const isUnverified = !isVerifiedUrl(link.url);
+          return {
+            href: isUnverified ? "#" : link.url,
+            icon: socialLinkMap[link.icon as keyof typeof socialLinkMap] || FaInstagram,
+            label: link.platform.charAt(0).toUpperCase() + link.platform.slice(1),
+          };
+        });
+        setSocialLinks(fallback);
+      });
+  }, []);
+
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
@@ -124,21 +177,7 @@ export default function Footer() {
                 })}
               </div>
             </div>
-            <div>
-              <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-[#D4AF37] font-playfair">
-                <span className="h-1 w-4 rounded-full bg-[#D4AF37]" />
-                {isAr ? "الأقسام" : "Categories"}
-              </h3>
-              <ul className="space-y-2.5">
-                {categories.map(({ href, label, labelEn }) => (
-                  <li key={href}>
-                    <Link href={href} className="text-sm text-[#FFF7F2]/50 transition-colors duration-200 ease-out-smooth hover:text-[#D4AF37] font-montserrat">
-                      {isAr ? label : labelEn}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            
             <div>
               <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-[#D4AF37] font-playfair">
                 <span className="h-1 w-4 rounded-full bg-[#D4AF37]" />
@@ -168,7 +207,9 @@ export default function Footer() {
                   </li>
                 ))}
               </ul>
-              <h3 className="mb-4 mt-6 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-[#D4AF37] font-playfair">
+            </div>
+            <div>
+              <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-[#D4AF37] font-playfair">
                 <span className="h-1 w-4 rounded-full bg-[#D4AF37]" />
                 {isAr ? "معلومات الاتصال" : "Contact Info"}
               </h3>
@@ -178,9 +219,9 @@ export default function Footer() {
                   <span>{isAr ? "صنعاء، اليمن" : "Sana'a, Yemen"}</span>
                 </li>
                 <li>
-                  <a href="tel:+967777777777" className="flex items-center gap-2 text-sm text-[#FFF7F2]/50 transition-colors duration-200 ease-out-smooth hover:text-[#D4AF37] font-montserrat">
+                  <a href="tel:+967780015305" className="flex items-center gap-2 text-sm text-[#FFF7F2]/50 transition-colors duration-200 ease-out-smooth hover:text-[#D4AF37] font-montserrat">
                     <Phone size={14} className="shrink-0 text-[#D4AF37]" />
-                    +967 777 777 777
+                    +967 780 015 305
                   </a>
                 </li>
                 <li>

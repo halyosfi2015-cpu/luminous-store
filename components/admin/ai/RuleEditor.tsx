@@ -34,6 +34,7 @@ const OPERATOR_LABELS: Record<PersonalizationConditionOperator, string> = {
   less_than: "أصغر من",
   in: "في",
   not_in: "ليس في",
+  starts_with: "يبدأ بـ",
 };
 
 const ACTION_TYPE_LABELS: Record<PersonalizationActionType, string> = {
@@ -53,7 +54,7 @@ export interface RuleEditorProps {
   onCancel: () => void;
 }
 
-const OPERATOR_VALUES = ["equals", "not_equals", "contains", "greater_than", "less_than", "in", "not_in"];
+const OPERATOR_VALUES = ["equals", "not_equals", "contains", "greater_than", "less_than", "in", "not_in", "starts_with"];
 const ACTION_TYPE_VALUES: PersonalizationActionType[] = [
   "reorder_products",
   "filter_products",

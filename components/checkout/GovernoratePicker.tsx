@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { MapPin, ChevronDown, Search, Check, Truck } from "lucide-react";
-import { loadGovernorates, type Governorate } from "@/src/data/shipping";
+import { loadGovernorates, fetchGovernoratesFromAPI, type Governorate } from "@/src/data/shipping";
 
 type Props = {
   value: Governorate | null;
@@ -12,10 +12,17 @@ type Props = {
 export default function GovernoratePicker({ value, onChange }: Props) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
-  const [list] = useState<Governorate[]>(() =>
+  const [list, setList] = useState<Governorate[]>(() =>
     loadGovernorates().filter((g) => g.enabled)
   );
   const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetchGovernoratesFromAPI().then((apiGovs) => {
+      const enabled = apiGovs.filter((g) => g.enabled);
+      if (enabled.length > 0) setList(enabled);
+    });
+  }, []);
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {

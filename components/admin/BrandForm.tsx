@@ -6,7 +6,6 @@ import { Save, Database, Check, Undo2, AlertTriangle, Loader2 } from "lucide-rea
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
-import { saveBrandLocal } from "@/src/admin/adapters/local/brands";
 import type { Brand } from "@/src/data/brands";
 
 const slugify = (value: string) =>
@@ -145,7 +144,8 @@ export default function BrandForm({ initialBrand }: { initialBrand?: Brand }) {
 
     const brand: Brand = {
       ...initialBrand,
-      id: initialBrand?.id || `new-${Date.now()}`,
+      // brands.id is a UUID column — generate a proper UUID for new brands.
+      id: initialBrand?.id || crypto.randomUUID(),
       slug: isEdit ? initialBrand!.slug : slugify(form.slug || form.name || form.nameAr),
       name: form.name.trim(),
       nameAr: form.nameAr.trim() || form.name.trim(),
@@ -173,7 +173,6 @@ export default function BrandForm({ initialBrand }: { initialBrand?: Brand }) {
       .then(async (r) => {
         const data = await r.json();
         if (!r.ok) throw new Error(data.error || `HTTP ${r.status}`);
-        saveBrandLocal(brand);
         setBuilt(brand);
         setSaveError(null);
       })

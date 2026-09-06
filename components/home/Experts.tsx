@@ -5,21 +5,26 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowLeft, BadgeCheck, Star, MapPin, Stethoscope, ChevronLeft, ChevronRight } from "lucide-react"
 import Container from "@/components/ui/Container"
-import { experts } from "@/lib/content"
+import { useAdminExperts } from "@/hooks/useAdminExperts"
 import { useLang } from "@/lib/use-lang"
+import { useSectionContent } from "@/components/site-content/SiteContentProvider"
 import { getExpertImage } from "@/lib/expert-images"
 
 export default function Experts() {
   const { lang } = useLang()
   const isAr = lang === "ar"
   const t = (ar: string, en: string) => (isAr ? ar : en)
+  const content = useSectionContent("experts")
   const stripRef = useRef<HTMLDivElement>(null)
+  const experts = useAdminExperts()
 
   const scrollStrip = (dir: 1 | -1) => {
     const el = stripRef.current
     if (!el) return
-    el.scrollBy({ left: dir * 340, behavior: "smooth" })
+    el.scrollBy({ left: dir * 200, behavior: "smooth" })
   }
+
+  if (!content.visible) return null
 
   return (
     <section id="experts" className="w-full scroll-mt-28 bg-white py-8 sm:py-10 lg:py-12">
@@ -29,16 +34,13 @@ export default function Experts() {
           <div>
             <span className="mb-3 inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-secondary">
               <span className="h-0.5 w-6 rounded-pill bg-accent" />
-              {t("خبراء موثوقون", "Trusted Experts")}
+              {t(content.eyebrowAr, content.eyebrowEn)}
             </span>
             <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-              {t("خبراء العناية بالبشرة", "Skincare Experts")}
+              {t(content.titleAr, content.titleEn)}
             </h2>
             <p className="mt-2 max-w-xl text-sm text-gray-600">
-              {t(
-                "فريق متخصص يقدم استشارات مخصصة لاختيار المنتجات والروتين المناسبة",
-                "Specialized team offering personalized consultations for your products and routines"
-              )}
+              {t(content.subtitleAr, content.subtitleEn)}
             </p>
           </div>
           <Link
@@ -133,6 +135,29 @@ export default function Experts() {
             </Link>
           ))}
           </div>
+        </div>
+
+        {/* Join-the-network CTA */}
+        <div className="mt-7 flex flex-col items-center gap-3 rounded-3xl border border-primary/10 bg-gradient-to-l from-primary/[0.04] via-white to-secondary/[0.06] px-6 py-6 text-center sm:flex-row sm:justify-between sm:text-start">
+          <div>
+            <h3 className="text-sm font-bold text-gray-900 sm:text-base">
+              {t("لديك خبرة تستحق أن تصل إلى من يحتاجها؟", "Have expertise that deserves to reach those who need it?")}
+            </h3>
+            <p className="mt-1 text-xs text-gray-500 sm:text-sm">
+              {t(
+                "انضم إلى شبكة خبراء Luminous Derma وشارك خبرتك لتقديم تجربة أكثر تخصصًا لعملائنا.",
+                "Join the Luminous Derma expert network and help deliver a more specialised experience."
+              )}
+            </p>
+          </div>
+          <Link
+            href="/experts/join"
+            className="group inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-6 py-3 text-xs font-bold text-white shadow-lg shadow-primary/25 transition-all duration-300 hover:bg-primary-700 hover:shadow-primary/40 active:scale-95 sm:text-sm"
+          >
+            <Stethoscope size={15} className="text-accent-light" />
+            {t("انضم إلى خبرائنا", "Join Our Experts")}
+            <ArrowLeft size={13} className="transition-transform duration-300 group-hover:-translate-x-1" />
+          </Link>
         </div>
       </Container>
     </section>

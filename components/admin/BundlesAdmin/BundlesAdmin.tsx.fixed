@@ -1,0 +1,501 @@
+"use client";
+
+import { useState, useEffect, useMemo } from "react";
+import { Loader2, Plus, Pencil, Trash2, Save, CheckCircle2, X, Filter, Package } from "lucide-react";
+import Container from "@/components/ui/Container";
+import Badge from "@/components/ui/Badge";
+import Button from "@/components/ui/Button";
+import { useAdminToast } from "@/components/admin/ui/AdminToast";
+import { useAdminGuard } from "@/src/admin/useAdminGuard";
+import { getBundlesByOccasion, getBundleProducts } from "@/src/data/bundles";
+import type { Bundle } from "@/src/types/bundle";
+import type { BundleOccasion } from "@/src/types/bundle";
+
+function FormatPrice(n: number) {
+  return n.toLocaleString("ar-YE");
+}
+
+const OCCASION_LABELS: Record<string, string> = {
+  all: "الكل",
+  bride: "عروس",
+  engagement: "خطوبة",
+  wedding: "زفاف",
+  holidays: "أعياد",
+  valentine: "عيد الحب",
+  "mothers-day": "عيد الأم",
+  summer: "صيف",
+  winter: "شتاء",
+};
+
+export default function BundlesAdmin() {
+  const { toast } = useAdminToast();
+  const allowed = useAdminGuard("merchandising");
+
+  if (!allowed) {
+    return (
+      <div className="p-8 text-center">
+        <div className="text-5xl mb-4 text-error">
+لا تملك صلاحية
+</div>
+        <h1 className="text-2xl font-bold text-error">لا تملك صلاحية</h1>
+        <p className="text-muted">دورك الحالي لا يملك صلاحية الوصول إلى مركز إدارة الباقات.</p>
+      </div>
+    );
+  }
+
+  const [allBundles, setAllBundles] = useState<Bundle[]>([]);
+  const [bundles, setBundles] = useState<Bundle[]>([]);
+  const [occasions, setOccasions] = useState<string[]>(["all"]);
+  const [query, setQuery] = useState("");
+  const [editing, setEditing] = useState<Bundle | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [saving, setSaving] = useState(0);
+  const [selectedOccasion, setSelectedOccasion] = useState("all");
+
+  // Fetch bundles from API
+  useEffect(() => {
+    const fetchBundles = async () => {
+      try {
+        const res = await fetch("/api/admin/bundles", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setAllBundles(data.bundles || []);
+          setBundles(data.bundles || []);
+          // Build occasions list
+          const occasionSet = new Set<string>(["all"]);
+          (data.bundles || []).forEach((b: any) => {
+            (b.occasion || []).forEach((o: string) => occasionSet.add(o));
+          });
+          setOccasions(["all", ...occasionSet]);
+          setSelectedOccasion("all");
+        }
+      } catch (err) {
+        console.error("Failed to fetch bundles:", err);
+      }
+    };
+    fetchBundles();
+  }, []);
+
+  // Filter bundles by occasion
+  const filteredBundles = useMemo(() => {
+    if (selectedOccasion === "all") return bundles;
+    return bundles.filter((b) => b.occasion && b.occasion.includes(selectedOccasion as BundleOccasion));
+  }, [bundles, selectedOccasion]);
+
+  const handleSave = (bundle: Bundle) => {
+    setSaving(1);
+    fetch("/api/admin/bundles", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(bundle),
+    }).then(() => {
+      setSaving(0);
+      toast("تم حفظ الباقة بنجاح", "success");
+      // Refresh
+      fetch("/api/admin/bundles")
+        .then((r) => r.json())
+        .then((data) => {
+          setAllBundles(data.bundles || []);
+          setBundles(data.bundles || []);
+        });
+    });
+  };
+
+  const handleDelete = async (id: string) => {
+    setDeleting(true);
+    fetch(`/api/admin/bundles/${id}`, { method: "DELETE" })
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        toast("تم حذف الباقة بنجاح", "success");
+        setDeleteId(null);
+        setDeleting(false);
+        fetch("/api/admin/bundles")
+          .then((r) => r.json())
+          .then((data) => {
+            setAllBundles(data.bundles || []);
+            setBundles(data.bundles || []);
+          });
+      })
+      .catch(() => {
+        toast("حدث خطأ أثناء الحذف", "error");
+        setDeleteId(null);
+        setDeleting(false);
+      });
+  };
+
+  const openNew = () => {
+    setEditing({
+      id: `bund-${Date.now()}`,
+      nameAr: "",
+      nameEn: "",
+      descriptionAr: "",
+      descriptionEn: "",
+      occasion: ["engagement" as BundleOccasion],
+      image: "",
+      badge: "",
+      badgeAr: "",
+      productIds: [] as string[],
+      originalPrice: 0,
+      bundlePrice: 0,
+      savingsPercent: 0,
+      giftWrap: false,
+      giftWrapPrice: 0,
+      servicePrice: 0,
+      giftCard: false,
+      placeholder: true,
+      active: true,
+    } as Bundle);
+  };
+
+  const saveEdit = (bundle: Bundle) => {
+    handleSave(bundle);
+    setEditing(null);
+  };
+
+  if (saving > 0) return <p className="text-muted">جارٍ الحفظ...</p>;
+
+  return (
+    <main dir="rtl" className="min-h-screen bg-background py-8">
+      <Container>
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h1 className="flex items-center gap-2 text-2xl font-bold text-foreground">
+              <Package size={24} className="text-primary" /> إدارة الباقات
+            </h1>
+            <p className="mt-1 text-sm text-muted">
+              {allBundles.length} باقة (المضمنة + المخصصة) — عدّل باقات قائمة أو أضف باقة جديدة
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={openNew}
+              className="flex items-center gap-2 rounded-input bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-primary/30 transition-all hover:bg-primary-dark active:scale-95"
+            >
+              <Plus size={16} /> باقة جديدة
+            </button>
+          </div>
+        </div>
+
+        {/* Filter by occasion */}
+        <div className="mb-6">
+          <div className="flex flex-wrap gap-2">
+            {occasions.map((occ) => (
+              <button
+                key={occ}
+                type="button"
+                onClick={() => setSelectedOccasion(occ)}
+                className={`rounded-pill border px-3.5 py-1.5 text-xs font-bold transition-all ${
+                  selectedOccasion === occ
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border bg-background text-muted hover:border-primary/30 hover:text-primary"
+                }`}
+              >
+                {OCCASION_LABELS[occ as keyof typeof OCCASION_LABELS]}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Editor */}
+        {editing && (
+          <div className="mb-6 p-5 rounded-card border border-primary/20 bg-card shadow-card-hover">
+            <h2 className="mb-4 text-sm font-bold text-foreground">
+              {editing.id?.includes("bund-")
+                ? `تعديل باقة: ${editing.nameAr}`
+                : "باقة جديدة"}
+            </h2>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                // Use editing state and only update changed fields
+                const updated: Partial<Bundle> = {
+                  nameAr: (e.target as HTMLFormElement).nameAr.value || editing.nameAr,
+                  nameEn: (e.target as HTMLFormElement).nameEn.value || editing.nameEn,
+                  descriptionAr: (e.target as HTMLFormElement).descriptionAr.value || editing.descriptionAr,
+                  descriptionEn: (e.target as HTMLFormElement).descriptionEn.value || editing.descriptionEn,
+                  occasion: editing.occasion,
+                  image: (e.target as HTMLFormElement).image.value || editing.image,
+                  badge: (e.target as HTMLFormElement).badge.value || editing.badge,
+                  badgeAr: (e.target as HTMLFormElement).badgeAr.value || editing.badgeAr,
+                  productIds: editing.productIds,
+                  originalPrice: editing.originalPrice,
+                  bundlePrice: editing.bundlePrice,
+                  savingsPercent: editing.savingsPercent,
+                  giftWrap: editing.giftWrap,
+                  giftWrapPrice: editing.giftWrapPrice,
+                  servicePrice: editing.servicePrice,
+                  giftCard: editing.giftCard,
+                  placeholder: editing.placeholder,
+                  active: editing.active,
+                };
+                saveEdit(updated as Bundle);
+              }}
+            >
+              <div className="grid gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-foreground">اسم الباقة (عربي)</label>
+<input
+  type="text"
+  name="nameAr"
+  value={editing.nameAr}
+  onChange={(e) => setEditing({ ...editing, nameAr: e.target.value })}
+/>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground">اسم الباقة (إنجليزي)</label>
+                  <input
+                    type="text"
+                    name="nameEn"
+                    value={editing.nameEn}
+                    onChange={(e) => setEditing({ ...editing, nameAr: e.target.value })}
+                    className="w-full rounded-input border border-border bg-background px-4 py-2.5 text-sm text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground">الوصف (عربي)</label>
+                  <textarea
+                    name="descriptionAr"
+                    value={editing.descriptionAr}
+                    onChange={(e) => setEditing({ ...editing, nameAr: e.target.value })}
+                    rows={2}
+                    className="w-full rounded-input border border-border bg-background px-4 py-2.5 text-sm text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground">الوصف (إنجليزي)</label>
+                  <textarea
+                    name="descriptionEn"
+                    value={editing.descriptionEn}
+                    onChange={(e) => setEditing({ ...editing, nameAr: e.target.value })}
+                    rows={2}
+                    className="w-full rounded-input border border-border bg-background px-4 py-2.5 text-sm text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground">المناسبة</label>
+                  <select
+                    name="occasion"
+                    value={editing.occasion?.[0] || "engagement"}
+                    onChange={(e) => setEditing({ ...editing, nameAr: e.target.value })}
+                    className="w-full rounded-input border border-border bg-background px-4 py-2.5 text-sm text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
+                  >
+                    <option value="engagement">خطوبة</option>
+                    <option value="wedding">زفاف</option>
+                    <option value="valentine">عيد الحب</option>
+                    <option value="summer">صيف</option>
+                    <option value="holidays">أعياد</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground">الصورة</label>
+                  <input
+                    type="text"
+                    name="image"
+                    value={editing.image}
+                    onChange={(e) => setEditing({ ...editing, nameAr: e.target.value })}
+                    className="w-full rounded-input border border-border bg-background px-4 py-2.5 text-sm text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground">شارة (شعار)</label>
+                  <input
+                    type="text"
+                    name="badge"
+                    value={editing.badge || ""}
+                    onChange={(e) => setEditing({ ...editing, nameAr: e.target.value })}
+                    className="w-full rounded-input border border-border bg-background px-4 py-2.5 text-sm text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
+                  />
+                  <input
+                    type="text"
+                    name="badgeAr"
+                    value={editing.badgeAr || ""}
+                    onChange={(e) => setEditing({ ...editing, nameAr: e.target.value })}
+                    className="w-full rounded-input border border-border bg-background px-4 py-2.5 text-sm text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground">المنتجات (أسماء مفصولة بفاصلة)</label>
+                  <input
+                    type="text"
+                    name="productIds"
+                    value={editing.productIds?.join(",") || ""}
+                    onChange={(e) => setEditing({ ...editing, nameAr: e.target.value })}
+                    className="w-full rounded-input border border-border bg-background px-4 py-2.5 text-sm text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
+                  />
+                  <p className="text-xs text-muted mt-2">
+                    أضف معرّفات المنتجات (yq-...) المفصولة بفاصلة
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground">السعر الأصلي</label>
+                  <input
+                    type="number"
+                    name="originalPrice"
+                    value={editing.originalPrice}
+                    onChange={(e) => setEditing({ ...editing, nameAr: e.target.value })}
+                    className="w-full rounded-input border border-border bg-background px-3 py-2.5 text-sm text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground">سعر الباقة</label>
+                  <input
+                    type="number"
+                    name="bundlePrice"
+                    value={editing.bundlePrice}
+                    onChange={(e) => setEditing({ ...editing, nameAr: e.target.value })}
+                    className="w-full rounded-input border border-border bg-background px-3 py-2.5 text-sm text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground">نسبة التوفير %</label>
+                  <input
+                    type="number"
+                    name="savingsPercent"
+                    value={editing.savingsPercent}
+                    onChange={(e) => setEditing({ ...editing, nameAr: e.target.value })}
+                    className="w-full rounded-input border border-border bg-background px-3 py-2.5 text-sm text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground">التغليف gift wrap</label>
+                  <select
+                    name="giftWrap"
+                    value={editing.giftWrap ? "true" : "false"}
+                    onChange={(e) => setEditing({ ...editing, nameAr: e.target.value })}
+                    className="w-full rounded-input border border-border bg-background px-4 py-2.5 text-sm text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
+                  >
+                    <option value="true">نعم</option>
+                    <option value="false">لا</option>
+                  </select>
+                  <input
+                    type="number"
+                    name="giftWrapPrice"
+                    value={editing.giftWrapPrice}
+                    onChange={(e) => setEditing({ ...editing, nameAr: e.target.value })}
+                    className="w-full rounded-input border border-border bg-background px-3 py-2.5 text-sm text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground">رسوم الخدمة</label>
+                  <input
+                    type="number"
+                    name="servicePrice"
+                    value={editing.servicePrice}
+                    onChange={(e) => setEditing({ ...editing, nameAr: e.target.value })}
+                    className="w-full rounded-input border border-border bg-background px-3 py-2.5 text-sm text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-foreground">بطاقة هدية gift card</label>
+                  <select
+                    name="giftCard"
+                    value={editing.giftCard ? "true" : "false"}
+                    onChange={(e) => setEditing({ ...editing, nameAr: e.target.value })}
+                    className="w-full rounded-input border border-border bg-background px-4 py-2.5 text-sm text-foreground transition-all focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
+                  >
+                    <option value="true">نعم</option>
+                    <option value="false">لا</option>
+                  </select>
+                  <input
+                    type="checkbox"
+                    name="placeholder"
+                    checked={editing.placeholder}
+                    onChange={(e) => setEditing({ ...editing, nameAr: e.target.value })}
+                    className="w-4 h-4 rounded border border-primary bg-primary/checked checked:bg-primary"
+                  />
+                  <span className="ml-2 text-sm text-muted">صورة مؤقتة</span>
+                </div>
+              </div>
+              <div className="flex gap-3 mt-6">
+                <button
+                  type="submit"
+                  className="flex items-center gap-1.5 rounded-pill bg-primary px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-primary/30 transition-all hover:bg-primary-dark active:scale-95">
+                  <Save size={13} /> حفظ
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditing(null);
+                  }}
+                  className="flex items-center gap-1.5 rounded-pill border border-border bg-background px-5 py-2.5 text-sm font-bold text-muted transition-all hover:border-red-300 hover:text-red-500">
+                  <X size={13} /> إلغاء
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {/* List */}
+        <div className="overflow-hidden rounded-card border border-border bg-card shadow-card">
+          <div className="grid grid-cols-[1fr_120px_100px_100px_100px] items-center gap-2 border-b border-border bg-muted-bg/50 px-5 py-3 text-xs font-bold uppercase tracking-wider text-muted sm:grid-cols-[1fr_140px_110px_110px_110px_110px]">
+            <span>الباقة</span>
+            <span className="hidden sm:block">المناسبة</span>
+            <span className="hidden sm:block">السعر</span>
+            <span className="hidden sm:block">الإجراءات</span>
+          </div>
+          {filteredBundles.map((b) => (
+            <div
+              key={b.id}
+              className={`grid grid-cols-[1fr_120px_100px_100px_100px] items-center gap-2 border-b border-border px-5 py-3 text-sm last:border-b-0 ${!b.active ? "opacity-50" : ""}`}>
+                <div className="flex min-w-0 items-center gap-3">
+                  <span className="relative hidden h-11 w-11 shrink-0 overflow-hidden rounded-lg bg-background sm:block">
+                    {b.image && <img src={b.image} alt="" className="object-cover h-11 w-11" />}
+                  </span>
+                  <div className="min-w-0">
+                    <p className="truncate font-semibold text-foreground">{b.nameAr}</p>
+                    <p className="truncate text-[10px] text-muted">{b.descriptionAr || ""}</p>
+                  </div>
+                </div>
+
+                <div className="hidden sm:block">
+                  <span className="block text-[10px] font-semibold text-foreground">{OCCASION_LABELS[b.occasion?.[0] || "all"]}</span>
+                </div>
+
+                <div className="hidden sm:block">
+                  <span className="text-[10px] font-bold text-foreground">{FormatPrice(b.bundlePrice)} ر.ي</span>
+                  <span className="text-[10px] text-muted / original">السعر الأصلي: {FormatPrice(b.originalPrice)} ر.ي</span>
+                  <span className="text-[10px] text-muted">وفر {b.savingsPercent}%</span>
+                </div>
+
+                <div className="flex items-center justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setEditing({ ...b })}
+                    className="flex h-8 w-8 items-center justify-center rounded-full sm:hidden bg-primary/10 text-primary hover:bg-primary/20 transition-all"
+                    aria-label="تعديل">
+                    <Pencil size={13} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDeleteId(b.id)}
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-red-200 text-red-500 hover:bg-red-100 transition-all disabled:opacity-30 disabled:hover:border-red-200 disabled:hover:text-red-500"
+                    aria-label="حذف">
+                    <Trash2 size={13} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+          {filteredBundles.length === 0 && (
+            <p className="text-center text-muted py-8">لا توجد باقات مطابقة للفلاتر</p>
+          )}
+        </div>
+
+        <ConfirmDialog
+          open={deleteId !== null}
+          title="تأكيد الحذف"
+          message={`سيتم حذف الباقة "${filteredBundles.find((b) => b.id === deleteId)?.nameAr ?? ""}" نهائياً.`}
+          confirmLabel="حذف"
+          tone="danger"
+          onConfirm={() => handleDelete(deleteId!)}
+          onCancel={() => setDeleteId(null)}
+        />
+      </Container>
+    </main>
+  );
+}

@@ -6,7 +6,6 @@ import { Save, Database, Check, Undo2, AlertTriangle, Loader2 } from "lucide-rea
 import Card from "@/components/ui/Card";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
-import { saveCategoryLocal } from "@/src/admin/adapters/local/categories";
 import type { CategoryInfo } from "@/src/types/product";
 
 const slugify = (value: string) =>
@@ -136,7 +135,6 @@ export default function CategoryForm({ initialCategory }: { initialCategory?: Ca
       .then(async (r) => {
         const data = await r.json();
         if (!r.ok) throw new Error(data.error || `HTTP ${r.status}`);
-        saveCategoryLocal(category);
         setBuilt(category);
         setSaveError(null);
       })

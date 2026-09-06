@@ -3,6 +3,7 @@ import {
   COMMERCE_ANALYST_PROMPT_VERSION,
   CUSTOMER_INTELLIGENCE_PROMPT_VERSION,
   PRODUCT_INTELLIGENCE_PROMPT_VERSION,
+  MERCHANDISING_PROMPT_VERSION,
   AI_CONTEXT_VERSION,
 } from './config'
 
@@ -61,13 +62,21 @@ Respond with STRICT JSON only. The JSON must have these top-level keys:
 - If you cannot answer reliably, output: {"answer":"Insufficient data to answer reliably.","summary":"","facts":[],"insights":[],"recommendations":[],"confidence":"low","dataSources":[],"contextRange":""}
 `
 
-function buildSystemPrompt(scope: 'commerce' | 'customer' | 'product', config: AIProviderConfig): PromptBundle {
+function buildSystemPrompt(
+  scope: 'commerce' | 'customer' | 'product' | 'content' | 'merchandising',
+  config: AIProviderConfig,
+  contentType?: 'description' | 'title' | 'tag' | 'feature',
+): PromptBundle {
   const contextVersion = config.contextVersion
   const promptVersion =
     scope === 'commerce'
       ? COMMERCE_ANALYST_PROMPT_VERSION
       : scope === 'customer'
       ? CUSTOMER_INTELLIGENCE_PROMPT_VERSION
+      : scope === 'content'
+      ? PRODUCT_INTELLIGENCE_PROMPT_VERSION
+      : scope === 'merchandising'
+      ? MERCHANDISING_PROMPT_VERSION
       : PRODUCT_INTELLIGENCE_PROMPT_VERSION
 
   const scopeInstructions: Record<string, string> = {
@@ -77,11 +86,23 @@ function buildSystemPrompt(scope: 'commerce' | 'customer' | 'product', config: A
       'You are a customer intelligence assistant. Analyze the provided summarized customer context to interpret behavior, lifecycle, interests, and purchase intent. Ground every statement in the provided signals. Do not expose PII beyond what is shared.',
     product:
       'You are a product intelligence assistant. Analyze the provided product performance context including views, cart additions, purchases, revenue, and category position. Ground every statement in the provided metrics.',
+    content:
+      'You are a content generation assistant for Luminous Derma. Generate product content (titles, descriptions, tags, features) based on the product context provided. Be concise, Arabic-first, and commercially appealing. Output strictly in the requested JSON format.',
+    merchandising:
+      'You are a merchandising intelligence assistant. Analyze product performance, pricing, discounts, visibility status, and catalog health to provide recommendations for product placement, pricing strategy, and visibility optimization. Base all recommendations on the provided product context data.',
+  }
+
+  const contentInstructions: Record<string, string> = {
+    description: 'Generate a product description (2-3 paragraphs) highlighting key benefits, ingredients, and usage. Include Arabic and English versions.',
+    title: 'Generate a product title (max 60 characters) that is catchy, descriptive, and includes key benefits. Include Arabic and English versions.',
+    tag: 'Generate 3-5 product tags/keywords that capture the product\'s main benefits and category. Include Arabic and English versions.',
+    feature: 'Generate 3-5 product features highlighting the technical and user benefits. Include Arabic and English versions.',
   }
 
   const system = [
     ...GROUNDING_RULES,
     scopeInstructions[scope] ?? scopeInstructions.commerce,
+    contentType ? contentInstructions[contentType] : '',
     JSON_SCHEMA_DESCRIPTION,
   ].join('\n\n')
 
@@ -103,4 +124,15 @@ export function getCustomerIntelligencePrompt(config: AIProviderConfig): PromptB
 
 export function getProductIntelligencePrompt(config: AIProviderConfig): PromptBundle {
   return buildSystemPrompt('product', config)
+}
+
+export function getContentGenerationPrompt(
+  config: AIProviderConfig,
+  contentType: 'description' | 'title' | 'tag' | 'feature',
+): PromptBundle {
+  return buildSystemPrompt('content', config, contentType)
+}
+
+export function getMerchandisingPrompt(config: AIProviderConfig): PromptBundle {
+  return buildSystemPrompt('merchandising', config)
 }

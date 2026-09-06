@@ -1,10 +1,12 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState, useRef, useMemo } from "react";
 import { Search, X, TrendingUp, Clock, PackageSearch, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useSearch } from "@/context/SearchContext";
-import { productSummaries, categories } from "@/src/data/product-summaries";
+import { productSummaries } from "@/src/data/product-summaries";
+import CommercePrice from "@/components/product/CommercePrice";
+import { getTaxonomyCategoryCards, type TaxonomyCategoryCard } from "@/src/lib/taxonomy";
 import { trackClient } from "@/src/lib/analytics/client";
 import { ANALYTICS_EVENT_TYPES } from "@/src/lib/analytics/types";
 import type { ProductSummary } from "@/src/types/product";
@@ -31,9 +33,7 @@ function saveRecent(searches: string[]) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(searches.slice(0, 10))); } catch {}
 }
 
-function formatPrice(amount: number): string {
-  return amount.toLocaleString("ar-YE");
-}
+
 
 /** Normalize Arabic text for smart matching (strip diacritics, unify alef/hamza/taa). */
 function normalizeAr(value: string): string {
@@ -91,11 +91,35 @@ function SearchOverlayInner({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(-1);
   const [recentSearches, setRecentSearches] = useState<string[]>(() => loadRecent());
+  const [taxonomyCategories, setTaxonomyCategories] = useState<TaxonomyCategoryCard[]>(() => getTaxonomyCategoryCards());
+  const [catalogProducts, setCatalogProducts] = useState<ProductSummary[]>(productSummaries);
   const inputRef = useRef<HTMLInputElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { inputRef.current?.focus(); }, []);
+
+  useEffect(() => {
+    fetch("/api/content/products?limit=1000", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data.products) && data.products.length > 0) {
+          setCatalogProducts(data.products as ProductSummary[]);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/content/taxonomy", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data.categoryCards) && data.categoryCards.length > 0) {
+          setTaxonomyCategories(data.categoryCards);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -113,40 +137,44 @@ function SearchOverlayInner({ onClose }: { onClose: () => void }) {
 
     const productHits: Suggestion[] = [];
     const brandMap = new Map<string, number>();
-    const catMap = new Map<string, number>();
 
-    for (const p of productSummaries) {
+    for (const p of catalogProducts) {
       const score = scoreProduct(p, q);
       if (score < 0) continue;
       productHits.push({ type: "product", product: p, score });
       if (p.brand && !brandMap.has(p.brand)) brandMap.set(p.brand, Math.max(0, score - 200));
-      if (p.categoryAr && !catMap.has(p.categoryAr)) catMap.set(p.categoryAr, Math.max(0, score - 300));
     }
 
     const brandHits: Suggestion[] = [...brandMap.entries()]
       .map(([brand, score]) => ({ type: "brand" as const, brand, score }));
 
-    const catHits: Suggestion[] = [...catMap.entries()]
-      .map(([nameAr, score]) => {
-        const cat = categories.find((c) => c.nameAr === nameAr);
-        return { type: "category" as const, category: { slug: cat?.slug ?? "", nameAr, nameEn: cat?.name ?? nameAr }, score };
-      })
-      .filter((c) => c.category && c.category.slug);
+    const nq = normalizeAr(q);
+    const catHits: Suggestion[] = taxonomyCategories
+      .map((cat) => ({
+        cat,
+        score: Math.max(
+          normalizeAr(cat.nameAr).includes(nq) || normalizeAr(cat.name).includes(nq) ? 380 : -1,
+          normalizeAr(cat.nameAr).startsWith(nq) || normalizeAr(cat.name).startsWith(nq) ? 450 : -1,
+        ),
+      }))
+      .filter((x) => x.score >= 0)
+      .map(({ cat, score }) => ({ type: "category" as const, category: { slug: cat.slug, nameAr: cat.nameAr, nameEn: cat.name }, score }));
 
     return [...brandHits, ...catHits, ...productHits]
       .sort((a, b) => b.score - a.score)
       .slice(0, 8);
-  }, [query]);
+  }, [query, taxonomyCategories, catalogProducts]);
 
   const results = useMemo(() => {
     const q = query.trim();
     if (!q) return [];
-    return productSummaries
+        return catalogProducts
+
       .map((p) => ({ p, score: scoreProduct(p, q) }))
       .filter((x) => x.score >= 0)
       .sort((a, b) => b.score - a.score)
       .map((x) => x.p);
-  }, [query]);
+  }, [query, catalogProducts]);
 
   const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -229,6 +257,8 @@ function SearchOverlayInner({ onClose }: { onClose: () => void }) {
               onKeyDown={handleKeyDown}
               placeholder="ابحثي عن منتجاتك، ماركتك، أو تصنيفك المفضل..."
               aria-label="بحث"
+              aria-controls="search-suggestions"
+              aria-activedescendant={activeIndex >= 0 ? `search-suggestion-${activeIndex}` : undefined}
               autoComplete="off"
               className="h-12 w-full rounded-button border border-border bg-muted-bg ps-5 pe-12 text-sm text-foreground outline-none transition-colors placeholder:text-muted focus:border-primary-light focus:bg-card"
             />
@@ -248,10 +278,13 @@ function SearchOverlayInner({ onClose }: { onClose: () => void }) {
           {/* Live smart suggestions */}
           {query.trim() !== "" && suggestions.length > 0 && (
             <section aria-label="اقتراحات البحث" className="mb-6">
-              <div ref={listRef} className="overflow-hidden rounded-card border border-border bg-card shadow-card">
+                  <div id="search-suggestions" ref={listRef} role="listbox" aria-label="اقتراحات البحث" className="overflow-hidden rounded-card border border-border bg-card shadow-card">
                 {suggestions.map((s, index) => (
                   <button
                     key={`${s.type}-${s.product?.id ?? s.brand ?? s.category?.slug}`}
+                    id={`search-suggestion-${index}`}
+                    role="option"
+                    aria-selected={index === activeIndex}
                     type="button"
                     onMouseEnter={() => setActiveIndex(index)}
                     onClick={() => {
@@ -290,7 +323,7 @@ function SearchOverlayInner({ onClose }: { onClose: () => void }) {
                           <p className="truncate text-sm font-medium text-foreground">{s.product.name.ar}</p>
                           <p className="text-xs text-muted">{s.product.brand}</p>
                         </div>
-                        <span className="text-xs font-semibold text-primary">{formatPrice(s.product.pricing.price)} ر.ي</span>
+                        <CommercePrice product={s.product} className="text-xs font-semibold text-primary" originalClassName="hidden" />
                       </>
                     ) : s.type === "brand" ? (
                       <>

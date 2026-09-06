@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState, useMemo, Fragment } from "react";
+import { useEffect, useRef, useState, Fragment } from "react";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 import { useLang } from "@/lib/use-lang";
-import { categories as leafCategories, sectionCategories } from "@/src/data/product-summaries";
-import { categoryTree, type NavCategory } from "@/components/layout/navConfig";
+import { categoryTree as defaultTree, fetchCategoryTreeFromAPI, type NavCategory } from "@/components/layout/navConfig";
 
 /* ================================================================================================ */
 /* CATEGORIES PANEL — narrow vertical column drill-down, text-only                                   */
@@ -13,41 +12,44 @@ import { categoryTree, type NavCategory } from "@/components/layout/navConfig";
 /* opens column 2 for that section only; hovering/clicking a sub-section that has deeper children    */
 /* opens column 3 (e.g. العناية بالبشرة → العناية بالوجه → غسول). Deepest items (leaves) open the    */
 /* products page (/categories/{slug}) directly — no products inside the menu.                        */
-/* Data source: categoryTree (navConfig) — 3 levels. Leaf slugs are filtered to real category pages  */
+/* Data source: categoryTree (navConfig) — derived from the Master Taxonomy, 3 levels.               */
+/* Every node in the tree is a valid /categories/{slug} page, so all leaves link directly.           */
 /* ================================================================================================ */
 function CategoriesPanel({ onClose }: { onClose: () => void }) {
   const { lang } = useLang();
   const isAr = lang === "ar";
 
+  const [tree, setTree] = useState<NavCategory[]>(defaultTree);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [activeChild, setActiveChild] = useState<string | null>(null);
 
-  const validSlugs = useMemo(() => {
-    const slugs = new Set<string>();
-    leafCategories.forEach((c) => slugs.add(c.slug));
-    sectionCategories.forEach((c) => slugs.add(c.slug));
-    return slugs;
+  useEffect(() => {
+    fetchCategoryTreeFromAPI().then(setTree);
   }, []);
 
-  const section = categoryTree.find((s) => s.slug === activeSection) ?? null;
+  const section = tree.find((s) => s.slug === activeSection) ?? null;
   const activeChildNode = section?.children?.find((c) => c.slug === activeChild) ?? null;
   const grandChildren = activeChildNode?.children ?? [];
 
   const label = (n: NavCategory) => (isAr ? n.labelAr : n.labelEn);
   const canDrill = (n: NavCategory) => Boolean(n.children && n.children.length > 0);
-  const isLeaf = (n: NavCategory) => !canDrill(n) && validSlugs.has(n.slug);
+  const isLeaf = (n: NavCategory) => !canDrill(n);
 
   const renderRow = (n: NavCategory, active: boolean, onOpen: () => void, onToggle: () => void) => {
     const drill = canDrill(n);
     const content = (
       <>
-        <span className="truncate text-sm">{label(n)}</span>
-        <ChevronLeft size={14} strokeWidth={2.5} className="shrink-0 text-blue-600" />
+        <span className="min-w-0 flex-1 truncate text-xs font-semibold">{label(n)}</span>
+        <ChevronLeft
+          size={12}
+          strokeWidth={2.5}
+          className={`shrink-0 text-blue-600 ${isAr ? "" : "rotate-180"}`}
+        />
       </>
     );
-    const cls = `group flex w-full items-center gap-1 rounded-lg px-3 py-2 text-start transition-colors duration-200 ${
+    const cls = `group flex w-full items-center gap-2 rounded-lg px-3 py-2 text-start transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 ${
       active
-        ? "bg-blue-50 font-semibold text-blue-700"
+        ? "bg-blue-50 text-blue-700"
         : "text-muted hover:bg-blue-50/60 hover:text-blue-700"
     }`;
     if (drill) {
@@ -74,7 +76,7 @@ function CategoriesPanel({ onClose }: { onClose: () => void }) {
     <div className="relative">
       {/* Column 1 — all sections */}
       <ul className="w-60 space-y-0.5">
-        {categoryTree.map((sec) => (
+        {tree.map((sec) => (
           <li key={sec.slug}>
             {renderRow(
               sec,

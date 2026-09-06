@@ -1,0 +1,204 @@
+{
+  "items": [
+    {
+      "id": "acne",
+      "labelAr": "حب الشباب",
+      "labelEn": "Acne",
+      "taglineAr": "بشرة نقية خلال 14 يوم",
+      "taglineEn": "Clear skin in 14 days",
+      "descAr": "حلول فعّالة للسيطرة على حب الشباب والحفاظ على بشرة نقية",
+      "descEn": "Effective solutions to control acne and maintain clear skin",
+      "image": "/images/problems/acne.webp",
+      "accent": "#e11d48",
+      "accentBg": "rgba(225,29,72,0.08)",
+      "emoji": "🌋",
+      "routineAr": [
+        "نظفي بشرتك بمنظف لطيف",
+        "ضعي سيروم حمض الساليسيليك",
+        "ترطيبي بشرتك بمرطب خفيف"
+      ],
+      "routineEn": [
+        "Cleanse with a gentle cleanser",
+        "Apply salicylic acid serum",
+        "Moisturize with a lightweight moisturizer"
+      ],
+      "hidden": false
+    },
+    {
+      "id": "dryness",
+      "labelAr": "جفاف البشرة",
+      "labelEn": "Dryness",
+      "taglineAr": "ترطيب عميق يدوم 24 ساعة",
+      "taglineEn": "24h deep hydration",
+      "descAr": "حلول ترطيب مكثفة للبشرة الجافة والمتشققة",
+      "descEn": "Intensive hydration solutions for dry and cracked skin",
+      "image": "/images/problems/dryness.webp",
+      "accent": "#0284c7",
+      "accentBg": "rgba(2,132,199,0.08)",
+      "emoji": "💧",
+      "routineAr": [
+        "استخدمي منظف كريمي خالٍ من الصابون",
+        "ضعي سيروم هايالورونيك أسيد",
+        "ترطيبي بكريم مرطب كثيف"
+      ],
+      "routineEn": [
+        "Use a soap-free cream cleanser",
+        "Apply hyaluronic acid serum",
+        "Moisturize with a rich cream"
+      ],
+      "hidden": false
+    },
+    {
+      "id": "pigmentation",
+      "labelAr": "تصبغات وكلف",
+      "labelEn": "Pigmentation",
+      "taglineAr": "توحيد لون وإشراقة",
+      "taglineEn": "Even tone & radiance",
+      "descAr": "علاج التصبغات والبقع الداكنة للحصول على لون موحد",
+      "descEn": "Treat dark spots and pigmentation for an even skin tone",
+      "image": "/images/problems/pigmentation.webp",
+      "accent": "#d97706",
+      "accentBg": "rgba(217,119,6,0.08)",
+      "emoji": "✨",
+      "routineAr": [
+        "نظفي بشرتك جيداً",
+        "ضعي سيروم فيتامين سي",
+        "واقي شمس SPF 50+ morning"
+      ],
+      "routineEn": [
+        "Cleanse thoroughly",
+        "Apply vitamin C serum",
+        "Use SPF 50+ sunscreen daily"
+      ],
+      "hidden": false
+    },
+    {
+      "id": "large_pores",
+      "labelAr": "مسام واسعة",
+      "labelEn": "Pores",
+      "taglineAr": "مسام ضيقة وبشرة ناعمة",
+      "taglineEn": "Refined & smooth skin",
+      "descAr": " تقليص حجم المسام وتنعيم ملمس البشرة",
+      "descEn": "Minimize pore size and smooth skin texture",
+      "image": "/images/problems/large-pores-v2.webp",
+      "accent": "#7c3aed",
+      "accentBg": "rgba(124,58,237,0.08)",
+      "emoji": "🔬",
+      "routineAr": [
+        "نظفي بشرتك بمنظف عميق",
+        "ضعي تونر بالنياسيناميد",
+        "ترطيبي بمرطب خفيف"
+      ],
+      "routineEn": [
+        "Deep cleanse with a foaming cleanser",
+        "Apply niacinamide toner",
+        "Use a lightweight moisturizer"
+      ],
+      "hidden": false
+    },
+    {
+      "id": "oiliness",
+      "labelAr": "لمعة زائدة",
+      "labelEn": "Oiliness",
+      "taglineAr": "مات بدون جفاف",
+      "taglineEn": "Matte without drying",
+      "descAr": "التحكم في إفرازات اللمعة الزائدة مع الحفاظ على الترطيب",
+      "descEn": "Control excess oil while maintaining hydration",
+      "image": "/images/problems/oiliness.webp",
+      "accent": "#0891b2",
+      "accentBg": "rgba(8,145,178,0.08)",
+      "emoji": "🫧",
+      "routineAr": [
+        "نظفي بشرتك مرتين يومياً",
+        "استخدمي تونر متوازن للزهم",
+        "ترطيبي بمرطب مائي خفيف"
+      ],
+      "routineEn": [
+        "Cleanse twice daily",
+        "Use an oil-balancing toner",
+        "Apply a water-based moisturizer"
+      ],
+      "hidden": false
+    },
+    {
+      "id": "sensitivity",
+      "labelAr": "بشرة حساسة",
+      "labelEn": "Sensitivity",
+      "taglineAr": "هدوء وراحة فورية",
+      "taglineEn": "Instant calm & comfort",
+      "descAr": "تهدئة وتقوية البشرة الحساسة المتضررة",
+      "descEn": "Soothe and strengthen sensitive, compromised skin",
+      "image": "/images/problems/sensitivity-v2.webp",
+      "accent": "#059669",
+      "accentBg": "rgba(5,150,105,0.08)",
+      "emoji": "🌿",
+      "routineAr": [
+        "نظفي بشرتك بمنظف لطيف خالٍ من العطور",
+        "ضعي سيروم كوليدول مهدئ",
+        "ترطيبي بكريم مُهدئ للبشرة الحساسة"
+      ],
+      "routineEn": [
+        "Use a fragrance-free gentle cleanser",
+        "Apply a calming centella serum",
+        "Moisturize with a sensitive-skin cream"
+      ],
+      "hidden": false
+    },
+    {
+      "id": "aging",
+      "labelAr": "مكافحة الشيخوخة",
+      "labelEn": "Anti-Aging",
+      "taglineAr": "بشرة شابة ومشدودة",
+      "taglineEn": "Youthful, firm skin",
+      "descAr": "محاربة علامات التقدم بالسن وتجديد خلايا البشرة",
+      "descEn": "Fight signs of aging and renew skin cells",
+      "image": "/images/problems/aging.webp",
+      "accent": "#db2777",
+      "accentBg": "rgba(219,39,119,0.08)",
+      "emoji": "🌸",
+      "routineAr": [
+        "نظفي بشرتك بمنظف لطيف",
+        "ضعي سيروم ريتينول",
+        "ترطيبي بكريم مكافحة الشيخوخة",
+        "واقي شمس كل صباح"
+      ],
+      "routineEn": [
+        "Cleanse with a gentle cleanser",
+        "Apply retinol serum",
+        "Use anti-aging moisturizer",
+        "Sunscreen every morning"
+      ],
+      "hidden": false
+    },
+    {
+      "id": "dark_circles",
+      "labelAr": "هالات سوداء",
+      "labelEn": "Dark Circles",
+      "taglineAr": "عيون منتعشة ومشرقة",
+      "taglineEn": "Bright, refreshed eyes",
+      "descAr": "تقليل الهالات السوداء وتوحيد لون منطقة حول العين",
+      "descEn": "Reduce dark circles and even out the eye area",
+      "image": "/images/problems/dark-circles-v2.webp",
+      "accent": "#4f46e5",
+      "accentBg": "rgba(79,70,229,0.08)",
+      "emoji": "👁️",
+      "routineAr": [
+        "ضعي كريم عيون بالكافيين صباحاً",
+        "استخدمي سيروم فيتامين سي حول العين",
+        "ATIONAL مرر بالكولد"
+      ],
+      "routineEn": [
+        "Apply caffeine eye cream in the morning",
+        "Use vitamin C eye serum",
+        "Gently massage with a cold roller"
+      ],
+      "hidden": false
+    }
+  ],
+  "productOverrides": {
+    "acne": {
+      "pinned": [],
+      "excluded": []
+    }
+  }
+}

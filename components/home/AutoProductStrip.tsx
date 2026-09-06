@@ -134,7 +134,7 @@ export default function AutoProductStrip({
                 src={p.gallery[0]}
                 alt={p.name.ar}
                 productId={p.id}
-                variant="soft"
+                variant="clean"
                 hoverZoom={false}
                 pedestal={false}
                 className="absolute inset-0 h-full w-full"

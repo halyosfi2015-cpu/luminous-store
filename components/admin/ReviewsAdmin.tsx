@@ -44,7 +44,8 @@ export default function ReviewsAdmin() {
     (async () => {
       try {
         const res = await fetch("/api/admin/reviews");
-        const list = res.ok ? await res.json() : await services.getReviews();
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const list = await res.json();
         if (!cancelled) {
           setReviews(list);
           setError(false);
@@ -68,27 +69,25 @@ export default function ReviewsAdmin() {
 
   const toggleStatus = async (review: AdminReview) => {
     const nextStatus = review.status === "visible" ? "hidden" : "visible";
-    setReviews((prev) =>
-      prev.map((item) =>
-        item.id === review.id ? { ...item, status: nextStatus } : item,
-      ),
-    );
-    await services.updateReviewStatus(review.id, nextStatus);
-    fetch(`/api/admin/reviews/${review.id}/status`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: nextStatus }),
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        toast(
-          nextStatus === "visible" ? "تم إظهار التقييم" : "تم إخفاء التقييم",
-          "success",
-        );
-      })
-      .catch(() => {
-        toast("حدث خطأ أثناء تحديث التقييم", "error");
+    try {
+      const res = await fetch(`/api/admin/reviews/${review.id}/status`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: nextStatus }),
       });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      setReviews((prev) =>
+        prev.map((item) =>
+          item.id === review.id ? { ...item, status: nextStatus } : item,
+        ),
+      );
+      toast(
+        nextStatus === "visible" ? "تم إظهار التقييم" : "تم إخفاء التقييم",
+        "success",
+      );
+    } catch {
+      toast("تعذر تحديث التقييم — لم يتم حفظ التغيير", "error");
+    }
   };
 
   const filtered = useMemo(() => {
@@ -122,8 +121,8 @@ export default function ReviewsAdmin() {
       <div>
         <h1 className="text-lg font-bold text-foreground">التقييمات والمراجعات</h1>
         <p className="mt-1 text-sm text-muted">
-          {reviews.length} مراجعة — {visibleCount} ظاهرة. التعديلات تُحفظ محلياً (Phase 5)؛
-          التغيير الدائم في بيانات المنتجات يتطلب قاعدة بيانات (Phase 6).
+          {reviews.length} مراجعة — {visibleCount} ظاهرة. الإظهار/الإخفاء
+          يُحفظ مباشرة في قاعدة البيانات.
         </p>
       </div>
 
