@@ -118,10 +118,11 @@ export function createMetaDeliver(
         break;
       }
     }
+    const story = opts.story ?? payload.format === "story";
     if (channel === "facebook") {
       return publishFacebook(token, payload.title, payload.body, payload.callToAction, imageUrl);
     }
-    return publishInstagram(token, payload.title, payload.body, payload.callToAction, imageUrl, opts.story === true);
+    return publishInstagram(token, payload.title, payload.body, payload.callToAction, imageUrl, story);
   };
 }
 

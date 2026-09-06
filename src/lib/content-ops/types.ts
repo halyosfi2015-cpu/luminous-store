@@ -206,11 +206,16 @@ export const CHANNEL_LABELS: Record<ChannelKey, { ar: string; en: string }> = {
 
 export type ContentScheduleStatus = "scheduled" | "publishing" | "published" | "failed" | "cancelled";
 
+/** Post shape within a channel (e.g. Instagram feed vs story). */
+export type ContentFormat = "post" | "story";
+
 export interface ContentSchedule {
   id: string;
   itemId: string;
   versionId: string;
   channel: ChannelKey;
+  /** Null = channel default (feed post). Story only where the channel supports it. */
+  format: ContentFormat | null;
   scheduledFor: string;
   timezone: string;
   campaignId: string | null;
@@ -228,6 +233,8 @@ export interface ContentPublication {
   versionId: string;
   channel: ChannelKey;
   scheduleId: string;
+  /** Copied from the schedule at publish time (null = default). */
+  format: ContentFormat | null;
   status: PublicationStatus;
   /** Provider confirmation (only real confirmations). */
   providerResponse?: { providerId?: string; ok: boolean; error?: string };

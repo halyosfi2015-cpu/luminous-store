@@ -412,11 +412,13 @@ export async function POST(request: NextRequest) {
       }
 
       case "schedule": {
+        const format = body.format === "story" || body.format === "post" ? body.format : null;
         const input: ScheduleInput = {
           itemId: body.id as string,
           channel: (body.channel as ChannelKey) ?? "website",
           scheduledFor: body.scheduledFor as string,
           campaignId: (body.campaignId as string | null) ?? null,
+          format,
         };
         const res = await scheduleContentItem(store, input, actor);
         if (!res.ok) return NextResponse.json({ error: res.error }, { status: 400 });
@@ -617,6 +619,56 @@ export async function POST(request: NextRequest) {
         const res = await disconnectChannel(store, channel, actor);
         if (!res.ok) return NextResponse.json({ error: res.error }, { status: 400 });
         return NextResponse.json({ channel: res.data, channels: getChannelConnectionStatuses(store.settings) });
+      }
+
+      case "meta-pages": {
+        // Pages from a completed OAuth handshake (no tokens leave the server).
+        const pendingId = String(body.pendingId ?? "");
+        const { readPendingHandshake } = await import("@/src/lib/social/meta-oauth");
+        const pending = await readPendingHandshake(pendingId);
+        if (!pending) {
+          return NextResponse.json({ error: { code: "pending_expired", message: "انتهت جلسة التفويض — ابدأ الربط من جديد" } }, { status: 410 });
+        }
+        return NextResponse.json({ pages: pending.pages });
+      }
+
+      case "meta-finish": {
+        // Complete OAuth connect: pending user token → Meta connect flow.
+        const pendingId = String(body.pendingId ?? "");
+        const channel = body.channel as ChannelKey;
+        if (channel !== "facebook" && channel !== "instagram") {
+          return NextResponse.json({ error: { code: "invalid_request", message: "facebook|instagram only" } }, { status: 400 });
+        }
+        const { readPendingHandshake, clearPendingHandshake } = await import("@/src/lib/social/meta-oauth");
+        const pending = await readPendingHandshake(pendingId);
+        if (!pending) {
+          return NextResponse.json({ error: { code: "pending_expired", message: "انتهت جلسة التفويض — ابدأ الربط من جديد" } }, { status: 410 });
+        }
+        const { connectMetaChannel } = await import("@/src/lib/social/meta-connect");
+        const meta = await connectMetaChannel({
+          channel,
+          userToken: pending.userToken,
+          pageId: typeof body.pageId === "string" ? body.pageId.trim() : undefined,
+          actor,
+        });
+        await clearPendingHandshake(pendingId);
+        if (!meta.ok) {
+          const status = meta.error?.code === "meta_not_configured" ? 503 : 400;
+          return NextResponse.json({ error: meta.error }, { status });
+        }
+        const res = await connectChannel(store, channel, actor, { credentialsProvided: true });
+        if (!res.ok) return NextResponse.json({ error: res.error }, { status: 400 });
+        if (!store.settings.enabledChannels.includes(channel)) {
+          store.settings.enabledChannels = [...store.settings.enabledChannels, channel];
+          const { persistContentStore } = await import("@/src/lib/content-ops/store");
+          await persistContentStore(store);
+        }
+        const { getTokenMeta } = await import("@/src/lib/social/token-store");
+        return NextResponse.json({
+          channel: res.data,
+          channels: getChannelConnectionStatuses(store.settings),
+          meta: await getTokenMeta(channel),
+        });
       }
 
       case "channel-meta": {

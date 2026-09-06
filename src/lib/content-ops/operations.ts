@@ -54,6 +54,7 @@ import type {
   OpResult,
   PlanRequest,
   ChannelKey,
+  ContentFormat,
   PublishedContent,
   HybridAIProviderName,
 } from "./types";
@@ -734,6 +735,8 @@ export interface ScheduleInput {
   channel: ChannelKey;
   scheduledFor: string;
   campaignId?: string | null;
+  /** Null = channel default. Only "post"|"story" accepted. */
+  format?: ContentFormat | null;
 }
 
 export async function scheduleContentItem(
@@ -803,11 +806,13 @@ export async function scheduleContentItem(
     return { ok: false, error: { code: "revalidation_required", message: freshness.issues.join("; ") } };
   }
 
+  const format = input.format === "story" || input.format === "post" ? input.format : null;
   const schedule: ContentSchedule = {
     id: randomUUID(),
     itemId: input.itemId,
     versionId: version.id,
     channel: input.channel,
+    format,
     scheduledFor: input.scheduledFor,
     timezone: store.settings.timezone,
     campaignId: input.campaignId ?? null,
@@ -970,6 +975,7 @@ export async function publishSchedule(
       versionId: schedule.versionId,
       channel: schedule.channel,
       scheduleId: schedule.id,
+      format: schedule.format ?? null,
       status: "failed",
       revalidation: { passed: false, issues: freshness.issues },
       attemptedAt: at,
@@ -1003,6 +1009,7 @@ export async function publishSchedule(
       versionId: schedule.versionId,
       channel: schedule.channel,
       scheduleId: schedule.id,
+      format: schedule.format ?? null,
       status: "failed",
       revalidation: { passed: true, issues: [] },
       attemptedAt: at,
@@ -1042,6 +1049,7 @@ export async function publishSchedule(
     versionId: schedule.versionId,
     channel: schedule.channel,
     scheduleId: schedule.id,
+    format: schedule.format ?? null,
     status: "pending",
     revalidation: { passed: true, issues: [] },
     attemptedAt: at,

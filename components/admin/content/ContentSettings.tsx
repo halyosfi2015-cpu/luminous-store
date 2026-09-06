@@ -74,6 +74,9 @@ export default function ContentSettings() {
 
   const [metaToken, setMetaToken] = useState("");
   const [metaBusy, setMetaBusy] = useState<"idle" | "facebook" | "instagram">("idle");
+  const [pendingId, setPendingId] = useState<string | null>(null);
+  const [pendingPages, setPendingPages] = useState<{ pageId: string; pageName: string; igUserId?: string; igUsername?: string }[] | null>(null);
+  const [pendingPageId, setPendingPageId] = useState<string>("");
   const [metaInfo, setMetaInfo] = useState<Record<string, { page_name?: string | null; ig_username?: string | null; token_expires_at?: string | null; status?: string } | null>>({});
 
   async function refreshMetaInfo() {
@@ -143,8 +146,66 @@ export default function ContentSettings() {
 
   useEffect(() => {
     void refreshMetaInfo();
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const pid = params.get("meta_pending");
+      const err = params.get("meta_error");
+      if (err) toast(`ميتا: ${err}`, "error");
+      if (pid) {
+        setPendingId(pid);
+        void (async () => {
+          try {
+            const res = await fetch("/api/admin/content", {
+              method: "POST",
+              signal: AbortSignal.timeout(20000),
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ action: "meta-pages", pendingId: pid }),
+            });
+            const json = (await res.json()) as { error?: { message: string }; pages?: { pageId: string; pageName: string; igUsername?: string }[] };
+            if (!res.ok || json.error) {
+              toast(json.error?.message ?? `HTTP ${res.status}`, "error");
+              return;
+            }
+            setPendingPages(json.pages ?? []);
+            if (json.pages?.[0]) setPendingPageId(json.pages[0].pageId);
+          } catch (e) {
+            toast((e as Error).message, "error");
+          }
+        })();
+      }
+    } catch { /* URL parse optional */ }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  async function handleMetaFinish(channel: "facebook" | "instagram") {
+    if (!pendingId || !pendingPageId) {
+      toast("اختر الصفحة أولاً", "error");
+      return;
+    }
+    setMetaBusy(channel);
+    try {
+      const res = await fetch("/api/admin/content", {
+        method: "POST",
+        signal: AbortSignal.timeout(45000),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "meta-finish", pendingId: pendingId, channel, pageId: pendingPageId }),
+      });
+      const json = (await res.json()) as { error?: { message: string }; channels?: ChannelConnectionStatus[] };
+      if (!res.ok || json.error) {
+        toast(json.error?.message ?? `HTTP ${res.status}`, "error");
+        return;
+      }
+      if (json.channels) setChannels(json.channels);
+      setPendingId(null);
+      setPendingPages(null);
+      await refreshMetaInfo();
+      toast("تم ربط القناة عبر ميتا", "success");
+    } catch (e) {
+      toast((e as Error).message, "error");
+    } finally {
+      setMetaBusy("idle");
+    }
+  }
 
   function patch(p: Partial<ContentOpsSettings>) {
     setSettings((prev) => (prev ? { ...prev, ...p } : prev));
@@ -482,8 +543,50 @@ export default function ContentSettings() {
               <p className="mb-2 rounded-card border border-primary/20 bg-primary/5 px-3 py-2 text-[10px] leading-relaxed text-muted">زر «ربط» هنا مخصص لاتصال القناة الفعلي فقط. بعد تهيئة OAuth الرسمية، سيظهر الحساب متصلًا؛ لا يتم اعتبار القناة متصلة لمجرد الضغط على الزر.</p>
               {canEdit && (
                 <div className="mb-2 rounded-card border border-border/60 px-3 py-2">
-                  <p className="text-[10px] font-bold text-foreground">ربط ميتا (فيسبوك + انستغرام) — رمز حقيقي</p>
-                  <p className="mt-0.5 text-[9px] leading-relaxed text-muted">من لوحة تطبيق ميتا: الصق رمز وصول مستخدم بصلاحيات الصفحات، وسيتحقق الخادم منه ويخزنه مشفراً. يتطلب <span dir="ltr">META_APP_ID / META_APP_SECRET / SOCIAL_TOKEN_KEY</span> في بيئة السيرفر.</p>
+                  <p className="text-[10px] font-bold text-foreground">ربط ميتا (فيسبوك + انستغرام) — OAuth أو رمز</p>
+                  <div className="mt-1.5">
+                    <a
+                      href="/api/social/meta/authorize"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-[#0866FF] px-3 py-1 text-[10px] font-bold text-white transition hover:brightness-110"
+                    >
+                      تسجيل الدخول عبر ميتا (OAuth)
+                    </a>
+                    <span className="ms-2 text-[9px] text-muted">يتطلب META_APP_ID في السيرفر وتسجيل عنوان الإرجاع في لوحة التطبيق</span>
+                  </div>
+                  {pendingPages && (
+                    <div className="mt-1.5 rounded-lg border border-primary/30 bg-primary/5 p-2">
+                      <p className="text-[10px] font-bold">اختر الصفحة من حساب ميتا:</p>
+                      <div className="mt-1 space-y-1">
+                        {pendingPages.map((pg) => (
+                          <label key={pg.pageId} className="flex items-center gap-2 text-[10px]">
+                            <input
+                              type="radio"
+                              name="meta-page"
+                              checked={pendingPageId === pg.pageId}
+                              onChange={() => setPendingPageId(pg.pageId)}
+                              className="accent-primary"
+                            />
+                            <span className="font-bold">{pg.pageName}</span>
+                            <span className="text-muted" dir="ltr">{pg.pageId}</span>
+                            {pg.igUsername && <span className="text-muted">IG: @{pg.igUsername}</span>}
+                          </label>
+                        ))}
+                      </div>
+                      <div className="mt-1.5 flex flex-wrap gap-1.5">
+                        {(["facebook", "instagram"] as const).map((ch) => (
+                          <button
+                            key={ch}
+                            onClick={() => void handleMetaFinish(ch)}
+                            disabled={metaBusy !== "idle" || !pendingPageId}
+                            className="rounded-full bg-primary px-3 py-1 text-[10px] font-bold text-white transition hover:bg-primary-700 disabled:opacity-50"
+                          >
+                            {metaBusy === ch ? "جاري الربط..." : `إتمام ربط ${ch === "facebook" ? "فيسبوك" : "انستغرام"}`}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  <p className="mt-1.5 text-[9px] leading-relaxed text-muted">أو من لوحة تطبيق ميتا: الصق رمز وصول مستخدم بصلاحيات الصفحات، وسيتحقق الخادم منه ويخزنه مشفراً. يتطلب <span dir="ltr">META_APP_ID / META_APP_SECRET / SOCIAL_TOKEN_KEY</span> في بيئة السيرفر.</p>
                   <textarea
                     value={metaToken}
                     onChange={(e) => setMetaToken(e.target.value)}

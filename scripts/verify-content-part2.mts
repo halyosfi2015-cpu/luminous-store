@@ -636,10 +636,10 @@ section("Channel adapters");
   assert(web.isConfigured(), "C1 website adapter configured (real channel)");
   const emptyItem = makeOpsItem(createMemoryStore(), { id: "x" });
   emptyItem.item.body = "";
-  const fail = await web.publish({ item: emptyItem, versionId: "v-x" }, { id: "k", itemId: "x", versionId: "v-x", channel: "website", scheduleId: "s", status: "pending", revalidation: { passed: true, issues: [] }, attemptedAt: NOW });
+  const fail = await web.publish({ item: emptyItem, versionId: "v-x" }, { id: "k", itemId: "x", versionId: "v-x", channel: "website", scheduleId: "s", format: null, status: "pending", revalidation: { passed: true, issues: [] }, attemptedAt: NOW });
   assert(!fail.ok && fail.error === "empty body cannot be published", "C2 website rejects empty body");
   const okItem = makeOpsItem(createMemoryStore(), { id: "y" });
-  const good = await web.publish({ item: okItem, versionId: "v-y" }, { id: "k2", itemId: "y", versionId: "v-y", channel: "website", scheduleId: "s2", status: "pending", revalidation: { passed: true, issues: [] }, attemptedAt: NOW });
+  const good = await web.publish({ item: okItem, versionId: "v-y" }, { id: "k2", itemId: "y", versionId: "v-y", channel: "website", scheduleId: "s2", format: null, status: "pending", revalidation: { passed: true, issues: [] }, attemptedAt: NOW });
   assert(good.ok && good.providerId === "website", "C3 website publish confirms delivery with providerId");
 }
 
@@ -647,21 +647,21 @@ section("Channel adapters");
   const ig = createSocialAdapter("instagram");
   assert(!ig.isConfigured(), "C4 social adapter unconfigured by default");
   const item = makeOpsItem(createMemoryStore(), { id: "s" });
-  const res = await ig.publish({ item, versionId: "v-s" }, { id: "k", itemId: "s", versionId: "v-s", channel: "instagram", scheduleId: "s", status: "pending", revalidation: { passed: true, issues: [] }, attemptedAt: NOW });
+  const res = await ig.publish({ item, versionId: "v-s" }, { id: "k", itemId: "s", versionId: "v-s", channel: "instagram", scheduleId: "s", format: null, status: "pending", revalidation: { passed: true, issues: [] }, attemptedAt: NOW });
   assert(!res.ok && res.error === CHANNEL_NOT_CONNECTED, "C5 unconfigured social publish → CHANNEL_NOT_CONNECTED (no fake success)");
 }
 
 {
   const fb = createSocialAdapter("facebook", { enabled: true, deliver: async () => ({ providerId: "fb-post-1" }) });
   const item = makeOpsItem(createMemoryStore(), { id: "s2" });
-  const res = await fb.publish({ item, versionId: "v" }, { id: "k", itemId: "s2", versionId: "v", channel: "facebook", scheduleId: "s", status: "pending", revalidation: { passed: true, issues: [] }, attemptedAt: NOW });
+  const res = await fb.publish({ item, versionId: "v" }, { id: "k", itemId: "s2", versionId: "v", channel: "facebook", scheduleId: "s", format: null, status: "pending", revalidation: { passed: true, issues: [] }, attemptedAt: NOW });
   assert(res.ok && res.providerId === "fb-post-1", "C6 configured social adapter performs real delivery (injected deliver)");
 }
 
 {
   const tt = createSocialAdapter("tiktok", { enabled: true, deliver: async () => ({ error: "rate_limited" }) });
   const item = makeOpsItem(createMemoryStore(), { id: "s3" });
-  const res = await tt.publish({ item, versionId: "v" }, { id: "k", itemId: "s3", versionId: "v", channel: "tiktok", scheduleId: "s", status: "pending", revalidation: { passed: true, issues: [] }, attemptedAt: NOW });
+  const res = await tt.publish({ item, versionId: "v" }, { id: "k", itemId: "s3", versionId: "v", channel: "tiktok", scheduleId: "s", format: null, status: "pending", revalidation: { passed: true, issues: [] }, attemptedAt: NOW });
   assert(!res.ok && res.error === "rate_limited", "C7 configured adapter propagates provider errors honestly");
 }
 

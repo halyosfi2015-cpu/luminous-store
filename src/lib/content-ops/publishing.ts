@@ -27,6 +27,8 @@ export interface DeliveryPayload {
   versionId: string;
   channel: ChannelKey;
   publicationId: string;
+  /** Post shape (null = channel default feed post). */
+  format: "post" | "story" | null;
   title: string | null;
   body: string;
   callToAction: string | null;
@@ -73,6 +75,7 @@ export function createWebsiteAdapter(config: ChannelAdapterConfig = {}): Publish
         versionId: payload.versionId,
         channel: "website",
         publicationId: _publication.id,
+        format: null,
         title: payload.item.item.title,
         body: payload.item.item.body,
         callToAction: payload.item.item.callToAction,
@@ -113,6 +116,7 @@ export function createSocialAdapter(
         versionId: payload.versionId,
         channel: key,
         publicationId: publication.id,
+        format: (publication as { format?: "post" | "story" | null }).format ?? null,
         title: payload.item.item.title,
         body: payload.item.item.body,
         callToAction: payload.item.item.callToAction,
