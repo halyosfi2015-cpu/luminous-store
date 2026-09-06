@@ -1,8 +1,11 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
+<<<<<<< HEAD
 import { createBrowserSupabaseClient } from "@/src/lib/supabase";
 import { useAuth } from "@/context/AuthContext";
+=======
+>>>>>>> f070a3e53a1403a41b2b3395680b6d08df10efd2
 
 export type LoyaltyTier = "bronze" | "silver" | "gold" | "platinum";
 
@@ -36,10 +39,19 @@ type LoyaltyContextType = {
   tier: LoyaltyTier;
   tierProgress: { current: number; next: number; remaining: number };
   transactions: LoyaltyTransaction[];
+<<<<<<< HEAD
   addOrderPoints: (orderTotal: number) => Promise<number>;
   redeemReward: (reward: Reward) => Promise<boolean>;
 };
 
+=======
+  addOrderPoints: (orderTotal: number) => number;
+  redeemReward: (reward: Reward) => boolean;
+};
+
+const STORAGE_KEY = "luminous-loyalty";
+
+>>>>>>> f070a3e53a1403a41b2b3395680b6d08df10efd2
 export const tierConfig: { key: LoyaltyTier; nameAr: string; nameEn: string; threshold: number }[] = [
   { key: "bronze", nameAr: "برونزي", nameEn: "Bronze", threshold: 0 },
   { key: "silver", nameAr: "فضي", nameEn: "Silver", threshold: 500 },
@@ -54,6 +66,7 @@ export const rewards: Reward[] = [
   { id: "rv4", name: "7000 YER Discount", nameAr: "خصم 7000 ريال", description: "Coupon worth 7000 YER on your next order.", descriptionAr: "كوبون بقيمة 7000 ريال على طلبك القادم.", points: 500 },
 ];
 
+<<<<<<< HEAD
 const LoyaltyContext = createContext<LoyaltyContextType | null>(null);
 
 type SupabaseAccountRow = { id: string; points: number; lifetime_points: number; tier: string };
@@ -113,15 +126,50 @@ export function LoyaltyProvider({ children }: { children: ReactNode }) {
       label: "Points from order",
       label_ar: "نقاط من طلب",
     } as never);
+=======
+function loadState(): LoyaltyState {
+  if (typeof window === "undefined") {
+    return { points: 0, lifetime: 0, transactions: [] };
+  }
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (typeof parsed.points === "number" && typeof parsed.lifetime === "number" && Array.isArray(parsed.transactions)) {
+        return parsed;
+      }
+    }
+  } catch {}
+  return { points: 0, lifetime: 0, transactions: [] };
+}
+
+const LoyaltyContext = createContext<LoyaltyContextType | null>(null);
+
+export function LoyaltyProvider({ children }: { children: ReactNode }) {
+  const [state, setState] = useState<LoyaltyState>(() => loadState());
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }, [state]);
+
+  const addOrderPoints = useCallback((orderTotal: number): number => {
+    const earned = Math.floor(orderTotal / 100);
+    if (earned <= 0) return 0;
+>>>>>>> f070a3e53a1403a41b2b3395680b6d08df10efd2
     setState((prev) => ({
       points: prev.points + earned,
       lifetime: prev.lifetime + earned,
       transactions: [
+<<<<<<< HEAD
         { id: `txn-${Date.now()}`, type: "earn" as const, amount: earned, label: "Points from order", labelAr: "نقاط من طلب", date: new Date().toISOString() },
+=======
+        { id: `txn-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`, type: "earn" as const, amount: earned, label: "Points from order", labelAr: "نقاط من طلب", date: new Date().toISOString() },
+>>>>>>> f070a3e53a1403a41b2b3395680b6d08df10efd2
         ...prev.transactions,
       ].slice(0, 50),
     }));
     return earned;
+<<<<<<< HEAD
   }, [user, supabase]);
 
   const redeemReward = useCallback(async (reward: Reward): Promise<boolean> => {
@@ -152,6 +200,26 @@ export function LoyaltyProvider({ children }: { children: ReactNode }) {
     }));
     return true;
   }, [user, state.points, supabase]);
+=======
+  }, []);
+
+  const redeemReward = useCallback((reward: Reward): boolean => {
+    let ok = false;
+    setState((prev) => {
+      if (prev.points < reward.points) return prev;
+      ok = true;
+      return {
+        points: prev.points - reward.points,
+        lifetime: prev.lifetime,
+      transactions: [
+        { id: `txn-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`, type: "redeem" as const, amount: -reward.points, label: reward.name, labelAr: reward.nameAr, date: new Date().toISOString() },
+        ...prev.transactions,
+      ].slice(0, 50),
+      };
+    });
+    return ok;
+  }, []);
+>>>>>>> f070a3e53a1403a41b2b3395680b6d08df10efd2
 
   const tier = ((): LoyaltyTier => {
     let current: LoyaltyTier = "bronze";
