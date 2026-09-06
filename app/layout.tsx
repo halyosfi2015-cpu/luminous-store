@@ -1,13 +1,8 @@
-<<<<<<< HEAD
 import type { Metadata, Viewport } from "next";
-=======
-import type { Metadata } from "next";
->>>>>>> f070a3e53a1403a41b2b3395680b6d08df10efd2
 import "./globals.css";
 import { Suspense } from "react";
 import Providers from "@/components/Providers";
 import BackButton from "@/components/ui/BackButton";
-<<<<<<< HEAD
 import SearchOverlay from "@/components/search/SearchOverlay";
 import { AssistantChat } from "@/components/assistant";
 import { rootStructuredData, websiteStructuredData } from "@/lib/structured-data";
@@ -18,8 +13,6 @@ export const viewport: Viewport = {
   viewportFit: "cover",
   themeColor: "#6b4c5a",
 };
-=======
->>>>>>> f070a3e53a1403a41b2b3395680b6d08df10efd2
 
 export const metadata: Metadata = {
   title: { default: "Luminous Derma — العناية الفاخرة بالبشرة", template: "%s | Luminous Derma" },
@@ -46,7 +39,6 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-<<<<<<< HEAD
     <html lang="ar" dir="rtl" suppressHydrationWarning className="h-full scroll-smooth">
       <head>
         <script
@@ -58,11 +50,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteStructuredData) }}
         />
         <script
-=======
-    <html lang="ar" dir="rtl" className="h-full scroll-smooth">
-      <head>
-        <script
->>>>>>> f070a3e53a1403a41b2b3395680b6d08df10efd2
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var l=window.localStorage.getItem("ld-lang");if(l==="en"){document.documentElement.lang="en";document.documentElement.dir="ltr";}else{document.documentElement.lang="ar";document.documentElement.dir="rtl";}}catch(e){}})();`,
           }}
@@ -82,21 +69,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <Suspense fallback={null}>
             <BackButton />
           </Suspense>
-<<<<<<< HEAD
           <Suspense fallback={null}>
             <SearchOverlay />
           </Suspense>
           <Suspense fallback={null}>
             <AssistantChat />
           </Suspense>
-=======
->>>>>>> f070a3e53a1403a41b2b3395680b6d08df10efd2
         </Providers>
       </body>
     </html>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> f070a3e53a1403a41b2b3395680b6d08df10efd2

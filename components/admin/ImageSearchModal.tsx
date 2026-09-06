@@ -312,7 +312,7 @@ export default function ImageSearchModal({
                   referrerPolicy="no-referrer"
                 />
                 <div className="flex flex-col gap-2 text-xs text-muted">
-                  <p>ستُستبدل صورة المنتج الحالية بهذه الصورة بعد الضغط على "اعتماد الصورة".</p>
+                  <p>ستُستبدل صورة المنتج الحالية بهذه الصورة بعد الضغط على &quot;اعتماد الصورة&quot;.</p>
                   <p className="font-medium text-foreground">لن تتغير أي بيانات أخرى (الاسم، الماركة، السعر، SKU).</p>
                 </div>
               </div>
