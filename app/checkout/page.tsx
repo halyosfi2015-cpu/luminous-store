@@ -17,12 +17,13 @@ import { trackClient } from "@/src/lib/analytics/client";
 import { ANALYTICS_EVENT_TYPES } from "@/src/lib/analytics/types";
 import type { ShippingAddress } from "@/types/cart";
 import type { Governorate } from "@/src/data/shipping";
+import { SAR_YER_RATE, sarLabel } from "@/src/lib/currency";
 
 type CurrencyCode = "YER" | "SAR";
 
 const CURRENCIES: Record<CurrencyCode, { symbol: string; rate: number }> = {
   YER: { symbol: "ر.ي", rate: 1 },
-  SAR: { symbol: "ر.س", rate: 1 / 84 },
+  SAR: { symbol: "ر.س", rate: 1 / SAR_YER_RATE },
 };
 
 function formatPrice(amount: number, code: CurrencyCode): string {
@@ -30,7 +31,7 @@ function formatPrice(amount: number, code: CurrencyCode): string {
   return `${Math.round(amount * rate).toLocaleString("ar-YE")} ${symbol}`;
 }
 
-const compactInput = "!h-8 !px-2.5 !text-xs";
+  const compactInput = "h-12 !px-3 text-[16px] sm:!h-8 sm:!px-2.5 sm:!text-xs";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -72,6 +73,27 @@ export default function CheckoutPage() {
   const shipping = governorate ? governorate.fee : 0;
   const total = subtotal + shipping;
 
+  // Network-resilient submit: phones on WiFi frequently drop a request.
+  // Retries once with the SAME idempotency key, so the server replays the
+  // original order instead of creating a duplicate. Aborts hung requests.
+  const fetchWithRetry = async (input: RequestInfo, init: RequestInit): Promise<Response> => {
+    let lastErr: unknown = null;
+    for (let attempt = 0; attempt <= 1; attempt++) {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 45000);
+      try {
+        const res = await fetch(input, { ...init, signal: ctrl.signal });
+        clearTimeout(timer);
+        return res;
+      } catch (e) {
+        clearTimeout(timer);
+        lastErr = e;
+        if (attempt === 0) await new Promise((r) => setTimeout(r, 2500));
+      }
+    }
+    throw lastErr;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (items.length === 0) return;
@@ -96,7 +118,7 @@ export default function CheckoutPage() {
       notes: location ? `${location}${address.notes ? ` — ${address.notes}` : ""}` : address.notes,
     };
     try {
-      const res = await fetch("/api/checkout", {
+      const res = await fetchWithRetry("/api/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -111,13 +133,27 @@ export default function CheckoutPage() {
         return;
       }
       const orderNumber: string = data.orderId;
+      try {
+        // Snapshot for the confirmation page (guests have no account lookup).
+        sessionStorage.setItem("ld-last-order", JSON.stringify({
+          orderNumber,
+          phone: shippingAddress.phone,
+          items,
+          subtotal,
+          shipping,
+          total,
+          address: shippingAddress,
+          source,
+          createdAt: new Date().toISOString(),
+        }));
+      } catch { /* snapshot is best-effort; confirmation falls back to server lookup */ }
       clearCart();
       await addOrderPoints(total);
       trackClient({ event_type: ANALYTICS_EVENT_TYPES.PURCHASE_COMPLETED, entity_type: "order", entity_id: orderNumber, properties: { total, items: items.length } });
       trackClient({ event_type: ANALYTICS_EVENT_TYPES.CHECKOUT_COMPLETED, entity_type: "order", entity_id: orderNumber });
-      router.push(`/order/confirmation/${orderNumber}`);
+      router.push(`/order/confirmation/${orderNumber}?phone=${encodeURIComponent(shippingAddress.phone)}`);
     } catch {
-      setSubmitError("تعذر الاتصال بالخادم. تحققي من اتصالك وحاولي مرة أخرى.");
+      setSubmitError("تعذر الاتصال بالخادم. تحققي من اتصالك بالإنترنت (الواي فاي) وحاولي مرة أخرى — لن يتكرر طلبك عند إعادة المحاولة.");
       setIsSubmitting(false);
     }
   };
@@ -148,9 +184,9 @@ export default function CheckoutPage() {
         </h1>
 
         {!isLoggedIn && (
-          <div className="mb-4 rounded-card border border-warning-border bg-warning-soft p-3 text-xs text-warning-fg">
+          <div className="mb-4 rounded-card border border-warning-border bg-warning-soft p-3 text-[13px] text-warning-fg sm:text-sm">
             لديك حساب؟{" "}
-            <Link href="/login" className="font-semibold underline">تسجيل الدخول</Link>
+            <Link href="/login" className="font-semibold underline py-1">تسجيل الدخول</Link>
             {" "}لإتمام الطلب بشكل أسرع.
           </div>
         )}
@@ -169,7 +205,7 @@ export default function CheckoutPage() {
                   <button
                     type="button"
                     onClick={() => setShowLocation(true)}
-                    className="flex items-center justify-center gap-1.5 rounded-input border border-primary/20 bg-primary/5 px-3 py-2.5 text-xs font-bold text-primary transition-all hover:bg-primary/10 active:scale-[0.98]"
+                    className="flex items-center justify-center gap-1.5 rounded-input border border-primary/20 bg-primary/5 px-3 py-2.5 min-h-[44px] text-[13px] font-bold text-primary transition-all hover:bg-primary/10 active:scale-[0.98] sm:text-xs"
                   >
                     <LocateFixed size={13} />
                     تحديد الموقع
@@ -208,7 +244,7 @@ export default function CheckoutPage() {
                   <MapPin size={14} className="text-primary" />
                   عنوان الشحن
                 </h2>
-                <div className="grid grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                   <div className="col-span-2">
                     <Input
                       label="الاسم الكامل"
@@ -227,7 +263,8 @@ export default function CheckoutPage() {
                       onChange={(e) => handleChange("phone", e.target.value)}
                       autoComplete="tel"
                       inputMode="tel"
-                      className={compactInput}
+                      dir="ltr"
+                      className={`${compactInput} text-left placeholder:text-right`}
                     />
                   </div>
                   <div className="col-span-2 sm:col-span-1">
@@ -362,13 +399,13 @@ export default function CheckoutPage() {
                           onClick={() => setCurrencyOpen(!currencyOpen)}
                           aria-expanded={currencyOpen}
                           aria-haspopup="listbox"
-                          className="flex items-center gap-1 rounded-full border border-border bg-card px-2.5 py-1.5 text-xs font-bold transition-all duration-200 hover:border-primary/40"
+                          className="flex items-center gap-1 rounded-full border border-border bg-card px-2.5 py-1.5 min-h-[36px] text-xs font-bold transition-all duration-200 hover:border-primary/40"
                         >
                           {currency === "YER" ? "🇾🇪" : "🇸🇦"}
                           <ChevronDown size={11} className={`text-muted transition-transform duration-200 ${currencyOpen ? "rotate-180" : ""}`} />
                         </button>
                         {currencyOpen && (
-                          <div className="absolute top-full end-0 z-20 mt-1.5 min-w-[140px] overflow-hidden rounded-xl border border-gray-100 bg-white p-1 shadow-xl shadow-primary/10 animate-slide-down">
+                          <div className="absolute top-full end-0 z-20 mt-1.5 min-w-[140px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-gray-100 bg-white p-1 shadow-xl shadow-primary/10 animate-slide-down">
                             {(["YER", "SAR"] as CurrencyCode[]).map((code) => (
                               <button
                                 key={code}
@@ -400,6 +437,9 @@ export default function CheckoutPage() {
                     <span>المجموع النهائي</span>
                     <span className="text-primary">{formatPrice(total, currency)}</span>
                   </div>
+                  {currency === "YER" && (
+                    <p className="text-xs text-muted">{sarLabel(total, true)} بسعر الصرف {SAR_YER_RATE}</p>
+                  )}
                 </div>
 
                 {submitError && (
@@ -407,11 +447,11 @@ export default function CheckoutPage() {
                     {submitError}
                   </p>
                 )}
-                <Button type="submit" className="w-full gap-2" disabled={isSubmitting}>
+                <Button type="submit" className="w-full gap-2 min-h-[48px] text-base" disabled={isSubmitting}>
                   <CreditCard size={14} />
                   {isSubmitting ? "جاري المعالجة..." : "تأكيد الطلب"}
                 </Button>
-                <p className="text-center text-[9px] text-muted">
+                <p className="text-center text-[11px] text-muted sm:text-xs">
                   الدفع عند الاستلام • كريمي • فلوسك • يمن والت
                 </p>
               </div>

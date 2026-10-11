@@ -64,7 +64,7 @@ export default function LocationModal({ open, onClose, onSave, defaultQuery = "�
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-full text-muted transition-all hover:bg-muted-bg hover:text-foreground"
+            className="flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-muted transition-all hover:bg-muted-bg hover:text-foreground"
             aria-label="إغلاق"
           >
             <X size={16} />
@@ -85,7 +85,7 @@ export default function LocationModal({ open, onClose, onSave, defaultQuery = "�
           <button
             type="button"
             onClick={useMyLocation}
-            className="mb-3 flex w-full items-center justify-center gap-2 rounded-input border border-primary/20 bg-primary/5 py-2.5 text-sm font-bold text-primary transition-all hover:bg-primary/10 active:scale-[0.98]"
+            className="mb-3 flex w-full items-center justify-center gap-2 rounded-input border border-primary/20 bg-primary/5 py-2.5 min-h-[44px] text-[13px] font-bold text-primary transition-all hover:bg-primary/10 active:scale-[0.98] sm:text-sm"
           >
             <LocateFixed size={15} />
             تحديد موقعي الحالي
@@ -101,7 +101,7 @@ export default function LocationModal({ open, onClose, onSave, defaultQuery = "�
               if (error) setError("");
             }}
             placeholder="مثال: شارع حدة، حي السعادة، صنعاء"
-            className="w-full rounded-input border border-border bg-card px-4 py-2.5 text-sm text-foreground placeholder:text-muted/70 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15"
+            className="w-full rounded-input border border-border bg-card px-4 py-2.5 min-h-[44px] text-[16px] text-foreground placeholder:text-muted/70 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15 sm:text-sm"
           />
 
           <div className="mt-3 flex items-center gap-2 rounded-input border border-dashed border-border bg-muted-bg/40 px-3 py-2.5">

@@ -16,12 +16,12 @@ export default function CampaignBanners() {
   return (
     <section className="w-full bg-gradient-to-r from-primary/5 via-white to-secondary/5 py-4">
       <Container>
-        <div className="flex gap-3 overflow-x-auto pb-2">
+        <div className="hide-scrollbar flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto pb-2">
           {campaigns.map((campaign) => (
             <Link
               key={campaign.id}
               href={`/offers?campaign=${campaign.slug}`}
-              className="group relative flex min-w-[280px] shrink-0 items-center gap-3 rounded-2xl border border-primary/10 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-md sm:min-w-[320px]"
+              className="magic-autoshine luminous-shine group relative flex min-w-[260px] max-w-[85vw] shrink-0 snap-start items-center gap-3 overflow-hidden rounded-2xl border border-primary/10 bg-white p-3.5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-md sm:min-w-[320px] sm:p-4"
             >
               {campaign.image && (
                 <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl">
@@ -37,16 +37,16 @@ export default function CampaignBanners() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   {campaign.badge && (
-                    <span className="inline-flex shrink-0 items-center rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">
+                    <span className="inline-flex shrink-0 items-center rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
                       {isAr ? campaign.badgeAr : campaign.badge}
                     </span>
                   )}
-                  <h3 className="truncate text-sm font-bold text-gray-900">
+                  <h3 className="truncate text-[13px] font-bold text-gray-900 sm:text-sm">
                     {isAr ? campaign.nameAr : campaign.name}
                   </h3>
                 </div>
                 {(campaign.descriptionAr || campaign.description) && (
-                  <p className="mt-0.5 truncate text-xs text-gray-500">
+                  <p className="mt-0.5 truncate text-[13px] leading-[1.7] text-gray-500 sm:text-xs">
                     {isAr ? campaign.descriptionAr : campaign.description}
                   </p>
                 )}

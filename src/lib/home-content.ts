@@ -18,7 +18,8 @@ export type HomeSectionKey =
   | "productsFavorites"
   | "newArrivals"
   | "smartRecommendations"
-  | "weeklyOffers";
+  | "weeklyOffers"
+  | "supplements";
 
 export interface HomeSectionContent {
   visible: boolean;
@@ -83,6 +84,7 @@ export const HOME_SECTION_LABELS: Record<HomeSectionKey, string> = {
   newArrivals: "وصل حديثاً",
   smartRecommendations: "موصى لك",
   weeklyOffers: "العروض الأسبوعية",
+  supplements: "المكملات الغذائية",
 };
 
 /* Defaults for original 13 HomeSectionKey */
@@ -109,10 +111,10 @@ export const HOME_SECTION_DEFAULTS: Record<HomeSectionKey, HomeSectionContent> =
     visible: true,
     eyebrowAr: "تصفحي حسب القسم",
     eyebrowEn: "Browse by Category",
-    titleAr: "أبرز منتجات كل قسم",
-    titleEn: "Top Products per Category",
-    subtitleAr: "كل قسم يعرض لك أشهر المنتجات من أفضل الماركات العالمية",
-    subtitleEn: "Each section shows you the best-selling products from top global brands",
+    titleAr: "كل عالم الجمال بين يديك",
+    titleEn: "The Whole Beauty World in Your Hands",
+    subtitleAr: "اختاري القسم المناسب لاحتياجك واكتشفي كل المنتجات بداخله",
+    subtitleEn: "Pick the category that fits your need and discover everything inside",
   },
   routines: {
     visible: true,
@@ -212,6 +214,15 @@ export const HOME_SECTION_DEFAULTS: Record<HomeSectionKey, HomeSectionContent> =
     titleEn: "",
     subtitleAr: "خصومات حصرية على منتجاتك المفضلة — لا تفوّت الفرصة!",
     subtitleEn: "Exclusive discounts on your favorite products — don't miss out!",
+  },
+  supplements: {
+    visible: true,
+    eyebrowAr: "صحة وجمال من الداخل",
+    eyebrowEn: "Beauty From Within",
+    titleAr: "المكملات الغذائية",
+    titleEn: "Dietary Supplements",
+    subtitleAr: "فيتامينات وكولاجين ومكملات تدعم بشرتك وشعرك وصحتك",
+    subtitleEn: "Vitamins, collagen and supplements for your skin, hair and health",
   },
 };
 

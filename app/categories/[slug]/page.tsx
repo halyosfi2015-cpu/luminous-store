@@ -87,7 +87,7 @@ function nodeToCategoryInfo(slug: string, supabaseCategories?: CategoryInfo[]): 
 }
 export async function generateStaticParams() {
   const { taxonomy } = await import("@/src/data/taxonomy");
-  return taxonomy.map((n) => ({ slug: n.slug }));
+  return taxonomy.filter((n: any) => n.status !== "HIDDEN").map((n) => ({ slug: n.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -105,7 +105,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const node = getTaxonomyNodeBySlug(slug);
-  if (!node) notFound();
+  if (!node || (node as any).status === "HIDDEN") notFound();
 
   const [products, supabaseCategories] = await Promise.all([
     getProductsByTaxonomyNode(node.slug),

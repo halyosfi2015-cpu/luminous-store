@@ -5,7 +5,6 @@ import { Package, X, Search, CheckCircle, Truck, Clock, XCircle } from "lucide-r
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import { useLang } from "@/lib/use-lang";
-import { createBrowserSupabaseClient } from "@/src/lib/supabase";
 
 function formatPrice(amount: number): string {
   return amount.toLocaleString("ar-YE");
@@ -50,39 +49,39 @@ export default function TrackOrderModal({ open, onClose }: { open: boolean; onCl
   const { lang } = useLang();
   const isAr = lang === "ar";
   const [orderId, setOrderId] = useState("");
+  const [phone, setPhone] = useState("");
   const [result, setResult] = useState<{ order: OrderRow; items: OrderItemRow[] } | null>(null);
   const [searched, setSearched] = useState(false);
+  const [searchError, setSearchError] = useState("");
+  const [searching, setSearching] = useState(false);
 
   if (!open) return null;
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     setSearched(false);
-    const id = orderId.trim().toUpperCase();
+    setSearchError("");
+    setResult(null);
+    setSearching(true);
     try {
-      const supabase = createBrowserSupabaseClient();
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) { setResult(null); setSearched(true); return; }
-      const { data: customer } = await supabase.from("customers" as never).select("id").eq("auth_id", session.user.id).single();
-      if (!customer) { setResult(null); setSearched(true); return; }
-      const customerId = (customer as { id: string }).id;
-      const { data: orderData } = await supabase
-        .from("orders" as never)
-        .select("id, order_number, status, total, created_at")
-        .eq("order_number", id)
-        .eq("customer_id", customerId)
-        .single();
-      if (!orderData) { setResult(null); setSearched(true); return; }
-      const orderRow = orderData as OrderRow;
-      const { data: itemRows } = await supabase
-        .from("order_items" as never)
-        .select("product_name_ar, quantity, unit_price, total_price")
-        .eq("order_id", orderRow.id);
-      setResult({ order: orderRow, items: (itemRows ?? []) as OrderItemRow[] });
+      const res = await fetch("/api/orders/track", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderNumber: orderId.trim(), phone: phone.trim() }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data?.success) {
+        setSearchError(data?.error?.message ?? (isAr ? "لم نعثر على طلب مطابق. تحقق من رقم الطلب ورقم الهاتف وحاول مجدداً." : "No matching order found. Please check your details and try again."));
+        setSearched(true);
+        return;
+      }
+      setResult({ order: data.order, items: data.items ?? [] });
       setSearched(true);
     } catch {
-      setResult(null);
+      setSearchError(isAr ? "تعذر الاتصال بالخادم، حاول مجددًا." : "Connection failed, please try again.");
       setSearched(true);
+    } finally {
+      setSearching(false);
     }
   };
 
@@ -131,20 +130,25 @@ export default function TrackOrderModal({ open, onClose }: { open: boolean; onCl
                   onChange={(e) => setOrderId(e.target.value)}
                   placeholder={isAr ? "مثال: ORD-1234567890" : "e.g. ORD-1234567890"}
                 />
-                <Button type="submit" className="gap-2">
+                <Input
+                  label={isAr ? "رقم الهاتف (المستخدم في الطلب)" : "Phone used in the order"}
+                  dir="ltr"
+                  required
+                  inputMode="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder={isAr ? "مثال: 700000000" : "e.g. 700000000"}
+                />
+                <Button type="submit" className="gap-2" disabled={searching}>
                   <Search size={16} />
-                  {isAr ? "تتبع الآن" : "Track now"}
+                  {searching ? (isAr ? "جاري البحث..." : "Searching...") : (isAr ? "تتبع الآن" : "Track now")}
                 </Button>
               </form>
 
               {searched && !result && (
                 <div className="mt-3 flex items-start gap-2 rounded-input border border-error/20 bg-error/5 p-3 text-sm text-error-fg">
                   <X size={16} className="mt-0.5 shrink-0" />
-                  <span>
-                    {isAr
-                      ? "لم نعثر على طلب مطابق. تحقق من رقم الطلب وحاول مجدداً."
-                      : "No matching order found. Please check your order number and try again."}
-                  </span>
+                  <span>{searchError}</span>
                 </div>
               )}
             </>
@@ -193,7 +197,9 @@ export default function TrackOrderModal({ open, onClose }: { open: boolean; onCl
                 onClick={() => {
                   setResult(null);
                   setSearched(false);
+                  setSearchError("");
                   setOrderId("");
+                  setPhone("");
                 }}
                 className="mt-4 w-full rounded-input border border-border py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/40 hover:bg-primary/5"
               >

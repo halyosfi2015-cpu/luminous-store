@@ -16,8 +16,8 @@ export default function CartItemRow({ item }: CartItemRowProps) {
   const { updateQuantity, removeItem } = useCart();
 
   return (
-    <div className="flex gap-4 border-b border-border pb-4 last:border-b-0 last:pb-0">
-      <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-card bg-muted-bg">
+    <div className="flex gap-3 border-b border-border pb-4 last:border-b-0 last:pb-0 sm:gap-4">
+      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-card bg-muted-bg sm:h-20 sm:w-20">
         {item.image ? (
           <ProductImage
             src={item.image}
@@ -34,12 +34,12 @@ export default function CartItemRow({ item }: CartItemRowProps) {
         <div className="flex items-start justify-between gap-2">
           {item.kind === "product" ? (
             <Link href={`/products/${item.slug}`}>
-              <p className="text-sm font-medium text-foreground line-clamp-2 transition-colors hover:text-primary">
+              <p className="text-[13px] font-medium text-foreground line-clamp-2 break-words transition-colors hover:text-primary sm:text-sm">
                 {item.nameAr}
               </p>
             </Link>
           ) : (
-            <p className="text-sm font-medium text-foreground line-clamp-2">
+            <p className="text-[13px] font-medium text-foreground line-clamp-2 break-words sm:text-sm">
               {item.nameAr}
             </p>
           )}
@@ -47,23 +47,23 @@ export default function CartItemRow({ item }: CartItemRowProps) {
             type="button"
             aria-label="إزالة"
             onClick={() => removeItem(item.productId)}
-            className="shrink-0 rounded-full p-2 text-muted transition-colors hover:text-error focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            className="shrink-0 rounded-full p-3 -m-1 min-h-[44px] min-w-[44px] flex items-center justify-center text-muted transition-colors hover:text-error focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           >
             <Trash2 size={16} />
           </button>
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center rounded-lg border border-border">
             <button
               type="button"
               aria-label="إنقاص الكمية"
               onClick={() => item.quantity > 1 && updateQuantity(item.productId, item.quantity - 1)}
               disabled={item.quantity <= 1}
-              className="flex h-10 w-10 items-center justify-center text-muted transition-colors hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset disabled:cursor-not-allowed disabled:opacity-30"
+              className="flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center text-muted transition-colors hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset disabled:cursor-not-allowed disabled:opacity-30"
             >
               <Minus size={12} />
             </button>
-            <span className="flex h-10 w-10 items-center justify-center text-xs font-medium text-foreground tabular-nums">
+            <span className="flex h-11 w-10 items-center justify-center text-xs font-medium text-foreground tabular-nums">
               {item.quantity}
             </span>
             <button
@@ -71,12 +71,12 @@ export default function CartItemRow({ item }: CartItemRowProps) {
               aria-label="زيادة الكمية"
               onClick={() => updateQuantity(item.productId, Math.min(99, item.quantity + 1))}
               disabled={item.quantity >= 99}
-              className="flex h-10 w-10 items-center justify-center text-muted transition-colors hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset disabled:cursor-not-allowed disabled:opacity-30"
+              className="flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center text-muted transition-colors hover:bg-muted-bg focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset disabled:cursor-not-allowed disabled:opacity-30"
             >
               <Plus size={12} />
             </button>
           </div>
-          <p className="text-sm font-semibold text-foreground">
+          <p className="shrink-0 text-sm font-semibold tabular-nums text-foreground">
             {formatPrice(item.price * item.quantity)} ر.ي
           </p>
         </div>

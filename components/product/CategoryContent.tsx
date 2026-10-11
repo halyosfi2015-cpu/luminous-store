@@ -15,6 +15,7 @@ const defaultFilters: FilterState = {
   skinConcerns: [],
   priceRanges: [],
   ratings: [],
+  productTypes: [],
 };
 
 export default function CategoryContent({ products, subcategories = [] }: { products: ProductSummary[]; subcategories?: CategoryInfo[] }) {
@@ -54,6 +55,9 @@ export default function CategoryContent({ products, subcategories = [] }: { prod
     }
     if (filters.ratings.length > 0) {
       result = result.filter((p) => filters.ratings.some((r) => Math.floor(p.rating) >= r));
+    }
+    if (filters.productTypes.length > 0) {
+      result = result.filter((p) => p.categorySlug && filters.productTypes.includes(p.categorySlug));
     }
 
     switch (sort) {
@@ -115,16 +119,40 @@ export default function CategoryContent({ products, subcategories = [] }: { prod
     setFilters(defaultFilters);
   };
 
+  // Louz-style subtype facet: distinct leaf categories present on this page,
+  // with live counts and Arabic labels resolved from the products themselves.
+  const subtypeFacets = useMemo(() => {
+    const counts = new Map<string, { labelAr: string; count: number }>();
+    for (const p of products) {
+      const slug = p.categorySlug;
+      if (!slug) continue;
+      const prev = counts.get(slug);
+      counts.set(slug, {
+        labelAr: prev?.labelAr && prev.labelAr !== slug ? prev.labelAr : (p.categoryAr || slug),
+        count: (prev?.count ?? 0) + 1,
+      });
+    }
+    return [...counts.entries()]
+      .map(([slug, v]) => ({ slug, ...v }))
+      .sort((a, b) => b.count - a.count);
+  }, [products]);
+  const subtypeLabels = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const f of subtypeFacets) map[f.slug] = f.labelAr;
+    return map;
+  }, [subtypeFacets]);
+
   return (
-    <div className="flex flex-col lg:flex-row gap-0">
+    <div className="flex flex-col lg:flex-row gap-3 lg:gap-6">
       <div className="lg:w-52 xl:w-56 shrink-0">
-        <FilterSidebar filters={filters} onChange={handleFilterChange} products={products} />
+        <FilterSidebar filters={filters} onChange={handleFilterChange} products={products} subtypeFacets={subtypeFacets} />
       </div>
-      <div className="flex-1 flex flex-col gap-0 min-w-0">
+      <div className="flex-1 flex flex-col gap-3 lg:gap-6 min-w-0">
         <ActiveFilters
           filters={filters}
           onRemove={handleRemoveFilter}
           onClear={handleClearFilters}
+          typeLabels={subtypeLabels}
         />
         <ProductGrid products={filtered} />
       </div>

@@ -94,7 +94,7 @@ export default function BundlesClient({ serverBundles }: { serverBundles?: Bundl
                 <span className="h-0.5 w-6 rounded-pill bg-accent" />
                 باقات وهدايا
               </span>
-              <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+              <h1 className="text-[24px] font-bold text-gray-900 sm:text-4xl">
                 هدايا وباقات مختارة بعناية
               </h1>
               <p className="mt-2 max-w-xl text-sm text-gray-500">

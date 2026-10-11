@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Clock, ArrowLeft } from "lucide-react";
 import Container from "@/components/ui/Container";
+import MobileReveal from "@/components/ui/MobileReveal";
 import ProductImage from "@/components/product/ProductImage";
 import { useProducts } from "@/hooks/useProducts";
 import { useLang } from "@/lib/use-lang";
@@ -88,8 +89,8 @@ export default function RecentlyViewed() {
               <Clock size={18} className="text-gray-500" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-gray-900">
-                {isAr ? "شووف مؤخراً" : "Recently Viewed"}
+              <h3 className="magic-title text-base font-bold text-gray-900">
+                {isAr ? "تصفحتِ مؤخراً" : "Recently Viewed"}
               </h3>
               <p className="text-xs text-gray-400">
                 {isAr ? "المنتجات اللي شفتها قريب" : "Products you recently viewed"}
@@ -105,16 +106,17 @@ export default function RecentlyViewed() {
           </Link>
         </div>
 
-        <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
+        <MobileReveal delay={100}>
+        <div className="magic-stagger magic-fade-x hide-scrollbar -mx-4 flex snap-x snap-proximity gap-3 overflow-x-auto px-4 pb-2">
           {recentProducts.map((product) => {
             const productName = isAr ? product.name.ar : product.name.en;
             return (
               <Link
                 key={product.id}
                 href={`/products/${product.slug}`}
-                className="group flex w-36 shrink-0 flex-col gap-2 rounded-2xl border border-gray-100 bg-white p-2.5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:w-40"
+                className="magic-card-glow group flex w-36 shrink-0 snap-start flex-col gap-2 rounded-2xl border border-gray-100 bg-white p-2.5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg active:scale-[0.98] sm:w-40"
               >
-                <div className="relative aspect-square overflow-hidden rounded-xl bg-gray-50">
+                <div className="magic-autoshine luminous-shine relative aspect-square overflow-hidden rounded-xl bg-gray-50">
                   <ProductImage
                     src={product.gallery[0]}
                     alt={productName}
@@ -130,13 +132,14 @@ export default function RecentlyViewed() {
                   </p>
                   <span className="text-[12px] font-extrabold text-gray-900">
                     {formatPrice(product.pricing.price)}
-                    <span className="ms-0.5 text-[9px] font-normal text-gray-400">ريال</span>
+                    <span className="ms-0.5 text-[10px] font-normal text-gray-400">ريال</span>
                   </span>
                 </div>
               </Link>
             );
           })}
         </div>
+        </MobileReveal>
       </Container>
     </section>
   );

@@ -914,6 +914,9 @@ function ResourceListView({ config, headerActions, reload }: { config: ResourceC
   const [error, setError] = useState(false);
   const [query, setQuery] = useState("");
   const [flagSel, setFlagSel] = useState<string[]>([]);
+  // ترقيم الصفحات: رسم آلاف الصفوف دفعة واحدة يعلّق الهاتف — 50 صفًا فقط
+  const PAGE_SIZE = 50;
+  const [page, setPage] = useState(0);
   const [reloadKey, setReloadKey] = useState(0);
 
   const reloadData = useCallback(() => {
@@ -954,6 +957,11 @@ function ResourceListView({ config, headerActions, reload }: { config: ResourceC
     if (!q) return out;
     return out.filter((row) => config.searchText(row).toLowerCase().includes(q));
   }, [rows, query, flagSel, config]);
+
+  useEffect(() => { setPage(0); }, [query, flagSel, rows.length]);
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const safePage = Math.min(page, pageCount - 1);
+  const pageRows = filtered.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE);
 
   const retry = useCallback(() => {
     setError(false);
@@ -1056,7 +1064,7 @@ function ResourceListView({ config, headerActions, reload }: { config: ResourceC
               </tr>
             </thead>
             <tbody>
-              {filtered.map((row) => (
+              {pageRows.map((row) => (
                 <tr
                   key={config.rowKey(row)}
                   className="border-b border-border/60 transition-colors last:border-0 hover:bg-muted-bg/50"
@@ -1080,9 +1088,37 @@ function ResourceListView({ config, headerActions, reload }: { config: ResourceC
           </table>
         </div>
       )}
-      <p className="mt-1 text-xs text-muted">
-        إجمالي {config.title}: {rows.length}
-      </p>
+      <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+        <p className="text-xs text-muted">
+          إجمالي {config.title}: {rows.length}
+          {pageCount > 1 && ` — صفحة ${safePage + 1} من ${pageCount}`}
+        </p>
+        {pageCount > 1 && (
+          <div className="flex items-center gap-1.5" dir="ltr">
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              disabled={safePage === 0}
+              className="flex min-h-[40px] min-w-[40px] items-center justify-center rounded-full border border-border text-sm font-bold text-foreground transition-colors hover:border-primary/40 hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label="الصفحة السابقة"
+            >
+              ‹
+            </button>
+            <span className="min-w-[64px] text-center text-xs font-bold text-foreground tabular-nums">
+              {safePage + 1} / {pageCount}
+            </span>
+            <button
+              type="button"
+              onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
+              disabled={safePage >= pageCount - 1}
+              className="flex min-h-[40px] min-w-[40px] items-center justify-center rounded-full border border-border text-sm font-bold text-foreground transition-colors hover:border-primary/40 hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label="الصفحة التالية"
+            >
+              ›
+            </button>
+          </div>
+        )}
+      </div>
     </Card>
   );
 }

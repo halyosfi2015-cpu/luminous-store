@@ -237,7 +237,11 @@ export default function QuizPage() {
               </div>
             </div>
 
-            <div className="rounded-card border border-border bg-card p-6 shadow-card sm:p-8">
+            <div
+              key={question.id}
+              className="rounded-card border border-border bg-card p-6 shadow-card sm:p-8"
+              style={{ animation: "slideUp 0.35s cubic-bezier(0.22,1,0.36,1) both" }}
+            >
               <h2 className="text-lg font-bold text-foreground sm:text-xl">{question.question.ar}</h2>
               {question.hint && <p className="mt-1 text-xs text-muted">{question.hint.ar}</p>}
               {question.multi && (

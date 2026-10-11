@@ -31,18 +31,18 @@ export default function CartSummary() {
         </div>
         <div className="flex items-center justify-between gap-3 text-muted">
           <span className="shrink-0">الشحن</span>
-          <span className="text-end text-xs">يُحدَّد عند إتمام الطلب (صنعاء 700 / بقية المحافظات 1500)</span>
+          <span className="text-end text-[13px] leading-relaxed">يُحدَّد عند إتمام الطلب (صنعاء 700 / بقية المحافظات 1500)</span>
         </div>
         <div className="border-t border-border pt-2">
           <div className="flex justify-between font-semibold text-foreground">
             <span>المجموع</span>
             <span>{formatPrice(subtotal)} ر.ي</span>
           </div>
-          <p className="mt-1 text-xs text-muted">المجموع لا يشمل التوصيل</p>
+          <p className="mt-1 text-[13px] text-muted">المجموع لا يشمل التوصيل</p>
         </div>
       </div>
       <Link href="/checkout" onClick={handleCheckout}>
-        <Button className="w-full gap-2">
+        <Button className="w-full gap-2 min-h-[48px] text-sm">
           <ShoppingBag size={16} />
           إتمام الطلب
         </Button>

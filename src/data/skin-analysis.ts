@@ -21,6 +21,13 @@ const CONCERN_PRIORITY: Record<SkinConcern, number> = {
   dark_circles: 2,
   oiliness: 3,
   sensitivity: 3,
+  rosacea: 3,
+  eczema: 3,
+  psoriasis: 3,
+  vitiligo: 3,
+  burns_scars: 2,
+  tired_skin: 2,
+  stretch_marks: 2,
 };
 
 const CONCERN_TO_ROUTINE_TYPES: Record<SkinConcern, string[]> = {
@@ -34,6 +41,13 @@ const CONCERN_TO_ROUTINE_TYPES: Record<SkinConcern, string[]> = {
   dark_circles: ["eye"],
   oiliness: ["oiliness"],
   sensitivity: ["sensitivity"],
+  rosacea: ["sensitivity"],
+  eczema: ["sensitivity"],
+  psoriasis: ["sensitivity"],
+  vitiligo: ["brightening"],
+  burns_scars: ["sensitivity"],
+  tired_skin: ["brightening"],
+  stretch_marks: ["dryness"],
 };
 
 const ROUTINE_LEVEL_ORDER = ["basic", "standard", "premium"] as const;
@@ -126,6 +140,13 @@ export function getRecommendedExpert(profile: SkinAnalysisProfile): Expert | nul
     dark_circles: ["skin-analysis", "product-recommendations"],
     oiliness: ["skin-analysis", "acne-treatment"],
     sensitivity: ["skin-analysis", "baby-skin-care"],
+    rosacea: ["skin-analysis", "sensitive-skin"],
+    eczema: ["skin-analysis", "sensitive-skin"],
+    psoriasis: ["skin-analysis", "sensitive-skin"],
+    vitiligo: ["skin-analysis", "hyperpigmentation"],
+    burns_scars: ["skin-analysis", "sensitive-skin"],
+    tired_skin: ["skin-analysis", "product-recommendations"],
+    stretch_marks: ["skin-analysis", "product-recommendations"],
   };
 
   const desiredServices = specialtyMap[primaryConcern] || ["skin-analysis"];

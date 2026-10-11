@@ -25,6 +25,7 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
 
   const prevImage = () => setSelected((p) => (p > 0 ? p - 1 : images.length - 1));
   const nextImage = () => setSelected((p) => (p < images.length - 1 ? p + 1 : 0));
+  const touchX = useRef<number | null>(null);
 
   if (images.length === 0) {
     return (
@@ -38,10 +39,17 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
     <div className="flex flex-col gap-4">
       <div
         ref={imageRef}
-        className="relative aspect-square w-full overflow-hidden rounded-card bg-muted-bg/50 border border-border group cursor-crosshair"
+        className="relative aspect-square w-full overflow-hidden rounded-card bg-muted-bg/50 border border-border group sm:cursor-crosshair touch-pan-y select-none"
         onMouseEnter={() => setIsZoomed(true)}
         onMouseLeave={() => setIsZoomed(false)}
         onMouseMove={handleMouseMove}
+        onTouchStart={(e) => { touchX.current = e.touches[0]?.clientX ?? null; }}
+        onTouchEnd={(e) => {
+          if (touchX.current === null) return;
+          const dx = (e.changedTouches[0]?.clientX ?? 0) - touchX.current;
+          touchX.current = null;
+          if (Math.abs(dx) > 40) { if (dx < 0) nextImage(); else prevImage(); }
+        }}
       >
         <div
           className="absolute inset-0 transition-transform duration-300 will-change-transform"
@@ -62,7 +70,7 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
           />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-        <div className="absolute top-3 end-3 flex h-8 w-8 items-center justify-center rounded-full bg-card/80 backdrop-blur-sm shadow-card opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="absolute top-3 end-3 hidden h-8 w-8 items-center justify-center rounded-full bg-card/80 backdrop-blur-sm shadow-card opacity-0 group-hover:opacity-100 transition-opacity sm:flex">
           <ZoomIn size={15} className="text-foreground" />
         </div>
         {images.length > 1 && (
@@ -71,7 +79,7 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
               type="button"
               onClick={prevImage}
               aria-label="السابق"
-              className="absolute start-3 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-card/80 backdrop-blur-sm shadow-card opacity-0 group-hover:opacity-100 transition-all hover:bg-card"
+              className="absolute start-3 top-1/2 -translate-y-1/2 flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-card/90 backdrop-blur-sm shadow-card transition-all hover:bg-card sm:opacity-0 sm:group-hover:opacity-100"
             >
               <ChevronRight size={18} className="text-foreground rtl:rotate-180" />
             </button>
@@ -79,7 +87,7 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
               type="button"
               onClick={nextImage}
               aria-label="التالي"
-              className="absolute end-3 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-card/80 backdrop-blur-sm shadow-card opacity-0 group-hover:opacity-100 transition-all hover:bg-card"
+              className="absolute end-3 top-1/2 -translate-y-1/2 flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-card/90 backdrop-blur-sm shadow-card transition-all hover:bg-card sm:opacity-0 sm:group-hover:opacity-100"
             >
               <ChevronLeft size={18} className="text-foreground rtl:rotate-180" />
             </button>
@@ -87,7 +95,7 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
         )}
       </div>
       {images.length > 1 && (
-        <div className="flex gap-3 overflow-x-auto pb-1 hide-scrollbar" role="tablist" aria-label="Product images">
+        <div className="hide-scrollbar flex snap-x snap-mandatory gap-2 overflow-x-auto px-1 pb-1" role="tablist" aria-label="Product images">
           {images.map((src, i) => (
             <button
               key={src}
@@ -95,7 +103,7 @@ export default function ProductGallery({ images, name }: ProductGalleryProps) {
               aria-selected={i === selected}
               aria-label={`View image ${i + 1}`}
               onClick={() => setSelected(i)}
-              className={`shrink-0 rounded-xl border-2 overflow-hidden transition-all duration-200 ${
+              className={`shrink-0 snap-start min-h-[44px] min-w-[44px] rounded-xl border-2 overflow-hidden transition-all duration-200 ${
                 i === selected
                   ? "border-primary ring-1 ring-primary/30 shadow-card"
                   : "border-border hover:border-border-strong opacity-70 hover:opacity-100"

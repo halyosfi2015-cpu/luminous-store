@@ -44,8 +44,11 @@ type OrderRow = { id: string; order_number: string; status: string; total: numbe
 export default function TrackOrderPage() {
   const { isLoggedIn, user } = useAuth();
   const [orderId, setOrderId] = useState("");
-  const [result, setResult] = useState<OrderRow | null>(null);
+  const [phone, setPhone] = useState("");
+  const [result, setResult] = useState<{ order: OrderRow; items: { product_name_ar: string; quantity: number; total_price: number }[] } | null>(null);
   const [searched, setSearched] = useState(false);
+  const [searchError, setSearchError] = useState("");
+  const [searching, setSearching] = useState(false);
   const [myOrders, setMyOrders] = useState<OrderRow[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
 
@@ -77,29 +80,32 @@ export default function TrackOrderPage() {
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     setSearched(false);
-    const id = orderId.trim().toUpperCase();
+    setSearchError("");
+    setResult(null);
+    setSearching(true);
     try {
-      const supabase = createBrowserSupabaseClient();
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) { setResult(null); setSearched(true); return; }
-      const { data: customer } = await supabase.from("customers" as never).select("id").eq("auth_id", session.user.id).single();
-      if (!customer) { setResult(null); setSearched(true); return; }
-      const customerId = (customer as { id: string }).id;
-      const { data } = await supabase
-        .from("orders" as never)
-        .select("id, order_number, status, total, created_at")
-        .eq("order_number", id)
-        .eq("customer_id", customerId)
-        .single();
-      setResult(data as OrderRow | null);
+      const res = await fetch("/api/orders/track", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderNumber: orderId.trim(), phone: phone.trim() }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data?.success) {
+        setSearchError(data?.error?.message ?? "لم يتم العثور على الطلب. تأكد من رقم الطلب ورقم الهاتف.");
+        setSearched(true);
+        return;
+      }
+      setResult({ order: data.order, items: data.items ?? [] });
       setSearched(true);
     } catch {
-      setResult(null);
+      setSearchError("تعذر الاتصال بالخادم، حاول مجددًا.");
       setSearched(true);
+    } finally {
+      setSearching(false);
     }
   };
 
-  const renderOrderCard = (order: OrderRow) => (
+  const renderOrderCard = (order: OrderRow, items?: { product_name_ar: string; quantity: number; total_price: number }[]) => (
     <div key={order.id} className="rounded-card border border-border bg-card p-4 shadow-card">
       <div className="mb-2 flex items-center justify-between">
         <span className="text-xs text-muted">{order.order_number}</span>
@@ -107,6 +113,16 @@ export default function TrackOrderPage() {
           {statusLabels[order.status] || order.status}
         </span>
       </div>
+      {items && items.length > 0 && (
+        <div className="mb-2 space-y-1 border-b border-border pb-2">
+          {items.map((it, idx) => (
+            <div key={idx} className="flex items-center justify-between text-sm">
+              <span className="truncate ps-1 text-foreground">{it.product_name_ar} × {it.quantity}</span>
+              <span className="shrink-0 font-medium text-foreground">{formatPrice(it.total_price)} ر.ي</span>
+            </div>
+          ))}
+        </div>
+      )}
       <p className="mb-1 text-sm text-muted">
         {formatPrice(order.total)} ر.ي
       </p>
@@ -141,19 +157,28 @@ export default function TrackOrderPage() {
                 onChange={(e) => setOrderId(e.target.value)}
                 placeholder="مثال: ORD-1234567890"
               />
-              <Button type="submit" className="gap-2">
+              <Input
+                label="رقم الهاتف (المستخدم في الطلب)"
+                required
+                inputMode="tel"
+                dir="ltr"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="مثال: 700000000"
+              />
+              <Button type="submit" className="gap-2" disabled={searching}>
                 <Search size={16} />
-                تتبع
+                {searching ? "جاري البحث..." : "تتبع"}
               </Button>
             </form>
 
             {searched && !result && (
               <p role="alert" className="mt-3 rounded-input border border-error/20 bg-error/5 p-3 text-center text-sm text-error-fg">
-                لم يتم العثور على الطلب. تأكد من رقم الطلب.
+                {searchError || "لم يتم العثور على الطلب. تأكد من رقم الطلب."}
               </p>
             )}
             {result && (
-              <div className="mt-4">{renderOrderCard(result)}</div>
+              <div className="mt-4">{renderOrderCard(result.order, result.items)}</div>
             )}
           </div>
 

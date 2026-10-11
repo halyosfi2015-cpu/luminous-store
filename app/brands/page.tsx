@@ -100,7 +100,7 @@ export default function BrandsPage() {
     <main dir="rtl" className="min-h-screen bg-background py-8">
       <Container>
         <div className="mb-8">
-          <h1 className="mb-1 flex items-center gap-2 text-2xl font-bold text-foreground">
+          <h1 className="mb-1 flex items-center gap-2 text-[24px] font-bold text-foreground">
             <Store size={24} className="text-primary" />
             {isAr ? "العلامات التجارية" : "Brands"}
           </h1>
@@ -112,14 +112,14 @@ export default function BrandsPage() {
         </div>
 
         <div className="mb-8">
-          <div className="hide-scrollbar flex flex-wrap gap-2 overflow-x-auto pb-2" role="tablist" aria-label={isAr ? "تصفية الماركات حسب الحرف" : "Filter brands by letter"}>
+          <div className="hide-scrollbar flex flex-nowrap gap-1.5 overflow-x-auto pb-2 sm:flex-wrap sm:gap-2" role="tablist" aria-label={isAr ? "تصفية الماركات حسب الحرف" : "Filter brands by letter"}>
             {availableInitials.map((initial) => (
               <button
                 key={initial}
                 role="tab"
                 aria-selected={activeFilter === initial}
                 onClick={() => setActiveFilter(initial)}
-                className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 ${
+                className={`flex min-h-[40px] min-w-[40px] shrink-0 items-center justify-center rounded-full px-3 py-2 text-xs font-bold transition-all duration-200 sm:text-sm sm:px-4 ${
                   activeFilter === initial
                     ? "bg-primary text-white shadow-lg shadow-primary/30"
                     : "bg-white text-gray-600 border border-gray-200 hover:border-primary/40 hover:text-primary"

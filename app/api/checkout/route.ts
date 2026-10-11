@@ -60,6 +60,57 @@ function fail(status: number, code: string, messageAr: string, extra?: Record<st
   return NextResponse.json({ error: { code, message: messageAr, ...extra } }, { status });
 }
 
+// ── Fallback stock decrement (no-RPC path) ─────────────────────────────
+// Used ONLY when the atomic RPC is unavailable (e.g. missing EXECUTE grant
+// in the database). Each row is guarded (stock_quantity >= qty) so a single
+// row can never go negative; rows already decremented are compensated on any
+// failure to preserve all-or-nothing behavior.
+type AdminDb = ReturnType<typeof createAdminClient>;
+async function compensateStock(db: AdminDb, done: Array<{ id: string; qty: number }>) {
+  for (const { id, qty } of done) {
+    try {
+      const { data: row } = await (db as any).from("products").select("stock_quantity").eq("id", id).maybeSingle();
+      const current = Number((row as { stock_quantity?: unknown } | null)?.stock_quantity);
+      if (!Number.isFinite(current)) continue;
+      await (db as any).from("products")
+        .update({ stock_quantity: current + qty, updated_at: new Date().toISOString() })
+        .eq("id", id);
+    } catch { /* best-effort compensation */ }
+  }
+}
+async function decrementStockDirect(
+  db: AdminDb,
+  deltas: Map<string, number>
+): Promise<{ ok: true } | { ok: false; error: "insufficient" | "product_not_found" | "unavailable" }> {
+  const done: Array<{ id: string; qty: number }> = [];
+  for (const [id, qty] of deltas) {
+    let row: { stock_quantity?: unknown; is_active?: unknown } | null = null;
+    try {
+      const res = await (db as any).from("products").select("stock_quantity, is_active").eq("id", id).maybeSingle();
+      if (res.error || !res.data) { await compensateStock(db, done); return { ok: false, error: "product_not_found" }; }
+      row = res.data;
+    } catch { await compensateStock(db, done); return { ok: false, error: "unavailable" }; }
+    const stock = Number(row?.stock_quantity);
+    if (row?.is_active !== true || !Number.isFinite(stock) || stock < qty) {
+      await compensateStock(db, done);
+      return { ok: false, error: "insufficient" };
+    }
+    try {
+      const upd = await (db as any).from("products")
+        .update({ stock_quantity: stock - qty, updated_at: new Date().toISOString() })
+        .eq("id", id)
+        .gte("stock_quantity", qty)
+        .select("id");
+      if (upd.error || !Array.isArray(upd.data) || upd.data.length === 0) {
+        await compensateStock(db, done);
+        return { ok: false, error: "insufficient" };
+      }
+    } catch { await compensateStock(db, done); return { ok: false, error: "unavailable" }; }
+    done.push({ id, qty });
+  }
+  return { ok: true };
+}
+
 export async function POST(request: Request) {
   try {
     const raw: CheckoutPayload = await request.json().catch(() => ({}));
@@ -218,8 +269,18 @@ export async function POST(request: Request) {
       for (const row of (data ?? []) as unknown as RoutineRow[]) routineRows.set(row.slug, row);
     }
 
-    // Approved-config addon prices (never client-supplied).
-    const addonPrices = new Map(DEFAULT_GIFT_OPTIONS.map((g) => [g.id, g.price]));
+    // Approved-config addon prices (never client-supplied): static defaults
+    // PLUS live DB gift_options (storefront shows DB options with UUID ids —
+    // validating static-only rejected every real addon with unknown_addon).
+    const addonPrices = new Map<string, number>(DEFAULT_GIFT_OPTIONS.map((g) => [g.id, g.price]));
+    try {
+      const { data: giftRows } = await db.from("gift_options").select("id, price, is_active").eq("is_active", true);
+      for (const g of ((giftRows ?? []) as unknown as { id?: unknown; price?: unknown }[])) {
+        const gid = typeof g?.id === "string" ? g.id.trim() : "";
+        const gp = Number(g?.price);
+        if (gid && Number.isFinite(gp) && gp >= 0) addonPrices.set(gid, gp);
+      }
+    } catch { /* static fallback stands */ }
 
     // ── Build server-derived lines ────────────────────────────────────────
     const lines: PricedLine[] = [];
@@ -377,15 +438,43 @@ export async function POST(request: Request) {
     const p_items = [...stockDeltas.entries()].map(([id, q]) => ({ id, qty: q }));
     const { data: decData, error: decError } = await db.rpc("checkout_decrement_product_stock", { p_items } as never);
     if (decError) {
-      // Any failure rolls back ALL decrements inside the RPC transaction;
-      // here we also remove the order so no paid-but-unfulfillable record stays.
-      await db.from("order_items").delete().eq("order_id", orderId);
-      await db.from("orders").delete().eq("id", orderId);
-      const msg = String(decError.message ?? "");
-      if (msg.includes("STOCK_INSUFFICIENT")) {
-        return fail(409, "insufficient_stock", "الكمية المطلوبة نفدت أثناء إتمام الطلب — لم يتم أي خصم");
+      const rollbackOrder = async () => {
+        await db.from("order_items").delete().eq("order_id", orderId);
+        await db.from("orders").delete().eq("id", orderId);
+      };
+      const msg = String((decError as { message?: unknown })?.message ?? "");
+      const code = String((decError as { code?: unknown })?.code ?? "");
+      const isPermissionIssue = code === "42501" || /permission denied/i.test(msg);
+      if (!isPermissionIssue) {
+        // Any failure rolls back ALL decrements inside the RPC transaction;
+        // here we also remove the order so no paid-but-unfulfillable record stays.
+        await rollbackOrder();
+        if (msg.includes("STOCK_INSUFFICIENT")) {
+          return fail(409, "insufficient_stock", "الكمية المطلوبة نفدت أثناء إتمام الطلب — لم يتم أي خصم");
+        }
+        return fail(500, "stock_update_failed", "تعذر تحديث المخزون، تم إلغاء الطلب بالكامل");
       }
-      return fail(500, "stock_update_failed", "تعذر تحديث المخزون، تم إلغاء الطلب بالكامل");
+      // Fallback: RPC unavailable (missing EXECUTE grant) — guarded direct
+      // decrement with compensation. Keeps checkout working until the grant
+      // below is applied in the database (see db/migration_checkout_stock_atomicity.sql).
+      const direct = await decrementStockDirect(db, stockDeltas);
+      if (!direct.ok) {
+        await rollbackOrder();
+        if (direct.error === "insufficient") {
+          return fail(409, "insufficient_stock", "الكمية المطلوبة نفدت أثناء إتمام الطلب — لم يتم أي خصم");
+        }
+        if (direct.error === "product_not_found") {
+          return fail(409, "product_not_found", "أحد المنتجات غير موجود");
+        }
+        return fail(500, "stock_update_failed", "تعذر تحديث المخزون، تم إلغاء الطلب بالكامل");
+      }
+      return NextResponse.json({
+        success: true,
+        orderId: orderNumber,
+        dbOrderId: orderId,
+        totals: { subtotal, shipping, total, currency: "YER" },
+        serverDerived: true,
+      });
     }
     const dec = decData as { ok?: boolean; error?: string } | null;
     if (!dec?.ok) {

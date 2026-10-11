@@ -64,3 +64,9 @@ BEGIN
   RETURN jsonb_build_object('ok', true);
 END;
 $$;
+
+-- The server calls this RPC with the SERVICE-ROLE key (see app/api/checkout).
+-- Without an explicit EXECUTE grant the call fails with 42501
+-- ("permission denied for function") and every checkout is cancelled.
+-- Run this once in the Supabase SQL editor (or with the postgres owner role):
+GRANT EXECUTE ON FUNCTION public.checkout_decrement_product_stock(JSONB) TO service_role;

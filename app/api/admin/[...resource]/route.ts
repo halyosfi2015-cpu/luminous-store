@@ -169,7 +169,9 @@ const ORDER_STATUS_TRANSITIONS: Record<string, readonly string[]> = {
 type HandlerFn = (request: NextRequest, resource: string[], rest: string[]) => Promise<NextResponse>
 
 const getHandlers: Record<string, HandlerFn> = {
-products: () => wrap(supabaseGetProducts),
+products: (request) => wrap(() => supabaseGetProducts({
+    compact: new URL(request.url).searchParams.get("compact") === "1",
+  })),
   categories: () => wrap(supabaseGetCategories),
   brands: () => wrap(supabaseGetBrands),
   orders: () => wrap(supabaseGetOrders),

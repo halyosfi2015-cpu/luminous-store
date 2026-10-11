@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Star, BadgeCheck, Quote, MessageSquareHeart } from "lucide-react"
 import Container from "@/components/ui/Container"
 import SectionTitle from "@/components/ui/SectionTitle"
+import MobileReveal from "@/components/ui/MobileReveal"
 
 /**
  * آراء عملائنا — real social proof.
@@ -29,11 +30,11 @@ function Stars({ rating }: { rating: number }) {
   return (
     <div className="flex items-center gap-0.5" aria-label={`${rating} من 5`}>
       {[1, 2, 3, 4, 5].map((i) => (
-        <Star
-          key={i}
-          size={14}
-          className={i <= rating ? "fill-amber-400 text-amber-400" : "text-gray-200"}
-        />
+          <Star
+            key={i}
+            size={14}
+            className={i <= rating ? "fill-amber-400 text-amber-400 drop-shadow-[0_0_4px_rgba(251,191,36,0.7)]" : "text-gray-200"}
+          />
       ))}
     </div>
   )
@@ -88,25 +89,26 @@ export default function CustomerReviews() {
           }
         />
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <MobileReveal delay={100}>
+          <div className="magic-stagger magic-fade-x grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3 max-sm:flex max-sm:snap-x max-sm:snap-mandatory max-sm:gap-3 max-sm:overflow-x-auto max-sm:pb-2">
           {reviews.slice(0, 6).map((review) => (
             <article
               key={review.id}
-              className="group relative flex flex-col overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5"
+              className="luminous-shine group relative flex flex-col overflow-hidden rounded-3xl border border-gray-100 bg-white p-4 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 sm:p-6 max-sm:min-w-[85vw] max-sm:snap-start"
             >
-              <Quote size={40} className="pointer-events-none absolute -top-1 end-4 rotate-180 text-primary/[0.06]" />
+              <Quote size={64} className="pointer-events-none absolute -top-2 end-3 h-10 w-10 rotate-180 text-transparent opacity-80 transition-all duration-500 group-hover:text-accent/25 sm:h-16 sm:w-16" strokeWidth={1.5} style={{ WebkitTextStroke: "1.5px rgba(212,175,55,0.5)" }} />
 
               <div className="flex items-center justify-between">
                 <Stars rating={review.rating} />
                 {review.verifiedPurchase && (
                   <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-bold text-emerald-700">
-                    <BadgeCheck size={11} />
+                    <BadgeCheck size={13} />
                     شراء موثّق
                   </span>
                 )}
               </div>
 
-              <p className="mt-4 flex-1 text-sm leading-relaxed text-gray-600 line-clamp-4">
+              <p className="mt-4 flex-1 text-[13px] leading-[1.8] text-gray-600 line-clamp-3 sm:text-sm sm:line-clamp-4">
                 “{review.comment}”
               </p>
 
@@ -119,7 +121,7 @@ export default function CustomerReviews() {
                   {review.product ? (
                     <Link
                       href={`/products/${review.product.slug}`}
-                      className="mt-0.5 block truncate text-[11px] text-muted transition-colors hover:text-primary"
+                      className="mt-0.5 block max-w-full truncate py-2 text-xs text-muted transition-colors hover:text-primary"
                     >
                       عن منتج: {review.product.nameAr}
                     </Link>
@@ -136,6 +138,7 @@ export default function CustomerReviews() {
             </article>
           ))}
         </div>
+        </MobileReveal>
       </div>
     </section>
   )

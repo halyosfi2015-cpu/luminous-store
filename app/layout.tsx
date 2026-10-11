@@ -5,6 +5,7 @@ import Providers from "@/components/Providers";
 import BackButton from "@/components/ui/BackButton";
 import SearchOverlay from "@/components/search/SearchOverlay";
 import { AssistantChat } from "@/components/assistant";
+import HomeBottomNav from "@/components/layout/HomeBottomNav";
 import { rootStructuredData, websiteStructuredData } from "@/lib/structured-data";
 
 export const viewport: Viewport = {
@@ -55,7 +56,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-background font-sans text-foreground antialiased">
+      <body suppressHydrationWarning className="min-h-full flex flex-col bg-background font-sans text-foreground antialiased">
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:end-2 focus:z-50 focus:rounded-full focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:text-white focus:shadow-lg"
@@ -74,6 +75,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           </Suspense>
           <Suspense fallback={null}>
             <AssistantChat />
+          </Suspense>
+          <Suspense fallback={null}>
+            <HomeBottomNav />
           </Suspense>
         </Providers>
       </body>

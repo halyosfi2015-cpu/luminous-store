@@ -210,8 +210,8 @@ export default function ProductMarquee({ products }: ProductMarqueeProps) {
         touchXRef.current = null;
         cycle.resume();
       }}
-      className="relative w-full overflow-hidden"
-      style={{ height: "clamp(340px, 52vw, 620px)" }}
+      className="relative w-full overflow-hidden h-[480px] sm:h-[clamp(340px,52vw,620px)]"
+      style={{}}
     >
       {HERO_SLIDES.map((s, i) => {
         const isActive = i === cycle.index;
@@ -235,7 +235,7 @@ export default function ProductMarquee({ products }: ProductMarqueeProps) {
             <div className={s.shape2} style={{ background: s.accent }} />
             <div className={s.shape3} style={{ background: s.accent }} />
 
-            <div className="relative h-full w-full flex items-center justify-between px-8 sm:px-14 lg:px-24 max-w-[1400px] mx-auto">
+            <div className="relative h-full w-full flex flex-col-reverse items-center justify-center gap-2 px-4 sm:flex-row sm:items-center sm:justify-between sm:px-14 sm:gap-0 lg:px-24 max-w-[1400px] mx-auto">
 
               <div className={"flex flex-col " + (isAr ? "items-end text-right order-2" : "items-start text-left order-1") + " z-10 max-w-[420px]"}>
                 <div
@@ -280,7 +280,7 @@ export default function ProductMarquee({ products }: ProductMarqueeProps) {
 
                 <Link
                   href={s.ctaHref}
-                  className="group inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-sm font-medium transition-all duration-300 active:scale-[0.97]"
+                  className="group inline-flex items-center gap-2 rounded-full px-6 py-3 min-h-[44px] text-sm font-medium transition-all duration-300 active:scale-[0.97]"
                   style={{
                     background: s.accent,
                     color: "white",
@@ -296,7 +296,7 @@ export default function ProductMarquee({ products }: ProductMarqueeProps) {
                 </Link>
               </div>
 
-              <div className={"relative " + (isAr ? "order-1" : "order-2") + " flex items-center justify-center w-[55%] h-full"}>
+              <div className={"relative " + (isAr ? "order-1" : "order-2") + " flex items-center justify-center w-full h-[180px] sm:w-[55%] sm:h-full"}>
                 {/* Luxury 3D display plinth — auto-tinted per slide */}
                 <Podium accent={s.accent} />
                 {slideProducts.map((p, pi) => {
@@ -347,7 +347,7 @@ export default function ProductMarquee({ products }: ProductMarqueeProps) {
         type="button"
         onClick={() => isAr ? cycle.next() : cycle.prev()}
         aria-label={isAr ? "السابق" : "Previous"}
-        className="absolute start-4 top-1/2 -translate-y-1/2 z-20 inline-flex h-10 w-10 items-center justify-center rounded-full transition-all duration-300 active:scale-95"
+        className="absolute start-4 top-1/2 -translate-y-1/2 z-20 inline-flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full shadow-md backdrop-blur bg-white/80 transition-all duration-300 active:scale-95"
         style={{ background: "rgba(0,0,0,0.05)", color: "#555" }}
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -359,7 +359,7 @@ export default function ProductMarquee({ products }: ProductMarqueeProps) {
         type="button"
         onClick={() => isAr ? cycle.prev() : cycle.next()}
         aria-label={isAr ? "التالي" : "Next"}
-        className="absolute end-4 top-1/2 -translate-y-1/2 z-20 inline-flex h-10 w-10 items-center justify-center rounded-full transition-all duration-300 active:scale-95"
+        className="absolute end-4 top-1/2 -translate-y-1/2 z-20 inline-flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full shadow-md backdrop-blur bg-white/80 transition-all duration-300 active:scale-95"
         style={{ background: "rgba(0,0,0,0.05)", color: "#555" }}
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -374,13 +374,18 @@ export default function ProductMarquee({ products }: ProductMarqueeProps) {
             type="button"
             onClick={() => cycle.goTo(i, i > cycle.index ? 1 : -1)}
             aria-label={isAr ? "شريحة " + (i + 1) : "Slide " + (i + 1)}
-            className="rounded-full transition-all duration-300"
-            style={{
-              width: i === cycle.index ? "24px" : "8px",
-              height: "8px",
-              background: i === cycle.index ? s.accent : "rgba(0,0,0,0.12)",
-            }}
-          />
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full transition-all duration-300"
+            style={{}}
+          >
+            <span
+              className="block rounded-full transition-all duration-300"
+              style={{
+                width: i === cycle.index ? "24px" : "8px",
+                height: "8px",
+                background: i === cycle.index ? s.accent : "rgba(0,0,0,0.12)",
+              }}
+            />
+          </button>
         ))}
       </div>
     </section>

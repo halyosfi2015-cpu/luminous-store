@@ -75,9 +75,7 @@ export default function FeaturedCollections() {
                           )
                       )}
                     </div>
-                    <span className="rounded-pill bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                      {routine.products.length} منتجات
-                    </span>
+
                   </div>
 
                   <div className="mt-5 flex items-center gap-1.5 text-sm font-semibold text-primary">

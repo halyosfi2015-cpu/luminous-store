@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Clock, Sparkles, TrendingUp, Tag } from "lucide-react";
 import Container from "@/components/ui/Container";
 import SectionTitle from "@/components/ui/SectionTitle";
+import MobileReveal from "@/components/ui/MobileReveal";
 import HorizontalCarousel from "@/components/ui/HorizontalCarousel";
 import ProductCard from "@/components/product/ProductCard";
 import { useLang } from "@/lib/use-lang";
@@ -77,15 +78,31 @@ export default function WeeklyOffers() {
     return () => clearInterval(timer);
   }, [campaign]);
 
+  // Fallback: when the engine has no active campaign on this device,
+  // show discounted / best-seller products so the section never disappears.
+  const fallbackOffers = useMemo<OfferProduct[]>(() => {
+    if (offers.length > 0) return [];
+    const cands = allProducts.filter(
+      (p: ProductSummary) => ((p as { discount?: number }).discount ?? 0) > 0 || p.isBestSeller
+    );
+    const pool = cands.length > 0 ? cands : allProducts.slice(0, 10);
+    return pool.slice(0, 10).map((p: ProductSummary) => ({
+      productId: p.id,
+      discount: (p as { discount?: number }).discount ?? 10,
+      reason: (p.isBestSeller ? "best_seller" : "boost_sales") as OfferProduct["reason"],
+    }));
+  }, [offers]);
+
   const offerProducts = useMemo(() => {
-    return offers
+    return (offers.length > 0 ? offers : fallbackOffers)
       .map((op: OfferProduct) => {
         const product = allProducts.find((p: ProductSummary) => p.id === op.productId);
         if (!product) return null;
+        if (op.reason === "month_top") return null;
         return { product, offer: op };
       })
       .filter(Boolean) as { product: ProductSummary; offer: OfferProduct }[];
-  }, [offers]);
+  }, [offers, fallbackOffers]);
 
   if (!mounted) return null;
   if (offerProducts.length === 0) return null;
@@ -93,35 +110,30 @@ export default function WeeklyOffers() {
   return (
     <section
       id="offers"
-      className="w-full scroll-mt-28 py-8 sm:py-10 lg:py-12"
-      style={{ background: "var(--background)" }}
+      className="magic-aurora w-full scroll-mt-28 py-8 sm:py-10 lg:py-12"
     >
-      <Container>
+      <Container className="[&_h2]:text-[22px] sm:[&_h2]:text-4xl">
         <SectionTitle
           eyebrow={isAr ? "عروض لفترة محدودة" : "Limited Time Offers"}
           title={isAr ? `عروض ${weekLabel}` : `${weekLabel} Offers`}
-          subtitle={
-            isAr
-              ? "محرك العروض الذكي يختار لك أفضل المنتجات والخصومات كل أسبوع"
-              : "Our smart engine picks the best products and discounts for you every week"
-          }
           action={
             <Link
               href="/offers"
-              className="group inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] px-4 py-2 text-sm font-semibold text-[var(--foreground)] transition-all duration-200 ease-out-smooth hover:border-[var(--primary)]/40 hover:bg-[var(--primary)]/5"
+              className="group inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] px-2.5 py-1.5 min-h-[38px] text-[11px] font-semibold text-[var(--foreground)] transition-all duration-200 ease-out-smooth hover:border-[var(--primary)]/40 hover:bg-[var(--primary)]/5 sm:px-4 sm:py-2.5 sm:min-h-[44px] sm:text-sm"
             >
               {isAr ? "عرض الكل" : "View All"}
             </Link>
           }
         />
 
+        <MobileReveal delay={100}>
         {/* Countdown */}
-        <div className="mb-8 flex flex-col items-center gap-3 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] px-5 py-4 sm:flex-row sm:justify-center sm:gap-6">
+        <div className="mb-5 flex flex-col items-center gap-3 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--card)] px-5 py-4 sm:flex-row sm:justify-center sm:gap-6">
           <span className="inline-flex items-center gap-1.5 text-sm font-bold text-[var(--muted)]">
             <Clock size={16} className="text-[var(--error)]" />
             {isAr ? "ينتهي العرض خلال" : "Ends in"}
           </span>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-nowrap items-center justify-center gap-1.5 sm:gap-2">
             {[
               { label: isAr ? "يوم" : "Days", value: countdown.days },
               { label: isAr ? "ساعة" : "Hrs", value: countdown.hours },
@@ -130,35 +142,36 @@ export default function WeeklyOffers() {
             ].map((unit) => (
               <div
                 key={unit.label}
-                className="flex h-12 w-12 flex-col items-center justify-center rounded-[var(--radius-card)] bg-[var(--primary)] text-white shadow-[var(--shadow-card)]"
+                className="magic-countbox flex h-11 w-11 shrink-0 flex-col items-center justify-center rounded-2xl border border-accent/30 bg-gradient-to-b from-primary-dark via-primary to-primary-dark text-white sm:h-14 sm:w-14"
               >
-                <span className="font-sans text-base font-extrabold leading-none tabular-nums">
+                <span className="font-sans text-sm font-extrabold leading-none tabular-nums text-[#F7D98C] [text-shadow:0_0_12px_rgba(247,217,140,0.55)] sm:text-lg">
                   {String(unit.value).padStart(2, "0")}
                 </span>
-                <span className="mt-0.5 text-[10px] text-white/70">{unit.label}</span>
+                <span className="mt-1 text-[10px] font-bold text-white/60 sm:text-[9px]">{unit.label}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Products */}
-        <HorizontalCarousel ariaLabel={isAr ? "عروض الأسبوع" : "Weekly offers"} autoplay autoplaySpeed={2000}>
+        <HorizontalCarousel ariaLabel={isAr ? "عروض الأسبوع" : "Weekly offers"} autoplay autoplaySpeed={4500}>
           {offerProducts.map(({ product, offer }) => (
-            <div key={product.id} className="w-60 shrink-0 sm:w-64">
+            <div key={product.id} className="w-[calc(50dvw-24px)] min-w-[140px] max-w-[170px] shrink-0 snap-start sm:w-64 sm:min-w-[256px] sm:max-w-none">
               <div className="relative">
-                <ProductCard product={product} />
+                <ProductCard product={product} hideBadges />
                 {/* Discount Badge */}
-                <span className="absolute top-3 end-3 z-10 inline-flex items-center gap-1 rounded-full bg-[var(--error)] px-2.5 py-1 text-[10px] font-bold text-white shadow-lg">
+                <span className="luminous-ribbon absolute top-2 end-2 z-10 inline-flex max-w-[42%] items-center gap-1 truncate rounded-full bg-gradient-to-l from-[var(--error)] via-[#ff7a7a] to-[var(--error)] px-2 py-0.5 text-[10px] font-bold text-white shadow-lg sm:top-3 sm:end-3 sm:px-2.5 sm:py-1 sm:text-[10px]">
                   -{offer.discount}%
                 </span>
                 {/* Reason Badge */}
-                <span className={`absolute top-3 start-3 z-10 inline-flex items-center gap-1 rounded-full px-2 py-1 text-[9px] font-bold ${REASON_META[offer.reason]?.color ?? "bg-gray-100 text-gray-700"}`}>
+                <span className={`absolute top-2 start-2 z-10 inline-flex max-w-[42%] items-center gap-1 truncate rounded-full px-1.5 py-0.5 text-[10px] font-bold sm:top-3 sm:start-3 sm:px-2 sm:py-1 sm:text-[9px] ${REASON_META[offer.reason]?.color ?? "bg-gray-100 text-gray-700"}`}>
                   {REASON_META[offer.reason]?.ar ?? offer.reason}
                 </span>
               </div>
             </div>
           ))}
         </HorizontalCarousel>
+        </MobileReveal>
       </Container>
     </section>
   );

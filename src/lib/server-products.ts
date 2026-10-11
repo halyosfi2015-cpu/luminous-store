@@ -57,13 +57,17 @@ type DbProduct = {
 };
 
 function resolveCategory(tags: string[]): { category: string; categoryAr: string; categorySlug: string } {
+  const normTag = (t: string) => (t || "").toLowerCase().replace(/[-_\s]/g, "");
   for (const tag of tags) {
-    const parent = SUBCATEGORY_TO_PARENT[tag];
+    const key = normTag(tag);
+    const subHit = Object.keys(SUBCATEGORY_TO_PARENT).find((k) => normTag(k) === key);
+    const parent = subHit ? SUBCATEGORY_TO_PARENT[subHit] : undefined;
     if (parent) {
       const mapped = CATEGORY_MAP[parent];
       if (mapped) return { category: mapped.name, categoryAr: mapped.nameAr, categorySlug: mapped.slug };
     }
-    const mapped = CATEGORY_MAP[tag];
+    const catHit = Object.keys(CATEGORY_MAP).find((k) => normTag(k) === key);
+    const mapped = catHit ? CATEGORY_MAP[catHit] : undefined;
     if (mapped) return { category: mapped.name, categoryAr: mapped.nameAr, categorySlug: mapped.slug };
   }
   return { category: "Other", categoryAr: "أخرى", categorySlug: "other" };

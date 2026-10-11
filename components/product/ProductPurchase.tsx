@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Heart, ShoppingCart, Headphones, Minus, Plus, Scale } from "lucide-react";
+import { ShoppingCart, Headphones, Minus, Plus, Scale } from "lucide-react";
 import Button from "@/components/ui/Button";
 import TrustBadge from "@/components/product/TrustBadge";
 import AlternativePopover from "@/components/product/AlternativePopover";
 import { useCart } from "@/context/CartContext";
-import { useWishlist } from "@/context/WishlistContext";
 import { useCompare } from "@/context/CompareContext";
 import { useCommerceOverlay, toAvailability } from "@/src/lib/commerce-overlay";
 import type { Product } from "@/types/product";
@@ -22,12 +21,9 @@ function formatPrice(amount: number): string {
 export default function ProductPurchase({ product }: ProductPurchaseProps) {
   const [quantity, setQuantity] = useState(1);
   const { addItem } = useCart();
-  const { toggle: toggleWishlist, isWishlisted } = useWishlist();
   const { toggle: toggleCompare, isCompared } = useCompare();
 
   const decrement = () => setQuantity((q) => Math.max(1, q - 1));
-
-  const wishlisted = isWishlisted(product.id);
   const compared = isCompared(product.id);
 
   // Availability Display is admin-controlled (in_stock tri-state) — never derived from stock.
@@ -57,7 +53,7 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
     <div className="flex flex-col gap-5 rounded-card border border-border bg-card p-5 sm:p-6 shadow-card">
       <div className="flex flex-col gap-2">
         <div className="flex items-baseline gap-3 flex-wrap">
-          <span className="text-3xl font-bold text-foreground">
+          <span className="text-2xl font-bold whitespace-nowrap text-foreground sm:text-3xl">
             {formatPrice(product.pricing.price * quantity)} ر.ي
           </span>
           {product.discount && product.pricing.originalPrice && (
@@ -92,7 +88,7 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
         )}
       </div>
 
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+      <div className="flex flex-row items-center justify-between gap-2 sm:flex-row sm:items-center">
         <div className="flex items-center rounded-button border border-border bg-card">
           <button
             type="button"
@@ -120,18 +116,6 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
         <div className="flex gap-2">
           <button
             type="button"
-            aria-label={wishlisted ? "إزالة من المفضلة" : "إضافة إلى المفضلة"}
-            onClick={() => toggleWishlist(product.id)}
-            className={`flex h-11 w-11 items-center justify-center rounded-button border transition-all duration-200 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
-              wishlisted
-                ? "border-secondary-200 bg-secondary-50 text-secondary-500 shadow-card"
-                : "border-border text-muted hover:border-secondary-200 hover:bg-secondary-50 hover:text-secondary-500"
-            }`}
-          >
-            <Heart size={20} fill={wishlisted ? "currentColor" : "none"} />
-          </button>
-          <button
-            type="button"
             aria-label={compared ? "إزالة من المقارنة" : "إضافة إلى المقارنة"}
             onClick={() => toggleCompare(product.id)}
             className={`flex h-11 w-11 items-center justify-center rounded-button border transition-all duration-200 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
@@ -155,7 +139,7 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
         {showOutOfStock ? "خلصت الكمية" : "إضافة للسلة"}
       </Button>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 min-[380px]:grid-cols-3 gap-2">
         <TrustBadge />
         <AlternativePopover productId={product.id} />
         <div className="flex items-center gap-2.5 rounded-lg bg-muted-bg/60 px-3 py-2.5 border border-border">
@@ -163,6 +147,28 @@ export default function ProductPurchase({ product }: ProductPurchaseProps) {
           <span className="text-xs text-muted">دعم العملاء 24/7</span>
         </div>
       </div>
+
+      {/* Sticky mobile buy bar — Sephora pattern: price + CTA always reachable */}
+      <div className="fixed inset-x-0 bottom-0 z-[60] border-t border-border bg-card/95 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2.5 shadow-[0_-8px_24px_rgba(28,23,38,0.12)] backdrop-blur-md sm:hidden">
+        <div className="flex items-center gap-3">
+          <div className="flex min-w-0 flex-col">
+            <span className="shrink-0 whitespace-nowrap text-sm font-extrabold text-foreground">
+              {formatPrice(product.pricing.price * quantity)} ر.ي
+            </span>
+            <span className="hidden min-[380px]:block flex-1 min-w-0 truncate text-xs text-muted">{product.name.ar}</span>
+          </div>
+          <Button
+            variant="primary"
+            className="flex-1 gap-1.5 py-3 min-h-[48px] text-sm"
+            onClick={handleAddToCart}
+            disabled={!canPurchase}
+          >
+            <ShoppingCart size={17} />
+            {showOutOfStock ? "خلصت الكمية" : "إضافة للسلة"}
+          </Button>
+        </div>
+      </div>
+      <div aria-hidden="true" className="h-[76px] sm:hidden" />
     </div>
   );
 }

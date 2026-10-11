@@ -6,6 +6,7 @@ type ActiveFiltersProps = {
   filters: FilterState;
   onRemove: (key: keyof FilterState, value: string | number) => void;
   onClear: () => void;
+  typeLabels?: Record<string, string>;
 };
 
 const skinTypeLabels: Record<SkinType, string> = {
@@ -16,6 +17,8 @@ const skinConcernLabels: Record<SkinConcern, string> = {
   acne: "حبوب الشباب", dryness: "الجفاف", pigmentation: "التصبغات", aging: "الشيخوخة",
   redness: "الاحمرار", large_pores: "المسام الواسعة", uneven_texture: "الملمس غير المتجانس",
   dark_circles: "الهالات السوداء", oiliness: "اللمعة الزائدة", sensitivity: "الحساسية",
+  rosacea: "الوردية", eczema: "الأكزيما", psoriasis: "الصدفية", vitiligo: "البهاق",
+  burns_scars: "الحروق والندبات", tired_skin: "البشرة المرهقة", stretch_marks: "علامات التمدد",
 };
 
 const priceRangeLabels: Record<string, string> = {
@@ -32,13 +35,13 @@ type ChipProps = {
 
 function Chip({ label, onRemove }: ChipProps) {
   return (
-    <span className="inline-flex animate-fade-in items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-xs font-medium text-primary">
+    <span className="inline-flex animate-fade-in items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3 py-2 min-h-[36px] text-[13px] font-medium text-primary">
       {label}
       <button
         type="button"
         onClick={onRemove}
         aria-label={`إزالة فلتر ${label}`}
-        className="rounded-full p-0.5 transition-colors hover:bg-primary/10"
+        className="rounded-full p-2 -m-1 min-h-[36px] min-w-[36px] flex items-center justify-center transition-colors hover:bg-primary/10"
       >
         <X size={12} />
       </button>
@@ -46,10 +49,11 @@ function Chip({ label, onRemove }: ChipProps) {
   );
 }
 
-export default function ActiveFilters({ filters, onRemove, onClear }: ActiveFiltersProps) {
+export default function ActiveFilters({ filters, onRemove, onClear, typeLabels = {} }: ActiveFiltersProps) {
   const chips: { key: keyof FilterState; label: string; value: string | number }[] = [];
 
   filters.brands.forEach((b) => chips.push({ key: "brands", label: b === OTHER_BRAND ? "أخرى" : b, value: b }));
+  filters.productTypes.forEach((t) => chips.push({ key: "productTypes", label: typeLabels[t] || t, value: t }));
   filters.skinTypes.forEach((t) => chips.push({ key: "skinTypes", label: skinTypeLabels[t as SkinType], value: t }));
   filters.skinConcerns.forEach((c) => chips.push({ key: "skinConcerns", label: skinConcernLabels[c as SkinConcern], value: c }));
   filters.priceRanges.forEach((r) => chips.push({ key: "priceRanges", label: priceRangeLabels[r] || r, value: r }));

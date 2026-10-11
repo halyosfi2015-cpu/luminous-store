@@ -9,9 +9,11 @@ import { SearchProvider } from "@/context/SearchContext";
 import { SkinProfileProvider } from "@/context/SkinProfileContext";
 import { LoyaltyProvider } from "@/context/LoyaltyContext";
 import { ConsentProvider } from "@/src/lib/analytics/ConsentProvider";
+import { CurrencyProvider } from "@/context/CurrencyContext";
 import { AdminToastProvider } from "@/components/admin/ui/AdminToast";
 import ConsentBanner from "@/components/analytics/ConsentBanner";
 import PageViewTracker from "@/components/analytics/PageViewTracker";
+import ScrollProgress from "@/components/ui/ScrollProgress";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -22,8 +24,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
             <SearchProvider>
               <SkinProfileProvider>
                 <LoyaltyProvider>
-                  <ConsentProvider>
+                  <CurrencyProvider>
+                    <ConsentProvider>
                     <AdminToastProvider>
+                      <ScrollProgress />
                       <Suspense fallback={null}>
                         <PageViewTracker />
                       </Suspense>
@@ -31,6 +35,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                       <ConsentBanner />
                     </AdminToastProvider>
                   </ConsentProvider>
+                </CurrencyProvider>
                 </LoyaltyProvider>
               </SkinProfileProvider>
             </SearchProvider>

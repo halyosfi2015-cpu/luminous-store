@@ -43,8 +43,10 @@ export interface LuminousStageSlide {
   ctaHref: string;
   theme: LuminousStageTheme;
   products: StageProductPlacement[];
-  slideType?: "template" | "custom-image";
+  slideType?: "template" | "custom-image" | "html-embed";
   customImage?: string;
+  /** Self-contained animated banner document (html-embed slides only). */
+  embedSrc?: string;
   showBrandMark?: boolean;
   stageMood?: string;
 }
@@ -74,9 +76,11 @@ export interface StageSlideConfig {
   products: ProductConfig[];
   hidden?: boolean;
   /** B7: slide presentation mode — never mixed. */
-  slideType?: "template" | "custom-image";
+  slideType?: "template" | "custom-image" | "html-embed";
   /** Uploaded ready-made image URL (custom-image slides only). */
   customImage?: string;
+  /** Animated banner document URL (html-embed slides only). */
+  embedSrc?: string;
   /** Brand mark overlay — template default ON, custom-image default OFF. */
   showBrandMark?: boolean;
   /** Semantic visual mood driving the cinematic product stage. */
@@ -461,6 +465,28 @@ const FALLBACK_BG =
   "linear-gradient(165deg,#f8f6f3 0%,#efece6 55%,#e4dfd5 100%)";
 
 export const LUMINOUS_MODEL_HERO_ID = "luminous-model-hero";
+export const LUMINOUS_GUEST_BANNER_ID = "luminous-guest-banner";
+
+/** Animated delivery banner (agent -> cart -> map) — pinned as the FIRST slide. */
+const GUEST_BANNER_CONFIG: StageSlideConfig = {
+  id: LUMINOUS_GUEST_BANNER_ID,
+  kind: "campaign",
+  eyebrowAr: "",
+  eyebrowEn: "",
+  headlineAr: "سرّ البشرة المثالية",
+  headlineEn: "The secret to perfect skin",
+  subAr: "توصيل سريع وآمن لجميع محافظات اليمن.",
+  subEn: "Fast, safe delivery to all Yemeni governorates.",
+  ctaAr: "تسوقي الآن",
+  ctaEn: "Shop Now",
+  ctaHref: "/products",
+  accent: "#b8893a",
+  bg: "#fbf8f3",
+  products: [],
+  slideType: "html-embed",
+  embedSrc: "/banners/luminous-guest-banner.html",
+  showBrandMark: false,
+};
 
 const MODEL_HERO_CONFIG: StageSlideConfig = {
   id: LUMINOUS_MODEL_HERO_ID,
@@ -486,9 +512,14 @@ export function resolveStageSlides(configs: StageSlideConfig[]): LuminousStageSl
   const out: LuminousStageSlide[] = [];
   const curatedById = new Map(defaultStageConfigs().map((cfg) => [cfg.id, cfg]));
   const orderedConfigs = [
+    GUEST_BANNER_CONFIG,
     MODEL_HERO_CONFIG,
     ...configs
-      .filter((cfg) => cfg.id !== LUMINOUS_MODEL_HERO_ID)
+      .filter(
+        (cfg) =>
+          cfg.id !== LUMINOUS_MODEL_HERO_ID &&
+          cfg.id !== LUMINOUS_GUEST_BANNER_ID
+      )
       .map((cfg) => {
         const curated = curatedById.get(cfg.id);
         return curated ? { ...curated, hidden: cfg.hidden } : cfg;
@@ -508,7 +539,8 @@ export function resolveStageSlides(configs: StageSlideConfig[]): LuminousStageSl
         hero: pc.hero === true,
       });
     });
-    if (placements.length === 0 && !(cfg.slideType === "custom-image" && cfg.customImage)) return;
+    const embedOk = cfg.slideType === "html-embed" && !!cfg.embedSrc;
+    if (placements.length === 0 && !(cfg.slideType === "custom-image" && cfg.customImage) && !embedOk) return;
     out.push({
       id: cfg.id,
       kind: cfg.kind === "custom" ? "collection" : cfg.kind,
@@ -525,6 +557,7 @@ export function resolveStageSlides(configs: StageSlideConfig[]): LuminousStageSl
       products: placements,
       slideType: cfg.slideType,
       customImage: cfg.customImage,
+      embedSrc: cfg.embedSrc,
       showBrandMark: cfg.showBrandMark,
       stageMood: cfg.stageMood,
     });

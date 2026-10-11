@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { normalizeImageURL } from "@/src/lib/image-url-normalizer";
 
@@ -93,6 +94,10 @@ export default function ProductImage({
   const gradient = pick(GRADIENTS, seed);
   const glow = pick(GLOW_COLORS, seed);
   const shadow = pick(SHADOW_COLORS, seed);
+  // Silk reveal: images fade from a soft blur the moment they decode —
+  // applied only after load, so nothing ever stays hidden on error.
+  const [loaded, setLoaded] = useState(false);
+  const silk = loaded ? "animate-silkreveal" : "";
 
   // Single shared normalization point for every image that flows through this
   // component. Absolute http(s) URLs are repaired (https: // and https:/// →
@@ -112,7 +117,8 @@ export default function ProductImage({
           sizes={sizes}
           priority={priority}
           unoptimized={unoptimized}
-          className={`object-cover ${hoverZoom ? "transition-transform duration-500 ease-out-smooth group-hover:scale-110" : ""}`}
+          onLoad={() => setLoaded(true)}
+          className={`object-cover ${silk} ${hoverZoom ? "transition-transform duration-500 ease-out-smooth group-hover:scale-110" : ""}`}
           style={{ objectPosition }}
         />
       </div>
@@ -128,7 +134,8 @@ export default function ProductImage({
         sizes={sizes}
         priority={priority}
         unoptimized={unoptimized}
-        className={`object-cover ${hoverZoom ? "transition-transform duration-500 ease-out-smooth group-hover:scale-110" : ""}`}
+        onLoad={() => setLoaded(true)}
+        className={`object-cover ${silk} ${hoverZoom ? "transition-transform duration-500 ease-out-smooth group-hover:scale-110" : ""}`}
         style={{ objectPosition }}
       />
     );
@@ -162,7 +169,8 @@ export default function ProductImage({
         sizes={sizes}
         priority={priority}
         unoptimized={unoptimized}
-        className={`object-contain p-[6%] drop-shadow-[0_10px_14px_rgba(28,23,38,0.18)] ${
+        onLoad={() => setLoaded(true)}
+        className={`object-contain p-[6%] drop-shadow-[0_10px_14px_rgba(28,23,38,0.18)] ${silk} ${
           hoverZoom ? "transition-transform duration-500 ease-out-smooth group-hover:scale-105" : ""
         }`}
         style={{ objectPosition }}

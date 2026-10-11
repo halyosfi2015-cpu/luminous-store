@@ -44,8 +44,7 @@ function downloadCsv(rows: Record<string, string>[], fields: readonly string[], 
 }
 
 /** Minimal RFC-4180 parser: handles quoted fields, escaped quotes, CRLF. */
-function parseCsv(content: string): { headers: string[]; rows: Record<string, string>[] } {
-  const text = content.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+function parseCsv(content: string): { headers: string[]; rows: Record<string, string>[] } {  const text = content.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n").replace(/\r/g, "\n");
   const records: string[][] = [];
   let field = "";
   let record: string[] = [];
@@ -70,7 +69,18 @@ function parseCsv(content: string): { headers: string[]; rows: Record<string, st
 
   const nonEmpty = records.filter((r) => r.some((c) => c.trim() !== ""));
   if (nonEmpty.length === 0) return { headers: [], rows: [] };
-  const headers = nonEmpty[0].map((h) => h.trim());
+  // تطبيع الترويسات: أي اختلاف (كبير/صغير، عربي، images) يُرد للاسم المعتمد
+  // وإلا يُتجاهل العمود بصمت — وهذا سبب شائع لعدم تحديث الصور.
+  const HEADER_ALIASES: Record<string, string> = {
+    gallery: "gallery", images: "gallery", image: "gallery",
+    "الصور": "gallery", "صور": "gallery", "صورة": "gallery", "روابط الصور": "gallery",
+    sku: "sku", id: "id", slug: "slug",
+  };
+  const canonHeader = (h: string) => {
+    const t = h.trim();
+    return HEADER_ALIASES[t.toLowerCase()] ?? HEADER_ALIASES[t] ?? t;
+  };
+  const headers = nonEmpty[0].map((h) => canonHeader(h));
   const rows = nonEmpty.slice(1).map((cells) => {
     const row: Record<string, string> = {};
     headers.forEach((h, j) => { row[h] = (cells[j] ?? "").trim(); });

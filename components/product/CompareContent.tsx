@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import ProductImage from "@/components/product/ProductImage";
 import { useCompare } from "@/context/CompareContext";
-import { productSummaries } from "@/src/data/product-summaries";
+import { productSummaries as staticSummaries } from "@/src/data/product-summaries";
+import { useCanonicalProducts } from "@/hooks/useCanonicalProducts";
 import { productCompareDetails } from "@/src/data/product-compare-details";
 import { safeRatingDisplay, safeReviewCountDisplay } from "@/lib/ratings";
 import { toAvailability } from "@/src/lib/commerce-overlay";
@@ -26,6 +27,8 @@ const skinConcernLabels: Record<SkinConcern, string> = {
   acne: "حبوب الشباب", dryness: "الجفاف", pigmentation: "التصبغات", aging: "الشيخوخة",
   redness: "الاحمرار", large_pores: "المسام الواسعة", uneven_texture: "الملمس غير المتجانس",
   dark_circles: "الهالات السوداء", oiliness: "اللمعة الزائدة", sensitivity: "الحساسية",
+  rosacea: "الوردية", eczema: "الأكزيما", psoriasis: "الصدفية", vitiligo: "البهاق",
+  burns_scars: "الحروق والندبات", tired_skin: "البشرة المرهقة", stretch_marks: "علامات التمدد",
 };
 
 type RowProps = {
@@ -36,7 +39,7 @@ type RowProps = {
 function CompareRow({ label, cells }: RowProps) {
   return (
     <tr className="border-b border-border">
-      <td className="sticky end-0 bg-card px-4 py-3.5 text-sm font-medium text-foreground whitespace-nowrap min-w-[120px] border-e border-border">
+      <td className="sticky start-0 z-10 bg-card px-4 py-3.5 text-sm font-medium text-foreground whitespace-nowrap min-w-[120px] border-e border-border shadow-[-4px_0_8px_rgba(0,0,0,0.06)]">
         {label}
       </td>
       {cells.map((cell, i) => (
@@ -52,12 +55,19 @@ const MAX_PICKER = 12;
 
 export default function CompareContent() {
   const { items, clear, count } = useCompare();
-  const compared = productSummaries.filter((p) => items.includes(p.id));
+  // Canonical catalog (live DB merged): search list works and compared
+  // products always show updated images/prices/names. Static as fallback.
+  const liveCatalog = useCanonicalProducts(staticSummaries);
+  const catalog = liveCatalog.length > 0 ? liveCatalog : staticSummaries;
+  const compared = useMemo(
+    () => items.map((id) => catalog.find((p) => p.id === id)).filter((p): p is ProductSummary => Boolean(p)),
+    [items, catalog]
+  );
 
   const [query, setQuery] = useState("");
 
   const suggestions = useMemo(() => {
-    const list = productSummaries.filter((p) => p.status === "published" && p.gallery?.[0]);
+    const list = catalog.filter((p) => p.gallery?.[0]);
     if (query.trim()) {
       const term = query.trim().toLowerCase();
       return list.filter(
@@ -86,7 +96,8 @@ export default function CompareContent() {
           <EmptyState />
         ) : (
           <>
-            <div className="flex items-center justify-between">
+
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <SectionTitle
                 title="مقارنة المنتجات"
                 subtitle={`${count} من 4 منتجات`}
@@ -94,7 +105,7 @@ export default function CompareContent() {
               <button
                 type="button"
                 onClick={clear}
-                className="flex items-center gap-1.5 rounded-button border border-border px-4 py-2 text-xs font-medium text-muted transition-all duration-200 hover:border-secondary-200 hover:bg-secondary-50 hover:text-secondary-500"
+                className="flex w-fit self-start items-center gap-1.5 rounded-button border border-border px-4 py-2.5 min-h-[44px] text-[13px] font-medium text-muted transition-all duration-200 hover:border-secondary-200 hover:bg-secondary-50 hover:text-secondary-500 sm:self-auto"
               >
                 <Trash2 size={14} />
                 مسح الكل
@@ -105,9 +116,9 @@ export default function CompareContent() {
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="border-b-2 border-border bg-card">
-                    <th className="sticky end-0 bg-card px-4 py-4 min-w-[120px]" />
+                    <th className="sticky start-0 z-10 bg-card px-4 py-4 min-w-[120px] shadow-[-4px_0_8px_rgba(0,0,0,0.06)]" />
                     {compared.map((product) => (
-                      <th key={product.id} className="px-4 py-4 text-center min-w-[200px]">
+                      <th key={product.id} className="px-4 py-4 text-center min-w-[160px] sm:min-w-[200px]">
                         <div className="flex flex-col items-center gap-3">
                           <div className="relative aspect-square w-28 rounded-xl bg-muted-bg overflow-hidden">
                             {product.gallery[0] && (
@@ -163,7 +174,7 @@ export default function CompareContent() {
                           </div>
                           <Link
                             href={`/products/${product.slug}`}
-                            className="mt-1 block w-full rounded-full bg-primary px-3 py-1.5 text-center text-[11px] font-bold text-white shadow transition-all duration-200 hover:bg-primary-700 active:scale-95"
+                            className="mt-1 block w-full rounded-full bg-primary px-3 py-2.5 min-h-[44px] text-center text-xs font-bold text-white shadow transition-all duration-200 hover:bg-primary-700 active:scale-95"
                           >
                             اعرض المنتج
                           </Link>
@@ -339,7 +350,7 @@ function ProductPicker({ query, setQuery, suggestions, comparedIdsSet }: Product
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
         {suggestions.slice(0, MAX_PICKER).map((product) => {
           const inCompare = comparedIdsSet.has(product.id);
           return (
@@ -360,13 +371,13 @@ function ProductPicker({ query, setQuery, suggestions, comparedIdsSet }: Product
                 )}
               </div>
               <div className="flex-1 p-2 text-center">
-                <p className="line-clamp-1 text-[10px] font-medium text-foreground">
+                <p className="line-clamp-1 text-[11px] font-medium text-foreground">
                   {product.brandAr || product.brand}
                 </p>
-                <p className="mt-0.5 line-clamp-1 text-[11px] font-semibold text-gray-800">
+                <p className="mt-0.5 line-clamp-2 min-h-[2rem] text-xs font-semibold text-gray-800">
                   {product.name.ar}
                 </p>
-                <p className="mt-1 text-[10px] text-primary font-medium">
+                <p className="mt-1 text-xs text-primary font-medium">
                   {formatPrice(product.pricing.price)} ر.ي
                 </p>
               </div>

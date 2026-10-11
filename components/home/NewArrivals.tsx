@@ -5,8 +5,8 @@ import Link from "next/link";
 import Container from "@/components/ui/Container";
 import HorizontalCarousel from "@/components/ui/HorizontalCarousel";
 import SectionTitle from "@/components/ui/SectionTitle";
+import MobileReveal from "@/components/ui/MobileReveal";
 import ProductImage from "@/components/product/ProductImage";
-import ProductBadges from "@/components/product/ProductBadges";
 import { useProducts } from "@/hooks/useProducts";
 import { useLang } from "@/lib/use-lang";
 import { useSectionContent, useSiteContent } from "@/components/site-content/SiteContentProvider";
@@ -62,7 +62,7 @@ export default function NewArrivals() {
   const items: ProductSummary[] = newArrivals;
 
   return (
-    <section id="new-arrivals" className="w-full scroll-mt-28 bg-white py-8 sm:py-10 lg:py-12">
+    <section id="new-arrivals" className="hide-sub-m w-full scroll-mt-28 bg-white py-8 sm:py-10 lg:py-12">
       <Container>
         <SectionTitle
           eyebrow={<>
@@ -74,7 +74,7 @@ export default function NewArrivals() {
           action={
             <Link
               href="/new-arrivals"
-              className="group inline-flex items-center gap-1.5 rounded-pill border border-border px-4 py-2 text-sm font-semibold text-primary transition-all duration-200 ease-out-smooth hover:border-primary/40 hover:bg-primary/5"
+              className="group inline-flex items-center gap-1.5 rounded-pill border border-border px-2.5 py-1.5 min-h-[38px] text-[11px] font-semibold text-primary transition-all duration-200 ease-out-smooth hover:border-primary/40 hover:bg-primary/5 sm:px-4 sm:py-2.5 sm:min-h-[44px] sm:text-sm"
             >
               {isAr ? "عرض الكل" : "View All"}
             </Link>
@@ -82,24 +82,29 @@ export default function NewArrivals() {
         />
       </Container>
 
+      <MobileReveal delay={100}>
       <Container>
-        <HorizontalCarousel ariaLabel={isAr ? "وصل حديثاً" : "New arrivals"} autoplay autoplaySpeed={2500}>
+        <HorizontalCarousel ariaLabel={isAr ? "وصل حديثاً" : "New arrivals"} autoplay autoplaySpeed={4500}>
             {items.map((product, i) => {
               const productName = isAr ? product.name.ar : product.name.en;
               return (
                 <Link
                   key={`${product.id}-${i}`}
                   href={`/products/${product.slug}`}
-                  className="group flex w-56 shrink-0 flex-col gap-2.5 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                  className="magic-card-glow group flex w-[calc(50dvw-24px)] min-w-[170px] max-w-[170px] shrink-0 snap-start flex-col gap-2.5 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg active:scale-[0.98] sm:w-56 sm:max-w-none"
                 >
-                  <div className="relative aspect-square overflow-hidden rounded-xl bg-gray-50">
+                  <div className="magic-autoshine magic-scan luminous-shine relative aspect-square overflow-hidden rounded-xl bg-gray-50">
+                    <span className="luminous-glow-pulse absolute top-2 start-2 z-10 inline-flex items-center gap-1 rounded-full bg-gradient-to-l from-emerald-500 to-teal-500 px-2 py-0.5 text-[10px] font-extrabold text-white shadow-lg">
+                      <span className="magic-star" aria-hidden="true" />
+                      {isAr ? "جديد" : "NEW"}
+                    </span>
                     {product.gallery[0] ? (
                       <ProductImage
                         src={product.gallery[0]}
                         alt={productName}
                         productId={product.id}
                         className="h-full w-full"
-                        sizes="224px"
+                        sizes="(max-width:640px) 45vw, 224px"
                         pedestal
                       />
                     ) : (
@@ -107,13 +112,12 @@ export default function NewArrivals() {
                         <span className="text-2xl">🧴</span>
                       </div>
                     )}
-                    <ProductBadges product={product} position="start-2 top-2" />
                   </div>
                   <div className="flex flex-col gap-1">
-                    <p className="line-clamp-2 text-xs font-semibold text-gray-700 transition-colors group-hover:text-gray-900">
+                    <p className="line-clamp-2 min-h-[2rem] text-xs font-semibold leading-relaxed text-gray-700 transition-colors group-hover:text-gray-900">
                       {productName}
                     </p>
-                    <span className="text-sm font-extrabold text-gray-900">
+                    <span className="whitespace-nowrap text-sm font-extrabold tabular-nums text-gray-900">
                       {formatPrice(product.pricing.price)}
                       <span className="ms-0.5 text-[10px] font-normal text-gray-400">{isAr ? "ريال" : "YER"}</span>
                     </span>
@@ -123,6 +127,7 @@ export default function NewArrivals() {
             })}
         </HorizontalCarousel>
       </Container>
+      </MobileReveal>
     </section>
   );
 }

@@ -6,7 +6,7 @@
  * Verifies:
  *   1. Product part files (products-part-01..08) are byte-identical to git HEAD
  *      (no product data was ever modified).
- *   2. Total product count = 2764.
+ *   2. Total product count = 2764 + 15 + 30.
  *   3. Every product id in the catalog has exactly one mapping entry.
  *   4. Mapping targets exist in the taxonomy.
  *   5. No duplicate mapping keys.
@@ -27,8 +27,8 @@ console.log("ℹ git HEAD is only an init snapshot; diff checks are skipped for\
 
 /* 1. Product part files unchanged vs git HEAD (informational only). */
 const partFiles = [];
-for (let i = 1; i <= 8; i++) {
-  partFiles.push(`src/data/products-part-0${i}.ts`);
+for (let i = 1; i <= 10; i++) {
+  partFiles.push(`src/data/products-part-${String(i).padStart(2, "0")}.ts`);
 }
 
 for (const f of partFiles) {
@@ -38,17 +38,19 @@ for (const f of partFiles) {
 /* 2. Total count. */
 const aggregator = readFileSync(join(root, "src/data/products.ts"), "utf8");
 let total = 0;
+const idPattern = /"id":"(?:yq|hl|sm)-\d+"/g;
 for (const m of aggregator.matchAll(/\.\.\.productsPart(\d+),/g)) {
   const n = String(parseInt(m[1], 10)).padStart(2, "0");
   const src = readFileSync(join(root, `src/data/products-part-${n}.ts`), "utf8");
-  total += (src.match(/"id":"yq-\d+"/g) ?? []).length;
+  total += (src.match(idPattern) ?? []).length;
 }
 console.log(`  ✔ Total products: ${total}`);
-if (total !== 2764) errors.push(`expected 2764 products, got ${total}`);
+const expectedTotal = 2776 + 15 + 30;
+if (total !== expectedTotal) errors.push(`expected ${expectedTotal} products, got ${total}`);
 
 /* 3+4. Mapping completeness. */
 const mappingSrc = readFileSync(join(root, "src/lib/taxonomy/product-mappings.ts"), "utf8");
-const mappedIds = [...mappingSrc.matchAll(/\n(\s*)"(yq-\d+)":\s*\{/g)].map((m) => m[2]);
+const mappedIds = [...mappingSrc.matchAll(/\n(\s*)"((?:yq|hl|sm)-\d+)":\s*\{/g)].map((m) => m[2]);
 const uniqueIds = new Set(mappedIds);
 if (mappedIds.length !== uniqueIds.size) {
   errors.push(`duplicate mapping keys: ${mappedIds.length} entries, ${uniqueIds.size} unique`);
@@ -72,7 +74,7 @@ for (const m of mappingSrc.matchAll(/\{ productId: "([^"]+)", categorySlug: "([^
 console.log(`  ✔ Mapped products: ${uniqueIds.size}`);
 console.log(`  ✔ Review required: ${reviewCount}`);
 console.log(`  ✔ Total covered  : ${totalCovered}`);
-if (totalCovered !== 2764) errors.push(`expected 2764 products covered, got ${totalCovered}`);
+if (totalCovered !== expectedTotal) errors.push(`expected ${expectedTotal} products covered, got ${totalCovered}`);
 
 if (errors.length) {
   console.log("\n── ERRORS ──");

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Luminous Derma — Model Banner</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:Tahoma,Arial,sans-serif;overflow:hidden;background:#2a0a45}
+#g{position:relative;width:100vw;height:100vh;overflow:hidden}
+#g img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:kb 22s ease-in-out infinite alternate}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.12)}}
+#g .shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(20,4,35,.72) 0%,rgba(20,4,35,.25) 42%,transparent 68%)}
+#g .glow{position:absolute;inset:0;background:radial-gradient(circle at 88% 12%,rgba(240,217,138,.30),transparent 46%),radial-gradient(circle at 8% 88%,rgba(147,51,234,.30),transparent 50%)}
+#g .copy{position:absolute;z-index:3;right:4%;top:50%;transform:translateY(-50%);text-align:right;max-width:46%}
+#g .eb{display:inline-block;font-size:clamp(11px,1.4vw,15px);font-weight:800;letter-spacing:.14em;color:#f0d98a;border:1.5px solid rgba(240,217,138,.65);border-radius:999px;padding:7px 16px;margin-bottom:12px;opacity:0;animation:up .8s ease-out .15s forwards}
+#g h1{font-size:clamp(26px,4.6vw,64px);font-weight:800;line-height:1.35;color:#fff;text-shadow:0 2px 18px rgba(0,0,0,.5);opacity:0;animation:up .8s ease-out .3s forwards}
+#g h1 .gold{color:#f0d98a}
+#g p{font-size:clamp(13px,1.7vw,21px);line-height:1.9;color:rgba(255,255,255,.92);text-shadow:0 1px 10px rgba(0,0,0,.5);margin-top:10px;opacity:0;animation:up .8s ease-out .5s forwards}
+#g .cta{display:inline-flex;align-items:center;gap:10px;margin-top:18px;min-height:52px;padding:0 34px;border-radius:999px;background:linear-gradient(135deg,#f0d98a,#b8893a);color:#3b0764;font-weight:800;font-size:clamp(14px,1.6vw,19px);text-decoration:none;border:2px solid #f5e3ae;opacity:0;animation:up .8s ease-out .7s forwards,cpulse 2.6s ease-in-out 2s infinite;box-shadow:0 8px 26px rgba(184,137,58,.45)}
+@keyframes cpulse{0%,100%{box-shadow:0 8px 26px rgba(184,137,58,.45)}50%{box-shadow:0 8px 38px rgba(240,217,138,.75)}}
+@keyframes up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+#g .copy>*{--d:0s}
+#g .prod{position:absolute;z-index:2;filter:drop-shadow(0 10px 14px rgba(0,0,0,.35));animation:bob 5s ease-in-out infinite}
+#g .prod img{display:block;height:100%;width:auto}
+#g .p1{left:6%;bottom:10%;height:30%;animation-delay:.8s}
+#g .p2{left:16%;bottom:22%;height:22%;animation-delay:2.1s}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-14px) rotate(2deg)}}
+#g .sp{position:absolute;z-index:2;width:7px;height:7px;border-radius:50%;background:#f0d98a;box-shadow:0 0 12px 3px rgba(240,217,138,.8);animation:tw 2.8s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.2;transform:scale(.6)}50%{opacity:1;transform:scale(1.15)}}
+@media(max-width:639.98px){
+  #g .copy{right:0;left:0;top:auto;bottom:7%;transform:none;text-align:center;max-width:100%;padding:0 22px}
+  #g .eb{font-size:11px}
+  #g .p1{left:4%;bottom:34%;height:20%}
+  #g .p2{left:auto;right:5%;bottom:38%;height:16%}
+  #g .cta{min-height:48px;width:100%;max-width:300px;justify-content:center}
+}
+@media(prefers-reduced-motion:reduce){
+  #g img.bg,#g .prod,#g .sp,#g .cta{animation:none!important}
+  #g .eb,#g h1,#g p,#g .cta{opacity:1!important}
+}
+</style>
+</head>
+<body>
+<div id="g">
+  <img class="bg" src="/images/hero/luminous-hero-reference.png" alt="Luminous Derma">
+  <div class="shade"></div>
+  <div class="glow"></div>
+  <div class="prod p1"><img src="/images/louz/cerave.webp" alt=""></div>
+  <div class="prod p2"><img src="/images/louz/lrp.webp" alt=""></div>
+  <span class="sp" style="left:12%;top:20%"></span>
+  <span class="sp" style="left:30%;top:12%;animation-delay:.9s"></span>
+  <span class="sp" style="left:55%;top:22%;animation-delay:1.7s"></span>
+  <span class="sp" style="left:78%;top:14%;animation-delay:.4s"></span>
+  <span class="sp" style="left:90%;top:45%;animation-delay:2.2s"></span>
+  <span class="sp" style="left:22%;top:55%;animation-delay:1.2s"></span>
+  <div class="copy" dir="rtl">
+    <span class="eb">لومينوس ديرما</span>
+    <h1>جمال يفوح <span class="gold">بالثقة</span></h1>
+    <p>اكتشفي أفضل منتجات العناية لبشرة صحية متألقة كل يوم</p>
+    <a class="cta" href="/products" target="_top">تسوقي الآن &nbsp;❮</a>
+  </div>
+</div>
+</body>
+</html>

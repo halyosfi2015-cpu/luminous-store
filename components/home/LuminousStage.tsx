@@ -5,8 +5,8 @@ import type { RefObject, TouchEvent as ReactTouchEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useLang } from "@/lib/use-lang";
+import { useIsMobile } from "@/lib/use-is-mobile";
 import {
-  defaultStageConfigs,
   resolveStageSlides,
   sanitizeConfigs,
   type LuminousStageSlide,
@@ -17,6 +17,20 @@ interface LuminousStageProps {
 }
 
 const EASE = "cubic-bezier(0.22,1,0.36,1)";
+
+const GIRL_GRADIENT = "linear-gradient(135deg,#fff2f4 0%,#f9e2e8 52%,#ead8f0 100%)";
+
+// Floating gold dust motes over the pink slide: [x%, y%, size, dur, delay].
+const STAGE_DUST: Array<[number, number, number, number, number]> = [
+  [6, 18, 5, 16, 0],
+  [22, 72, 4, 19, 2.4],
+  [38, 30, 6, 17, 4.8],
+  [55, 64, 4, 21, 1.2],
+  [72, 22, 5, 18, 6.0],
+  [86, 58, 4, 20, 3.4],
+  [94, 40, 6, 22, 5.2],
+  [14, 88, 3, 15, 7.1],
+];
 
 const STAGE_WEB_PACK_ART: Record<string, string> = {
   "luminous-offers": "/images/stage-references/luminous-offers-blend.jpg",
@@ -144,15 +158,21 @@ function useInViewLite<T extends HTMLElement>(): [RefObject<T | null>, boolean] 
 export default function LuminousStage({ slides: slidesProp }: LuminousStageProps) {
   const { lang } = useLang();
   const isAr = lang === "ar";
+  const isMobile = useIsMobile();
   const [sectionRef, inView] = useInViewLite<HTMLElement>();
   const [configs, setConfigs] = useState<ReturnType<typeof sanitizeConfigs>>(null);
   const slides = useMemo(() => {
     if (slidesProp && slidesProp.length > 0) {
-      const hero = resolveStageSlides([])[0];
-      const withoutHero = slidesProp.filter((slide) => slide.id !== hero?.id);
-      return hero ? [hero, ...withoutHero] : slidesProp;
+      // Pinned slides (guest banner first, then the model hero) always lead.
+      const pinned = resolveStageSlides([]);
+      const rest = slidesProp.filter(
+        (slide) => !pinned.some((p) => p.id === slide.id)
+      );
+      return [...pinned, ...rest];
     }
-    const base = configs && configs.length > 0 ? configs : defaultStageConfigs();
+    // Only the two pinned slides show by default. Admin-saved overrides
+    // still render normally, so new slides can be added anytime.
+    const base = configs && configs.length > 0 ? configs : [];
     return resolveStageSlides(base);
   }, [slidesProp, configs]);
 
@@ -204,13 +224,34 @@ export default function LuminousStage({ slides: slidesProp }: LuminousStageProps
     return () => window.removeEventListener("keydown", onKey);
   }, [isAr, next, prev]);
 
+  // Guest banner: one full animation cycle (~10s: product row into the bag,
+  // 3 mini-baskets to houses, then city dots/layouts across the Yemen map),
+  // then it rests a while before handing over to the hero.
+  // Hero (girl) slide: shorter dwell than the map slide so it does not stay
+  // pinned forever — the loop keeps rotating.
+  // Mobile: no auto-movement at all (manual swipe/arrows only).
+  const activeId = slides[index]?.id;
+  const dwellMs =
+    activeId === "luminous-model-hero"
+      ? 12000
+        : activeId === "luminous-guest-banner"
+          ? 22000
+        : 6000;
+  const [isMobileView, setIsMobileView] = useState(false);
   useEffect(() => {
-    if (!inView || count < 2) return;
+    const mq = window.matchMedia("(max-width: 639.98px)");
+    const sync = () => setIsMobileView(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+  useEffect(() => {
+    if (!inView || count < 2 || dwellMs === null || isMobileView) return;
     const timer = window.setTimeout(() => {
       setIndex((i) => (i + 1) % count);
-    }, 6000);
+    }, dwellMs);
     return () => window.clearTimeout(timer);
-  }, [count, inView, index]);
+  }, [count, inView, index, dwellMs]);
 
   if (count === 0) return null;
 
@@ -245,11 +286,8 @@ export default function LuminousStage({ slides: slidesProp }: LuminousStageProps
     touchRef.current = null;
   };
 
-  // Layered slide transition: the outgoing composition recedes gently
-  // (slight drift + scale-down, fast fade), the incoming one establishes
-  // slowly from a whisper of depth. No bouncing, no aggressive zoom.
-  const layerIn = "opacity 420ms ease, transform 460ms cubic-bezier(0.22,1,0.36,1)";
-  const layerOut = "opacity 240ms ease, transform 260ms ease";
+  // Layered slide transition: outgoing recedes (drift + scale + soft blur),
+  // incoming sharpens in from a whisper of depth (inline on <article>).
 
   return (
     <section
@@ -258,16 +296,25 @@ export default function LuminousStage({ slides: slidesProp }: LuminousStageProps
       role="region"
       aria-roledescription="carousel"
       aria-label={isAr ? "عرض لومينوس المميز" : "Luminous premium showcase"}
-      className="relative my-2 w-full overflow-hidden rounded-[1.25rem] border border-primary/10 isolate sm:my-3"
+      className="relative my-2 w-full overflow-hidden rounded-[1.25rem] border border-primary/10 isolate sm:my-3 luminous-stage"
+      style={{ background: "transparent" }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
+      {/* Aspect sizer: ONE fixed height per container width so the banner
+          and the girl slide occupy the exact same box (no jump between
+          slides — container queries keep it aligned with the iframe). */}
+      <div aria-hidden="true" className="luminous-sizer" />
       {slides.map((s, i) => {
         const active = i === index;
         const scene = sceneFor(s.id, i);
         const acc = s.theme.accent;
         // Custom-image slides replace the template composition entirely.
         const isCustomImage = s.slideType === "custom-image" && !!s.customImage;
+        // html-embed slides host a self-contained animated banner document.
+        const isEmbed = s.slideType === "html-embed" && !!s.embedSrc;
+        // Model hero gets the kinetic treatment: dance-animated girl + word pop.
+        const isHero = s.id === "luminous-model-hero";
 
         return (
           <article
@@ -275,31 +322,55 @@ export default function LuminousStage({ slides: slidesProp }: LuminousStageProps
             aria-hidden={!active || undefined}
             aria-label={isAr ? s.headlineAr : s.headlineEn}
             className={
-              "w-full " +
-              (active ? "relative z-10" : "absolute inset-0 z-0 pointer-events-none")
+              "absolute inset-0 w-full " +
+              (active ? "z-10" : "z-0 pointer-events-none")
             }
             style={{
               opacity: active ? 1 : 0,
               transform: active
                 ? "translateX(0) scale(1)"
                 : `translateX(${i > index ? 1.8 : -1.8}%) scale(0.988)`,
-              transition: active ? layerIn : layerOut,
-              willChange: "opacity, transform",
+              filter: active ? "blur(0px)" : "blur(6px)",
+              transition: `opacity 950ms ${EASE}, transform 1050ms ${EASE}, filter 1050ms ${EASE}`,
+              willChange: "opacity, transform, filter",
             }}
           >
-            {/* ── CUSTOM IMAGE SLIDE ───────────────────────────────────────
-                Ready-made artwork fills the same boxed stage (object-cover,
-                no distortion). Optionally overlaid with the brand mark. */}
-            {isCustomImage ? (
+            {/* ── HTML EMBED SLIDE ──────────────────────────────────────────
+                Self-contained animated banner. Identical render on phone
+                and laptop; the swipe-transparent iframe keeps carousel
+                gestures working on small screens. */}
+            {isEmbed ? (
               <div
-                className="relative aspect-[1024/340] min-h-[280px] w-full overflow-hidden sm:min-h-[330px] lg:min-h-[340px]"
-                style={{ opacity: active ? 1 : 0, transition: "opacity 520ms ease" }}
+                className="relative h-full w-full overflow-hidden"
+                style={{
+                  background: "transparent",
+                  opacity: active ? 1 : 0,
+                  transition: "opacity 520ms ease",
+                }}
+              >
+                <iframe
+                  src={s.embedSrc}
+                  title={isAr ? s.headlineAr : s.headlineEn}
+                  className="absolute inset-0 h-full w-full border-0 max-sm:pointer-events-none"
+                />
+              </div>
+            ) : /* ── CUSTOM IMAGE SLIDE ──────────────────────────────────────
+                Ready-made artwork fills the same boxed stage (object-cover,
+                no distortion). Optionally overlaid with the brand mark. */
+            isCustomImage ? (
+              <div
+                className="absolute inset-0 w-full overflow-hidden"
+                style={{
+                  background: "transparent",
+                  opacity: active ? 1 : 0,
+                  transition: "opacity 520ms ease",
+                }}
               >
                 {s.id !== "luminous-model-hero" && (
                   <div
                     className="absolute inset-0 pointer-events-none"
                     style={{
-                      backgroundColor: "#f9e2e8",
+                      backgroundColor: "transparent",
                       backgroundImage: "url('/images/hero/luminous-stage-background.png')",
                       backgroundPosition: "center",
                       backgroundSize: "cover",
@@ -307,16 +378,46 @@ export default function LuminousStage({ slides: slidesProp }: LuminousStageProps
                     aria-hidden="true"
                   />
                 )}
+                {isHero ? (
+                  /* Shrunk, feathered portrait that never reads as a box —
+                     the oval mask dissolves every edge into the slide. */
+                  <div
+                    className="luminous-girl-wrap absolute left-[1%] top-[-6%] h-[112%] w-[44%] max-sm:left-[2%] max-sm:top-[14%] max-sm:h-[66%] max-sm:w-[42%]"
+                    style={{
+                      opacity: active ? 1 : 0,
+                      transform: active ? "scale(1)" : "scale(.9)",
+                      clipPath: active
+                        ? "circle(92% at 50% 50%)"
+                        : "circle(0% at 50% 50%)",
+                      transition: active
+                        ? "opacity 520ms ease, transform 900ms cubic-bezier(0.22,1,0.36,1), clip-path 900ms cubic-bezier(0.22,1,0.36,1)"
+                        : "opacity 260ms ease, transform 260ms ease, clip-path 260ms ease",
+                    }}
+                  >
+                    <Image
+                      src={s.customImage!}
+                      alt={isAr ? s.headlineAr : s.headlineEn}
+                      fill
+                      sizes="(max-width: 640px) 42vw, 44vw"
+                      className="object-cover luminous-girl-live"
+                      style={{ objectPosition: "38% 30%" }}
+                      priority
+                      draggable={false}
+                    />
+                  </div>
+                ) : (
                 <Image
                   src={s.customImage!}
                   alt={isAr ? s.headlineAr : s.headlineEn}
                   fill
                   sizes="100vw"
-                  className={`absolute inset-0 h-full w-full object-center ${s.id === "luminous-model-hero" ? "object-cover" : "object-contain bg-transparent"}`}
-                  priority={s.id === "luminous-model-hero"}
+                  className="absolute inset-0 h-full w-full object-center object-contain bg-transparent"
                   draggable={false}
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/8 to-[#f1d9e5]/45" aria-hidden="true" />
+                )}
+                {!isHero && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/8 to-[#f1d9e5]/45" aria-hidden="true" />
+                )}
                 <div className="absolute inset-0 grid grid-cols-[minmax(0,36%)_minmax(0,64%)] items-center gap-1 px-2 sm:grid-cols-[minmax(0,38%)_minmax(0,62%)] sm:px-5 lg:grid-cols-[minmax(0,40%)_minmax(0,60%)] lg:px-8" dir="ltr">
                   <div className="relative z-10 col-start-2 flex min-w-0 translate-x-[4%] flex-col items-center justify-center px-2 text-center sm:translate-x-[5%] sm:px-5 lg:translate-x-[7%] lg:px-10" dir={isAr ? "rtl" : "ltr"}>
                     {(isAr ? s.eyebrowAr : s.eyebrowEn) && (
@@ -325,20 +426,69 @@ export default function LuminousStage({ slides: slidesProp }: LuminousStageProps
                         {isAr ? s.eyebrowAr : s.eyebrowEn}
                       </span>
                     )}
+                    {isHero ? (
+                      <h2
+                        className="stage-hero-h2 max-w-xl text-2xl font-bold leading-[1.16] text-foreground sm:text-3xl lg:text-[clamp(30px,3.6vw,54px)]"
+                        style={{ fontFamily: "var(--font-display)", ...reveal(active, 120, 12) }}
+                      >
+                        {(isAr ? s.headlineAr : s.headlineEn).split("\n").map((line, li) => (
+                          <span key={li} className="stage-hero-line">
+                            {line.split(" ").map((w, wi) => (
+                              <span
+                                key={wi}
+                                className={"stage-hero-word" + (active ? " on" : "")}
+                                style={{ animationDelay: `${0.16 + (li * 6 + wi) * 0.1}s` }}
+                              >
+                                {w}{" "}
+                              </span>
+                            ))}
+                          </span>
+                        ))}
+                      </h2>
+                    ) : (
                     <h2 className="max-w-xl whitespace-pre-line text-balance text-2xl font-bold leading-[1.16] text-foreground sm:text-3xl lg:text-[clamp(30px,3.6vw,54px)]" style={{ fontFamily: "var(--font-display)", ...reveal(active, 120, 12) }}>
                       {isAr ? s.headlineAr : s.headlineEn}
                     </h2>
-                    <p className="mt-2 max-w-lg whitespace-pre-line text-xs leading-relaxed text-muted sm:text-sm lg:text-base" style={reveal(active, 180)}>
+                    )}
+                    {isHero && (
+                      <svg
+                        className={"stage-hero-squiggle" + (active ? " on" : "")}
+                        viewBox="0 0 240 18"
+                        preserveAspectRatio="none"
+                        aria-hidden="true"
+                      >
+                        <defs>
+                          <linearGradient id="stageHeroGold" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0" stopColor="#b8893a" />
+                            <stop offset="0.5" stopColor="#f0d98a" />
+                            <stop offset="1" stopColor="#7c3aed" />
+                          </linearGradient>
+                        </defs>
+                        <path
+                          d="M6 12 C46 3 78 16 112 9 S178 3 210 11 C222 13.5 230 9 234 6"
+                          fill="none"
+                          stroke="url(#stageHeroGold)"
+                          strokeWidth="4"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    )}
+                    {isHero && (
+                      <>
+                        <i className="stage-hero-spark s1" aria-hidden="true" />
+                        <i className="stage-hero-spark s2" aria-hidden="true" />
+                      </>
+                    )}
+                    <p className="mt-2 max-w-lg whitespace-pre-line text-xs leading-relaxed text-muted sm:text-sm lg:text-base" style={{ ...reveal(active, isHero ? 900 : 180) }}>
                       {isAr ? s.subAr : s.subEn}
                     </p>
-                    <Link href={s.ctaHref} tabIndex={active ? 0 : -1} className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-xs font-bold text-white shadow-primary transition-all duration-300 hover:bg-primary-dark active:scale-[0.97] sm:text-sm" style={reveal(active, 240, 8)}>
+                    <Link href={s.ctaHref} tabIndex={active ? 0 : -1}                     className="stage-hero-cta mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-xs font-bold text-white shadow-primary transition-all duration-300 hover:bg-primary-dark active:scale-[0.97] sm:text-sm" style={reveal(active, isHero ? 1100 : 240, 8)}>
                       {isAr ? s.ctaAr : s.ctaEn}
                       <svg className="h-4 w-4 rtl:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                       </svg>
                     </Link>
                   </div>
-
                 </div>
               </div>
             ) : (
@@ -346,7 +496,7 @@ export default function LuminousStage({ slides: slidesProp }: LuminousStageProps
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
-                backgroundColor: "#f9e2e8",
+                backgroundColor: "transparent",
                 backgroundImage: "url('/images/hero/luminous-stage-background.png')",
                 backgroundPosition: "center",
                 backgroundSize: "cover",
@@ -459,7 +609,7 @@ export default function LuminousStage({ slides: slidesProp }: LuminousStageProps
               />
             )}
             <div
-              className="absolute inset-y-[-10%] w-[36%] pointer-events-none"
+              className="absolute inset-y-[-10%] w-[36%] pointer-events-none max-sm:hidden"
               style={{
                 insetInlineEnd: "-6%",
                 background: `linear-gradient(${isAr ? 255 : 105}deg, transparent 0%, rgba(255,255,255,${scene.sweepOp}) 50%, transparent 100%)`,
@@ -470,7 +620,7 @@ export default function LuminousStage({ slides: slidesProp }: LuminousStageProps
               aria-hidden="true"
             />
             <div
-              className="absolute inset-0 pointer-events-none mix-blend-multiply opacity-[0.03]"
+              className="absolute inset-0 pointer-events-none mix-blend-multiply opacity-[0.03] max-sm:hidden"
               style={{
                 backgroundImage:
                   "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
@@ -483,22 +633,22 @@ export default function LuminousStage({ slides: slidesProp }: LuminousStageProps
             </>
             )}
 
-            {/* Template content (text + products) — custom-image slides are
-                pure artwork and render no template composition. */}
-            {!isCustomImage && (
-            <div className="relative w-full max-w-[1600px] mx-auto px-5 sm:px-8 lg:px-10 py-5 sm:py-6 lg:py-7" dir="ltr">
-              <div className="grid gap-5 lg:grid-cols-[minmax(0,60%)_minmax(0,40%)] lg:gap-6 lg:items-center">
+            {/* Template content (text + products) — custom-image and
+                html-embed slides render no template composition. */}
+            {!isCustomImage && !isEmbed && (
+            <div className="relative w-full max-w-[1600px] max-w-full mx-auto px-5 sm:px-6 md:px-8 lg:px-10 py-6 sm:py-5 lg:py-6 max-sm:aspect-[4/3] max-sm:overflow-hidden max-sm:flex max-sm:items-center max-sm:py-4" dir="ltr">
+              <div className="grid gap-5 sm:gap-5 lg:grid-cols-[minmax(0,60%)_minmax(0,40%)] lg:gap-6 lg:items-center max-sm:gap-1.5 max-sm:h-full max-sm:content-center">
                 <div className="flex flex-col items-center text-center lg:order-2" dir={isAr ? "rtl" : "ltr"}>
                   <span
-                    className="inline-flex items-center gap-2 mb-2.5"
+                    className="inline-flex items-center gap-2 mb-2.5 max-sm:mb-1"
                     style={reveal(active, 90)}
                   >
                     <span
-                      className="inline-block w-8 h-[2px] rounded-full"
+                      className="inline-block w-8 h-[2px] rounded-full max-sm:w-6"
                       style={{ background: acc }}
                     />
                     <span
-                      className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.18em]"
+                      className="text-[11px] sm:text-xs font-semibold uppercase tracking-normal sm:tracking-[0.18em] max-sm:text-[10px]"
                       style={{ color: acc }}
                     >
                       {isAr ? s.eyebrowAr : s.eyebrowEn}
@@ -506,10 +656,10 @@ export default function LuminousStage({ slides: slidesProp }: LuminousStageProps
                   </span>
 
                   <h2
-                    className="mb-2 leading-[1.16]"
+                    className="stage-h2 mb-2 leading-[1.16] max-sm:mb-1"
                     style={{
                       fontFamily: "var(--font-display)",
-                      fontSize: "clamp(28px, 3.5vw, 46px)",
+                      fontSize: "clamp(22px, 6vw, 46px)",
                       fontWeight: 700,
                       color: "#241f16",
                       ...reveal(active, 180, 18),
@@ -519,7 +669,7 @@ export default function LuminousStage({ slides: slidesProp }: LuminousStageProps
                   </h2>
 
                   <p
-                    className="max-w-sm text-xs leading-relaxed text-[#3a352c] sm:text-sm lg:text-base lg:mb-5"
+                    className="max-w-sm text-sm leading-[1.9] text-[#3a352c] sm:text-sm sm:leading-relaxed lg:text-base lg:mb-5 max-sm:text-xs max-sm:leading-[1.8] max-sm:line-clamp-2"
                     style={{ ...reveal(active, 300) }}
                   >
                     {isAr ? s.subAr : s.subEn}
@@ -528,7 +678,7 @@ export default function LuminousStage({ slides: slidesProp }: LuminousStageProps
                   <Link
                     href={s.ctaHref}
                     tabIndex={active ? 0 : -1}
-                    className="group inline-flex items-center gap-2 rounded-full px-6 py-2.5 text-[13px] font-semibold transition-all duration-300 active:scale-[0.97]"
+                    className="luminous-shine group relative inline-flex w-full max-w-[300px] justify-center items-center gap-2 overflow-hidden rounded-full px-6 py-3 min-h-[48px] text-sm font-semibold transition-all duration-300 active:scale-[0.97] sm:w-auto max-sm:max-w-[240px] max-sm:py-2 max-sm:min-h-[44px] max-sm:text-[13px]"
                     style={{
                       background: acc,
                       color: "#fff",
@@ -550,7 +700,7 @@ export default function LuminousStage({ slides: slidesProp }: LuminousStageProps
                 </div>
 
                 <div
-                  className="relative h-[240px] select-none sm:order-2 sm:h-[300px] lg:order-1 lg:h-[360px]"
+                  className="relative mt-1 h-[220px] select-none sm:order-2 sm:mt-0 sm:h-[300px] lg:order-1 lg:h-[360px] max-sm:h-20 max-sm:mt-0"
                   style={{
                     transform: active ? "translateY(0)" : "translateY(12px)",
                     transition: active ? "transform 520ms cubic-bezier(0.22,1,0.36,1)" : "transform 220ms ease",
@@ -573,11 +723,41 @@ export default function LuminousStage({ slides: slidesProp }: LuminousStageProps
         );
       })}
 
+      {/* ── STAGE FX OVERLAY: drifting dust, brand light (no side shine) ── */}
+      <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden" aria-hidden="true">
+        {STAGE_DUST.map(([x, y, size, dur, delay], k) => (
+          <span
+            key={k}
+            className="stage-dust"
+            style={
+              {
+                left: `${x}%`,
+                top: `${y}%`,
+                width: size,
+                height: size,
+                "--d": `${dur}s`,
+                "--dl": `${delay}s`,
+              } as React.CSSProperties
+            }
+          />
+        ))}
+        <div
+          className="magic-orb"
+          style={{ width: 180, height: 180, top: "-60px", insetInlineStart: "-50px", background: "radial-gradient(circle, rgba(247,217,140,0.30), transparent 70%)" }}
+        />
+        <div
+          className="magic-orb"
+          style={{ width: 220, height: 220, bottom: "-80px", insetInlineEnd: "-60px", background: "radial-gradient(circle, rgba(122,62,157,0.22), transparent 70%)", animationDelay: "2.5s" }}
+        />
+      </div>
+
+      {/* ── WOW wipe removed: no side light across the slides ── */}
+
       <button
         type="button"
         onClick={isAr ? next : prev}
         aria-label={isAr ? "السابق" : "Previous slide"}
-        className="hidden md:inline-flex absolute start-4 lg:start-6 top-1/2 -translate-y-1/2 z-30 h-10 w-10 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95"
+        className="inline-flex md:inline-flex absolute start-2 sm:start-4 lg:start-6 top-1/2 -translate-y-1/2 z-30 h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95"
         style={{ background: "rgba(255,255,255,0.55)", border: "1px solid rgba(0,0,0,0.06)", color: "#3a352c", boxShadow: "0 4px 14px rgba(0,0,0,0.07)" }}
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -588,7 +768,7 @@ export default function LuminousStage({ slides: slidesProp }: LuminousStageProps
         type="button"
         onClick={isAr ? prev : next}
         aria-label={isAr ? "التالي" : "Next slide"}
-        className="hidden md:inline-flex absolute end-4 lg:end-6 top-1/2 -translate-y-1/2 z-30 h-10 w-10 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95"
+        className="inline-flex md:inline-flex absolute end-2 sm:end-4 lg:end-6 top-1/2 -translate-y-1/2 z-30 h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 hover:scale-105 active:scale-95"
         style={{ background: "rgba(255,255,255,0.55)", border: "1px solid rgba(0,0,0,0.06)", color: "#3a352c", boxShadow: "0 4px 14px rgba(0,0,0,0.07)" }}
       >
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -596,7 +776,16 @@ export default function LuminousStage({ slides: slidesProp }: LuminousStageProps
         </svg>
       </button>
 
-      <div className="absolute top-4 end-6 z-30 text-[11px] tabular-nums tracking-widest text-black/40">
+      <div className="absolute bottom-3 inset-x-0 z-30 flex items-center justify-center gap-1.5" aria-hidden="true">
+        {slides.map((s, i) => (
+          <span
+            key={s.id}
+            className={`h-1.5 rounded-full transition-all duration-300 ${i === index ? "w-6 bg-gradient-to-l from-accent to-[#F7D98C] shadow-[0_0_10px_rgba(212,175,55,0.9)]" : "w-1.5 bg-white/50"}`}
+          />
+        ))}
+      </div>
+
+      <div className="absolute top-3 end-4 z-30 hidden text-xs tabular-nums tracking-widest text-black/60 sm:block">
         <span className="text-black/70">{String(index + 1).padStart(2, "0")}</span>
         {" / "}
         {String(count).padStart(2, "0")}

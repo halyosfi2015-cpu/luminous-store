@@ -49,30 +49,6 @@
       "hidden": false
     },
     {
-      "id": "pigmentation",
-      "labelAr": "تصبغات وكلف",
-      "labelEn": "Pigmentation",
-      "taglineAr": "توحيد لون وإشراقة",
-      "taglineEn": "Even tone & radiance",
-      "descAr": "علاج التصبغات والبقع الداكنة للحصول على لون موحد",
-      "descEn": "Treat dark spots and pigmentation for an even skin tone",
-      "image": "/images/problems/pigmentation.webp",
-      "accent": "#d97706",
-      "accentBg": "rgba(217,119,6,0.08)",
-      "emoji": "✨",
-      "routineAr": [
-        "نظفي بشرتك جيداً",
-        "ضعي سيروم فيتامين سي",
-        "واقي شمس SPF 50+ morning"
-      ],
-      "routineEn": [
-        "Cleanse thoroughly",
-        "Apply vitamin C serum",
-        "Use SPF 50+ sunscreen daily"
-      ],
-      "hidden": false
-    },
-    {
       "id": "large_pores",
       "labelAr": "مسام واسعة",
       "labelEn": "Pores",
@@ -191,6 +167,30 @@
         "Apply caffeine eye cream in the morning",
         "Use vitamin C eye serum",
         "Gently massage with a cold roller"
+      ],
+      "hidden": false
+    },
+    {
+      "id": "pigmentation",
+      "labelAr": "تصبغات وكلف",
+      "labelEn": "Pigmentation",
+      "taglineAr": "توحيد لون وإشراقة",
+      "taglineEn": "Even tone & radiance",
+      "descAr": "علاج التصبغات والبقع الداكنة للحصول على لون موحد",
+      "descEn": "Treat dark spots and pigmentation for an even skin tone",
+      "image": "/images/problems/pigmentation.webp",
+      "accent": "#d97706",
+      "accentBg": "rgba(217,119,6,0.08)",
+      "emoji": "✨",
+      "routineAr": [
+        "نظفي بشرتك جيداً",
+        "ضعي سيروم فيتامين سي",
+        "واقي شمس SPF 50+ morning"
+      ],
+      "routineEn": [
+        "Cleanse thoroughly",
+        "Apply vitamin C serum",
+        "Use SPF 50+ sunscreen daily"
       ],
       "hidden": false
     }

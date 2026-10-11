@@ -59,7 +59,7 @@ export function getTaxonomyProductCount(nodeSlug: string): number {
 export function getTaxonomyBreadcrumbs(nodeSlug: string): TaxonomyNode[] {
   const node = resolveTaxonomyNode(nodeSlug);
   if (!node) return [];
-  return getTaxonomyPath(node).filter((n) => n.type !== "ROOT");
+  return getTaxonomyPath(node).filter((n) => n.type !== "ROOT" && n.status !== "HIDDEN");
 }
 
 /** Direct ACTIVE children of a node that contain at least one product. */
@@ -67,7 +67,7 @@ export function getPopulatedChildren(nodeSlug: string): TaxonomyNode[] {
   const node = resolveTaxonomyNode(nodeSlug);
   if (!node) return [];
   return getTaxonomyChildren(node.id)
-    .filter((c) => c.status === "ACTIVE" || getTaxonomyProductCount(c.slug) > 0)
+    .filter((c) => c.status !== "HIDDEN" && (c.status === "ACTIVE" || getTaxonomyProductCount(c.slug) > 0))
     .sort((a, b) => a.order - b.order);
 }
 
@@ -96,6 +96,19 @@ const ALWAYS_SHOW_SLUGS = new Set([
   "personal-accessories",
   "misc-accessories",
   "mother-care",
+  /* louz-parity: medical supplies section + empty supplement groups show in
+     the navigation/tree even before products are mapped to them. */
+  "medical-supplies",
+  "memory-focus",
+  "digestive-health",
+  "urinary-health",
+  "respiratory-health",
+  "blood-sugar",
+  "sports-supplements",
+  "sports-snacks",
+  "senior-vitamins",
+  "eye-health-supplements",
+  "heart-health",
   ...CUSTOM_NODE_SLUGS,
 ]);
 
@@ -122,7 +135,7 @@ function nodeToNav(node: TaxonomyNode, color: string): NavCategory {
  *   FUTURE nodes WITH products are shown, satisfying "no empty future categories").
  */
 export function getTaxonomyNavTree(): NavCategory[] {
-  const categories = taxonomy.filter((n) => n.type === "CATEGORY").sort((a, b) => a.order - b.order);
+  const categories = taxonomy.filter((n) => n.type === "CATEGORY" && n.status !== "HIDDEN").sort((a, b) => a.order - b.order);
   const tree: NavCategory[] = [];
 
   for (let i = 0; i < categories.length; i++) {
@@ -131,7 +144,7 @@ export function getTaxonomyNavTree(): NavCategory[] {
 
     const navCat = nodeToNav(cat, categoryColorPalette[i % categoryColorPalette.length]);
     const subcats = getTaxonomyChildren(cat.id)
-      .filter((s) => s.type === "SUBCATEGORY")
+      .filter((s) => s.type === "SUBCATEGORY" && s.status !== "HIDDEN")
       .sort((a, b) => a.order - b.order);
 
     const children: NavCategory[] = [];
@@ -146,7 +159,7 @@ export function getTaxonomyNavTree(): NavCategory[] {
 
       const ptChildren: NavCategory[] = [];
       for (const pt of pts) {
-        if (getTaxonomyProductCount(pt.slug) === 0) continue;
+        if (getTaxonomyProductCount(pt.slug) === 0 && !ALWAYS_SHOW_SLUGS.has(pt.slug)) continue;
         ptChildren.push(nodeToNav(pt, leafColor));
       }
 
@@ -185,14 +198,14 @@ export interface TaxonomyCategoryCard {
  */
 export function getTaxonomyCategoryCards(): TaxonomyCategoryCard[] {
   const categories = taxonomy
-    .filter((n) => n.type === "CATEGORY")
+    .filter((n) => n.type === "CATEGORY" && n.status !== "HIDDEN")
     .sort((a, b) => a.order - b.order);
 
   return categories
     .map((cat) => {
       const count = getTaxonomyProductCount(cat.slug);
       const subcats = getTaxonomyChildren(cat.id)
-        .filter((s) => s.type === "SUBCATEGORY")
+        .filter((s) => s.type === "SUBCATEGORY" && s.status !== "HIDDEN")
         .sort((a, b) => a.order - b.order);
       const children = subcats
         .filter(

@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from "react";
 import Container from "@/components/ui/Container";
 import HorizontalCarousel from "@/components/ui/HorizontalCarousel";
 import SectionTitle from "@/components/ui/SectionTitle";
+import MobileReveal from "@/components/ui/MobileReveal";
 import ProductImage from "@/components/product/ProductImage";
 import { useProducts } from "@/hooks/useProducts";
 import { useLang } from "@/lib/use-lang";
@@ -41,7 +42,7 @@ function RecommendationCard({ sp, isAr }: { sp: ScoredProduct; isAr: boolean }) 
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group relative flex w-56 shrink-0 flex-col overflow-hidden rounded-3xl border border-gray-100 bg-white transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:border-transparent"
+            className="magic-card-glow group relative flex w-[calc(50dvw-24px)] min-w-[170px] max-w-[170px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white transition-all duration-500 active:scale-[0.98] sm:w-56 sm:max-w-none sm:rounded-3xl sm:hover:-translate-y-2 sm:hover:shadow-2xl hover:border-transparent"
       style={{ boxShadow: "0 4px 20px -4px rgba(0,0,0,0.06)" }}
       onClick={() => {
         trackProductView(product.id);
@@ -49,29 +50,29 @@ function RecommendationCard({ sp, isAr }: { sp: ScoredProduct; isAr: boolean }) 
         trackBrandVisit(product.brand);
       }}
     >
-      <div className="relative aspect-square overflow-hidden bg-gray-50">
+      <div className="magic-autoshine magic-scan luminous-shine relative aspect-square overflow-hidden bg-gray-50">
         {product.gallery[0] && (
           <ProductImage
             src={product.gallery[0]}
             alt={product.name.ar}
             productId={product.id}
             className="h-full w-full"
-            sizes="224px"
+            sizes="(max-width:640px) 45vw, 224px"
             pedestal
           />
         )}
 
         {product.discount && (
           <div className="absolute top-3 start-3 z-10">
-            <div className="flex items-center gap-1 rounded-full bg-red-500 px-2.5 py-1 shadow-lg shadow-red-500/30">
+            <div className="luminous-glow-pulse flex items-center gap-1 rounded-full bg-red-500 px-2.5 py-1 shadow-lg shadow-red-500/30">
               <span className="text-[11px] font-extrabold text-white">-{product.discount}%</span>
             </div>
           </div>
         )}
 
-        <div className="absolute bottom-3 inset-x-3 z-10">
-          <div className={`rounded-xl bg-gradient-to-r ${gradient} px-3 py-1.5 text-center shadow-lg`}>
-            <span className="text-[10px] font-bold text-white leading-tight">
+        <div className="absolute bottom-2 inset-x-2 z-10">
+          <div className={`rounded-xl bg-gradient-to-r ${gradient} px-2 py-1 text-center shadow-lg sm:px-3 sm:py-1.5`}>
+            <span className="line-clamp-1 text-[10px] font-bold text-white leading-tight truncate sm:text-[11px]">
               {isAr ? badge : badgeEn}
             </span>
           </div>
@@ -79,15 +80,15 @@ function RecommendationCard({ sp, isAr }: { sp: ScoredProduct; isAr: boolean }) 
       </div>
 
       <div className="flex flex-1 flex-col p-3.5">
-        <p className="text-[10px] font-bold text-primary/70 uppercase tracking-wider">{product.brandAr || product.brand}</p>
-        <h3 className="mt-1 line-clamp-2 text-xs font-bold text-gray-900 leading-relaxed transition-colors group-hover:text-primary">
-          {product.name.ar}
+        <p className="text-[11px] font-bold text-primary/70 normal-case tracking-wide rtl:tracking-normal sm:text-xs">{product.brandAr || product.brand}</p>
+        <h3 className="mt-1 line-clamp-2 text-[13px] font-bold text-gray-900 leading-relaxed min-h-[2.6rem] transition-colors group-hover:text-primary sm:text-sm">
+          {isAr ? product.name.ar : product.name.en}
         </h3>
 
         {safeRatingDisplay(product) > 0 && safeReviewCountDisplay(product) > 0 && (
           <div className="mt-2 flex items-center gap-0.5">
             {Array.from({ length: 5 }, (_, i) => (
-              <StarIcon key={i} size={11} filled={i < Math.floor(safeRatingDisplay(product))} />
+                    <StarIcon key={i} size={12} filled={i < Math.floor(safeRatingDisplay(product))} />
             ))}
             <span className="text-[10px] text-gray-400 ms-1">({safeReviewCountDisplay(product)})</span>
           </div>
@@ -95,14 +96,14 @@ function RecommendationCard({ sp, isAr }: { sp: ScoredProduct; isAr: boolean }) 
 
         <div className="flex-1" />
 
-        <div className="mt-3 flex items-baseline gap-2">
-          <span className="text-lg font-extrabold text-gray-900">{formatPrice(product.pricing.price)}</span>
-          <span className="text-[9px] font-normal text-gray-400">ريال</span>
+        <div className="mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-0.5 text-base tabular-nums sm:text-lg">
+          <span className="text-base font-extrabold text-gray-900 sm:text-lg">{formatPrice(product.pricing.price)}</span>
+          <span className="text-[11px] font-normal text-gray-500">{isAr ? "ريال" : "YER"}</span>
         </div>
         {product.discount && product.pricing.originalPrice && product.pricing.originalPrice > product.pricing.price && (
           <div className="flex items-center gap-1.5">
             <span className="text-[11px] text-gray-400 line-through">{formatPrice(product.pricing.originalPrice)}</span>
-            {product.discount && <span className="rounded-full bg-red-50 px-1.5 py-0.5 text-[9px] font-bold text-red-600">-{product.discount}%</span>}
+            {product.discount && <span className="rounded-full bg-red-50 px-1.5 py-0.5 text-[10px] font-bold text-red-600">-{product.discount}%</span>}
           </div>
         )}
       </div>
@@ -171,7 +172,7 @@ export default function SmartRecommendations() {
   if (loading) return null;
   if (error) {
     return (
-      <section className="w-full py-8" style={{ background: "var(--background)" }}>
+      <section className="w-full py-8 max-sm:hidden" style={{ background: "var(--background)" }}>
         <Container>
           <div className="text-center py-12 text-[var(--muted)]">
             <p>{isAr ? "فشل تحميل التوصيات" : "Failed to load recommendations"}</p>
@@ -193,7 +194,7 @@ export default function SmartRecommendations() {
   if (!content.visible) return null;
   if (items.length === 0) {
     return (
-      <section id="recommended" className="w-full overflow-hidden bg-white py-8 sm:py-10 lg:py-12">
+      <section id="recommended" className="hide-sub-m w-full overflow-hidden bg-white py-8 sm:py-10 lg:py-12 max-sm:hidden">
         <div className="mx-auto w-full max-w-[1800px] px-4 sm:px-6 lg:px-8">
           <SectionTitle
             eyebrow={<>
@@ -222,13 +223,15 @@ export default function SmartRecommendations() {
           title={isAr ? content.titleAr : content.titleEn}
           subtitle={isAr ? content.subtitleAr : content.subtitleEn}
         />
-        <HorizontalCarousel ariaLabel={isAr ? "توصيات ذكية" : "Smart recommendations"} autoplay autoplaySpeed={2500}>
+        <MobileReveal delay={100}>
+        <HorizontalCarousel ariaLabel={isAr ? "توصيات ذكية" : "Smart recommendations"} autoplay autoplaySpeed={4500}>
           {items.map((sp) => (
-            <div key={sp.product.id} className="shrink-0">
+            <div key={sp.product.id} className="shrink-0 snap-start">
               <RecommendationCard sp={sp} isAr={isAr} />
             </div>
           ))}
         </HorizontalCarousel>
+        </MobileReveal>
       </Container>
     </section>
   );

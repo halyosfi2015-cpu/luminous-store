@@ -44,6 +44,13 @@ export const skinConcernLabels: Record<SkinConcern, { ar: string; en: string }> 
   dark_circles: { ar: "الهالات السوداء", en: "Dark circles" },
   oiliness: { ar: "اللمعان الزائد", en: "Oiliness" },
   sensitivity: { ar: "الحساسية", en: "Sensitivity" },
+  rosacea: { ar: "الوردية", en: "Rosacea" },
+  eczema: { ar: "الأكزيما", en: "Eczema" },
+  psoriasis: { ar: "الصدفية", en: "Psoriasis" },
+  vitiligo: { ar: "البهاق", en: "Vitiligo" },
+  burns_scars: { ar: "الحروق والندبات", en: "Burns & Scars" },
+  tired_skin: { ar: "البشرة المرهقة", en: "Tired Skin" },
+  stretch_marks: { ar: "علامات التمدد", en: "Stretch Marks" },
 };
 
 /* ========================================================================

@@ -1,9 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
+import MobileReveal from "@/components/ui/MobileReveal";
 import Link from "next/link";
 import { Gift, Package, ArrowLeft, Sparkles } from "lucide-react";
 import AutoProductStrip from "@/components/home/AutoProductStrip";
+import ProductImage from "@/components/product/ProductImage";
 import Container from "@/components/ui/Container";
 import { getBundleProducts } from "@/src/data/bundles";
 import { useEffect } from "react";
@@ -67,49 +69,91 @@ function BundleCard({ bundle }: { bundle: Bundle }) {
       className="group relative flex flex-col overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:ring-2 hover:ring-amber-400/40"
     >
       {/* Image — auto product strip */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-gray-50">
-        <AutoProductStrip products={products} speed={0.15} itemClassName="w-40" itemRounded="rounded-xl" />
+      <div className="relative aspect-[16/10] overflow-hidden bg-gray-50 sm:aspect-[4/3]">
+        {/* Desktop: original scrolling strip */}
+        <div className="absolute inset-0 hidden sm:block">
+          <AutoProductStrip products={products} speed={0.15} itemClassName="w-40" itemRounded="rounded-xl" />
+        </div>
+        {/* Mobile: circular orbit */}
+        <div className="group/orbit absolute inset-0 flex items-center justify-center sm:hidden">
+        <div className="bundle-orbit-ring relative h-24 w-24 shrink-0 group-hover/orbit:[animation-play-state:paused]">
+          {products.slice(0, 4).map((p, idx, arr) => {
+            const angle = arr.length > 1 ? (360 / arr.length) * idx : 0;
+            return p.gallery?.[0] ? (
+              <div
+                key={p.id}
+                className="bundle-orbit-item absolute left-1/2 top-1/2"
+                style={{ "--a": `${angle}deg` } as CSSProperties}
+              >
+                <div className="bundle-orbit-upright group-hover/orbit:[animation-play-state:paused]">
+                  <div className="relative h-8 w-8 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full bg-white shadow-md ring-2 ring-white">
+                    <ProductImage
+                      src={p.gallery[0]}
+                      alt={bundle.nameAr}
+                      productId={p.id}
+                      hoverZoom={false}
+                      pedestal={false}
+                      className="absolute inset-0 h-full w-full"
+                      sizes="64px"
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : null;
+          })}
+          <div className="absolute left-1/2 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-primary/30">
+            <span className="text-[10px] font-extrabold leading-none">-{bundle.savingsPercent}%</span>
+          </div>
+        </div>
+        </div>
+        <style>{`
+          @keyframes bundleOrbit { to { transform: rotate(360deg); } }
+          @keyframes bundleOrbitRev { to { transform: rotate(-360deg); } }
+          .bundle-orbit-ring { animation: bundleOrbit 18s linear infinite; }
+          .bundle-orbit-upright { animation: bundleOrbitRev 18s linear infinite; }
+          .bundle-orbit-item { --r: 38px; transform: rotate(var(--a)) translateX(var(--r)) rotate(calc(var(--a) * -1)); }
+          @media (min-width: 640px) { .bundle-orbit-item { --r: 78px; } }
+          @media (prefers-reduced-motion: reduce) { .bundle-orbit-ring, .bundle-orbit-upright { animation: none; } }
+        `}</style>
 
         {/* Badge */}
         {bundle.badge && (
-          <div className="absolute top-3 start-3">
-            <span className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-[10px] font-bold shadow-lg ${getBadgeStyle(bundle.badge)}`}>
-              <Sparkles size={10} />
+          <div className="absolute top-2 start-2 sm:top-3 sm:start-3">
+            <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold shadow-lg sm:px-3 sm:py-1 sm:text-[10px] ${getBadgeStyle(bundle.badge)}`}>
+              <Sparkles size={11} className="sm:hidden" />
+              <Sparkles size={10} className="hidden sm:block" />
               {getBadgeAr(bundle)}
             </span>
           </div>
         )}
 
         {/* Savings badge */}
-        <div className="absolute top-3 end-3">
-          <span className="inline-flex items-center rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-extrabold text-emerald-600 shadow-sm">
+        <div className="absolute top-2 end-2 sm:top-3 sm:end-3">
+          <span className="inline-flex items-center rounded-full bg-white/95 px-2.5 py-1 text-[10px] font-extrabold text-emerald-600 shadow-sm sm:px-2.5 sm:py-1 sm:text-[10px]">
             وفّري {bundle.savingsPercent}%
           </span>
         </div>
       </div>
 
       {/* Content */}
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <div className="flex items-center gap-1.5">
-          <Package size={13} className="text-primary" />
-          <span className="text-[11px] font-medium text-gray-400">{products.length} منتجات</span>
-        </div>
+      <div className="flex flex-1 flex-col gap-1 p-2.5 text-start sm:gap-2 sm:p-4" dir={isAr ? "rtl" : "ltr"}>
 
-        <h3 className="text-base font-bold text-gray-900 line-clamp-1 transition-colors duration-300 group-hover:text-primary">
+
+        <h3 className="text-[13px] font-bold text-gray-900 line-clamp-1 transition-colors duration-300 group-hover:text-primary sm:text-base">
           {bundle.nameAr}
         </h3>
 
-        <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">{bundle.descriptionAr}</p>
+        <p className="hidden text-xs text-gray-500 line-clamp-2 leading-relaxed sm:block">{bundle.descriptionAr}</p>
 
         {/* Price */}
-        <div className="mt-auto flex items-baseline gap-2 pt-2">
-          <span className="text-lg font-extrabold text-gray-900">{formatPrice(bundle.bundlePrice)}</span>
-          <span className="text-sm text-gray-400 line-through">{formatPrice(bundle.originalPrice)}</span>
+        <div className="mt-auto flex flex-wrap items-baseline gap-x-2 gap-y-1 pt-1.5 min-w-0 sm:pt-2">
+          <span className="text-[15px] font-extrabold text-gray-900 sm:text-lg">{formatPrice(bundle.bundlePrice)}</span>
+          <span className="text-xs text-gray-400 line-through sm:text-sm">{formatPrice(bundle.originalPrice)}</span>
           <span className="ms-auto text-[10px] font-bold text-emerald-600">{isAr ? "ر.ي" : "YER"}</span>
         </div>
 
         {/* Button */}
-        <div className="mt-2 flex items-center justify-center gap-2 rounded-xl bg-gray-900 py-2.5 text-xs font-bold text-white transition-all duration-300 group-hover:bg-primary group-hover:shadow-lg group-hover:shadow-primary/30 active:scale-[0.98]">
+        <div className="mt-1.5 flex items-center justify-center gap-2 rounded-xl bg-gray-900 py-2.5 min-h-[44px] text-[13px] font-bold text-white transition-all duration-300 group-hover:bg-primary group-hover:shadow-lg group-hover:shadow-primary/30 active:scale-[0.98] sm:mt-2 sm:py-3 sm:text-sm">
           {isAr ? "استكشف الباقة" : "Explore Bundle"}
           <ArrowLeft size={13} className="transition-transform duration-300 group-hover:-translate-x-1" />
         </div>
@@ -149,9 +193,10 @@ export default function GiftBundles() {
   };
 
   return (
-    <section id="bundles" className="w-full bg-gradient-to-b from-white via-primary-50/30 to-white py-14 sm:py-18 lg:py-22">
+    <section id="bundles" className="hide-sub-m w-full bg-gradient-to-b from-white via-primary-50/30 to-white py-8 sm:py-16 lg:py-20">
       <Container>
         {/* = Header = */}
+        <MobileReveal>
         <div className="mb-8 text-center">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 shadow-lg shadow-primary/20">
             <Gift size={14} className="text-amber-400" />
@@ -159,24 +204,25 @@ export default function GiftBundles() {
               {isAr ? "هدايا مميزة" : "Curated Gifts"}
             </span>
           </div>
-          <h2 className="text-2xl font-extrabold text-primary sm:text-3xl lg:text-4xl">
+          <h2 className="text-xl font-extrabold text-primary sm:text-3xl lg:text-4xl">
             {isAr ? "هدايا وباقات مختارة بعناية" : "Carefully Selected Bundles & Gifts"}
           </h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm text-gray-500">
+          <p className="section-subtitle mx-auto mt-3 max-w-xl text-sm text-gray-500">
             {isAr
               ? "باقات جاهزة لكل مناسبة — اختاري الباقة المثالية أو صممي باقتك الخاصة"
               : "Ready bundles for every occasion — pick the perfect one or design your own"}
           </p>
         </div>
+        </MobileReveal>
 
         {/* = Occasion Tabs = */}
         <div className="mb-4 flex justify-center">
-          <div className="hide-scrollbar flex max-w-full gap-2 overflow-x-auto pb-2">
+          <div className="hide-scrollbar flex max-w-full gap-2 overflow-x-auto pb-2" dir={isAr ? "rtl" : "ltr"}>
             {MAIN_TABS.map((tab) => (
               <button
                 key={tab.key}
                 onClick={() => handleTabChange(tab.key)}
-                className={`shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-300 ${
+                className={`shrink-0 rounded-full px-5 py-3 min-h-[44px] text-sm font-semibold transition-all duration-300 ${
                   activeTab === tab.key
                     ? "bg-primary text-white shadow-lg shadow-primary/30 scale-105"
                     : "bg-white text-gray-600 border border-gray-200 hover:border-primary/40 hover:text-primary"
@@ -196,7 +242,7 @@ export default function GiftBundles() {
                 <button
                   key={sub.key}
                   onClick={() => setActiveSubTab(sub.key)}
-                  className={`rounded-full px-4 py-1.5 text-xs font-bold transition-all duration-300 ${
+                  className={`rounded-full px-5 py-2.5 min-h-[44px] text-xs font-bold transition-all duration-300 ${
                     activeSubTab === sub.key
                       ? "bg-primary/10 text-primary"
                       : "text-gray-500 hover:text-primary"
@@ -212,7 +258,7 @@ export default function GiftBundles() {
         {/* = Bundles Grid = */}
         {filteredBundles.length > 0 ? (
           <div
-            className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4"
+            className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4"
             style={{ animation: "megaMenuFadeIn 0.3s ease-out" }}
           >
             {filteredBundles.map((bundle) => (
@@ -227,13 +273,13 @@ export default function GiftBundles() {
         )}
 
         {/* = Design Your Bundle CTA = */}
-        <div className="mt-10 flex justify-center">
+        <div className="mt-6 flex justify-center">
           <Link
             href="/bundles/design"
-            className="group inline-flex items-center gap-3 rounded-full bg-gray-900 px-8 py-3.5 text-sm font-bold text-white shadow-xl transition-all duration-300 hover:bg-primary hover:shadow-primary/30 active:scale-95"
+            className="group inline-flex w-full items-center justify-center gap-3 rounded-full bg-gray-900 px-8 py-3.5 min-h-[44px] text-sm font-bold text-white shadow-xl transition-all duration-300 hover:bg-primary hover:shadow-primary/30 active:scale-95 sm:w-auto"
           >
-            <Sparkles size={16} className="text-amber-400" />
-            {isAr ? "صممي باقتك الخاصة" : "Design Your Own Bundle"}
+            <Sparkles size={16} className="text-white" />
+            {isAr ? "صمّمي باقتك الخاصة" : "Design Your Own Bundle"}
             <ArrowLeft size={15} className="transition-transform duration-300 group-hover:-translate-x-1" />
           </Link>
         </div>

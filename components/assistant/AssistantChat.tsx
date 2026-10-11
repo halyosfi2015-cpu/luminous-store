@@ -170,7 +170,7 @@ export function AssistantChat({
   if (!isOpen && !onClose) return null
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 transition-all duration-300" dir="rtl">
+    <div className="fixed inset-x-3 bottom-4 z-50 transition-all duration-300 sm:inset-x-auto sm:end-4" dir="rtl">
       {!isOpen && onClose && (
         <button
           onClick={() => setShowHistory(true)}
@@ -182,7 +182,7 @@ export function AssistantChat({
       )}
 
       {isOpen && (
-        <div className="w-full max-w-md md:max-w-lg lg:max-w-xl bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden flex flex-col h-[600px] md:h-[700px] animate-slide-up">
+        <div className="w-full max-w-md md:max-w-lg lg:max-w-xl bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden flex flex-col h-[calc(100dvh-2rem)] max-h-[600px] md:h-[700px] md:max-h-none animate-slide-up">
           <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-800 bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center">

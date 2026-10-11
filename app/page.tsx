@@ -131,7 +131,7 @@ export default async function Home() {
       <div className="sticky top-0 z-50 bg-background">
         <Header />
       </div>
-      <main id="main-content">
+      <main id="main-content" className="home-screen">
         <HomeSections
           serverBundles={serverBundles}
           serverProducts={serverProductsData.products}

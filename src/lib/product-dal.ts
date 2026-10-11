@@ -213,7 +213,7 @@ export async function getCanonicalProductBySlug(slug: string): Promise<Product |
     const supabase = createAdminClient();
     const { data, error } = await supabase
       .from("products")
-      .select("slug, pricing, discount, stock, stock_quantity, in_stock, is_active, gallery, hero_image")
+      .select("slug, pricing, discount, stock, stock_quantity, in_stock, is_active, gallery, hero_image, description")
       .eq("slug", slug)
       .limit(1);
     if (error) {
@@ -233,11 +233,20 @@ export async function getCanonicalProductBySlug(slug: string): Promise<Product |
       is_active?: boolean;
       gallery?: unknown;
       hero_image?: string | null;
+      description?: { ar?: string; en?: string } | null;
     };
     const dbStock = row.stock_quantity ?? row.stock;
     const dbGallery = Array.isArray(row.gallery) ? (row.gallery as string[]).filter(Boolean) : [];
+    const dbDescAr = row.description?.ar?.trim();
+    const dbDescEn = row.description?.en?.trim();
     const merged: Product = {
       ...(base ?? ({ slug, gallery: [], tags: [], howToUse: [], skinTypes: [], suitableFor: [], skinConcerns: [], rating: 0, reviewCount: 0 } as unknown as Product)),
+      // DB description wins when present — Yaqoot details backfilled via admin
+      // would otherwise never reach the storefront (static holds identity only).
+      description: {
+        ar: dbDescAr || base?.description?.ar || "",
+        en: dbDescEn || base?.description?.en || "",
+      },
       // DB gallery wins when present — otherwise admin image updates never
       // reach the storefront product page (it renders product.gallery).
       gallery: dbGallery.length > 0 ? dbGallery : (base?.gallery ?? []),

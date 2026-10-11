@@ -57,6 +57,8 @@ import { productsPart05 } from "./products-part-05";
 import { productsPart06 } from "./products-part-06";
 import { productsPart07 } from "./products-part-07";
 import { productsPart08 } from "./products-part-08";
+import { productsPart09 } from "./products-part-09";
+import { productsPart10 } from "./products-part-10";
 import imageOverrides from "@/src/data/content/image-source-overrides.json";
 
 type ImageOverride = { image: string; source: string; brand: string; matchedTitle: string; sizeScore: number };
@@ -71,6 +73,8 @@ const baseProducts: Product[] = [
   ...productsPart06,
   ...productsPart07,
   ...productsPart08,
+  ...productsPart09,
+  ...productsPart10,
 ];
 
 export const products: Product[] = baseProducts.map((p) => {
@@ -88,7 +92,7 @@ export const sectionCategoriesMap = [
   { slug: "perfume", name: "Perfume", nameAr: "العطور", description: "Luxury fragrances for men and women", descriptionAr: "عطور فاخرة للنساء والرجال", children: ["perfume-women","perfume-men","perfume-musk","perfume-gift-sets"], icon: "flask" },
   { slug: "bakhoor", name: "Bakhoor & Oud", nameAr: "البخور والعود", description: "Premium bakhoor and authentic oud", descriptionAr: "بخور فاخر وعود أصيل", children: ["bakhoor-premium","bakhoor-oud","bakhoor-dehn","bakhoor-burners","bakhoor-charcoal","bakhoor-home","bakhoor-occasions","bakhoor-brides","bakhoor-oils","bakhoor-gift-sets"], icon: "flame" },
   { slug: "baby", name: "Baby & Mom", nameAr: "الأم والطفل", description: "Gentle care for mother and baby", descriptionAr: "عناية لطيفة للأم والطفل", children: ["baby-care"], icon: "baby" },
-  { slug: "supplements", name: "Dietary Supplements", nameAr: "المكملات الغذائية", description: "Nutritional supplements for health and beauty", descriptionAr: "مكملات غذائية للصحة والجمال", children: ["vitamins","collagen","immunity","hair-nails","kids-supplements","women-health"], icon: "pill" },
+  { slug: "supplements", name: "Dietary Supplements", nameAr: "المكملات الغذائية", description: "Nutritional supplements for health and beauty", descriptionAr: "مكملات غذائية للصحة والجمال", children: ["hair-nails","sleep-aids","bones-joints","immunity","collagen","vitamins","minerals","kids-supplements","women-health","men-supplements","pregnancy-care","weight-control"], icon: "pill" },
   { slug: "tools", name: "Appliances & Accessories", nameAr: "الأجهزة والملحقات", description: "Personal care appliances and tools", descriptionAr: "أجهزة وأدوات العناية الشخصية", children: ["appliances-hair","appliances-shaving","appliances-teeth","tools"], icon: "tools" },
 ];
 

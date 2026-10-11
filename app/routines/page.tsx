@@ -189,7 +189,7 @@ export default function RoutinesPage() {
 
                     <div className="absolute top-3 start-3 z-10">
                       <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-extrabold backdrop-blur-sm ${levelMeta.color}`}>
-                        <Flame size={9} className="fill-current" />
+                        <Flame size={11} className="fill-current" />
                         {levelMeta.ar}
                       </span>
                     </div>

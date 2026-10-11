@@ -36,9 +36,9 @@ export default function Logo({
       case "footer":
         return { h: "h-20 w-auto", w: 300, h2: 80 };
       case "login":
-        return { h: "h-20 w-auto", w: 280, h2: 80 };
+        return { h: "h-14 w-auto mix-blend-multiply", w: 220, h2: 56 };
       default:
-        return { h: "h-20 w-auto", w: 280, h2: 80 };
+        return { h: "h-11 w-auto max-w-[140px] object-contain sm:h-14 sm:max-w-none", w: 220, h2: 56 };
     }
   };
 
@@ -46,10 +46,10 @@ export default function Logo({
   const sizes = getSizes();
 
   return (
-    <Link
+      <Link
       href="/"
       aria-label={isAr ? "لومينوس ديرما" : "Luminous Derma"}
-      className="flex items-center"
+      className="flex shrink-0 items-center"
     >
       <Image
         src={src}

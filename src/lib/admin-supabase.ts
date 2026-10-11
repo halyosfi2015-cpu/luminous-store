@@ -99,7 +99,12 @@ async function dualWrite(
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 
-export async function supabaseGetProducts(): Promise<Product[]> {
+export async function supabaseGetProducts(opts?: { compact?: boolean }): Promise<Product[]> {
+  // الوضع المضغوط للوحة التحكم: الأعمدة الضرورية فقط (اسم + مخزون) —
+  // يقلص الاستجابة من ~8MB إلى ~0.5MB فلا تتجمد الأجهزة الضعيفة.
+  const columns = opts?.compact
+    ? "id, legacy_id, sku, slug, name, stock, stock_quantity, in_stock"
+    : "*";
   return trySupabase(
     'products',
     async () => {
@@ -114,7 +119,7 @@ export async function supabaseGetProducts(): Promise<Product[]> {
       for (let from = 0; ; from += pageSize) {
         const { data, error } = await supabase
           .from('products')
-          .select('*')
+          .select(columns)
           .eq('is_active', true)
           .order('created_at', { ascending: false })
           .range(from, from + pageSize - 1)

@@ -15,8 +15,8 @@ export default function ProductInfo({ product }: ProductInfoProps) {
     const showRating = rating > 0 && reviews > 0;
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-2 flex-wrap">
+    <div className="flex min-w-0 flex-col gap-4">
+      <div className="flex min-w-0 items-center gap-2 flex-wrap">
         <span className="text-sm font-medium text-primary bg-primary/5 px-3 py-1 rounded-full">
           {product.brand}
         </span>
@@ -28,12 +28,12 @@ export default function ProductInfo({ product }: ProductInfoProps) {
           </span>
         )}
       </div>
-      <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl leading-tight">
+      <h1 className="text-lg font-bold tracking-normal text-foreground leading-[1.8] break-words min-[400px]:text-xl sm:text-2xl lg:text-3xl">
         {product.name.ar}
       </h1>
-      <p className="text-sm text-muted">{product.name.en}</p>
+      <p className="text-[13px] text-muted break-words sm:text-sm">{product.name.en}</p>
       {showRating && (
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <div className="flex items-center gap-0.5" aria-label={`تقييم ${rating} من 5`}>
             {Array.from({ length: 5 }, (_, i) => {
               let fill: "full" | "half" | "empty" = "empty";
@@ -64,7 +64,14 @@ export default function ProductInfo({ product }: ProductInfoProps) {
       )}
       <div className="border-t border-border pt-4">
         <p className="text-sm leading-relaxed text-muted">
-          {product.description.ar}
+          {(() => {
+            // نبذة قصيرة بجانب المنتج — التفاصيل الكاملة في تبويب تفاصيل المنتج
+            const full = (product.description.ar || "").replace(/\s+/g, " ").trim();
+            const limit = 180;
+            if (full.length <= limit) return full;
+            const cut = full.slice(0, limit);
+            return cut.slice(0, Math.max(cut.lastIndexOf(" "), 120)) + "…";
+          })()}
         </p>
       </div>
       {product.seoMetadata.keywords.includes("vitamin c") && (

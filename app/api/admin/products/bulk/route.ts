@@ -92,7 +92,9 @@ function brandNormalize(s: string): string {
 function parseGallery(v: string | undefined): string[] {
   return (v ?? '')
     .split('|')
-    .map((s) => s.trim())
+    // الروابط الملصقة من النت تحمل غالبًا أسطرًا ومسافات خفية بداخلها —
+    // الروابط الصحيحة لا تحتوي فراغات خام أبدًا (%20 المشفّرة لا تُمس)
+    .map((s) => s.replace(/\s+/g, ''))
     .filter(Boolean)
 }
 
@@ -345,9 +347,17 @@ function planRow(ctx: Ctx, row: Row, index: number): PlanRow {
     if (!isBlank(row.stock)) pushDiff('stock', String(dbProduct.stock_quantity ?? '0'), row.stock!)
     if (!isBlank(row.status)) pushDiff('status', String(dbProduct.status ?? ''), normKey(row.status))
     if (!isBlank(row.gallery)) {
-      const current = ((dbProduct.gallery as string[] | null) ?? []).join(' | ')
-      const incoming = parseGallery(row.gallery).join(' | ')
-      if (current !== incoming) {
+      const currentArr = ((dbProduct.gallery as string[] | null) ?? []);
+      const current = currentArr.join(' | ')
+      const incomingArr = parseGallery(row.gallery);
+      const incoming = incomingArr.join(' | ')
+      // حماية صور الإدارة: ملف مرفوع من اللوحة يحمل اسمًا مُصدَرًا بطابع زمني
+      // (/images/products/<key>-<timestamp>.<ext>). لا نسمح لملف استيراد يحمل
+      // روابط قديمة أن يعيد الصور القديمة فوقها.
+      const isVersionedUpload = (u: string) => /\/images\/products\/.+-\d{10,}\.[a-z0-9]{2,4}$/i.test(u);
+      const currentHasVersioned = currentArr.some(isVersionedUpload);
+      const incomingHasVersioned = incomingArr.some(isVersionedUpload);
+      if (current !== incoming && !(currentHasVersioned && !incomingHasVersioned)) {
         changes.push({ field: 'gallery', from: current, to: incoming })
         // remove placeholder entry pushed above
         const idx = changes.findIndex((c) => c.field === 'gallery' && c.to === '')
@@ -506,7 +516,19 @@ export async function POST(request: NextRequest) {
 
   const body = await request.json().catch(() => null)
   const mode = body?.mode
-  const rows: Row[] = Array.isArray(body?.rows) ? body.rows : []
+  // تطبيع مفاتيح الصفوف (دفاع إضافي): أي اسم بديل لعمود الصور يُرد لـ gallery
+  const KEY_ALIASES: Record<string, string> = {
+    gallery: 'gallery', images: 'gallery', image: 'gallery',
+    'الصور': 'gallery', 'صور': 'gallery', 'صورة': 'gallery', 'روابط الصور': 'gallery',
+  }
+  const canonKey = (k: string) => KEY_ALIASES[k.trim().toLowerCase()] ?? KEY_ALIASES[k.trim()] ?? k.trim()
+  const rows: Row[] = Array.isArray(body?.rows)
+    ? (body.rows as Record<string, unknown>[]).map((r) => {
+        const out: Record<string, unknown> = {}
+        for (const [k, v] of Object.entries(r ?? {})) out[canonKey(k)] = v
+        return out as Row
+      })
+    : []
 
   if (!rows.length) {
     return NextResponse.json(

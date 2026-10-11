@@ -137,13 +137,13 @@ export default function Footer() {
       <footer className="relative w-full overflow-hidden bg-[#352347] text-neutral-300">
       <div className="pointer-events-none absolute -start-32 -top-32 h-80 w-80 rounded-full bg-[#7A3E9D]/20 blur-3xl" />
       <div className="pointer-events-none absolute -end-32 bottom-0 h-80 w-80 rounded-full bg-[#D4AF37]/10 blur-3xl" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/40 to-transparent" />
+      <div className="magic-divider pointer-events-none absolute inset-x-0 top-0" aria-hidden="true" />
 
       <div className="relative border-b border-[#D4AF37]/20">
-        <Container className="py-12">
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-5">
+        <Container className="py-6 sm:py-12">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-8 lg:grid-cols-5">
             <div className="sm:col-span-2 lg:col-span-2">
-              <div className="ms-6">
+              <div className="ms-0 sm:ms-6">
                 <Logo variant="header" />
               </div>
               <p className="mt-3 max-w-md text-sm leading-relaxed text-[#FFF7F2]/60 font-montserrat">
@@ -157,7 +157,7 @@ export default function Footer() {
                   return isUnverified ? (
                     <span
                       key={label}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-[#D4AF37]/20 bg-[#7A3E9D]/20 text-[#D4AF37]/40 cursor-not-allowed"
+                      className="min-h-[44px] min-w-[44px] flex h-11 w-11 items-center justify-center rounded-full border border-[#D4AF37]/20 bg-[#7A3E9D]/20 text-[#D4AF37]/40 cursor-not-allowed"
                       aria-label={label}
                     >
                       <Icon size={16} />
@@ -168,7 +168,7 @@ export default function Footer() {
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-[#D4AF37]/20 bg-[#7A3E9D]/20 text-[#D4AF37] transition-all duration-200 ease-out-smooth hover:bg-[#D4AF37] hover:text-[#352347] hover:shadow-md hover:shadow-[#D4AF37]/20"
+                      className="min-h-[44px] min-w-[44px] flex h-11 w-11 items-center justify-center rounded-full border border-[#D4AF37]/20 bg-[#7A3E9D]/20 text-[#D4AF37] transition-all duration-200 ease-out-smooth hover:bg-[#D4AF37] hover:text-[#352347] hover:shadow-md hover:shadow-[#D4AF37]/20"
                       aria-label={label}
                     >
                       <Icon size={16} />
@@ -179,14 +179,14 @@ export default function Footer() {
             </div>
             
             <div>
-              <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-[#D4AF37] font-playfair">
+              <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-[#D4AF37] font-playfair sm:mb-4">
                 <span className="h-1 w-4 rounded-full bg-[#D4AF37]" />
                 {isAr ? "خدمة العملاء" : "Customer Service"}
               </h3>
-              <ul className="space-y-2.5">
+              <ul className="space-y-0 sm:space-y-1">
                 {services.map(({ href, label, labelEn }) => (
                   <li key={href}>
-                    <Link href={href} className="text-sm text-[#FFF7F2]/50 transition-colors duration-200 ease-out-smooth hover:text-[#D4AF37] font-montserrat">
+                    <Link href={href} className="inline-block py-1 min-h-[36px] text-xs text-[#FFF7F2]/50 transition-colors duration-200 ease-out-smooth hover:text-[#D4AF37] font-montserrat sm:py-2 sm:min-h-[44px] sm:text-sm">
                       {isAr ? label : labelEn}
                     </Link>
                   </li>
@@ -194,14 +194,14 @@ export default function Footer() {
               </ul>
             </div>
             <div>
-              <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-[#D4AF37] font-playfair">
+              <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-[#D4AF37] font-playfair sm:mb-4">
                 <span className="h-1 w-4 rounded-full bg-[#D4AF37]" />
                 {isAr ? "السياسات" : "Policies"}
               </h3>
-              <ul className="space-y-2.5">
+              <ul className="space-y-0 sm:space-y-1">
                 {policies.map(({ href, label, labelEn }) => (
                   <li key={href}>
-                    <Link href={href} className="text-sm text-[#FFF7F2]/50 transition-colors duration-200 ease-out-smooth hover:text-[#D4AF37] font-montserrat">
+                    <Link href={href} className="inline-block py-1 min-h-[36px] text-xs text-[#FFF7F2]/50 transition-colors duration-200 ease-out-smooth hover:text-[#D4AF37] font-montserrat sm:py-2 sm:min-h-[44px] sm:text-sm">
                       {isAr ? label : labelEn}
                     </Link>
                   </li>
@@ -209,25 +209,25 @@ export default function Footer() {
               </ul>
             </div>
             <div>
-              <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-[#D4AF37] font-playfair">
+              <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-[#D4AF37] font-playfair sm:mb-4">
                 <span className="h-1 w-4 rounded-full bg-[#D4AF37]" />
                 {isAr ? "معلومات الاتصال" : "Contact Info"}
               </h3>
-              <ul className="space-y-2.5">
-                <li className="flex items-center gap-2 text-sm text-[#FFF7F2]/50 font-montserrat">
+              <ul className="space-y-0.5 sm:space-y-1">
+                <li className="flex items-center gap-2 text-xs text-[#FFF7F2]/50 font-montserrat sm:text-sm">
                   <MapPin size={14} className="shrink-0 text-[#D4AF37]" />
                   <span>{isAr ? "صنعاء، اليمن" : "Sana'a, Yemen"}</span>
                 </li>
-                <li>
-                  <a href="tel:+967780015305" className="flex items-center gap-2 text-sm text-[#FFF7F2]/50 transition-colors duration-200 ease-out-smooth hover:text-[#D4AF37] font-montserrat">
+                <li className="min-w-0">
+                  <a href="tel:+967780015305" dir="ltr" className="flex items-center gap-2 py-1 text-xs text-[#FFF7F2]/50 transition-colors duration-200 ease-out-smooth hover:text-[#D4AF37] font-montserrat sm:py-2 sm:text-sm">
                     <Phone size={14} className="shrink-0 text-[#D4AF37]" />
-                    +967 780 015 305
+                    <span className="min-w-0 break-all">+967 780 015 305</span>
                   </a>
                 </li>
-                <li>
-                  <a href="mailto:info@luminousderma.com" className="flex items-center gap-2 text-sm text-[#FFF7F2]/50 transition-colors duration-200 ease-out-smooth hover:text-[#D4AF37] font-montserrat">
+                <li className="min-w-0">
+                  <a href="mailto:info@luminousderma.com" dir="ltr" className="flex items-center gap-2 py-1 text-xs text-[#FFF7F2]/50 transition-colors duration-200 ease-out-smooth hover:text-[#D4AF37] font-montserrat sm:py-2 sm:text-sm">
                     <Mail size={14} className="shrink-0 text-[#D4AF37]" />
-                    info@luminousderma.com
+                    <span className="min-w-0 break-all">info@luminousderma.com</span>
                   </a>
                 </li>
               </ul>
@@ -244,8 +244,8 @@ export default function Footer() {
           <div className="absolute -right-20 -top-12 h-40 w-40 rounded-full bg-[#F5A6C7]/10 blur-3xl" />
         </div>
 
-        <Container className="relative py-7">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <Container className="relative py-4 sm:py-7">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between sm:gap-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center lg:min-w-0 lg:flex-1">
               <div className="shrink-0">
                 <h3 className="flex items-center gap-2 font-playfair text-sm font-bold tracking-wide text-[#F7D98C]">
@@ -266,12 +266,12 @@ export default function Footer() {
                   placeholder={isAr ? "بريدك الإلكتروني" : "Your email address"}
                   required
                   disabled={subscribed}
-                  className="w-full flex-1 rounded-full border border-[#D4AF37]/30 bg-[#4B2A6F]/40 px-4 py-2.5 text-sm text-[#FFF7F2] outline-none backdrop-blur-sm transition-all duration-200 ease-out-smooth placeholder:text-[#FFF7F2]/35 focus:border-[#F7D98C] focus:shadow-[0_0_14px_-2px_rgba(212,175,55,0.45)] font-montserrat"
+                  className="w-full flex-1 rounded-full border border-[#D4AF37]/30 bg-[#4B2A6F]/40 px-4 py-3 min-h-[44px] text-sm text-[#FFF7F2] outline-none backdrop-blur-sm transition-all duration-200 ease-out-smooth placeholder:text-[#FFF7F2]/35 focus:border-[#F7D98C] focus:shadow-[0_0_14px_-2px_rgba(212,175,55,0.45)] font-montserrat"
                 />
                 <Button
                   type="submit"
                   aria-label={isAr ? "اشتراك" : "Subscribe"}
-                  className="shrink-0 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#F0C75E] px-5 py-2.5 text-sm font-semibold text-[#352347] shadow-[0_0_16px_-2px_rgba(212,175,55,0.55)] hover:from-[#F7D98C] hover:to-[#D4AF37] hover:shadow-[0_0_22px_-2px_rgba(212,175,55,0.7)]"
+                  className="shrink-0 rounded-full bg-gradient-to-r from-[#D4AF37] to-[#F0C75E] px-5 py-3 min-h-[44px] min-w-[44px] text-sm font-semibold text-[#352347] shadow-[0_0_16px_-2px_rgba(212,175,55,0.55)] hover:from-[#F7D98C] hover:to-[#D4AF37] hover:shadow-[0_0_22px_-2px_rgba(212,175,55,0.7)]"
                 >
                   {subscribed ? <Check size={15} /> : <Send size={15} />}
                 </Button>
@@ -306,8 +306,8 @@ export default function Footer() {
         </Container>
       </div>
 
-      <Container className="relative py-8">
-        <div className="flex flex-col items-center justify-between gap-3 text-center text-sm text-[#FFF7F2]/35 sm:flex-row sm:text-left font-montserrat">
+      <Container className="relative py-4 sm:py-8">
+        <div className="flex flex-col items-center justify-between gap-2 text-center text-xs text-[#FFF7F2]/35 sm:flex-row sm:gap-3 sm:text-start sm:text-sm font-montserrat">
           <p>
             &copy; {new Date().getFullYear()} Luminous Derma.{" "}
             {isAr ? "جميع الحقوق محفوظة." : "All rights reserved."}

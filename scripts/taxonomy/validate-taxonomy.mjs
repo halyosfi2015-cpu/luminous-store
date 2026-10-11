@@ -119,7 +119,7 @@ for (const n of nodes) {
 
 /* ────────────────────────────── 2. Mapping checks ─────────────────────────── */
 const mappingSrc = readFileSync(join(root, "src/lib/taxonomy/product-mappings.ts"), "utf8");
-const mappedLines = [...mappingSrc.matchAll(/\n(\s*)"(yq-\d+)":\s*\{ productId:/g)].map((m) => m[2]);
+  const mappedLines = [...mappingSrc.matchAll(/\n(\s*)"((?:yq|hl|sm)-\d+)":\s*\{ productId:/g)].map((m) => m[2]);
 const mappedIds = new Set(mappedLines);
 
 const duplicateMappingIds = mappedLines.filter((id, i) => mappedLines.indexOf(id) !== i);

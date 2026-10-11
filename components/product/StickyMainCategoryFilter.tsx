@@ -47,7 +47,7 @@ export default function StickyMainCategoryFilter({
               aria-current={isActive ? "page" : undefined}
             >
               {isAr ? cat.nameAr : cat.nameEn}
-              <span className="text-[8px] font-bold">
+                <span className="text-[10px] font-bold">
                 {cat.productCount ?? 0}
               </span>
             </Link>

@@ -38,7 +38,7 @@ export default async function ProductsPage() {
         <div className="mt-6">
           <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">كل المنتجات</h1>
           <p className="mt-1 text-sm text-muted">تصفحي تشكيلتنا الكاملة من العناية بالبشرة والجمال</p>
-          <p className="mt-1 text-xs text-muted/70">{catalogProducts.length} منتج</p>
+          <p className="mt-1 text-[13px] text-muted">{catalogProducts.length} منتج</p>
         </div>
 
         <div className="mt-8 w-full">

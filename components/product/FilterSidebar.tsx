@@ -8,6 +8,8 @@ type FilterSidebarProps = {
   filters: FilterState;
   onChange: (filters: FilterState) => void;
   products?: ProductSummary[];
+  /** Louz-style subtype facet options with live counts (computed by parent). */
+  subtypeFacets?: { slug: string; labelAr: string; count: number }[];
 };
 
 export const OTHER_BRAND = "__other__";
@@ -43,6 +45,8 @@ const skinConcernLabels: Record<SkinConcern, string> = {
   acne: "حبوب الشباب", dryness: "الجفاف", pigmentation: "التصبغات", aging: "الشيخوخة",
   redness: "الاحمرار", large_pores: "المسام الواسعة", uneven_texture: "الملمس غير المتجانس",
   dark_circles: "الهالات السوداء", oiliness: "اللمعة الزائدة", sensitivity: "الحساسية",
+  rosacea: "الوردية", eczema: "الأكزيما", psoriasis: "الصدفية", vitiligo: "البهاق",
+  burns_scars: "الحروق والندبات", tired_skin: "البشرة المرهقة", stretch_marks: "علامات التمدد",
 };
 
 function toggleArray<T>(arr: T[], item: T): T[] {
@@ -91,7 +95,7 @@ function Checkbox({
   onChange: () => void;
 }) {
   return (
-    <label className="group flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-muted-bg">
+    <label className="group flex min-h-[44px] cursor-pointer items-center gap-2 rounded-md px-2 py-2.5 text-sm transition-colors hover:bg-muted-bg">
       <input
         type="checkbox"
         checked={checked}
@@ -99,17 +103,17 @@ function Checkbox({
         aria-label={label}
         className="sr-only"
       />
-      <div className={`flex h-3.5 w-3.5 items-center justify-center rounded border-2 transition-all duration-150 group-focus-within:ring-2 group-focus-within:ring-primary/30 ${
+      <div className={`flex h-5 w-5 items-center justify-center rounded-md border-2 transition-all duration-150 group-focus-within:ring-2 group-focus-within:ring-primary/30 ${
         checked ? "bg-primary border-primary" : "border-border-strong group-hover:border-primary/50"
       }`}>
-        {checked && <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>}
+        {checked && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>}
       </div>
-      <span className="truncate text-xs text-muted">{label}</span>
+      <span className="truncate text-sm text-muted">{label}</span>
     </label>
   );
 }
 
-export default function FilterSidebar({ filters, onChange, products = [] }: FilterSidebarProps) {
+export default function FilterSidebar({ filters, onChange, products = [], subtypeFacets = [] }: FilterSidebarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const dynamicBrands = useMemo(() => getMainBrands(products), [products]);
@@ -135,7 +139,8 @@ export default function FilterSidebar({ filters, onChange, products = [] }: Filt
   };
 
   const hasActiveFilters = filters.brands.length > 0 || filters.skinTypes.length > 0 ||
-    filters.skinConcerns.length > 0 || filters.priceRanges.length > 0 || filters.ratings.length > 0;
+    filters.skinConcerns.length > 0 || filters.priceRanges.length > 0 || filters.ratings.length > 0 ||
+    filters.productTypes.length > 0;
 
   const filterContent = (
     <div className="flex flex-col gap-6">
@@ -147,7 +152,7 @@ export default function FilterSidebar({ filters, onChange, products = [] }: Filt
         {hasActiveFilters && (
           <button
             type="button"
-            onClick={() => onChange({ brands: [], skinTypes: [], skinConcerns: [], priceRanges: [], ratings: [] })}
+            onClick={() => onChange({ brands: [], skinTypes: [], skinConcerns: [], priceRanges: [], ratings: [], productTypes: [] })}
             className="flex items-center gap-1 text-xs text-muted hover:text-primary transition-colors"
           >
             <RotateCcw size={12} />
@@ -181,6 +186,20 @@ export default function FilterSidebar({ filters, onChange, products = [] }: Filt
         ))}
       </FilterGroup>
 
+      <FilterGroup label="نوع المنتج">
+        {subtypeFacets.map((f) => (
+          <Checkbox
+            key={f.slug}
+            checked={filters.productTypes.includes(f.slug)}
+            label={`${f.labelAr} (${f.count})`}
+            onChange={() => update({ productTypes: toggleArray(filters.productTypes, f.slug) })}
+          />
+        ))}
+        {subtypeFacets.length === 0 && (
+          <p className="px-2 py-1.5 text-xs text-muted">لا توجد أنواع فرعية</p>
+        )}
+      </FilterGroup>
+
       <FilterGroup label="مشاكل البشرة">
         {skinConcernOptions.map((concern) => (
           <Checkbox
@@ -208,12 +227,12 @@ export default function FilterSidebar({ filters, onChange, products = [] }: Filt
           <label
             key={stars}
             onClick={() => update({ ratings: toggleArray(filters.ratings, stars) })}
-            className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 transition-colors hover:bg-muted-bg group"
+            className="flex min-h-[44px] cursor-pointer items-center gap-2 rounded-md px-2 py-2.5 text-sm transition-colors hover:bg-muted-bg group"
           >
-            <div className={`flex h-3.5 w-3.5 items-center justify-center rounded border-2 transition-all duration-150 ${
+            <div className={`flex h-5 w-5 items-center justify-center rounded-md border-2 transition-all duration-150 ${
               filters.ratings.includes(stars) ? "bg-primary border-primary" : "border-border-strong group-hover:border-primary/50"
             }`}>
-              {filters.ratings.includes(stars) && <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>}
+              {filters.ratings.includes(stars) && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>}
             </div>
             <div className="flex items-center gap-0.5">
               {Array.from({ length: stars }, (_, i) => (
@@ -232,13 +251,13 @@ export default function FilterSidebar({ filters, onChange, products = [] }: Filt
       <button
         type="button"
         onClick={() => setMobileOpen(true)}
-        className="flex items-center gap-2 rounded-button border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground shadow-card transition-all duration-200 hover:shadow-card-hover lg:hidden"
+            className="flex min-h-[44px] w-full items-center justify-center gap-2 rounded-button border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground shadow-card transition-all duration-200 hover:shadow-card-hover lg:hidden sticky top-2 z-20"
       >
         <Filter size={16} />
         الفلترز
         {hasActiveFilters && (
           <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
-            {filters.brands.length + filters.skinTypes.length + filters.skinConcerns.length + filters.priceRanges.length + filters.ratings.length}
+            {filters.brands.length + filters.skinTypes.length + filters.skinConcerns.length + filters.priceRanges.length + filters.ratings.length + filters.productTypes.length}
           </span>
         )}
       </button>
@@ -255,7 +274,7 @@ export default function FilterSidebar({ filters, onChange, products = [] }: Filt
             className="absolute inset-0 bg-black/80 backdrop-blur-sm animate-fade-in"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="absolute inset-y-0 end-0 w-[90%] max-w-[480px] bg-card p-6 shadow-2xl rounded-2xl animate-slide-in-right">
+          <div className="absolute inset-y-0 end-0 w-[90%] max-w-[min(480px,calc(100vw-2rem))] bg-card p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-2xl rounded-2xl overflow-y-auto animate-slide-in-right">
             <div className="mb-6 flex items-center justify-between">
               <h3 className="text-xl font-bold text-foreground">الفلترز</h3>
               <button

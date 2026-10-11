@@ -39,7 +39,7 @@ export default function StickySubcategoryFilter({
               aria-current={isActive ? "page" : undefined}
             >
               {isAr ? sub.nameAr : sub.name}
-              <span className="text-[8px] font-bold">
+                <span className="text-[10px] font-bold">
                 {getTaxonomyProductCount(sub.slug)}
               </span>
             </Link>

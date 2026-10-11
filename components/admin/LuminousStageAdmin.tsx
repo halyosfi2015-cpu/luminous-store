@@ -186,8 +186,21 @@ export default function LuminousStageAdmin() {
       return next;
     });
 
+  const persistSlides = (slides: StageSlideConfig[]) => {
+    fetch("/api/admin/content/luminous-stage", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slides }),
+    }).catch(() => {});
+  };
+
+  // Delete persists immediately so a removed slide never reappears.
   const removeSlide = (id: string) =>
-    setConfigs((prev) => prev.filter((c) => c.id !== id));
+    setConfigs((prev) => {
+      const next = prev.filter((c) => c.id !== id);
+      persistSlides(next);
+      return next;
+    });
 
   // ── Reorder: drag & drop + move to first/last ──────────────────────────
   const [dragId, setDragId] = useState<string | null>(null);
@@ -198,6 +211,7 @@ export default function LuminousStageAdmin() {
       const next = [...prev];
       const [item] = next.splice(fromIdx, 1);
       next.splice(toIdx, 0, item);
+      persistSlides(next);
       return next;
     });
 
@@ -208,6 +222,7 @@ export default function LuminousStageAdmin() {
       const [item] = next.splice(idx, 1);
       if (end === "first") next.unshift(item);
       else next.push(item);
+      persistSlides(next);
       return next;
     });
 

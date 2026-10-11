@@ -110,6 +110,73 @@ export default function OrderConfirmationPage() {
 
   useEffect(() => {
     async function fetchOrder() {
+      // 1) Instant path: snapshot saved at checkout (rich bundle detail, works
+      //    for guests with no account lookup).
+      try {
+        const raw = sessionStorage.getItem("ld-last-order");
+        if (raw) {
+          const snap = JSON.parse(raw) as {
+            orderNumber?: string; phone?: string; items?: CartItem[];
+            subtotal?: number; shipping?: number; total?: number;
+            address?: ShippingAddress; source?: string; createdAt?: string;
+          };
+          if (snap?.orderNumber === id && Array.isArray(snap?.items)) {
+            setOrder({
+              id: snap.orderNumber!,
+              items: snap.items!,
+              subtotal: Number(snap.subtotal) || 0,
+              shipping: Number(snap.shipping) || 0,
+              total: Number(snap.total) || 0,
+              address: snap.address!,
+              status: "pending",
+              createdAt: snap.createdAt ?? new Date().toISOString(),
+              source: snap.source,
+            });
+            setLoading(false);
+            return;
+          }
+        }
+      } catch { /* fall through to server lookup */ }
+
+      // 2) Refresh/share path: server lookup by order number + phone (no login).
+      try {
+        const phone = new URLSearchParams(window.location.search).get("phone") ?? "";
+        if (phone) {
+          const res = await fetch("/api/orders/track", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ orderNumber: id, phone }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (res.ok && data?.success && data?.order) {
+            const o = data.order as { order_number: string; status: string; subtotal: number; shipping_fee: number; total: number; created_at: string };
+            const items: CartItem[] = ((data.items ?? []) as OrderItemRow[]).map((it) => ({
+              productId: "",
+              slug: "",
+              name: it.product_name_ar,
+              nameAr: it.product_name_ar,
+              price: it.unit_price,
+              image: "",
+              quantity: it.quantity,
+              inStock: true,
+            }));
+            setOrder({
+              id: o.order_number,
+              items,
+              subtotal: o.subtotal,
+              shipping: o.shipping_fee,
+              total: o.total,
+              address: { fullName: "", phone, city: "", district: "", street: "", building: "", notes: "" },
+              status: o.status as Order["status"],
+              createdAt: o.created_at,
+            });
+            setLoading(false);
+            return;
+          }
+        }
+      } catch { /* fall through to legacy lookup */ }
+
+      // 3) Legacy logged-in lookup.
       const supabase = createBrowserSupabaseClient();
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) { setLoading(false); return; }
@@ -332,12 +399,12 @@ export default function OrderConfirmationPage() {
                <MessageSquare size={18} />
                إكمال الطلب عبر واتساب
              </a>
-             <Link href="/account/orders">
-               <Button variant="outline" className="gap-2 w-full">
-                 <Package size={16} />
-                 تتبع الطلب
-               </Button>
-             </Link>
+              <Link href="/track-order">
+                <Button variant="outline" className="gap-2 w-full">
+                  <Package size={16} />
+                  تتبع الطلب
+                </Button>
+              </Link>
              <Link href="/">
                <Button className="w-full">متابعة التسوق</Button>
              </Link>

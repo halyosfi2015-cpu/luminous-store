@@ -149,6 +149,94 @@ function CategoriesPanel({ onClose }: { onClose: () => void }) {
 }
 
 /* ================================================================================================ */
+/* WELLNESS PANEL — our own taxonomy grouping: subcategory groups with links, */
+/* driven live by the category tree with a static fallback. */
+/* ================================================================================================ */
+const WELLNESS_FALLBACK: { slug: string; labelAr: string; labelEn: string; children: { slug: string; labelAr: string; labelEn: string }[] }[] = [
+  {
+    slug: "vitamins-supplements", labelAr: "فيتامينات ومكملات", labelEn: "Vitamins & Supplements",
+    children: [
+      { slug: "vitamins", labelAr: "فيتامينات", labelEn: "Vitamins" },
+      { slug: "collagen", labelAr: "كولاجين", labelEn: "Collagen" },
+      { slug: "immunity", labelAr: "المناعة", labelEn: "Immunity" },
+      { slug: "hair-nails", labelAr: "الشعر والأظافر", labelEn: "Hair & Nails" },
+      { slug: "minerals", labelAr: "معادن", labelEn: "Minerals" },
+    ],
+  },
+  {
+    slug: "supplements", labelAr: "المكملات الغذائية", labelEn: "Dietary Supplements",
+    children: [
+      { slug: "supplements", labelAr: "تسوق الكل", labelEn: "Shop All" },
+      { slug: "kids-supplements", labelAr: "مكملات الأطفال", labelEn: "Kids Supplements" },
+      { slug: "women-health", labelAr: "صحة المرأة", labelEn: "Women's Health" },
+    ],
+  },
+];
+
+function WellnessPanel({ onClose }: { onClose: () => void }) {
+  const { lang } = useLang();
+  const isAr = lang === "ar";
+
+  const [tree, setTree] = useState<NavCategory[]>(defaultTree);
+  useEffect(() => {
+    fetchCategoryTreeFromAPI().then(setTree);
+  }, []);
+
+  const hwNode = tree.find((s) => s.slug === "health-wellness") ?? null;
+  const groups = (hwNode?.children && hwNode.children.length > 0
+    ? hwNode.children.map((c) => ({
+        slug: c.slug,
+        labelAr: c.labelAr,
+        labelEn: c.labelEn,
+        children: (c.children ?? []).map((g) => ({ slug: g.slug, labelAr: g.labelAr, labelEn: g.labelEn })),
+      }))
+    : WELLNESS_FALLBACK
+  ).filter((g) => g.slug !== "future-health-categories");
+
+  const label = (ar: string, en: string) => (isAr ? ar : en);
+
+  return (
+    <div>
+      <Link
+        href="/categories/health-wellness"
+        onClick={onClose}
+        className="mb-2 flex items-center justify-between rounded-xl bg-primary px-3.5 py-2.5 text-sm font-bold text-white transition-all hover:bg-primary-dark"
+      >
+        {isAr ? "كل الصحة والعافية" : "All Health & Wellness"}
+        <ChevronLeft size={14} strokeWidth={2.5} className={isAr ? "" : "rotate-180"} />
+      </Link>
+      <div className="max-h-96 space-y-3 overflow-y-auto p-1">
+        {groups.map((g) => (
+          <div key={g.slug}>
+            <Link
+              href={`/categories/${g.slug}`}
+              onClick={onClose}
+              className="mb-1 block px-2 text-[11px] font-extrabold uppercase tracking-wide text-primary hover:underline"
+            >
+              {label(g.labelAr, g.labelEn)}
+            </Link>
+            {g.children.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 px-1">
+                {g.children.map((leaf) => (
+                  <Link
+                    key={leaf.slug}
+                    href={`/categories/${leaf.slug}`}
+                    onClick={onClose}
+                    className="rounded-full border border-border bg-muted-bg px-3 py-1.5 text-xs font-semibold text-foreground transition-all hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
+                  >
+                    {label(leaf.labelAr, leaf.labelEn)}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ================================================================================================ */
 /* WRAPPER — narrow anchored flyout panel positioned right below the active nav trigger              */
 /* ================================================================================================ */
 interface ModernMegaMenuProps {

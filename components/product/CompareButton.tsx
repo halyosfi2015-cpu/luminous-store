@@ -30,7 +30,7 @@ export default function CompareButton({
         type="button"
         aria-label={active ? "إزالة من المقارنة" : "أضف إلى المقارنة"}
         onClick={handleClick}
-        className={`flex h-8 w-8 items-center justify-center rounded-full transition-all duration-200 active:scale-90 ${className} ${
+        className={`flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-full transition-all duration-200 active:scale-90 ${className} ${
           active
             ? "bg-primary/10 text-primary shadow-card"
             : "bg-card/80 text-muted backdrop-blur-sm hover:bg-primary/5 hover:text-primary shadow-card"

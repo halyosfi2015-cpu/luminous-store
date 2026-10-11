@@ -54,7 +54,7 @@ export default function Doctors() {
                 />
                 {expert.isVerified && (
                   <span className="absolute bottom-2 end-2 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-accent text-white">
-                    <BadgeCheck size={11} />
+                    <BadgeCheck size={13} />
                   </span>
                 )}
               </div>

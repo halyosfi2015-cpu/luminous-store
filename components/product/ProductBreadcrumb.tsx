@@ -14,23 +14,23 @@ export default function ProductBreadcrumb({
 }: ProductBreadcrumbProps) {
   return (
     <nav aria-label="breadcrumb" className="pt-4">
-      <ol className="flex items-center gap-1.5 text-sm text-muted">
-        <li>
+      <ol className="flex max-w-full items-center gap-1.5 overflow-hidden text-xs text-muted sm:text-sm">
+        <li className="shrink-0 whitespace-nowrap">
           <Link href="/" className="transition-colors hover:text-primary">
             الرئيسية
           </Link>
         </li>
-        <ChevronLeft size={14} className="text-border-strong rtl:rotate-180" />
-        <li>
+        <ChevronLeft size={14} className="shrink-0 text-border-strong rtl:rotate-180" />
+        <li className="shrink-0 whitespace-nowrap">
           <Link
             href={`/categories/${categorySlug}`}
-            className="transition-colors hover:text-primary"
+            className="block max-w-[35vw] truncate transition-colors hover:text-primary"
           >
             {category}
           </Link>
         </li>
-        <ChevronLeft size={14} className="text-border-strong rtl:rotate-180" />
-        <li className="truncate text-foreground font-medium max-w-[200px] sm:max-w-md">
+        <ChevronLeft size={14} className="shrink-0 text-border-strong rtl:rotate-180" />
+        <li className="min-w-0 flex-1 truncate text-foreground font-medium">
           {productName}
         </li>
       </ol>

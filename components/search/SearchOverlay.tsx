@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef, useMemo, useDeferredValue } from "react";
 import { Search, X, TrendingUp, Clock, PackageSearch, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useSearch } from "@/context/SearchContext";
@@ -57,16 +57,36 @@ type Suggestion = {
   score: number;
 };
 
-/** Score a product against a query. Higher = better match. */
-function scoreProduct(p: ProductSummary, q: string): number {
-  const nq = normalizeAr(q);
+/** Pre-normalized product fields — built ONCE per catalog so typing never
+    re-normalizes thousands of strings (the cause of "Page Unresponsive"). */
+type IndexedProduct = {
+  p: ProductSummary;
+  nameAr: string;
+  nameEn: string;
+  brandAr: string;
+  brandEn: string;
+  catAr: string;
+  catEn: string;
+  tags: string[];
+};
+
+function buildIndex(products: ProductSummary[]): IndexedProduct[] {
+  return products.map((p) => ({
+    p,
+    nameAr: normalizeAr(p.name.ar),
+    nameEn: p.name.en.toLowerCase(),
+    brandAr: normalizeAr(p.brandAr ?? p.brand),
+    brandEn: p.brand.toLowerCase(),
+    catAr: normalizeAr(p.categoryAr ?? p.category),
+    catEn: p.category.toLowerCase(),
+    tags: (p.tags ?? []).map((t) => normalizeAr(t)),
+  }));
+}
+
+/** Score a pre-indexed product against a query. Higher = better match. */
+function scoreIndexed(x: IndexedProduct, nq: string, q: string): number {
   if (!nq) return -1;
-  const nameAr = normalizeAr(p.name.ar);
-  const nameEn = p.name.en.toLowerCase();
-  const brandAr = normalizeAr(p.brandAr ?? p.brand);
-  const brandEn = p.brand.toLowerCase();
-  const catAr = normalizeAr(p.categoryAr ?? p.category);
-  const catEn = p.category.toLowerCase();
+  const { nameAr, nameEn, brandAr, brandEn, catAr, catEn, tags } = x;
   let score = -1;
 
   // Exact / prefix matches rank highest
@@ -82,22 +102,33 @@ function scoreProduct(p: ProductSummary, q: string): number {
   if (catAr.includes(nq) || catEn.includes(q)) score = Math.max(score, 350);
 
   // Keyword matches (e.g. "كولاجين")
-  if (p.tags?.some((t) => normalizeAr(t).includes(nq))) score = Math.max(score, 300);
+  if (tags.some((t) => t.includes(nq))) score = Math.max(score, 300);
 
   return score;
 }
 
 function SearchOverlayInner({ onClose }: { onClose: () => void }) {
   const [query, setQuery] = useState("");
+  // Defer heavy filtering so typing never janks the keyboard on low-end phones
+  const deferredQuery = useDeferredValue(query);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [recentSearches, setRecentSearches] = useState<string[]>(() => loadRecent());
   const [taxonomyCategories, setTaxonomyCategories] = useState<TaxonomyCategoryCard[]>(() => getTaxonomyCategoryCards());
   const [catalogProducts, setCatalogProducts] = useState<ProductSummary[]>(productSummaries);
+  const searchIndex = useMemo(() => buildIndex(catalogProducts), [catalogProducts]);
   const inputRef = useRef<HTMLInputElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => { inputRef.current?.focus(); }, []);
+  useEffect(() => {
+    // Retry focus: mobile browsers often ignore the first programmatic
+    // focus, leaving the keyboard closed ("stuck").
+    const raf = requestAnimationFrame(() => inputRef.current?.focus({ preventScroll: true }));
+    const retry = setTimeout(() => {
+      if (document.activeElement !== inputRef.current) inputRef.current?.focus({ preventScroll: true });
+    }, 350);
+    return () => { cancelAnimationFrame(raf); clearTimeout(retry); };
+  }, []);
 
   useEffect(() => {
     fetch("/api/content/products?limit=1000", { cache: "no-store" })
@@ -132,23 +163,24 @@ function SearchOverlayInner({ onClose }: { onClose: () => void }) {
   }, [onClose]);
 
   const suggestions = useMemo<Suggestion[]>(() => {
-    const q = query.trim();
-    if (q.length < 1) return [];
+    const rawQ = deferredQuery.trim();
+    if (rawQ.length < 1) return [];
+    const nq = normalizeAr(rawQ);
+    const q = rawQ.toLowerCase();
 
     const productHits: Suggestion[] = [];
     const brandMap = new Map<string, number>();
 
-    for (const p of catalogProducts) {
-      const score = scoreProduct(p, q);
+    for (const x of searchIndex) {
+      const score = scoreIndexed(x, nq, q);
       if (score < 0) continue;
-      productHits.push({ type: "product", product: p, score });
-      if (p.brand && !brandMap.has(p.brand)) brandMap.set(p.brand, Math.max(0, score - 200));
+      productHits.push({ type: "product", product: x.p, score });
+      if (x.p.brand && !brandMap.has(x.p.brand)) brandMap.set(x.p.brand, Math.max(0, score - 200));
     }
 
     const brandHits: Suggestion[] = [...brandMap.entries()]
       .map(([brand, score]) => ({ type: "brand" as const, brand, score }));
 
-    const nq = normalizeAr(q);
     const catHits: Suggestion[] = taxonomyCategories
       .map((cat) => ({
         cat,
@@ -163,18 +195,19 @@ function SearchOverlayInner({ onClose }: { onClose: () => void }) {
     return [...brandHits, ...catHits, ...productHits]
       .sort((a, b) => b.score - a.score)
       .slice(0, 8);
-  }, [query, taxonomyCategories, catalogProducts]);
+  }, [deferredQuery, taxonomyCategories, searchIndex]);
 
   const results = useMemo(() => {
-    const q = query.trim();
-    if (!q) return [];
-        return catalogProducts
-
-      .map((p) => ({ p, score: scoreProduct(p, q) }))
+    const rawQ = deferredQuery.trim();
+    if (!rawQ) return [];
+    const nq = normalizeAr(rawQ);
+    const q = rawQ.toLowerCase();
+    return searchIndex
+      .map((x) => ({ p: x.p, score: scoreIndexed(x, nq, q) }))
       .filter((x) => x.score >= 0)
       .sort((a, b) => b.score - a.score)
       .map((x) => x.p);
-  }, [query, catalogProducts]);
+  }, [deferredQuery, searchIndex]);
 
   const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -243,15 +276,17 @@ function SearchOverlayInner({ onClose }: { onClose: () => void }) {
       role="dialog"
       aria-modal="true"
       aria-label="البحث عن المنتجات"
-      className="fixed inset-0 z-50 flex flex-col bg-black/40 backdrop-blur-sm"
+      className="fixed inset-0 z-[60] flex flex-col bg-black/40 backdrop-blur-sm"
       onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}
     >
-      <div className="w-full bg-card shadow-elevated" dir="rtl">
+      <div className="w-full max-h-[100dvh] overflow-y-auto overscroll-contain bg-card shadow-elevated" dir="rtl">
         <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-4 sm:px-6">
           <div className="relative flex-1">
             <input
               ref={inputRef}
               type="search"
+              inputMode="search"
+              enterKeyHint="search"
               value={query}
               onChange={handleQueryChange}
               onKeyDown={handleKeyDown}
@@ -260,7 +295,7 @@ function SearchOverlayInner({ onClose }: { onClose: () => void }) {
               aria-controls="search-suggestions"
               aria-activedescendant={activeIndex >= 0 ? `search-suggestion-${activeIndex}` : undefined}
               autoComplete="off"
-              className="h-12 w-full rounded-button border border-border bg-muted-bg ps-5 pe-12 text-sm text-foreground outline-none transition-colors placeholder:text-muted focus:border-primary-light focus:bg-card"
+              className="h-12 w-full rounded-button border border-border bg-muted-bg ps-5 pe-12 text-base text-foreground outline-none transition-colors placeholder:text-muted focus:border-primary-light focus:bg-card sm:text-sm"
             />
             <Search size={18} className="pointer-events-none absolute end-4 top-1/2 -translate-y-1/2 text-muted" />
           </div>
@@ -268,7 +303,7 @@ function SearchOverlayInner({ onClose }: { onClose: () => void }) {
             type="button"
             onClick={onClose}
             aria-label="إغلاق البحث"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-muted-bg hover:text-foreground"
+            className="flex h-11 w-11 min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-muted-bg hover:text-foreground"
           >
             <X size={22} />
           </button>
@@ -323,7 +358,7 @@ function SearchOverlayInner({ onClose }: { onClose: () => void }) {
                           <p className="truncate text-sm font-medium text-foreground">{s.product.name.ar}</p>
                           <p className="text-xs text-muted">{s.product.brand}</p>
                         </div>
-                        <CommercePrice product={s.product} className="text-xs font-semibold text-primary" originalClassName="hidden" />
+                        <CommercePrice product={s.product} className="shrink-0 text-xs font-semibold text-primary" originalClassName="hidden" />
                       </>
                     ) : s.type === "brand" ? (
                       <>
@@ -385,7 +420,7 @@ function SearchOverlayInner({ onClose }: { onClose: () => void }) {
                         key={term}
                         type="button"
                         onClick={() => handleSelect(term)}
-                        className="rounded-full border border-border px-3 py-1.5 text-sm text-muted transition-colors hover:border-primary/30 hover:text-foreground"
+                        className="rounded-full border border-border px-4 py-2.5 min-h-[44px] text-sm text-muted transition-colors hover:border-primary/30 hover:text-foreground"
                       >
                         {term}
                       </button>
@@ -405,7 +440,7 @@ function SearchOverlayInner({ onClose }: { onClose: () => void }) {
                       key={term}
                       type="button"
                       onClick={() => handleSelect(term)}
-                      className="rounded-full border border-primary/20 bg-primary/5 px-3 py-1.5 text-sm text-primary transition-colors hover:bg-primary/10"
+                      className="rounded-full border border-primary/20 bg-primary/5 px-4 py-2.5 min-h-[44px] text-sm text-primary transition-colors hover:bg-primary/10"
                     >
                       {term}
                     </button>

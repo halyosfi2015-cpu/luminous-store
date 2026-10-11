@@ -9,7 +9,16 @@
 
 export type SkinType = "dry" | "oily" | "combination" | "sensitive" | "normal" | "all";
 
-export type SkinConcern = "acne" | "dryness" | "pigmentation" | "aging" | "redness" | "large_pores" | "uneven_texture" | "dark_circles" | "oiliness" | "sensitivity";
+export type SkinConcern = "acne" | "dryness" | "pigmentation" | "aging" | "redness" |
+"large_pores" | "uneven_texture" | "dark_circles" | "oiliness" | "sensitivity" |
+"rosacea" | "eczema" | "psoriasis" | "vitiligo" | "burns_scars" | "tired_skin" | "stretch_marks";
+
+/** Hair problems (louz-style concern navigation for haircare). */
+export type HairConcern = "dry_hair" | "oily_scalp" | "dandruff" | "hair_loss" | "split_ends" |
+"dyed_hair" | "curly_hair" | "sensitive_scalp" | "frizzy_hair" | "dull_hair";
+
+/** Any problem key usable in /problems/[concern] (skin + hair). */
+export type ProblemConcern = SkinConcern | HairConcern;
 
 export type SortOption = "popular" | "newest" | "price_asc" | "price_desc" | "rating" | "name_asc" | "smart";
 
@@ -19,6 +28,8 @@ export type FilterState = {
   skinConcerns: SkinConcern[];
   priceRanges: string[];
   ratings: number[];
+  /** Product-type facet (taxonomy leaf slugs, e.g. collagen, sleep-aids). */
+  productTypes: string[];
 };
 
 export type ProductReview = {

@@ -433,6 +433,63 @@
   will-change: transform;
 }
 
+/* ── Luminous visual-madness layer (premium beauty motion) ── */
+@keyframes luminous-shine {
+  0% { transform: translateX(-130%) skewX(-18deg); }
+  100% { transform: translateX(230%) skewX(-18deg); }
+}
+.luminous-shine::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+  transform: translateX(-130%) skewX(-18deg);
+  opacity: 0;
+  pointer-events: none;
+}
+.group:hover .luminous-shine::after,
+.luminous-shine.luminous-shine-always::after {
+  opacity: 1;
+  animation: luminous-shine 1.1s ease forwards;
+}
+
+@keyframes luminous-glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0.45), 0 8px 24px -8px rgba(75,42,111,0.35); }
+  50% { box-shadow: 0 0 0 6px rgba(212,175,55,0), 0 8px 28px -6px rgba(75,42,111,0.5); }
+}
+.luminous-glow-pulse {
+  animation: luminous-glow-pulse 2.6s ease-in-out infinite;
+}
+
+@keyframes luminous-ring-spin {
+  to { transform: rotate(360deg); }
+}
+.luminous-ring-conic {
+  background: conic-gradient(from var(--ring-angle, 0deg), #4B2A6F, #d4af37, #7A3E9D, #F7D98C, #4B2A6F);
+}
+.luminous-ring-spin {
+  animation: luminous-ring-spin 9s linear infinite;
+}
+
+@keyframes luminous-float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.luminous-float-slow {
+  animation: luminous-float-slow 5s ease-in-out infinite;
+}
+
+@keyframes luminous-ribbon {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.luminous-ribbon {
+  background-size: 200% 100%;
+  animation: luminous-ribbon 3s linear infinite;
+}
+
 .category-orbit {
   isolation: isolate;
   animation: categoryOrbitFloat 5.8s ease-in-out var(--category-delay, 0ms) infinite;
@@ -607,6 +664,16 @@ html {
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
+}
+
+/* Silk image reveal — global blur-up for every product photo */
+@keyframes silk-reveal {
+  from { opacity: 0; filter: blur(8px); }
+  to { opacity: 1; filter: blur(0); }
+}
+.animate-silkreveal { animation: silk-reveal 0.7s ease-out both; }
+@media (prefers-reduced-motion: reduce) {
+  .animate-silkreveal { animation: none; }
 }
 
 @keyframes slideDown {
@@ -912,4 +979,573 @@ html {
 }
 @media (prefers-reduced-motion: reduce) {
   .luminous-blob { animation: none; }
+}
+
+/* ============ Mobile-only fluid scale (phones <640px — desktop untouched) ============
+   Headings shrink/grow smoothly with screen width instead of fixed steps,
+   and section rhythm stays consistent. Scoped to small screens only. */
+@media (max-width: 639.98px) {
+  /* Headings fluid scale — all pages (phone only) */
+  body .text-4xl { font-size: clamp(1.4rem, 6.5vw, 1.8rem); line-height: 1.5; }
+  body .text-3xl { font-size: clamp(1.2rem, 5.2vw, 1.5rem); line-height: 1.6; }
+  main .text-2xl { font-size: clamp(1.05rem, 4.4vw, 1.2rem); line-height: 1.7; }
+  main section[class*="py-16"], main section[class*="py-12"], main section[class*="py-20"] {
+    padding-top: clamp(1.25rem, 5vw, 1.75rem);
+    padding-bottom: clamp(1.25rem, 5vw, 1.75rem);
+  }
+  /* Home screen only, listed sections only: hide outer explanatory subtitles on phones */
+  .home-screen .hide-sub-m .section-subtitle { display: none; }
+  /* Home screen only: one consistent section rhythm on phones */
+  .home-screen section[class*="py-"] {
+    padding-top: clamp(1.25rem, 5vw, 1.75rem);
+    padding-bottom: clamp(1.25rem, 5vw, 1.75rem);
+  }
+  .home-screen .section-head { margin-bottom: clamp(1rem, 4vw, 1.4rem); }
+  /* Phone readability floor: visible text never smaller than 11px (all pages) */
+  body .text-\[7px\], body .text-\[8px\], body .text-\[9px\], body .text-\[10px\], body .text-\[10\.5px\] { font-size: 11px; }
+  /* Shimmer sweep for skeletons (premium loading) */
+  @keyframes shimmerSweep {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+  }
+  .animate-shimmer { position: relative; overflow: hidden; }
+  .animate-shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.65) 50%, transparent 80%);
+    animation: shimmerSweep 1.6s ease-in-out infinite;
+  }
+  /* Stage template headline: smaller + balanced on phones (overrides inline size) */
+  .stage-h2 { font-size: clamp(15px, 4.2vw, 18px) !important; line-height: 1.7 !important; }
+  /* Stage hero on phones: scaled-down type to match the smaller portrait —
+     one harmonious slide (girl + headline + sub + CTA). */
+  .luminous-stage .stage-hero-h2 { font-size: clamp(13.5px, 3.9vw, 15.5px); line-height: 1.5; }
+  .luminous-stage p.text-xs { font-size: 11px; line-height: 1.55; }
+  .luminous-stage .stage-hero-cta {
+    font-size: 10px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 13px;
+    padding-right: 13px;
+    gap: 6px;
+  }
+  .luminous-stage .stage-hero-cta svg { width: 12px; height: 12px; }
+  .luminous-stage .stage-hero-squiggle { width: min(58%, 260px); height: 11px; margin-top: 2px; }
+}
+
+/* ============ MAGIC — crazy/lively/magical section system ============
+   One system drives every homepage section: gradient titles, shimmer
+   eyebrows, flowing dividers, twinkling stars, glow cards. All guarded
+   by prefers-reduced-motion. */
+@keyframes magic-twinkle {
+  0%, 100% { opacity: 0.25; transform: scale(0.7) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1.2) rotate(25deg); }
+}
+@keyframes magic-shimmer-x {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+@keyframes magic-float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes magic-spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+/* Shimmer pill eyebrow with a twinkling star */
+.magic-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.8rem;
+  margin-bottom: 0.75rem;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #fff;
+  background: linear-gradient(120deg, var(--primary), var(--secondary), var(--primary));
+  background-size: 200% 100%;
+  animation: magic-shimmer-x 5s linear infinite;
+  box-shadow: 0 4px 16px -4px color-mix(in srgb, var(--primary) 55%, transparent);
+}
+.magic-star {
+  display: inline-block;
+  font-size: 12px;
+  line-height: 1;
+  color: #F7D98C;
+  animation: magic-twinkle 2.2s ease-in-out infinite;
+}
+.magic-star::before { content: "✦"; }
+
+/* Gradient headline that shimmers */
+.magic-title {
+  background: linear-gradient(100deg, var(--primary) 20%, var(--secondary) 45%, var(--accent) 55%, var(--primary) 80%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: magic-shimmer-x 7s linear infinite;
+}
+.magic-title-light {
+  background: linear-gradient(100deg, #fff 20%, #F7D98C 50%, #fff 80%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: magic-shimmer-x 7s linear infinite;
+  filter: drop-shadow(0 2px 12px rgba(247, 217, 140, 0.35));
+}
+
+/* Animated gradient bar next to the title */
+.magic-bar {
+  height: 3px;
+  width: 2.25rem;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--accent), var(--secondary), var(--primary));
+  background-size: 200% 100%;
+  animation: magic-shimmer-x 4s linear infinite;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 60%, transparent);
+  flex-shrink: 0;
+}
+
+/* Flowing luminous divider between sections */
+.magic-divider {
+  height: 2px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, transparent, var(--accent) 20%, var(--secondary) 50%, var(--accent) 80%, transparent);
+  background-size: 200% 100%;
+  animation: magic-shimmer-x 6s linear infinite;
+  opacity: 0.7;
+}
+
+/* Edge fade for horizontal rails */
+.magic-fade-x {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+}
+
+/* Countdown glow boxes */
+.magic-countbox {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25) inset, 0 6px 22px -6px color-mix(in srgb, var(--secondary) 65%, transparent);
+  animation: magic-float-y 3.2s ease-in-out infinite;
+}
+
+/* Product card magical hover glow */
+.magic-card-glow { transition: box-shadow 0.35s ease, transform 0.35s ease; }
+.magic-card-glow:hover {
+  box-shadow: 0 16px 36px -12px color-mix(in srgb, var(--primary) 40%, transparent), 0 0 0 1.5px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+/* Floating decorative orb (absolute, pointer-events safe) */
+.magic-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(60px);
+  pointer-events: none;
+  animation: magic-float-y 7s ease-in-out infinite;
+}
+
+/* Gentle floating (stories icons, badges) */
+.magic-float-y { animation: magic-float-y 3.4s ease-in-out infinite; }
+
+/* Slow-spinning conic halo for circular rails */
+.magic-halo {
+  background: conic-gradient(from 0deg, var(--primary), var(--accent), var(--secondary), #F7D98C, var(--primary));
+  animation: magic-spin-slow 14s linear infinite;
+}
+
+/* ============ MAGIC LEVEL 2 — total madness ============ */
+@keyframes magic-aurora {
+  0%, 100% { background-position: 0% 40%; }
+  50% { background-position: 100% 60%; }
+}
+/* Animated aurora section background */
+.magic-aurora {
+  background: linear-gradient(115deg,
+    color-mix(in srgb, var(--primary) 9%, transparent),
+    color-mix(in srgb, var(--secondary) 10%, transparent),
+    color-mix(in srgb, var(--accent) 12%, transparent),
+    color-mix(in srgb, var(--primary) 9%, transparent));
+  background-size: 280% 280%;
+  animation: magic-aurora 11s ease infinite;
+}
+
+/* Rotating conic border ring (falls back to a static gold ring) */
+@property --magic-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes magic-angle-spin {
+  to { --magic-angle: 360deg; }
+}
+.magic-border-spin { position: relative; }
+.magic-border-spin::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(from var(--magic-angle),
+    var(--primary), var(--accent), #F7D98C, var(--secondary), var(--primary));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: magic-angle-spin 5s linear infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Strong always-visible golden edge for service icons */
+.magic-icon-edge {
+  box-shadow: 0 0 0 2.5px color-mix(in srgb, var(--accent) 80%, transparent), 0 0 20px -2px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+/* Sonar ping ring for icons & avatars */
+@keyframes magic-ping {
+  0% { transform: scale(0.82); opacity: 0.85; }
+  70% { opacity: 0; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+.magic-ping { position: relative; }
+.magic-ping::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 9999px;
+  border: 2px solid var(--accent);
+  opacity: 0;
+  animation: magic-ping 2.6s ease-out infinite;
+  pointer-events: none;
+}
+
+/* Twinkling starfield layer (fill with <i> dots) */
+.magic-sparkles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.magic-sparkles i {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background: #F7D98C;
+  box-shadow: 0 0 10px 2px rgba(247, 217, 140, 0.85);
+  animation: magic-twinkle 2.8s ease-in-out infinite;
+}
+.magic-sparkles i:nth-child(3n) { background: #fff; box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.9); }
+.magic-sparkles i:nth-child(4n) { width: 3px; height: 3px; }
+
+/* Magic promo ribbon */
+.magic-ribbon {
+  background: linear-gradient(100deg, var(--primary), var(--secondary), var(--primary));
+  background-size: 220% auto;
+  animation: magic-shimmer-x 8s linear infinite;
+}
+.magic-ribbon-text {
+  color: #fff;
+  font-weight: 800;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .magic-aurora, .magic-border-spin::before, .magic-ping::after,
+  .magic-sparkles i, .magic-ribbon { animation: none !important; }
+  .magic-border-spin::before { display: none; }
+  .magic-ping::after { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .magic-eyebrow, .magic-title, .magic-title-light, .magic-bar,
+  .magic-divider, .magic-countbox, .magic-orb, .magic-halo, .magic-float-y,
+  .magic-star { animation: none !important; }
+  .magic-title, .magic-title-light { color: var(--primary); background: none; }
+  .magic-title-light { color: #fff; }
+}
+
+/* ============ MAGIC LEVEL 3 — PROJECT 2030 ============
+   Holographic auto-shine (visible on touch devices with no hover),
+   sci-fi scanner sweep, hue-cycling borders. Transform/opacity only. */
+@keyframes magic-autoshine-sweep {
+  0% { transform: translateX(-130%) skewX(-18deg); opacity: 0; }
+  10% { opacity: 1; }
+  36% { transform: translateX(235%) skewX(-18deg); opacity: 1; }
+  52%, 100% { transform: translateX(235%) skewX(-18deg); opacity: 0; }
+}
+.magic-autoshine { position: relative; }
+.magic-autoshine::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 45%;
+  background: linear-gradient(100deg, transparent 10%, rgba(255, 255, 255, 0.65) 50%, rgba(247, 217, 140, 0.35) 62%, transparent 90%);
+  transform: translateX(-130%) skewX(-18deg);
+  opacity: 0;
+  pointer-events: none;
+  animation: magic-autoshine-sweep 6.5s ease-in-out infinite;
+}
+
+/* Staggered delays per rail position so sweeps cascade, not flash in sync */
+.magic-stagger > *:nth-child(6n+2) .magic-autoshine::after { animation-delay: 1.1s; }
+.magic-stagger > *:nth-child(6n+3) .magic-autoshine::after { animation-delay: 2.2s; }
+.magic-stagger > *:nth-child(6n+4) .magic-autoshine::after { animation-delay: 3.3s; }
+.magic-stagger > *:nth-child(6n+5) .magic-autoshine::after { animation-delay: 4.4s; }
+.magic-stagger > *:nth-child(6n) .magic-autoshine::after { animation-delay: 5.5s; }
+.magic-stagger > *:nth-child(6n+2) .magic-scan::before { animation-delay: 0.9s; }
+.magic-stagger > *:nth-child(6n+3) .magic-scan::before { animation-delay: 1.8s; }
+.magic-stagger > *:nth-child(6n+4) .magic-scan::before { animation-delay: 2.7s; }
+.magic-stagger > *:nth-child(6n+5) .magic-scan::before { animation-delay: 3.6s; }
+.magic-stagger > *:nth-child(6n) .magic-scan::before { animation-delay: 4.5s; }
+
+/* Sci-fi scanner sweep across product images */
+@keyframes magic-scan-y {
+  0% { top: -14%; opacity: 0; }
+  12% { opacity: 1; }
+  50% { opacity: 1; }
+  64%, 100% { top: 106%; opacity: 0; }
+}
+.magic-scan { position: relative; }
+.magic-scan::before {
+  content: "";
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  height: 22%;
+  top: -14%;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, transparent, rgba(103, 232, 249, 0.5) 42%, rgba(255, 255, 255, 0.95) 50%, rgba(103, 232, 249, 0.5) 58%, transparent);
+  box-shadow: 0 0 20px 4px rgba(103, 232, 249, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  animation: magic-scan-y 5.5s ease-in-out infinite;
+  z-index: 5;
+}
+
+/* Hue-cycling upgrade for the spinning bundle border */
+@keyframes magic-hue {
+  to { filter: hue-rotate(360deg); }
+}
+
+/* CRAZY CTA — Luminous identity: deep plum + flowing gold sheen (for hero
+   buttons: design bundle / book consult / join experts / start quiz) */
+.magic-cta {
+  position: relative;
+  background: linear-gradient(110deg, var(--primary-dark) 0%, var(--primary) 42%, var(--primary-light) 55%, var(--primary-dark) 100%);
+  background-size: 220% auto;
+  animation: magic-shimmer-x 5s linear infinite;
+  box-shadow: 0 10px 26px -10px color-mix(in srgb, var(--primary) 70%, transparent), 0 0 0 1px color-mix(in srgb, var(--accent) 55%, transparent) inset, 0 0 20px -6px color-mix(in srgb, var(--accent) 50%, transparent);
+}
+.magic-cta:hover {
+  box-shadow: 0 14px 34px -10px color-mix(in srgb, var(--primary) 80%, transparent), 0 0 0 1px color-mix(in srgb, var(--accent) 70%, transparent) inset, 0 0 28px -4px color-mix(in srgb, var(--accent) 65%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .magic-autoshine::after, .magic-scan::before, .magic-cta { animation: none !important; opacity: 0 !important; }
+  .magic-cta { opacity: 1 !important; }
+}
+
+/* ============ LUMINOUS STAGE v6 � one continuous pink slide ============ */
+/* Section becomes a container so the aspect sizer can follow the SAME
+   width breakpoint as the iframe's internal 640px layout switch. */
+.luminous-stage {
+  container-type: inline-size;
+}
+.luminous-sizer {
+  width: 100%;
+  aspect-ratio: 2142 / 600;
+}
+@container (max-width: 639.98px) {
+  .luminous-sizer {
+    aspect-ratio: 100 / 91;
+  }
+}
+
+/* Phone: the stage bleeds edge-to-edge (parent has px-4 = 1rem). */
+@media (max-width: 639.98px) {
+  .luminous-stage {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    width: calc(100% + 2rem);
+    border-radius: 0 !important;
+    border-width: 0 !important;
+  }
+}
+
+/* Girl slide: slow cinematic zoom. */
+.luminous-kenburns {
+  animation: luminousKenburns 16s ease-in-out infinite alternate;
+}
+@keyframes luminousKenburns {
+  from { transform: scale(1); }
+  to   { transform: scale(1.07); }
+}
+
+/* WOW � gold light sheen sweeping across the whole slide. */
+.stage-sheen {
+  position: absolute;
+  top: -30%;
+  bottom: -30%;
+  left: -22%;
+  width: 14%;
+  background: linear-gradient(100deg, transparent 0%, rgba(255, 255, 255, 0.55) 45%, rgba(247, 217, 140, 0.35) 55%, transparent 100%);
+  filter: blur(24px);
+  opacity: 0;
+  pointer-events: none;
+  animation: stageSheen 8s ease-in-out 1.5s infinite;
+}
+@keyframes stageSheen {
+  0%   { transform: translateX(0) skewX(-14deg); opacity: 0; }
+  6%   { opacity: 0.9; }
+  46%  { transform: translateX(860%) skewX(-14deg); opacity: 0.5; }
+  54%, 100% { transform: translateX(860%) skewX(-14deg); opacity: 0; }
+}
+
+/* WOW � re-mounting light wipe on every slide change (keyed by React). */
+.stage-wipe {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+  overflow: hidden;
+  pointer-events: none;
+}
+.stage-wipe::before {
+  content: "";
+  position: absolute;
+  top: -10%;
+  bottom: -10%;
+  left: -40%;
+  width: 34%;
+  background: linear-gradient(100deg, transparent 0%, rgba(255, 255, 255, 0.9) 40%, rgba(247, 217, 140, 0.75) 60%, transparent 100%);
+  filter: blur(20px);
+  transform: translateX(0) skewX(-16deg);
+  animation: wipeGo 1400ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+@keyframes wipeGo {
+  to { transform: translateX(560%) skewX(-16deg); }
+}
+.stage-wipe::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.55), rgba(255, 247, 242, 0) 70%);
+  animation: wipeFlash 1400ms ease-out forwards;
+}
+@keyframes wipeFlash {
+  0%   { opacity: 0.85; }
+  100% { opacity: 0; }
+}
+.stage-wipe i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  background: #e6c76e;
+  clip-path: polygon(50% 0, 59% 41%, 100% 50%, 59% 59%, 50% 100%, 41% 59%, 0 50%, 41% 41%);
+  filter: drop-shadow(0 0 8px rgba(240, 217, 138, 0.9));
+  opacity: 0;
+  animation: wipeSpark 1100ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+  animation-delay: var(--sd, 0ms);
+}
+.stage-wipe i:nth-child(1) { --tx: -36vw; --ty: -30vh; --tx2: -46vw; --ty2: -40vh; --sd: 60ms; }
+.stage-wipe i:nth-child(2) { --tx: 34vw;  --ty: -24vh; --tx2: 44vw;  --ty2: -34vh; --sd: 150ms; }
+.stage-wipe i:nth-child(3) { --tx: -30vw; --ty: 32vh;  --tx2: -40vw; --ty2: 42vh;  --sd: 0ms; }
+.stage-wipe i:nth-child(4) { --tx: 32vw;  --ty: 30vh;  --tx2: 42vw;  --ty2: 40vh;  --sd: 220ms; }
+.stage-wipe i:nth-child(5) { --tx: 0vw;   --ty: -40vh; --tx2: 0vw;   --ty2: -52vh; --sd: 110ms; }
+.stage-wipe i:nth-child(6) { --tx: 0vw;   --ty: 38vh;  --tx2: 0vw;   --ty2: 50vh;  --sd: 260ms; }
+@keyframes wipeSpark {
+  0%   { opacity: 0; transform: translate(0, 0) scale(0.2) rotate(0deg); }
+  22%  { opacity: 1; transform: translate(var(--tx), var(--ty)) scale(1) rotate(60deg); }
+  100% { opacity: 0; transform: translate(var(--tx2), var(--ty2)) scale(1.3) rotate(150deg); }
+}
+
+/* ── Girl slide: shrunk feathered portrait — grows from inside to outside ── */
+.luminous-girl-live {
+  transform-origin: 50% 50%;
+  -webkit-mask-image: radial-gradient(ellipse 62% 70% at 46% 46%, #000 45%, rgba(0, 0, 0, 0) 96%);
+  mask-image: radial-gradient(ellipse 62% 70% at 46% 46%, #000 45%, rgba(0, 0, 0, 0) 96%);
+  animation: girlLive 5.4s ease-in-out infinite;
+}
+@keyframes girlLive {
+  0%, 100% { transform: scale(0.97); }
+  50%      { transform: scale(1.055); }
+}
+
+/* ── Girl slide kinetic type: purple↔gold shimmer + staggered word pop ── */
+.stage-hero-h2 {
+  background: linear-gradient(100deg, #4b2a6f 0%, #7c3aed 26%, #d4af37 50%, #7c3aed 74%, #4b2a6f 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: heroGlow 6s linear infinite;
+}
+@keyframes heroGlow {
+  0%   { background-position: 0% 0; }
+  100% { background-position: 220% 0; }
+}
+.stage-hero-line { display: block; }
+.stage-hero-word.on { animation: wordPop 0.55s cubic-bezier(0.3, 1.7, 0.45, 1) both; }
+@keyframes wordPop {
+  0%   { opacity: 0; transform: translateY(26px) rotate(-7deg) scale(0.72); }
+  60%  { opacity: 1; transform: translateY(-4px) rotate(2deg) scale(1.06); }
+  100% { opacity: 1; transform: none; }
+}
+.stage-hero-squiggle {
+  display: block;
+  width: min(72%, 340px);
+  height: 14px;
+  margin-top: 4px;
+  overflow: visible;
+}
+.stage-hero-squiggle path {
+  stroke-dasharray: 260;
+  stroke-dashoffset: 260;
+  opacity: 0;
+}
+.stage-hero-squiggle.on path {
+  animation: drawSq 0.9s ease 0.5s forwards, sqGlow 3.2s ease-in-out 1.5s infinite;
+}
+@keyframes drawSq {
+  to { stroke-dashoffset: 0; opacity: 1; }
+}
+@keyframes sqGlow {
+  0%, 100% { opacity: 0.75; }
+  50% { opacity: 1; }
+}
+.stage-hero-spark {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: #d4af37;
+  pointer-events: none;
+  clip-path: polygon(50% 0, 59% 41%, 100% 50%, 59% 59%, 50% 100%, 41% 59%, 0 50%, 41% 41%);
+  filter: drop-shadow(0 0 6px rgba(240, 217, 138, 0.9));
+  animation: sparkLoop 2.8s ease-in-out infinite;
+}
+.stage-hero-spark.s1 { top: -8px; inset-inline-start: 8%; }
+.stage-hero-spark.s2 {
+  bottom: 30%;
+  inset-inline-end: 6%;
+  width: 11px;
+  height: 11px;
+  animation-delay: 1.2s;
+}
+@keyframes sparkLoop {
+  0%, 100% { opacity: 0.25; transform: scale(0.6) rotate(0deg); }
+  50% { opacity: 0.95; transform: scale(1.15) rotate(35deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-wipe { display: none; }
+  .stage-sheen, .luminous-kenburns, .luminous-girl-live, .stage-hero-h2,
+  .stage-hero-word.on, .stage-hero-spark { animation: none !important; }
+  .luminous-girl-wrap { transition: none !important; }
+  .stage-hero-squiggle path { stroke-dashoffset: 0 !important; opacity: 1 !important; }
+  .stage-sheen { opacity: 0; }
 }

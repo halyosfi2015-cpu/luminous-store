@@ -84,3 +84,5 @@ public/uploads/
 
 # local analysis / generated working files
 scripts/_medium20-dump.txt
+
+.pnpm-store/

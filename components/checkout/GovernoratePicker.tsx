@@ -49,7 +49,7 @@ export default function GovernoratePicker({ value, onChange }: Props) {
           <MapPin size={16} />
         </span>
         <span className="flex-1">
-          <span className="block text-[10px] font-semibold uppercase tracking-wide text-muted">
+          <span className="block text-[11px] font-semibold uppercase tracking-wide text-muted sm:text-[10px]">
             محافظة التوصيل
           </span>
           <span className="block text-sm font-bold text-foreground">
@@ -65,14 +65,14 @@ export default function GovernoratePicker({ value, onChange }: Props) {
       </button>
 
       {open && (
-        <div className="absolute top-full z-30 mt-2 w-full overflow-hidden rounded-card border border-gray-100 bg-card shadow-xl shadow-primary/10 animate-slide-down">
+        <div className="absolute top-full z-30 mt-2 w-full max-w-[calc(100vw-2rem)] overflow-hidden rounded-card border border-gray-100 bg-card shadow-xl shadow-primary/10 animate-slide-down">
           <div className="relative border-b border-border/60 bg-muted-bg/40 p-2">
             <Search size={14} className="absolute start-4 top-1/2 -translate-y-1/2 text-muted" />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="ابحث عن محافظتك..."
-              className="w-full rounded-input border border-border bg-card py-2 pe-3 ps-9 text-sm outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10"
+              className="w-full rounded-input border border-border bg-card py-2.5 min-h-[44px] pe-3 ps-9 text-[16px] outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/10 sm:text-sm"
             />
           </div>
           <div className="max-h-64 overflow-y-auto p-1.5">

@@ -52,12 +52,12 @@ export default function Navbar() {
   return (
     <div className="w-full border-y border-border bg-background/50">
       <Container className="py-3">
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4" dir={isAr ? "rtl" : "ltr"}>
+        <div className="hide-scrollbar flex flex-nowrap items-center gap-2 overflow-x-auto py-1 sm:gap-3 md:gap-4" dir={isAr ? "rtl" : "ltr"}>
           {categories.map((cat) => (
             <Link
               key={cat.href}
               href={cat.href}
-              className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
+              className="flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
               aria-label={isAr ? cat.label.ar : cat.label.en}
             >
               <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gradient-to-r ${cat.color}`}>
@@ -66,12 +66,12 @@ export default function Navbar() {
               <span className="hidden sm:inline whitespace-nowrap">{isAr ? cat.label.ar : cat.label.en}</span>
             </Link>
           ))}
-          <div className="w-full md:hidden border-t border-border my-2" />
+          <div className="h-6 w-px shrink-0 bg-border" aria-hidden="true" />
           {quickLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
+              className="flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-primary"
               aria-label={isAr ? link.label.ar : link.label.en}
             >
               <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gradient-to-r ${link.color || "from-secondary to-primary"}`}>

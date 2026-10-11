@@ -19,6 +19,13 @@ const CONCERN_PRIORITY: Record<SkinConcern, number> = {
   dark_circles: 2,
   oiliness: 3,
   sensitivity: 3,
+  rosacea: 3,
+  eczema: 3,
+  psoriasis: 3,
+  vitiligo: 3,
+  burns_scars: 2,
+  tired_skin: 2,
+  stretch_marks: 2,
 };
 
 export function getPersonalizedProducts(profile: SkinProfile, count: number = 8): ProductSummary[] {

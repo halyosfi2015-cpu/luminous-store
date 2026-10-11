@@ -18,6 +18,9 @@ export default function Error({
           <AlertTriangle size={48} className="text-amber-500" />
           <h1 className="text-xl font-bold text-neutral-900">حدث خطأ</h1>
           <p className="text-sm text-neutral-500">عذراً، حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.</p>
+          {error?.message && (
+            <p dir="ltr" className="max-w-full break-all rounded-lg bg-red-50 p-3 text-left text-xs text-red-700">ERR: {error.message}</p>
+          )}
           {error?.digest && (
             <p className="text-xs text-muted">Digest: {error.digest}</p>
           )}

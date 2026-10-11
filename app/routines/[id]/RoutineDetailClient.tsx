@@ -453,7 +453,7 @@ export default function RoutineDetailClient({
           </span>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700">
             <Users size={12} />
-            {safeBuyerCountDisplay(currentRoutine)}{" "}
+            {Math.min(Number(safeBuyerCountDisplay(currentRoutine)) || 0, 5).toLocaleString("ar-YE")}{" "}
             {isAr ? "عميلة اشترت" : "customers bought"}
           </span>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700">

@@ -3,7 +3,7 @@
  * ============================================================================
  * MASTER TAXONOMY — PRODUCT MAPPING GENERATOR
  * ============================================================================
- * Reads the 8 product part files (src/data/products-part-01..08.ts) and the
+ * Reads the 10 product part files (src/data/products-part-01..10.ts) and the
  * master taxonomy (src/data/taxonomy.ts), then generates:
  *
  *   src/lib/taxonomy/product-mappings.ts
@@ -70,8 +70,8 @@ function loadTaxonomy() {
 /* ────────────────────────────── Product loader ───────────────────────────── */
 function loadProducts() {
   const products = [];
-  for (let i = 1; i <= 8; i++) {
-    const src = readFileSync(join(root, `src/data/products-part-0${i}.ts`), "utf8");
+  for (let i = 1; i <= 10; i++) {
+    const src = readFileSync(join(root, `src/data/products-part-${String(i).padStart(2, "0")}.ts`), "utf8");
     // Try to parse as exported array first (current format: export const productsPart01 = [...])
     const arrayMatch = src.match(/\[.*\]/s);
     if (arrayMatch) {
@@ -145,8 +145,8 @@ const globalPtKeywords = {
   "toothbrushes": ["فرشاة اسنان","toothbrush"],
   "mouthwash": ["غسول فم","مضمضه","mouthwash"],
   "deodorants-pt": ["مزيل عرق","deodorant"],
-  "vitamins-pt": ["فيتامين","vitamin"],
-  "supplements-pt": ["مكمل","supplement"],
+  "vitamins-supplements": ["فيتامين","vitamin"],
+  "supplements": ["مكمل","supplement"],
   "women-perfume": ["عطر نسائي","women perfume"],
   "men-perfume": ["عطر رجالي","men perfume"],
   "bakhoor-premium": ["بخور فاخر","premium bakhoor"],
@@ -376,15 +376,24 @@ const refineRules = {
   /* Health & wellness */
   "vitamins-supplements": {
     rules: [
+      [["بريجناكير", "pregnacare", "pregnancy", "الحمل", "رضاعة", "فوليك", "folic", "للحامل"], "pregnancy-care"],
+      [["مساعد النوم", "sleep aid", "ميلاتونين", "melatonin", "للنوم", "نوم عميق", "مغنيسيوم ملجم"], "sleep-aids"],
+      [["اوستيو", "osteo", "osteocare", "جلوكوزامين", "glucosamine", "كوندرويتين", "للعظام", "المفاصل", "كالسيوم ملجم"], "bones-joints"],
+      [["للرجل", "رجالي", "for men"], "men-supplements"],
+      [["خل التفاح", "apple cider", "ديتوكس", "detox", "شاي أخضر", "green tea", "جارسينيا", "garcinia"], "weight-control"],
+      [["سنترم فضي", "سنتروم فضي", "centrum silver", "فوق الخمسين", "فوق السن", "كبار السن", "senior"], "senior-vitamins"],
+      [["لوتين", "lutein", "لويتين"], "eye-health-supplements"],
+      [["اوميجا", "omega"], "heart-health"],
+      [["بيوتين", "biotin"], "hair-nails"],
       [["نساء", "مراه", "women", "حمل", "رضاعه"], "women-health"],
       [["اطفال", "kids", "صغار"], "kids-supplements"],
       [["معادن", "حديد", "كالسيوم", "مغنيسيوم", "minerals", "iron", "calcium"], "minerals"],
       [["كولاجين", "collagen"], "collagen"],
       [["مناعه", "immunity", "فيتامين سي", "فيتامين د", "فيتامين c", "فيتامين d", "زنك", "زينك", "اوميجا"], "immunity"],
       [["شعر", "اظافر", "نمو", "hair", "nail"], "hair-nails"],
-      [["مكمل", "supplement", "بروتين", "احماض"], "supplements-pt"],
+      [["مكمل", "supplement", "بروتين", "احماض"], "supplements"],
     ],
-    default: "vitamins-pt",
+    default: "vitamins-supplements",
   },
   /* Appliances & tools */
   "skincare-devices": {
@@ -483,7 +492,7 @@ const categoryLevel = {
       [["مقشر جسم", "body scrub"], "body-exfoliating", "body-scrubs"],
       [["كريم يد", "hand cream"], "hands-feet", "hand-creams"],
       [["كريم قدم", "foot cream"], "hands-feet", "foot-creams"],
-      [["مكمل", "فيتامين", "كولاجين"], "vitamins-supplements", "vitamins-pt"],
+      [["مكمل", "فيتامين", "كولاجين"], "vitamins-supplements", "vitamins-supplements"],
     ],
     default: ["face-care", "cleansers"],
   },
@@ -543,11 +552,11 @@ const categoryLevel = {
   "health-wellness": {
     categorySlug: "health-wellness",
     rules: [
-      [["فيتامين", "vitamin"], "vitamins-supplements", "vitamins-pt"],
+      [["فيتامين", "vitamin"], "vitamins-supplements", "vitamins-supplements"],
       [["كولاجين", "collagen"], "vitamins-supplements", "collagen"],
-      [["مكمل", "supplement"], "supplements", "supplements-pt"],
+      [["مكمل", "supplement"], "supplements", "supplements"],
     ],
-    default: ["vitamins-supplements", "vitamins-pt"],
+    default: ["vitamins-supplements", "vitamins-supplements"],
   },
 };
 
@@ -688,13 +697,28 @@ function mapProduct(product, taxo) {
         } else {
           /* Cross-branch refine: the matched PRODUCT_TYPE lives under another
              SUBCATEGORY (e.g. hair-masks under hair-moisturizing). Resolve its
-             real parent so the mapping stays valid. */
+             real parent so the mapping stays valid. Also accept a SUBCATEGORY
+             target that is a direct child of the same CATEGORY (louz-parity
+             supplement groups such as senior-vitamins / heart-health). */
           const target = taxo.nodes.find((n) => n.type === "PRODUCT_TYPE" && n.slug === rulePt);
           const targetParent = target ? taxo.byId.get(target.parentId) : undefined;
           if (target && targetParent && targetParent.type === "SUBCATEGORY") {
             ptSlug = rulePt;
             subcatSlug = targetParent.slug;
             confidence = "medium";
+          } else {
+            const targetSub = taxo.nodes.find(
+              (n) =>
+                n.type === "SUBCATEGORY" &&
+                n.slug === rulePt &&
+                n.parentId &&
+                taxo.byId.get(n.parentId)?.slug === category?.slug
+            );
+            if (targetSub) {
+              ptSlug = targetSub.slug;
+              subcatSlug = targetSub.slug;
+              confidence = "medium";
+            }
           }
         }
       } else if (cfg.rules.length === 0) {
